@@ -1,5 +1,15 @@
-<div>
-  <ng-form>
+<div class="jumbotron vertical-center"> <!--
+                      ^--- Added class  -->
+  <div class="container col-md-2 login-box">
+    <img src="assets/images/greenLogo.png" alt="Samha Logo">
+    <p>SAMHA Web</p>
+    <form class="form-group" [formGroup]="form" (ngSubmit)="login()">
+      <label for="login" class="form-label">Login</label>
+      <input type="text" class="form-control" id="login" formControlName="login">
+      <label for="password" class="form-label">Password</label>
+      <input type="password" class="form-control" id="password" formControlName="senha">
 
-  </ng-form>
+      <button class="btn btn-primary form-control form mt-3">Login</button>
+    </form>
+  </div>
 </div>
