@@ -2,16 +2,14 @@ package com.brenoleal.controller.common;
 
 import com.brenoleal.commons.UseCaseFacade;
 import org.springframework.util.Assert;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
 
 @RestController
 public abstract class BaseController<ENTITY, KEY extends Serializable> {
 
-    private Class<ENTITY> entityClass;
+    private final Class<ENTITY> entityClass;
     protected final UseCaseFacade facade;
 
     public BaseController(Class<ENTITY> entityClass, UseCaseFacade facade){
@@ -21,7 +19,22 @@ public abstract class BaseController<ENTITY, KEY extends Serializable> {
     }
 
     @GetMapping("{id}")
-    public <ENTITY> ENTITY get(@PathVariable KEY id){
-        return (ENTITY) this.facade.execute(new GetEntity(this.entityClass, id));
+    public ENTITY get(@PathVariable KEY id){
+        return this.facade.execute(new GetEntity<>(this.entityClass, id));
+    }
+
+    @PostMapping
+    public ENTITY insert(@RequestBody ENTITY body){
+        return this.facade.execute(new InsertEntity<>(body));
+    }
+
+    @DeleteMapping("{id}")
+    public void delete(@PathVariable KEY id){
+        this.facade.execute(new DeleteEntity<>(entityClass, id));
+    }
+
+    @PatchMapping("{id}")
+    public ENTITY update(@PathVariable KEY id, @RequestBody ENTITY entity){
+        return this.facade.execute(new UpdateEntity<>(entity));
     }
 }
