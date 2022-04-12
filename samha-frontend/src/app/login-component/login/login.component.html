@@ -1,12 +1,12 @@
 <div class="jumbotron vertical-center"> <!--
                       ^--- Added class  -->
-  <div class="container col-md-2 login-box">
-    <img src="assets/images/greenLogo.png" alt="Samha Logo">
+  <div class="container col-md-4 col-sm-6 login-box d-grid col-lg-3 col-10">
+    <img src="assets/images/greenLogo.png" alt="Samha Logo" class="m-auto">
     <p>SAMHA Web</p>
     <form class="form-group" [formGroup]="form" (ngSubmit)="login()">
-      <label for="login" class="form-label">Login</label>
-      <input type="text" class="form-control" id="login" formControlName="login">
-      <label for="password" class="form-label">Password</label>
+      <i class="fa fa-user mx-1"></i><label for="login">Usuário</label>
+      <input type="text" class="form-control mt-2" id="login" formControlName="login">
+      <i class="fa-solid fa-lock mx-1"></i><label for="password">Senha</label>
       <input type="password" class="form-control" id="password" formControlName="senha">
 
       <button class="btn btn-primary form-control form mt-3">Login</button>
