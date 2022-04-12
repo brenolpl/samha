@@ -54,6 +54,19 @@ public class GenericRepository implements IGenericRepository{
         return entityManager.createQuery(query).getResultList();
     }
 
+    @Override
+    public <ENTITY> ENTITY findSingle(Class<ENTITY> entityClass, IQueryBuilder<ENTITY, ENTITY> queryBuilder) {
+        return findsingle(entityClass, entityClass, queryBuilder);
+    }
+
+    @Override
+    public <ENTITY, TARGET> TARGET findsingle(Class<ENTITY> entityClass, Class<TARGET> targetClass, IQueryBuilder<ENTITY, TARGET> queryBuilder) {
+        CriteriaQuery<TARGET> query = this.createCriteriaQuery(entityClass, targetClass, queryBuilder);
+        List<TARGET> resultList = entityManager.createQuery(query).setMaxResults(1).getResultList();
+        if(resultList.isEmpty() || resultList == null) return null;
+        return resultList.get(0);
+    }
+
 
     private <ENTITY, TARGET> CriteriaQuery<TARGET> createCriteriaQuery(Class<ENTITY> entityClass, Class<TARGET> targetClass, IQueryBuilder queryBuilder){
         return queryBuilder.build(new QueryHelper<>(entityManager, entityClass, targetClass)).getCriteriaQuery();
