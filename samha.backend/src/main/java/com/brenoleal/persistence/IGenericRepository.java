@@ -10,4 +10,8 @@ public interface IGenericRepository {
     <ENTITY> ENTITY save(ENTITY entityClass);
     <ENTITY> void delete(ENTITY entityClass);
     <ENTITY> ENTITY update(ENTITY entity);
+
+    <ENTITY> List<ENTITY> find(Class<ENTITY> entityClass, IQueryBuilder<ENTITY, ENTITY> queryBuilder);
+
+    <ENTITY, TARGET> List<TARGET> find(Class<ENTITY> entityClass, Class<TARGET> targetClass, IQueryBuilder<ENTITY, TARGET> queryBuilder);
 }
