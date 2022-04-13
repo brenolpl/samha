@@ -1,6 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {DataService} from '../../shared/data.service';
 import {FormBuilder, FormGroup} from '@angular/forms';
+import {createUserWithEmailAndPassword, getAuth} from '@angular/fire/auth';
+import {AuthService} from '../../shared/auth.service';
 
 @Component({
   selector: 'samha-login',
@@ -9,8 +11,8 @@ import {FormBuilder, FormGroup} from '@angular/forms';
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private dataService: DataService,
-              private formBuilder: FormBuilder) {
+  constructor(private formBuilder: FormBuilder,
+              private authService: AuthService) {
   }
 
   form: FormGroup;
@@ -24,13 +26,7 @@ export class LoginComponent implements OnInit {
 
   login(): void {
     if (this.form.valid){
-      this.dataService.post('login', this.form.value).subscribe(
-          data => {
-              console.log(data);
-          }, error => {
-            console.log(error);
-        }
-      );
+        this.authService.signIn(this.form.value.login, this.form.value.senha);
     }else{
       this.form.markAllAsTouched();
     }

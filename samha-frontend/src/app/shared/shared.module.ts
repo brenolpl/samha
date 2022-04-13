@@ -1,8 +1,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {SamhaFormComponent} from './samha-form/samha-form.component';
-import {FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {BrowserModule} from '@angular/platform-browser';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {DataService} from './data.service';
+import {AuthService} from './auth.service';
+import {AngularFireModule} from '@angular/fire/compat';
+import {environment} from '../../environments/environment';
+import {AngularFirestoreModule} from '@angular/fire/compat/firestore';
 
 @NgModule({
   declarations: [
@@ -11,7 +15,11 @@ import {BrowserModule} from '@angular/platform-browser';
   imports: [
     CommonModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+  ],
+  providers: [
+    DataService,
+    AuthService
   ]
 })
 export class SharedModule { }
