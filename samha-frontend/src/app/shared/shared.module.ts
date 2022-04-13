@@ -16,6 +16,8 @@ import {AngularFirestoreModule} from '@angular/fire/compat/firestore';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    AngularFireModule.initializeApp(environment.firebaseConfig),
+    AngularFirestoreModule
   ],
   providers: [
     DataService,
