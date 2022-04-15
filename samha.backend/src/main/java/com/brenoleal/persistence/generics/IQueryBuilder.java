@@ -1,6 +1,4 @@
-package com.brenoleal.persistence;
-
-import java.util.List;
+package com.brenoleal.persistence.generics;
 
 @FunctionalInterface
 public interface IQueryBuilder<ENTITY, TARGET> {

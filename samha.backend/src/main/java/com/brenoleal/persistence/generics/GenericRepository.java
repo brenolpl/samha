@@ -1,4 +1,4 @@
-package com.brenoleal.persistence;
+package com.brenoleal.persistence.generics;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -63,7 +63,7 @@ public class GenericRepository implements IGenericRepository{
     public <ENTITY, TARGET> TARGET findsingle(Class<ENTITY> entityClass, Class<TARGET> targetClass, IQueryBuilder<ENTITY, TARGET> queryBuilder) {
         CriteriaQuery<TARGET> query = this.createCriteriaQuery(entityClass, targetClass, queryBuilder);
         List<TARGET> resultList = entityManager.createQuery(query).setMaxResults(1).getResultList();
-        if(resultList.isEmpty() || resultList == null) return null;
+        if(resultList.isEmpty()) return null;
         return resultList.get(0);
     }
 

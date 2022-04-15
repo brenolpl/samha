@@ -1,4 +1,4 @@
-package com.brenoleal.persistence;
+package com.brenoleal.persistence.generics;
 
 import java.io.Serializable;
 import java.util.List;

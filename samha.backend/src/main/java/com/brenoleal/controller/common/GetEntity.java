@@ -1,15 +1,15 @@
 package com.brenoleal.controller.common;
 
 import com.brenoleal.commons.UseCase;
-import com.brenoleal.persistence.IGenericRepository;
+import com.brenoleal.persistence.generics.IGenericRepository;
 
 import javax.inject.Inject;
 import java.io.Serializable;
 
 public class GetEntity<ENTITY, KEY extends Serializable> extends UseCase<ENTITY> {
 
-    private Class<ENTITY> entityClass;
-    private KEY id;
+    private final Class<ENTITY> entityClass;
+    private final KEY id;
 
     @Inject
     protected IGenericRepository genericRepository;

@@ -1,4 +1,4 @@
-package com.brenoleal.persistence;
+package com.brenoleal.persistence.generics;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.*;

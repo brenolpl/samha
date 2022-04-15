@@ -1,9 +1,10 @@
 package com.brenoleal.controller.common;
 
 import com.brenoleal.commons.UseCase;
-import com.brenoleal.persistence.IGenericRepository;
+import com.brenoleal.persistence.generics.IGenericRepository;
 
 import javax.inject.Inject;
+
 
 public class UpdateEntity<ENTITY> extends UseCase<ENTITY> {
 
