@@ -10,12 +10,12 @@ import org.hibernate.annotations.OnDeleteAction;
 @Entity
 @Table(name = "professor")
 @PrimaryKeyJoinColumn(name = "professor_id")
-public class Professor extends Servidor implements Comparable<Object>{
+public class Professor extends Usuario {
     
     @Column(nullable = false)
     private double cargaHoraria;
     
-    @Column(nullable = false, unique = false)
+    @Column(nullable = false)
     private boolean ativo;
     
     @ManyToOne(fetch = FetchType.EAGER)
@@ -25,22 +25,6 @@ public class Professor extends Servidor implements Comparable<Object>{
     private Coordenadoria coordenadoria;
     
     public Professor() {
-    }
-
-    public Professor(double cargaHoraria, Coordenadoria coordenadoria, int id, String nome, String matricula, 
-            String email, boolean ativo) {
-        super(id, nome, matricula, email);
-        this.cargaHoraria = cargaHoraria;
-        this.coordenadoria = coordenadoria;
-        this.ativo = ativo;
-    }
-
-    public Professor(double cargaHoraria, Collection<RestricaoProfessor> restricoes, Coordenadoria coordenadoria, 
-            String nome, String matricula, String email, boolean ativo) {
-        super(nome, matricula, email);
-        this.cargaHoraria = cargaHoraria;
-        this.coordenadoria = coordenadoria;
-        this.ativo = ativo;
     }
     
     public String obterNomeAbreviado(){
@@ -107,10 +91,4 @@ public class Professor extends Servidor implements Comparable<Object>{
         return new Object[] { this, getCargaHoraria()};
     }
 
-    @Override
-    public int compareTo(Object o) {
-        
-        Professor other = (Professor) o;  
-        return this.getNome().compareTo(other.getNome());
-    }
 }

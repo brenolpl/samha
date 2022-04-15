@@ -1,19 +1,13 @@
 package com.brenoleal.core;
 
 import java.io.Serializable;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.Table;
+import java.util.Set;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "usuario")
 @Inheritance(strategy=InheritanceType.JOINED)
-public abstract class Usuario implements Serializable{
+public class Usuario implements Serializable{
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,19 +18,41 @@ public abstract class Usuario implements Serializable{
     
     @Column(nullable = false)
     private String senha;
-    
+
+    @Column(nullable = false)
+    private String nome;
+
+    @Column(nullable = false)
+    private String matricula;
+
+    @Column(unique = true)
+    private String email;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Set<Papel> papeis;
+
     public Usuario(){    
     }
 
-    public Usuario(int id, String login, String senha) {
+    public Usuario(int id, String nome, String matricula, String email) {
         this.id = id;
-        this.login = login;
-        this.senha = senha;
+        this.nome = nome;
+        this.matricula = matricula;
+        this.email = email;
     }
 
-    public Usuario(String login, String senha) {
-        this.login = login;
-        this.senha = senha;
+    public Usuario(String nome, String matricula, String email) {
+        this.nome = nome;
+        this.matricula = matricula;
+        this.email = email;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getLogin() {
@@ -55,11 +71,35 @@ public abstract class Usuario implements Serializable{
         this.senha = senha;
     }
 
-    public int getId() {
-        return id;
+    public String getNome() {
+        return nome;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getMatricula() {
+        return matricula;
+    }
+
+    public void setMatricula(String matricula) {
+        this.matricula = matricula;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Set<Papel> getPapeis() {
+        return papeis;
+    }
+
+    public void setPapeis(Set<Papel> papeis) {
+        this.papeis = papeis;
     }
 }
