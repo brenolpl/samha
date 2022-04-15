@@ -1,12 +1,12 @@
 package com.brenoleal.core;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Set;
 import javax.persistence.*;
 
 @Entity
 @Table(name = "usuario")
-@Inheritance(strategy=InheritanceType.JOINED)
 public class Usuario implements Serializable{
     
     @Id
@@ -29,9 +29,15 @@ public class Usuario implements Serializable{
     private String email;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    private Set<Papel> papeis;
+    private Collection<Papel> papeis;
 
     public Usuario(){    
+    }
+
+    public Usuario(int id, String login, String senha) {
+        this.id = id;
+        this.login = login;
+        this.senha = senha;
     }
 
     public Usuario(int id, String nome, String matricula, String email) {
@@ -95,11 +101,11 @@ public class Usuario implements Serializable{
         this.email = email;
     }
 
-    public Set<Papel> getPapeis() {
+    public Collection<Papel> getPapeis() {
         return papeis;
     }
 
-    public void setPapeis(Set<Papel> papeis) {
+    public void setPapeis(Collection<Papel> papeis) {
         this.papeis = papeis;
     }
 }

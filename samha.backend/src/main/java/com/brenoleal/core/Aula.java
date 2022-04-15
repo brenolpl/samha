@@ -110,14 +110,14 @@ public class Aula implements Serializable, Comparable<Object> {
         this.oferta = oferta;
     }
     
-    @Override
-    public String toString() { 
-        String retorno = getAlocacao().getDisciplina().getSigla() + " - " + getAlocacao().getProfessor1().obterNomeAbreviado();
-        if(getAlocacao().getDisciplina().getTipo().toUpperCase().equals("ESPECIAL")){
-            retorno = retorno + "/" + getAlocacao().getProfessor2().obterNomeAbreviado();
-        }
-        return retorno;
-    }
+//    @Override
+//    public String toString() {
+//        String retorno = getAlocacao().getDisciplina().getSigla() + " - " + getAlocacao().getProfessor1().obterNomeAbreviado();
+//        if(getAlocacao().getDisciplina().getTipo().toUpperCase().equals("ESPECIAL")){
+//            retorno = retorno + "/" + getAlocacao().getProfessor2().obterNomeAbreviado();
+//        }
+//        return retorno;
+//    }
 
     @Override
     public int compareTo(Object o) {

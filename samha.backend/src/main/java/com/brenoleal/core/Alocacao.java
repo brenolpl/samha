@@ -136,15 +136,15 @@ public class Alocacao implements Serializable, Comparable<Object>{
         this.turma = turma;
     }
     
-    @Override
-    public String toString() {
-        
-        String retorno = disciplina.getSigla()+ " - " + professor1.obterNomeAbreviado();
-        if(disciplina.getTipo().toUpperCase().equals("ESPECIAL")){
-            retorno = retorno + "/" + professor2.obterNomeAbreviado();
-        }
-        return retorno;
-    }
+//    @Override
+//    public String toString() {
+//
+//        String retorno = disciplina.getSigla()+ " - " + professor1.obterNomeAbreviado();
+//        if(disciplina.getTipo().toUpperCase().equals("ESPECIAL")){
+//            retorno = retorno + "/" + professor2.obterNomeAbreviado();
+//        }
+//        return retorno;
+//    }
     
     public Object[] toArray() {
         return new Object[] { this, disciplina.getPeriodo(), isCompleta() };

@@ -1,17 +1,21 @@
 package com.brenoleal.core;
 
-import java.util.Collection;
 import javax.persistence.*;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import java.io.Serializable;
+
 @Entity
 @Table(name = "professor")
-@PrimaryKeyJoinColumn(name = "professor_id")
-public class Professor extends Usuario {
-    
+public class Professor implements Serializable {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int professor_id;
+
     @Column(nullable = false)
     private double cargaHoraria;
     
@@ -23,41 +27,42 @@ public class Professor extends Usuario {
     @Cascade(CascadeType.SAVE_UPDATE)
     @JoinColumn(name = "coordenadoria_id", nullable = false)
     private Coordenadoria coordenadoria;
-    
-    public Professor() {
-    }
-    
-    public String obterNomeAbreviado(){
-        
-        int espaco = this.getNome().indexOf(" ");
-        
-        if(espaco > 0){
 
-            String nomeAbreviado = this.getNome().substring(0, espaco) + " ";
-            
-            for(int indice = espaco; indice < this.getNome().length() - 1; indice++){
-                char caractere = this.getNome().charAt(indice);
-                if(caractere == ' '){
-                    char letra = this.getNome().charAt(indice + 1);
-                    if(letra != 'd')
-                        nomeAbreviado = nomeAbreviado + letra;
-                }
-            }
-            
-            return nomeAbreviado;
-        }
-        return getNome();
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id")
+    private Usuario usuario;
     
-    public String obterPrimeiroNome(){
-        
-        int espaco = this.getNome().indexOf(" ");
-        
-        if(espaco > 0)           
-            return this.getNome().substring(0, espaco);      
-        
-        return getNome();
-    }
+//    public String obterNomeAbreviado(){
+//
+//        int espaco = this.getNome().indexOf(" ");
+//
+//        if(espaco > 0){
+//
+//            String nomeAbreviado = this.getNome().substring(0, espaco) + " ";
+//
+//            for(int indice = espaco; indice < this.getNome().length() - 1; indice++){
+//                char caractere = this.getNome().charAt(indice);
+//                if(caractere == ' '){
+//                    char letra = this.getNome().charAt(indice + 1);
+//                    if(letra != 'd')
+//                        nomeAbreviado = nomeAbreviado + letra;
+//                }
+//            }
+//
+//            return nomeAbreviado;
+//        }
+//        return getNome();
+//    }
+    
+//    public String obterPrimeiroNome(){
+//
+//        int espaco = this.getNome().indexOf(" ");
+//
+//        if(espaco > 0)
+//            return this.getNome().substring(0, espaco);
+//
+//        return getNome();
+//    }
 
     public double getCargaHoraria() {
         return cargaHoraria;
@@ -84,11 +89,27 @@ public class Professor extends Usuario {
     }
     
     public Object[] toArray() {
-        return new Object[] { this, getMatricula(), getCoordenadoria().getNome()};
+       // return new Object[] { this, getMatricula(), getCoordenadoria().getNome()};
+        return null;
     }
     
     public Object[] toArrayCargaHoraria() {
         return new Object[] { this, getCargaHoraria()};
     }
 
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public int getProfessor_id() {
+        return professor_id;
+    }
+
+    public void setProfessor_id(int professor_id) {
+        this.professor_id = professor_id;
+    }
 }
