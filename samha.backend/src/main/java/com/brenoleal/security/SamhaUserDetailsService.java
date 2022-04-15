@@ -1,31 +1,30 @@
 package com.brenoleal.security;
 
-import com.brenoleal.core.CoordenadorAcademico_;
 import com.brenoleal.core.Usuario;
-import com.brenoleal.core.Usuario_;
-import com.brenoleal.persistence.IGenericRepository;
+import com.brenoleal.service.IUsuarioService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Collection;
 
+@RequiredArgsConstructor
 @Service
 public class SamhaUserDetailsService implements UserDetailsService {
 
-    @Inject
-    private IGenericRepository genericRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final IUsuarioService usuarioService;
+
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Usuario usuario = this.genericRepository.findSingle(Usuario.class, q -> q.where(
-            q.equal(q.get(Usuario_.login), username)
-        ));
+        Usuario usuario = usuarioService.findByLogin(username);
         if(usuario == null){
             throw new UsernameNotFoundException("Usuario não encontrado");
         }else{
