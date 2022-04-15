@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class TestController {
 
     @GetMapping(value = "{id}")
-    public String getTestValue(@PathVariable("id") String id){
+    public String getTestValue(@PathVariable(value = "id", required = false) String id){
         return "O valor é: " + id;
     }
 }
