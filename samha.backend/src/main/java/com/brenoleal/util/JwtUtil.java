@@ -6,6 +6,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -14,7 +15,7 @@ import org.springframework.security.core.userdetails.User;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -24,8 +25,8 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class JwtUtil {
 
     public static String generateAccessToken(String username, List<String> claims, String issuer, int expiresAt){
-        //TODO: Parâmetro "secret" deve ser criptografado em um local seguro e descriptografado aqui.
-        Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
+        String secret = JwtUtil.getSecret();
+        Algorithm algorithm = Algorithm.HMAC256(secret.getBytes());
         return JWT.create()
                 .withSubject(username)
                 .withExpiresAt(new Date(System.currentTimeMillis() + expiresAt * 60 * 1000))
@@ -35,7 +36,8 @@ public class JwtUtil {
     }
 
     public static String generateRefreshToken(String username, String issuer, int expiresAt){
-        Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
+        String secret = JwtUtil.getSecret();
+        Algorithm algorithm = Algorithm.HMAC256(secret.getBytes());
         return JWT.create()
                 .withSubject(username)
                 .withExpiresAt(new Date(System.currentTimeMillis() + expiresAt * 60 * 1000))
@@ -59,11 +61,10 @@ public class JwtUtil {
     }
 
     public static DecodedJWT verifyToken(String token) throws JWTVerificationException {
-        //TODO: Armazenar "secret" em um local seguro e implementar criptografia
-        Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
+        String secret = JwtUtil.getSecret();
+        Algorithm algorithm = Algorithm.HMAC256(secret.getBytes());
         JWTVerifier verifier = JWT.require(algorithm).build();
-        DecodedJWT decodedJWT = verifier.verify(token);
-        return decodedJWT;
+        return verifier.verify(token);
     }
 
     public static void verifyToken(String token, HttpServletResponse response) throws IOException {
@@ -72,9 +73,7 @@ public class JwtUtil {
             String login = decodedJWT.getSubject();
             String[] papeis = decodedJWT.getClaim("papeis").asArray(String.class);
             Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-            Arrays.stream(papeis).forEach( papel -> {
-                authorities.add(new SimpleGrantedAuthority(papel));
-            });
+            Arrays.stream(papeis).forEach( papel -> authorities.add(new SimpleGrantedAuthority(papel)));
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(login, null, authorities);
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         }catch (Exception ex){
@@ -98,5 +97,17 @@ public class JwtUtil {
         error.put("cause", ex.getClass().toString());
         response.setContentType(APPLICATION_JSON_VALUE);
         new ObjectMapper().writeValue(response.getOutputStream(), error);
+    }
+
+    public static String getSecret(){
+        try {
+            Reader reader = new FileReader("secret.json");
+            var gson = new Gson();
+            var secret = gson.fromJson(reader, JWTSecret.class);
+            reader.close();
+            return secret.getSecret();
+        } catch (IOException e) {
+            throw new RuntimeException("Não foi possível encontrar a chave mestra");
+        }
     }
 }
