@@ -1,10 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {DataService} from '../../shared/data.service';
 import {FormBuilder, FormGroup} from '@angular/forms';
-import {createUserWithEmailAndPassword, getAuth} from '@angular/fire/auth';
-import {AuthService} from '../../shared/auth.service';
-import {LocalStorageService} from '../../shared/local-storage.service';
-import {Observable} from 'rxjs';
+import {LocalStorageService} from '../shared/local-storage.service';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 
 @Component({
