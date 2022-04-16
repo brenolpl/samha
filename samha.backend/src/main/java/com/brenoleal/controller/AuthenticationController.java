@@ -1,13 +1,7 @@
 package com.brenoleal.controller;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTVerifier;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.interfaces.DecodedJWT;
-import com.brenoleal.core.Papel;
-import com.brenoleal.core.Usuario;
-import com.brenoleal.service.IUsuarioService;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.brenoleal.commons.UseCaseFacade;
+import com.brenoleal.domain.RefreshToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,56 +11,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.util.*;
-import java.util.stream.Collectors;
-
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
-import static org.springframework.http.HttpStatus.FORBIDDEN;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/auth")
 public class AuthenticationController {
 
-    private final IUsuarioService usuarioService;
+    private final UseCaseFacade facade;
 
     @GetMapping("refreshToken")
     public void refreshToken(HttpServletResponse response, HttpServletRequest request) throws IOException {
-        String authorizationHeader = request.getHeader(AUTHORIZATION);
-        //TODO: Refatorar para diminuir cópia de código. classe: SamhaAuthorizationFilter
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            try {
-                String token = authorizationHeader.substring("Bearer ".length());
-                //TODO: Armazenar "secret" em um local seguro e implementar criptografia
-                Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
-                JWTVerifier verifier = JWT.require(algorithm).build();
-                DecodedJWT decodedJWT = verifier.verify(token);
-                String login = decodedJWT.getSubject();
-                Usuario usuario = usuarioService.findByLogin(login);
-                //TODO: Criar JWTUtil para geração de token e diminuir cópia de código. classe:
-                String access_token = JWT.create()
-                        .withSubject(usuario.getLogin())
-                        .withExpiresAt(new Date(System.currentTimeMillis() + 10 * 60 * 1000))
-                        .withIssuer(request.getRequestURL().toString())
-                        .withClaim("papeis", usuario.getPapeis().stream().map(Papel::getNome).collect(Collectors.toList()))
-                        .sign(algorithm);
-
-                Map<String, String> tokens = new HashMap<>();
-                tokens.put("access_token", access_token);
-                tokens.put("refresh_token", token);
-                response.setContentType(APPLICATION_JSON_VALUE);
-                new ObjectMapper().writeValue(response.getOutputStream(), tokens);
-            } catch (Exception ex) {
-                response.setHeader("error", ex.getMessage());
-                response.setStatus(FORBIDDEN.value());
-                Map<String, String> error = new HashMap<>();
-                error.put("errorMessage", ex.getMessage());
-                response.setContentType(APPLICATION_JSON_VALUE);
-                new ObjectMapper().writeValue(response.getOutputStream(), error);
-            }
-        } else {
-            throw new RuntimeException("Não foi possível encontrar o refresh token");
-        }
+        this.facade.execute(new RefreshToken(response, request));
     }
 }
