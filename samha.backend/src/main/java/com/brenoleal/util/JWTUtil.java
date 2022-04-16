@@ -22,10 +22,10 @@ import java.util.stream.Collectors;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-public class JwtUtil {
+public class JWTUtil {
 
     public static String generateAccessToken(String username, List<String> claims, String issuer, int expiresAt){
-        String secret = JwtUtil.getSecret();
+        String secret = JWTUtil.getSecret();
         Algorithm algorithm = Algorithm.HMAC256(secret.getBytes());
         return JWT.create()
                 .withSubject(username)
@@ -36,7 +36,7 @@ public class JwtUtil {
     }
 
     public static String generateRefreshToken(String username, String issuer, int expiresAt){
-        String secret = JwtUtil.getSecret();
+        String secret = JWTUtil.getSecret();
         Algorithm algorithm = Algorithm.HMAC256(secret.getBytes());
         return JWT.create()
                 .withSubject(username)
@@ -47,8 +47,8 @@ public class JwtUtil {
 
     public static void getNewToken(User user, HttpServletRequest request, HttpServletResponse response){
         List<String> claims = user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
-        String access_token = JwtUtil.generateAccessToken(user.getUsername(), claims, request.getRequestURL().toString(), 10);
-        String refresh_token = JwtUtil.generateRefreshToken(user.getUsername(), request.getRequestURL().toString(), 30);
+        String access_token = JWTUtil.generateAccessToken(user.getUsername(), claims, request.getRequestURL().toString(), 10);
+        String refresh_token = JWTUtil.generateRefreshToken(user.getUsername(), request.getRequestURL().toString(), 30);
         Map<String, String> tokens = new HashMap<>();
         tokens.put("access_token", access_token);
         tokens.put("refresh_token", refresh_token);
@@ -61,7 +61,7 @@ public class JwtUtil {
     }
 
     public static DecodedJWT verifyToken(String token) throws JWTVerificationException {
-        String secret = JwtUtil.getSecret();
+        String secret = JWTUtil.getSecret();
         Algorithm algorithm = Algorithm.HMAC256(secret.getBytes());
         JWTVerifier verifier = JWT.require(algorithm).build();
         return verifier.verify(token);
@@ -69,7 +69,7 @@ public class JwtUtil {
 
     public static void verifyToken(String token, HttpServletResponse response) throws IOException {
         try {
-            DecodedJWT decodedJWT = JwtUtil.verifyToken(token);
+            DecodedJWT decodedJWT = JWTUtil.verifyToken(token);
             String login = decodedJWT.getSubject();
             String[] papeis = decodedJWT.getClaim("papeis").asArray(String.class);
             Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
@@ -77,7 +77,7 @@ public class JwtUtil {
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(login, null, authorities);
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         }catch (Exception ex){
-            JwtUtil.writeErrorResponse(response, ex);
+            JWTUtil.writeErrorResponse(response, ex);
         }
     }
 

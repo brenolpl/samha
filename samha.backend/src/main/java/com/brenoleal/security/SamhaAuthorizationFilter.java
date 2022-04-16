@@ -1,6 +1,6 @@
 package com.brenoleal.security;
 
-import com.brenoleal.util.JwtUtil;
+import com.brenoleal.util.JWTUtil;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -19,7 +19,7 @@ public class SamhaAuthorizationFilter extends OncePerRequestFilter {
             String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
             if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")){
                 String token = authorizationHeader.substring("Bearer ".length());
-                JwtUtil.verifyToken(token, response);
+                JWTUtil.verifyToken(token, response);
                 filterChain.doFilter(request, response);
             } else {
                 filterChain.doFilter(request, response);

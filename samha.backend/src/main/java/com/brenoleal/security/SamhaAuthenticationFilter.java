@@ -1,6 +1,6 @@
 package com.brenoleal.security;
 
-import com.brenoleal.util.JwtUtil;
+import com.brenoleal.util.JWTUtil;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -33,6 +33,6 @@ public class SamhaAuthenticationFilter extends UsernamePasswordAuthenticationFil
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication auth) throws IOException, ServletException {
         User user = (User) auth.getPrincipal();
-        JwtUtil.getNewToken(user, request, response);
+        JWTUtil.getNewToken(user, request, response);
     }
 }
