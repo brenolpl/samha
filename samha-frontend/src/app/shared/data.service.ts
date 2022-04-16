@@ -1,20 +1,30 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs';
+import {LocalStorageService} from './local-storage.service';
 
 @Injectable({providedIn: 'root'})
 export class DataService {
 
   private static APIPREFIX = 'api/';
+  private options: any;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient,
+              private localStorage: LocalStorageService) {
+    this.options = {
+      headers: new HttpHeaders()
+        .set('Content-Type', 'application/x-www-form-urlencoded')
+        .set('Authorization', 'Bearer ' + localStorage.get("access_token"))
+    }
+  }
+
 
   public get(resource: string, id: string): Observable<any>{
-    return this.http.get(DataService.APIPREFIX + resource + '/' + id);
+    return this.http.get(DataService.APIPREFIX + resource + '/' + id, this.options);
   }
 
   public post(resource: string, body: any): Observable<any>{
-    return this.http.post(DataService.APIPREFIX + resource, body);
+    return this.http.post(DataService.APIPREFIX + resource, body, this.options);
   }
 
 }

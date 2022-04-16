@@ -1,7 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {LocalStorageService} from '../shared/local-storage.service';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {TokenResponseModel} from '../shared/common-model';
+import {DataService} from '../shared/data.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'samha-login',
@@ -11,8 +13,9 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 export class LoginComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
-              private http: HttpClient,
-              private localStorage: LocalStorageService) {
+              private localStorage: LocalStorageService,
+              private dataService: DataService,
+              private route: Router) {
   }
 
   form: FormGroup;
@@ -30,16 +33,14 @@ export class LoginComponent implements OnInit {
         body.set('login', this.form.value.login);
         body.set('senha', this.form.value.senha);
 
-      let options = {
-        headers: new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
-      };
-      this.http.post('api/login', body.toString(), options).subscribe(
-          (result)=> {
-            console.log(result);
-            //this.localStorage.set("token", result);
+      this.dataService.post('login', body.toString()).subscribe(
+          (result: TokenResponseModel)=> {
+            this.localStorage.set("access_token", result.access_token);
+            this.localStorage.set("refresh_token", result.refresh_token);
+            this.route.navigate(['home']);
           },
           (error) => {
-            console.log(error);
+            throw error;
           }
         );
     }else{
@@ -48,9 +49,12 @@ export class LoginComponent implements OnInit {
   }
 
   button() {
-    this.http.get("api/alocacao/1").subscribe(
-      (result) =>{
-        console.log(result);
+    this.dataService.get('alocacao', '293').subscribe(
+      (result) => {
+        console.log(result)
+      },
+      error => {
+        throw error
       }
     )
   }
