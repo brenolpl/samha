@@ -5,6 +5,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.brenoleal.core.Papel;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -109,5 +110,10 @@ public class JWTUtil {
         } catch (IOException e) {
             throw new RuntimeException("Não foi possível encontrar a chave mestra");
         }
+    }
+
+    public static List<String> getPapeisFromToken(String access_token){
+        DecodedJWT decodedJWT = JWTUtil.verifyToken(access_token);
+        return decodedJWT.getClaim("papeis").asList(String.class);
     }
 }
