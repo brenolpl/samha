@@ -33,7 +33,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         authenticationFilter.setFilterProcessesUrl("/api/login");
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(STATELESS);
-        http.authorizeRequests().antMatchers("/api/login/**", "/api/auth/**").permitAll();
+        http.authorizeRequests().antMatchers("/api/login/**", "/api/auth/**", "/*").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.GET,"/api/**").hasAuthority("COORDENADOR_ACADEMICO");
         http.authorizeRequests().antMatchers(HttpMethod.POST,"/api/**").hasAuthority("COORDENADOR_ACADEMICO");
         http.authorizeRequests().antMatchers(HttpMethod.PATCH,"/api/**").hasAuthority("COORDENADOR_ACADEMICO");
