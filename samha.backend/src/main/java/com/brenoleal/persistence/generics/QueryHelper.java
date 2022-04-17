@@ -34,6 +34,11 @@ public class QueryHelper<ENTITY, TARGET> implements IQueryHelper<ENTITY, TARGET>
     }
 
     @Override
+    public Root<ENTITY> getRoot() {
+        return this.root;
+    }
+
+    @Override
     public IQueryHelper<ENTITY, TARGET> where(Predicate... restrictions) {
         if(restrictions != null && restrictions[0] != null) this.query.where(restrictions);
         return this;
@@ -49,6 +54,17 @@ public class QueryHelper<ENTITY, TARGET> implements IQueryHelper<ENTITY, TARGET>
     public Predicate notEqual(Expression<?> var1, Object var2) {
         if(var2 == null) return builder.and();
         return builder.notEqual(var1, var2);
+    }
+
+    @Override
+    public Predicate or(Predicate... var1) {
+        if(var1 == null) return builder.and();
+        return builder.or(var1);
+    }
+
+    @Override
+    public <T> Predicate in(Expression<? extends T> expression) {
+        return builder.in(expression);
     }
 
     @Override
