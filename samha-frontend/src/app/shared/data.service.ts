@@ -9,6 +9,7 @@ export class DataService {
   private static APIPREFIX = 'api/';
   private options: any;
 
+  //TODO: localStorage não está sendo injetado no ngInit (delayed)
   constructor(private http: HttpClient,
               private localStorage: LocalStorageService) {
     this.options = {

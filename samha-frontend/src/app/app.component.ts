@@ -10,7 +10,7 @@ export class AppComponent implements OnInit{
   constructor(private localStorage: LocalStorageService) {
   }
   ngOnInit(): void {
-    this.localStorage.clear();
+    //this.localStorage.clear();
   }
   title = 'SAMHA Web';
 }
