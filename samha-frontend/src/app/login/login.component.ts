@@ -37,7 +37,9 @@ export class LoginComponent implements OnInit {
           (result: TokenResponseModel)=> {
             this.localStorage.set("access_token", result.access_token);
             this.localStorage.set("refresh_token", result.refresh_token);
-            this.route.navigate(['home']);
+            //HACK: metodo navigate estava redirecionando antes dos tokens serem setados no localstorage, fazendo com que a tela
+            //home não carregasse
+            new Promise( f => setTimeout(f, 1000)).then(result => this.route.navigate(['home']));
           },
           (error) => {
             throw error;
@@ -46,16 +48,5 @@ export class LoginComponent implements OnInit {
     }else{
       this.form.markAllAsTouched();
     }
-  }
-
-  button() {
-    this.dataService.get('alocacao', '293').subscribe(
-      (result) => {
-        console.log(result)
-      },
-      error => {
-        throw error
-      }
-    )
   }
 }

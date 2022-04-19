@@ -48,8 +48,8 @@ public class JWTUtil {
 
     public static void getNewToken(User user, HttpServletRequest request, HttpServletResponse response){
         List<String> claims = user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
-        String access_token = JWTUtil.generateAccessToken(user.getUsername(), claims, request.getRequestURL().toString(), 10);
-        String refresh_token = JWTUtil.generateRefreshToken(user.getUsername(), request.getRequestURL().toString(), 30);
+        String access_token = JWTUtil.generateAccessToken(user.getUsername(), claims, request.getRequestURL().toString(), 100);
+        String refresh_token = JWTUtil.generateRefreshToken(user.getUsername(), request.getRequestURL().toString(), 300);
         Map<String, String> tokens = new HashMap<>();
         tokens.put("access_token", access_token);
         tokens.put("refresh_token", refresh_token);

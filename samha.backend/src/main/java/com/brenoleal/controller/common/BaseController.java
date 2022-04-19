@@ -5,6 +5,7 @@ import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
+import java.util.List;
 
 @RestController
 public abstract class BaseController<ENTITY, KEY extends Serializable> {
@@ -16,6 +17,11 @@ public abstract class BaseController<ENTITY, KEY extends Serializable> {
         this.facade = facade;
         Assert.notNull(entityClass, "EntityClass can not be null");
         this.entityClass = entityClass;
+    }
+
+    @GetMapping("all")
+    public List<ENTITY> getAll(){
+        return this.facade.execute(new GetAll<>(this.entityClass));
     }
 
     @GetMapping("{id}")

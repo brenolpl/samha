@@ -24,6 +24,10 @@ export class DataService {
     return this.http.get(DataService.APIPREFIX + resource + '/' + id, this.options);
   }
 
+  public getAll(resource: string): Observable<any>{
+    return this.http.get(DataService.APIPREFIX + resource + '/all', this.options);
+  }
+
   public post(resource: string, body: any): Observable<any>{
     return this.http.post(DataService.APIPREFIX + resource, body, this.options);
   }

@@ -1,0 +1,16 @@
+<samha-toolbar (sideBarClicked)="onSideBarClicked()"></samha-toolbar>
+<mat-sidenav-container>
+  <mat-sidenav mode="side" [(opened)]="opened">
+    <button (click)="testButton($event)" mat-icon-button class="w-auto row">
+      <mat-icon>person</mat-icon>
+      Professores
+    </button>
+    <button (click)="testButton($event)" mat-icon-button class="w-auto row"><i class="fa-regular fa-circle-user fa-2x"></i> Coordenadores</button>
+    <button (click)="testButton($event)" mat-icon-button class="w-auto row"><i class="fa-solid fa-link fa-2x"></i> Alocações</button>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <div class="container m-5">
+<!--      <samha-list resource="professor"></samha-list>-->
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
