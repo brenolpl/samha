@@ -1,27 +1,37 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {DataService} from './data.service';
 import {LocalStorageService} from './local-storage.service';
-import { ListComponent } from './list/list.component';
-import {MatTableModule} from '@angular/material/table';
+import {ToolbarComponent} from './toolbar/toolbar.component';
+import {AppRoutingModule} from '../app-routing.module';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {LoginComponent} from '../login/login.component';
+import {HomeComponent} from '../home/home.component';
+import { TableComponent } from './table/table.component';
+import {MaterialModule} from './material/material.module';
 
 @NgModule({
-    declarations: [
-        ListComponent,
-    ],
-    imports: [
-        CommonModule,
-        FormsModule,
-        ReactiveFormsModule,
-        MatTableModule,
-    ],
-    exports: [
-        ListComponent
-    ],
-    providers: [
-        DataService,
-        LocalStorageService
-    ]
+  declarations: [
+    LoginComponent,
+    HomeComponent,
+    ToolbarComponent,
+    TableComponent,
+  ],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    MaterialModule
+  ],
+  exports: [
+  ],
+  providers: [
+    DataService,
+    LocalStorageService
+  ]
 })
-export class SharedModule { }
+export class SharedModule {
+}
