@@ -14,6 +14,7 @@ public class Menu {
     private String nome;
 
     @ManyToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "papel_id", foreignKey = @ForeignKey(name = "FK_MENU_PAPEL"))
     private Set<Papel> papeis;
 
     public int getId() {

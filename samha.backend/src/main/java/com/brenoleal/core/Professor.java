@@ -8,30 +8,32 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import java.io.Serializable;
 
+
+import java.util.Collection;
+import javax.persistence.*;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 @Entity
 @Table(name = "professor")
-public class Professor implements Serializable {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int professor_id;
+@PrimaryKeyJoinColumn(name = "professor_id")
+public class Professor extends Servidor implements Comparable<Object>{
 
     @Column(nullable = false)
     private double cargaHoraria;
-    
-    @Column(nullable = false)
+
+    @Column(nullable = false, unique = false)
     private boolean ativo;
-    
+
     @ManyToOne(fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.NO_ACTION)
     @Cascade(CascadeType.SAVE_UPDATE)
     @JoinColumn(name = "coordenadoria_id", nullable = false)
     private Coordenadoria coordenadoria;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id")
-    private Usuario usuario;
-    
+
 //    public String obterNomeAbreviado(){
 //
 //        int espaco = this.getNome().indexOf(" ");
@@ -53,7 +55,7 @@ public class Professor implements Serializable {
 //        }
 //        return getNome();
 //    }
-    
+
 //    public String obterPrimeiroNome(){
 //
 //        int espaco = this.getNome().indexOf(" ");
@@ -87,29 +89,19 @@ public class Professor implements Serializable {
     public void setAtivo(boolean ativo) {
         this.ativo = ativo;
     }
-    
-    public Object[] toArray() {
-       // return new Object[] { this, getMatricula(), getCoordenadoria().getNome()};
-        return null;
-    }
-    
+
+//    public Object[] toArray() {
+//        return new Object[] { this, getMatricula(), getCoordenadoria().getNome()};
+//    }
+
     public Object[] toArrayCargaHoraria() {
         return new Object[] { this, getCargaHoraria()};
     }
 
-    public Usuario getUsuario() {
-        return usuario;
-    }
+    @Override
+    public int compareTo(Object o) {
 
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-    }
-
-    public int getProfessor_id() {
-        return professor_id;
-    }
-
-    public void setProfessor_id(int professor_id) {
-        this.professor_id = professor_id;
+        Professor other = (Professor) o;
+        return this.getNome().compareTo(other.getNome());
     }
 }

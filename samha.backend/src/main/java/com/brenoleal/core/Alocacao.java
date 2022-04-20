@@ -48,7 +48,7 @@ public class Alocacao implements Serializable, Comparable<Object>{
     private Professor professor1;
     
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "professor2_id", nullable = true)
+    @JoinColumn(name = "professor2_id")
     @OnDelete(action = OnDeleteAction.NO_ACTION)
     private Professor professor2;
 

@@ -30,35 +30,16 @@ public class Curso implements Serializable, Comparable<Object> {
     @Column(nullable = false)
     private String nivel;
     
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "coordenadoria_id", nullable = true)
     @Cascade(CascadeType.SAVE_UPDATE)
     private Coordenadoria coordenadoria;
     
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "coordenador_id", nullable = true)
+    @JoinColumn(name = "professor_id")
     @Cascade(CascadeType.SAVE_UPDATE)
-    private Usuario coordenador;
+    private Professor professor;
 
-    public Curso() {
-    }
-
-    public Curso(int id, String nome, int qtPeriodos, String nivel, Coordenadoria coordenadoria, Usuario coordenador) {
-        this.id = id;
-        this.nome = nome;
-        this.qtPeriodos = qtPeriodos;
-        this.nivel = nivel;
-        this.coordenadoria = coordenadoria;
-        this.coordenador = coordenador;
-    }
-
-    public Curso(String nome, int qtPeriodos, String nivel, Coordenadoria coordenadoria, Usuario coordenador) {
-        this.nome = nome;
-        this.qtPeriodos = qtPeriodos;
-        this.nivel = nivel;
-        this.coordenadoria = coordenadoria;
-        this.coordenador = coordenador;
-    }
 
     public int getId() {
         return id;
@@ -99,14 +80,6 @@ public class Curso implements Serializable, Comparable<Object> {
     public void setCoordenadoria(Coordenadoria coordenadoria) {
         this.coordenadoria = coordenadoria;
     }
-
-    public Usuario getCoordenador() {
-        return coordenador;
-    }
-
-    public void setCoordenador(Usuario coordenador) {
-        this.coordenador = coordenador;
-    }
     
     @Override
     public String toString() {
@@ -121,5 +94,13 @@ public class Curso implements Serializable, Comparable<Object> {
     public int compareTo(Object o) {
         Curso other = (Curso) o;
         return this.getNome().compareTo(other.getNome());
+    }
+
+    public Professor getProfessor() {
+        return professor;
+    }
+
+    public void setProfessor(Professor professor) {
+        this.professor = professor;
     }
 }

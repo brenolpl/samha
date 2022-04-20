@@ -3,6 +3,7 @@ package com.brenoleal.core;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "papel")
 public class Papel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

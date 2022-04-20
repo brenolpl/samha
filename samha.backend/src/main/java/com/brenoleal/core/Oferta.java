@@ -38,21 +38,6 @@ public class Oferta implements Serializable {
     public Oferta() {
     }
 
-    public Oferta(int id, int ano, int semestre, int tempoMaximoTrabalho, int intervaloMinimo, Turma turma) {
-        this.id = id;
-        this.semestre = semestre;
-        this.tempoMaximoTrabalho = tempoMaximoTrabalho;
-        this.intervaloMinimo = intervaloMinimo;
-        this.turma = turma;
-    }
-
-    public Oferta(int ano, int semestre, int tempoMaximoTrabalho, int intervaloMinimo, Turma turma) {
-        this.semestre = semestre;
-        this.tempoMaximoTrabalho = tempoMaximoTrabalho;
-        this.intervaloMinimo = intervaloMinimo;
-        this.turma = turma;
-    }
-
     public double getTempoMaximoTrabalho() {
         return tempoMaximoTrabalho;
     }
