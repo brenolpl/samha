@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {DataService} from '../shared/data.service';
 import {MenuEnum} from '../shared/menu-enum';
-import {ProfessorModel} from '../meta-model/professor-model';
+import {usuarioColumns} from '../meta-model/usuario';
+import {alocacaoColumns} from '../meta-model/alocacao';
+import {disciplina} from '../meta-model/disciplina';
 
 @Component({
   selector: 'samha-home',
@@ -9,16 +11,17 @@ import {ProfessorModel} from '../meta-model/professor-model';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit{
-  opened = false;
-  menusPermitidos: number[];
-  professoresArray: ProfessorModel[];
-
-  professores: boolean;
+  opened = true;
+  menusPermitidos: any[];
   coordenadores: boolean;
+  professores:boolean;
   alocacoes: boolean;
-  username: string = 'Teste';
+  selectedMenu: MenuEnum;
 
-  constructor(private dataService: DataService) { }
+  columns: any[] = [];
+
+  constructor(private dataService: DataService) {
+  }
 
   ngOnInit(): void {
     this.dataService.post('menu/list', null).subscribe(
@@ -45,7 +48,7 @@ export class HomeComponent implements OnInit{
             break;
           case MenuEnum.PROFESSORES:
             this.professores = true;
-           // this.loadProfessores();
+            // this.loadProfessores();
             break;
           case MenuEnum.ALOCACOES:
             this.alocacoes = true;
@@ -55,18 +58,26 @@ export class HomeComponent implements OnInit{
     )
   }
 
-  private loadProfessores(){
-    this.dataService.getAll('professor/all').subscribe(
-      (result: ProfessorModel[]) => {
-        this.professoresArray = result;
-      },
-      (error) => {
-        throw error;
-      }
-    )
-  }
-
   onSideBarClicked() {
     this.opened = ! this.opened;
+  }
+
+  onBotaoProfessorClick() {
+    this.columns = usuarioColumns;
+    this.selectedMenu = MenuEnum.PROFESSORES;
+  }
+
+  onBotaoCoordenadoresClick() {
+    this.selectedMenu = MenuEnum.COORDENADORES;
+  }
+
+  onBotaoAlocacaoClick() {
+    this.columns = alocacaoColumns;
+    this.selectedMenu = MenuEnum.ALOCACOES
+  }
+
+  onBotaoDisciplinaClick() {
+    this.columns = disciplina;
+    this.selectedMenu = MenuEnum.DISCIPLINA
   }
 }
