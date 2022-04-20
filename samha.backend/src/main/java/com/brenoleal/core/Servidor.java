@@ -61,4 +61,12 @@ public class Servidor implements Serializable{
     public String toString() {
         return nome;
     }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
 }
