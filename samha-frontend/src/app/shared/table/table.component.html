@@ -1,6 +1,6 @@
 <mat-card>
 
-  <mat-toolbar color="primary">{{resource}}</mat-toolbar>
+  <mat-toolbar color="accent">{{toolbarHeader}}</mat-toolbar>
   <div *ngIf="dataSource$ | async as dataSource; else loading">
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
