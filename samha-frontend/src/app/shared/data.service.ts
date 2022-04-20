@@ -6,7 +6,7 @@ import {LocalStorageService} from './local-storage.service';
 @Injectable({providedIn: 'root'})
 export class DataService {
 
-  private static APIPREFIX = 'api/';
+  public static APIPREFIX = 'api/';
   private options: any;
 
   //TODO: localStorage não está sendo injetado no ngInit (delayed)
@@ -18,13 +18,13 @@ export class DataService {
         .set('Authorization', 'Bearer ' + localStorage.get("access_token"))
     }
   }
-
+  //TODO: Serviço deve passar a retornar a observable do próprio http e não Observable<any>
 
   public get(resource: string, id: string): Observable<any>{
     return this.http.get(DataService.APIPREFIX + resource + '/' + id, this.options);
   }
 
-  public getAll(resource: string): Observable<any>{
+  public getAll(resource: string){
     return this.http.get(DataService.APIPREFIX + resource + '/all', this.options);
   }
 
