@@ -1,34 +1,42 @@
-<samha-toolbar
-  (sideBarClicked)="onSideBarClicked()
-  "></samha-toolbar>
-<mat-sidenav-container>
-  <mat-sidenav mode="side" [(opened)]="opened">
-    <button (click)="onBotaoProfessorClick()" mat-icon-button class="w-auto row">
-      <mat-icon>person</mat-icon>
-      Professores
-    </button>
-    <button (click)="onBotaoCoordenadoresClick()" mat-icon-button class="w-auto row">
-      <mat-icon> person_pin</mat-icon> Coordenadores
-    </button>
-    <button (click)="onBotaoAlocacaoClick()" mat-icon-button class="w-auto row">
-      <mat-icon>link</mat-icon>Alocações
-    </button>
-    <button (click)="onBotaoDisciplinaClick()" mat-icon-button class="w-auto row">
-      <mat-icon>library_books</mat-icon>Disciplinas
-    </button>
-  </mat-sidenav>
-  <mat-sidenav-content>
-    <div *ngIf="selectedMenu == 1">
-      <samha-table [resource]="'usuario'" [columns]="columns"></samha-table>
-    </div>
-    <div *ngIf="selectedMenu == 2">
-      <samha-table [resource]="'coordenador'" [columns]="columns"></samha-table>
-    </div>
-    <div *ngIf="selectedMenu == 3">
-      <samha-table [resource]="'alocacao'" [columns]="columns"></samha-table>
-    </div>
-    <div *ngIf="selectedMenu == 4">
-      <samha-table [resource]="'disciplina'" [columns]="columns"></samha-table>
-    </div>
-  </mat-sidenav-content>
-</mat-sidenav-container>
+<ng-template #loading>
+  <div class="loading-spinner m-auto">
+    <mat-spinner></mat-spinner>
+  </div>
+</ng-template>
+<ng-container *ngIf="!isloading; else loading">
+  <samha-toolbar (sideBarClicked)="onSideBarClicked()"></samha-toolbar>
+  <mat-sidenav-container>
+    <mat-sidenav mode="side" [(opened)]="opened">
+      <button (click)="onBotaoProfessorClick()" mat-icon-button class="w-auto row">
+        <mat-icon>person</mat-icon>
+        Professores
+      </button>
+      <button (click)="onBotaoCoordenadoresClick()" mat-icon-button class="w-auto row">
+        <mat-icon> person_pin</mat-icon>
+        Coordenadores
+      </button>
+      <button (click)="onBotaoAlocacaoClick()" mat-icon-button class="w-auto row">
+        <mat-icon>link</mat-icon>
+        Alocações
+      </button>
+      <button (click)="onBotaoDisciplinaClick()" mat-icon-button class="w-auto row">
+        <mat-icon>library_books</mat-icon>
+        Disciplinas
+      </button>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <div *ngIf="selectedMenu == 1">
+        <samha-table [resource]="'professor'" [columns]="columns"></samha-table>
+      </div>
+      <div *ngIf="selectedMenu == 2">
+        <samha-table [resource]="'coordenador'" [columns]="columns"></samha-table>
+      </div>
+      <div *ngIf="selectedMenu == 3">
+        <samha-table [resource]="'alocacao'" [columns]="columns"></samha-table>
+      </div>
+      <div *ngIf="selectedMenu == 4">
+        <samha-table [resource]="'disciplina'" [columns]="columns"></samha-table>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</ng-container>

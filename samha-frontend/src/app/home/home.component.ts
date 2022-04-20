@@ -1,16 +1,20 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {DataService} from '../shared/data.service';
 import {MenuEnum} from '../shared/menu-enum';
-import {usuarioColumns} from '../meta-model/usuario';
 import {alocacaoColumns} from '../meta-model/alocacao';
 import {disciplina} from '../meta-model/disciplina';
+import {Subscription} from 'rxjs';
+import {LocalStorageService} from '../shared/local-storage.service';
+import {professorColumns} from '../meta-model/professor';
 
 @Component({
   selector: 'samha-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent implements OnInit{
+export class HomeComponent implements OnInit, OnDestroy{
+  isloading: boolean = true;
+  private subscription: Subscription;
   opened = true;
   menusPermitidos: any[];
   coordenadores: boolean;
@@ -20,23 +24,16 @@ export class HomeComponent implements OnInit{
 
   columns: any[] = [];
 
-  constructor(private dataService: DataService) {
+  constructor(private dataService: DataService,
+              private localStorage: LocalStorageService) {
   }
 
   ngOnInit(): void {
-    this.dataService.post('menu/list', null).subscribe(
-      (result) => {
-        this.menusPermitidos = result;
-        this.loadMenus();
-      },
-      (error) => {
-        throw error;
-      }
-    )
+    this.loadData();
   }
 
-  testButton($event: MouseEvent) {
-
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   private loadMenus() {
@@ -63,7 +60,7 @@ export class HomeComponent implements OnInit{
   }
 
   onBotaoProfessorClick() {
-    this.columns = usuarioColumns;
+    this.columns = professorColumns;
     this.selectedMenu = MenuEnum.PROFESSORES;
   }
 
@@ -79,5 +76,26 @@ export class HomeComponent implements OnInit{
   onBotaoDisciplinaClick() {
     this.columns = disciplina;
     this.selectedMenu = MenuEnum.DISCIPLINA
+  }
+
+  private loadData() {
+    console.log('test');
+    if(this.localStorage.get('access_token')) {
+      console.log('test2');
+      this.subscription = this.dataService.post('menu/list', null).subscribe(
+        (result) => {
+          this.menusPermitidos = result;
+          console.log(result);
+          this.loadMenus();
+          this.isloading = false;
+        },
+        (error) => {
+          throw error;
+        }
+      );
+    }else{
+      console.log('test3');
+      this.loadData();
+    }
   }
 }
