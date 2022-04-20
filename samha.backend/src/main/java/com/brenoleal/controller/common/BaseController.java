@@ -1,6 +1,7 @@
 package com.brenoleal.controller.common;
 
 import com.brenoleal.commons.UseCaseFacade;
+import com.brenoleal.domain.commons.*;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
