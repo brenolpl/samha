@@ -1,0 +1,20 @@
+<mat-card>
+
+  <mat-toolbar color="primary">{{resource}}</mat-toolbar>
+  <div *ngIf="dataSource$ | async as dataSource; else loading">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+      <ng-container *ngFor="let column of columns" [matColumnDef]="column.columnDef">
+        <mat-header-cell *matHeaderCellDef>{{ column.header }}</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{ row[column.columnDef] }}</mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+    </table>
+  </div>
+  <ng-template #loading>
+    <div class="loading-spinner">
+      <mat-spinner></mat-spinner>
+    </div>
+  </ng-template>
+</mat-card>
