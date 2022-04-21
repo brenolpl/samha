@@ -1,10 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {DataService} from '../shared/data.service';
+import {DataService} from '../shared/service/data.service';
 import {MenuEnum} from '../shared/menu-enum';
 import {alocacaoColumns} from '../meta-model/alocacao';
 import {disciplina} from '../meta-model/disciplina';
 import {Subscription} from 'rxjs';
-import {LocalStorageService} from '../shared/local-storage.service';
+import {LocalStorageService} from '../shared/service/local-storage.service';
 import {professorColumns} from '../meta-model/professor';
 
 @Component({
@@ -45,7 +45,6 @@ export class HomeComponent implements OnInit, OnDestroy{
             break;
           case MenuEnum.PROFESSORES:
             this.professores = true;
-            // this.loadProfessores();
             break;
           case MenuEnum.ALOCACOES:
             this.alocacoes = true;
@@ -79,13 +78,10 @@ export class HomeComponent implements OnInit, OnDestroy{
   }
 
   private loadData() {
-    console.log('test');
     if(this.localStorage.get('access_token')) {
-      console.log('test2');
       this.subscription = this.dataService.post('menu/list', null).subscribe(
         (result) => {
           this.menusPermitidos = result;
-          console.log(result);
           this.loadMenus();
           this.isloading = false;
         },
@@ -94,7 +90,6 @@ export class HomeComponent implements OnInit, OnDestroy{
         }
       );
     }else{
-      console.log('test3');
       this.loadData();
     }
   }

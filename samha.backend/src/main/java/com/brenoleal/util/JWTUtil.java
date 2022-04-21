@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-public class JWTUtil {
+public abstract class JWTUtil {
 
     public static String generateAccessToken(String username, List<String> claims, String issuer, int expiresAt){
         String secret = JWTUtil.getSecret();

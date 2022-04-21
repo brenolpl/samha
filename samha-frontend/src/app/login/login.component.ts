@@ -1,10 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
-import {LocalStorageService} from '../shared/local-storage.service';
-import {DataService} from '../shared/data.service';
+import {LocalStorageService} from '../shared/service/local-storage.service';
+import {DataService} from '../shared/service/data.service';
 import {Router} from '@angular/router';
 import {Subscription} from 'rxjs';
-import {TokenResponseModel} from '../shared/common-model';
+import {TokenResponseModel} from '../meta-model/token-model';
 
 @Component({
   selector: 'samha-login',
@@ -35,7 +35,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         body.set('login', this.form.value.login);
         body.set('senha', this.form.value.senha);
 
-      this.subscription = this.dataService.post('login', body.toString()).subscribe(
+      this.subscription = this.dataService.login(body.toString()).subscribe(
           (result: TokenResponseModel)=> {
             this.localStorage.set("access_token", result.access_token);
             this.localStorage.set("refresh_token", result.refresh_token);
