@@ -1,8 +1,8 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {DataService} from './data.service';
-import {LocalStorageService} from './local-storage.service';
+import {DataService} from './service/data.service';
+import {LocalStorageService} from './service/local-storage.service';
 import {ToolbarComponent} from './toolbar/toolbar.component';
 import {AppRoutingModule} from '../app-routing.module';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
