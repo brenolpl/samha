@@ -1,14 +1,20 @@
 package com.brenoleal.persistence.generics;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.brenoleal.commons.UseCase;
+import com.brenoleal.persistence.filter.PagedList;
+import com.brenoleal.persistence.filter.Page;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Tuple;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Repository
 public class GenericRepository implements IGenericRepository{
@@ -53,6 +59,26 @@ public class GenericRepository implements IGenericRepository{
     public <ENTITY, TARGET> List<TARGET> find(Class<ENTITY> entityClass, Class<TARGET> targetClass, IQueryBuilder<ENTITY, TARGET> queryBuilder) {
         CriteriaQuery<TARGET> query = this.createCriteriaQuery(entityClass, targetClass, queryBuilder);
         return entityManager.createQuery(query).getResultList();
+    }
+
+    @Override
+    public <ENTITY, TARGET> PagedList<TARGET> find(Class<ENTITY> entityClass, Class<TARGET> targetClass, Page page, IQueryBuilder<ENTITY, TARGET> queryBuilder) {
+        if (page == null)
+            return new PagedList<>(this.find(entityClass, targetClass, queryBuilder));
+
+        // Execute Base Criteria Query
+        CriteriaQuery<TARGET> criteriaQuery = this.createCriteriaQuery(entityClass, targetClass, queryBuilder);
+
+        page.setTotalItems(PersistenceHelper.count(this.entityManager, criteriaQuery).intValue());
+
+        if (page.getTotalItems() == 0) return new PagedList<>(new ArrayList<TARGET>(), page);
+
+        List<TARGET> list = entityManager.createQuery(criteriaQuery)
+                .setFirstResult(page.getSkip() == null ? page.getSize() * page.getNumber() : page.getSkip())
+                .setMaxResults(page.getSize())
+                .getResultList();
+
+        return new PagedList<>(list, page);
     }
 
     @Override

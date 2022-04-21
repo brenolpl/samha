@@ -1,8 +1,13 @@
 package com.brenoleal.persistence.generics;
 
+import com.brenoleal.persistence.filter.EntityQueryParser;
+import com.brenoleal.persistence.filter.Query;
+
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.*;
 import javax.persistence.metamodel.SingularAttribute;
+import java.util.Collection;
+import java.util.Map;
 
 public class QueryHelper<ENTITY, TARGET> implements IQueryHelper<ENTITY, TARGET>{
 
@@ -13,6 +18,8 @@ public class QueryHelper<ENTITY, TARGET> implements IQueryHelper<ENTITY, TARGET>
     private Class<TARGET> targetClass;
     private Root<ENTITY> root;
 
+    private final EntityQueryParser<ENTITY, TARGET> queryParser;
+
     public QueryHelper(EntityManager entityManager, Class<ENTITY> entityClass, Class<TARGET> targetClass) {
         this.entityManager = entityManager;
         this.entityClass = entityClass;
@@ -21,6 +28,7 @@ public class QueryHelper<ENTITY, TARGET> implements IQueryHelper<ENTITY, TARGET>
         this.builder = this.entityManager.getCriteriaBuilder();
         this.query = this.builder.createQuery(targetClass);
         this.root = this.query.from(entityClass);
+        this.queryParser = new EntityQueryParser<>(builder, query, root, entityClass);
     }
 
     @Override
@@ -70,5 +78,47 @@ public class QueryHelper<ENTITY, TARGET> implements IQueryHelper<ENTITY, TARGET>
     @Override
     public <Y> Path<Y> get(SingularAttribute<? super ENTITY, Y> attribute) {
         return root.get(attribute);
+    }
+
+    @Override
+    public IQueryHelper<ENTITY, TARGET> entityQuery(Query entityQuery) {
+
+        if (!isEmpty(entityQuery.getProjections()))
+            query.multiselect(queryParser.buildExpressions(entityQuery.getProjections()));
+
+        if (!isEmpty(entityQuery.getPredicates()))
+            query.where(queryParser.buildPredicate(entityQuery.getPredicates()));
+
+        if (!isEmpty(entityQuery.getGroups()))
+            query.groupBy(queryParser.buildExpressions(entityQuery.getGroups()));
+
+        if (!isEmpty(entityQuery.getOrders()))
+            query.orderBy(queryParser.buildOrders(entityQuery.getOrders()));
+
+        return this;
+    }
+
+    @Override
+    public IQueryHelper<ENTITY, TARGET> distinct(boolean distinct) {
+        query.distinct(distinct);
+        return this;
+    }
+
+    @Override
+    public Class<ENTITY> getEntityClass() {
+        return this.entityClass;
+    }
+
+    @Override
+    public Class<TARGET> getTargetClass() {
+        return this.targetClass;
+    }
+
+    private <T> boolean isEmpty(Collection<T> collections) {
+        return collections == null || collections.isEmpty();
+    }
+
+    private <K, V> boolean isEmpty(Map<K, V> map) {
+        return map == null || map.isEmpty();
     }
 }

@@ -1,5 +1,8 @@
 package com.brenoleal.persistence.generics;
 
+import com.brenoleal.persistence.filter.Page;
+import com.brenoleal.persistence.filter.PagedList;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -18,6 +21,8 @@ public interface IGenericRepository {
     <ENTITY> List<ENTITY> find(Class<ENTITY> entityClass, IQueryBuilder<ENTITY, ENTITY> queryBuilder);
 
     <ENTITY, TARGET> List<TARGET> find(Class<ENTITY> entityClass, Class<TARGET> targetClass, IQueryBuilder<ENTITY, TARGET> queryBuilder);
+
+    <ENTITY, TARGET> PagedList<TARGET> find(Class<ENTITY> entityClass, Class<TARGET> targetClass, Page page, IQueryBuilder<ENTITY, TARGET> queryBuilder);
 
     <ENTITY> ENTITY findSingle(Class<ENTITY> entityClass, IQueryBuilder<ENTITY, ENTITY> queryBuilder);
 

@@ -1,5 +1,7 @@
 package com.brenoleal.persistence.generics;
 
+import com.brenoleal.persistence.filter.Query;
+
 import javax.persistence.criteria.*;
 import javax.persistence.metamodel.SingularAttribute;
 
@@ -22,5 +24,13 @@ public interface IQueryHelper<ENTITY, TARGET> {
     <T> Predicate in(Expression<? extends T> expression);
 
     <Y> Path<Y> get(SingularAttribute<? super ENTITY, Y> attribute);
+
+    IQueryHelper<ENTITY, TARGET> entityQuery(Query entityQuery);
+
+    IQueryHelper<ENTITY, TARGET> distinct(boolean distinct);
+
+    Class<ENTITY> getEntityClass();
+
+    Class<TARGET> getTargetClass();
 
 }

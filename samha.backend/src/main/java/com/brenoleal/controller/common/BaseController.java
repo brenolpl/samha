@@ -2,6 +2,8 @@ package com.brenoleal.controller.common;
 
 import com.brenoleal.commons.UseCaseFacade;
 import com.brenoleal.domain.commons.*;
+import com.brenoleal.persistence.filter.PagedList;
+import com.brenoleal.persistence.filter.Query;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +20,12 @@ public abstract class BaseController<ENTITY, KEY extends Serializable> {
         this.facade = facade;
         Assert.notNull(entityClass, "EntityClass can not be null");
         this.entityClass = entityClass;
+    }
+
+
+    @PostMapping("query")
+    public PagedList<ENTITY> query(@RequestBody Query query){
+        return this.facade.execute(new QueryEntities<>(query, this.entityClass));
     }
 
     @GetMapping("all")

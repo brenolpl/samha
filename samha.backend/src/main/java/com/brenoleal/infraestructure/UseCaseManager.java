@@ -1,5 +1,7 @@
-package com.brenoleal.commons;
+package com.brenoleal.infraestructure;
 
+import com.brenoleal.commons.IUseCaseManager;
+import com.brenoleal.commons.UseCase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
