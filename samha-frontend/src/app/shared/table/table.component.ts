@@ -2,11 +2,12 @@ import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {Observable, of} from 'rxjs';
 import {DataService} from '../service/data.service';
 import {catchError, tap} from 'rxjs/operators';
-import {QueryMirror} from '../query-mirror';
+import {Filter, Predicate, QueryMirror} from '../query-mirror';
 import {HttpEvent, HttpHeaderResponse, HttpProgressEvent, HttpResponse, HttpSentEvent, HttpUserEvent} from '@angular/common/http';
 import {Page, PagedList} from '../paged-list';
 import {TableColumnModel} from '../../meta-model/table-column-model';
 import {MatButton} from '@angular/material/button';
+import {FormBuilder, FormGroup} from '@angular/forms';
 
 /**
  * Este componente gera dinamicamente uma tabela de acordo com os parâmetros passados
@@ -29,32 +30,46 @@ export class TableComponent implements OnInit {
   fiftyButtonSelected: boolean = false;
   handredButtonSelected: boolean = false;
   currentPage: number = 1;
-  selectedValue: number = 10;
+  maxRows: number = 10;
   lastPage: number;
   fowardButtonDisabled: boolean = false;
   backwardButtonDisabled: boolean = true;
-  dataSource$: Observable<HttpEvent<PagedList>>;
+  dataSource$: Observable<PagedList>;
   displayedColumns: string[] = [];
   toolbarHeader: string;
+  orderBy: string = '';
+  group: FormGroup;
 
-  constructor(private dataService: DataService) { }
+  constructor(private dataService: DataService,
+              private formBuilder: FormBuilder) {
+    this.group = this.formBuilder.group({
+      search: [null]
+    })
+  }
 
   ngOnInit(): void {
     this.defineDisplayedColumns()
-    this.dataSource$ = this.carregarUsuarios(this.selectedValue, this.currentPage);
+    this.dataSource$ = this.loadTableData();
     this.defineToolbarHeader();
   }
 
-  carregarUsuarios(size: number, skip: number){
+  private loadTableData(filter: Predicate[] = []): Observable<PagedList>{
     const query = new QueryMirror(this.resource);
     let projections: string[] = [];
     let page: Page = {
-      size: size,
-      skip: skip
+      size: this.maxRows,
+      skip: this.calculateSkip()
+    };
+    let orFilter: Filter = {
+      and: {
+        or: filter
+      }
     };
     query.pageItem(page);
     this.columns.map(column => projections.push(column.columnDef));
-    query.selectList(projections)
+    query.selectList(projections);
+    if(filter.length > 0) query.where(orFilter);
+    if(this.orderBy !== '') query.orderBy(this.orderBy);
     return this.dataService.query(query).pipe(tap(
     next => {
 
@@ -92,25 +107,25 @@ export class TableComponent implements OnInit {
 
 
   setPageSize(value: number) {
-    this.selectedValue = value;
+    this.maxRows = value;
     switch(value){
       case 10:
         this.tenButtonSelected = true;
         this.fiftyButtonSelected = false;
         this.handredButtonSelected = false;
-        this.dataSource$ = this.carregarUsuarios(value, this.calculateSkip());
+        this.dataSource$ = this.loadTableData();
         break;
       case 50:
         this.tenButtonSelected = false;
         this.fiftyButtonSelected = true;
         this.handredButtonSelected = false;
-        this.dataSource$ = this.carregarUsuarios(value, this.calculateSkip());
+        this.dataSource$ = this.loadTableData();
         break;
       case 100:
         this.tenButtonSelected = false;
         this.fiftyButtonSelected = false;
         this.handredButtonSelected = true;
-        this.dataSource$ = this.carregarUsuarios(value, this.calculateSkip());
+        this.dataSource$ = this.loadTableData();
         break;
     }
   }
@@ -125,15 +140,13 @@ export class TableComponent implements OnInit {
   fowardPage() {
     this.currentPage++;
     this.checkButtons();
-    this.dataSource$ = this.carregarUsuarios(this.selectedValue, this.calculateSkip());
+    this.dataSource$ = this.loadTableData();
   }
-
-
 
   backwardPage() {
     this.currentPage--;
     this.checkButtons()
-    this.dataSource$ = this.carregarUsuarios(this.selectedValue, this.calculateSkip());
+    this.dataSource$ = this.loadTableData();
   }
 
   private checkButtons(){
@@ -141,14 +154,55 @@ export class TableComponent implements OnInit {
     if(this.currentPage >= this.lastPage) this.fowardButtonDisabled = true; else this.fowardButtonDisabled = false;
   }
 
-  private calculateLastPage = () => Math.ceil(this.pagedList.page.totalItems / this.selectedValue);
+  private calculateLastPage = () => Math.ceil(this.pagedList.page.totalItems / this.maxRows);
 
-  private calculateSkip(): number{
-    this.onSelectedValueChanged();
-    return this.selectedValue * (this.currentPage - 1);
+  private calculateSkip(): number {
+    if(this.pagedList !== null && this.pagedList !== undefined) this.onSelectedValueChanged();
+    return this.maxRows * (this.currentPage - 1);
   }
 
   private onSelectedValueChanged(): void{
-    while(this.currentPage > this.calculateLastPage()) --this.currentPage;
+    if(this.pagedList.page.totalItems != 0) {
+      let lastPage = this.calculateLastPage();
+      while (this.currentPage > lastPage) --this.currentPage;
+    }else{
+      this.currentPage = 1;
+    }
+  }
+
+  sort(columnDef: string) {
+    if(this.orderBy !== '' && this.orderBy.includes(columnDef)){
+      if(this.orderBy.includes('asc')){
+        this.orderBy = this.orderBy.replace('asc', 'desc');
+      }else{
+        this.orderBy = '';
+      }
+    }else{
+      this.orderBy = columnDef + ' asc';
+    }
+    this.dataSource$ = this.loadTableData();
+  }
+
+  showArrowUp(columnDef: string): boolean {
+    return this.orderBy.includes(columnDef + ' asc');
+  }
+
+  showArrowDown(columnDef: string): boolean {
+    return this.orderBy.includes(columnDef + ' desc');
+  }
+
+  onChanged() {
+    let filter:Predicate[] = [];
+    if(this.group.value.search !== '') {
+      let projections = this.columns.filter(column => column.columnDef !== 'id');
+      projections.forEach(column => {
+        filter.push({
+          [column.columnDef]: {
+            contains: this.group.value.search
+          }
+        });
+      });
+    }
+    this.dataSource$ = this.loadTableData(filter);
   }
 }

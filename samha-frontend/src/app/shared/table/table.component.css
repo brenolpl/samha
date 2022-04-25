@@ -9,3 +9,11 @@ table{
   justify-content: center;
   background-color: rgba(0, 0, 0, 0.15);
 }
+
+mat-cell{
+  margin-left: 16px;
+}
+
+input{
+  width: 380px;
+}

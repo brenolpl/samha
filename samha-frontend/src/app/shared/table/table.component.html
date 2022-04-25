@@ -1,12 +1,29 @@
 <mat-card>
 
   <mat-toolbar color="accent">{{toolbarHeader}}</mat-toolbar>
+  <div class="input-group">
+    <div class="form-outline">
+      <form [formGroup]="group">
+        <input type="search" id="form1" class="form-control" placeholder="Pesquisar" (change)="onChanged()" formControlName="search">
+      </form>
+    </div>
+    <button type="button" class="btn btn-primary">
+      <i class="fas fa-search"></i>
+    </button>
+  </div>
+
   <div *ngIf="dataSource$ | async as dataSource; else loading">
     <table mat-table [dataSource]="defineDataSource(dataSource)" class="mat-elevation-z8">
 
       <ng-container *ngFor="let column of columns" [matColumnDef]="column.columnDef">
 
-        <mat-header-cell *matHeaderCellDef>{{ column.header }}</mat-header-cell>
+        <mat-header-cell *matHeaderCellDef >
+          <button mat-button (click)="sort(column.columnDef)">
+            {{ column.header }}
+            <mat-icon *ngIf="showArrowUp(column.columnDef)">arrow_drop_up</mat-icon>
+            <mat-icon *ngIf="showArrowDown(column.columnDef)">arrow_drop_down</mat-icon>
+          </button>
+        </mat-header-cell>
         <mat-cell *matCellDef="let row">{{ findColumnValue(row, column.columnDef) }}</mat-cell>
       </ng-container>
 
