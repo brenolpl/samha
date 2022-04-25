@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpEvent, HttpHeaders} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {LocalStorageService} from './local-storage.service';
 import {QueryMirror} from '../query-mirror';
@@ -8,32 +8,27 @@ import {PagedList} from '../paged-list';
 @Injectable({providedIn: 'root'})
 export class DataService {
 
-  public static APIPREFIX = 'api/';
-  private options: any;
+  public static readonly APIPREFIX = 'api/';
 
   constructor(private http: HttpClient,
               private localStorage: LocalStorageService) {
-    this.options = {
-      headers: new HttpHeaders()
-        .set('Authorization', 'Bearer ' + this.localStorage.get("access_token"))
-    }
   }
   //TODO: Serviço deve passar a retornar a observable do próprio http e não Observable<any>
 
-  public query(query: QueryMirror): Observable<HttpEvent<PagedList>> {
-    return this.http.post<PagedList>(DataService.APIPREFIX + query.entityPath + '/query', query, this.options);
+  public query(query: QueryMirror): Observable<PagedList> {
+    return this.http.post<PagedList>(DataService.APIPREFIX + query.entityPath + '/query', query, this.getOptions());
   }
 
   public get(resource: string, id: string): Observable<any>{
-    return this.http.get(DataService.APIPREFIX + resource + '/' + id, this.options);
+    return this.http.get(DataService.APIPREFIX + resource + '/' + id, this.getOptions());
   }
 
   public getAll(resource: string): Observable<any>{
-    return this.http.get(DataService.APIPREFIX + resource + '/all', this.options);
+    return this.http.get(DataService.APIPREFIX + resource + '/all', this.getOptions());
   }
 
   public post(resource: string, body: any): Observable<any>{
-    return this.http.post(DataService.APIPREFIX + resource, body, this.options);
+    return this.http.post(DataService.APIPREFIX + resource, body, this.getOptions());
   }
 
   public login(body: any){
@@ -42,6 +37,13 @@ export class DataService {
         .set('Content-Type', 'application/x-www-form-urlencoded')
     })
 
+  }
+
+  private getOptions() {
+    return {
+      headers: new HttpHeaders()
+        .set('Authorization', 'Bearer ' + this.localStorage.get('access_token'))
+    }
   }
 
 }
