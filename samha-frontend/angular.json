@@ -11,6 +11,7 @@
       "prefix": "samha",
       "architect": {
         "build": {
+          "defaultConfiguration": "production",
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "outputPath": "dist/samha-frontend",
@@ -57,10 +58,19 @@
                   "maximumError": "10kb"
                 }
               ]
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
             }
           }
         },
         "serve": {
+          "defaultConfiguration": "development",
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
             "browserTarget": "samha-frontend:build"
@@ -68,6 +78,9 @@
           "configurations": {
             "production": {
               "browserTarget": "samha-frontend:build:production"
+            },
+            "development": {
+              "browserTarget": "samha-frontend:build:development"
             }
           }
         },
