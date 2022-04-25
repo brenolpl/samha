@@ -1,45 +1,49 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {DataService} from '../shared/service/data.service';
 import {MenuEnum} from '../shared/menu-enum';
 import {alocacaoColumns} from '../meta-model/alocacao';
 import {disciplina} from '../meta-model/disciplina';
-import {Subscription} from 'rxjs';
-import {LocalStorageService} from '../shared/service/local-storage.service';
+import {Observable, of} from 'rxjs';
 import {professorColumns} from '../meta-model/professor';
+import {catchError, tap} from 'rxjs/operators';
 
 @Component({
   selector: 'samha-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent implements OnInit, OnDestroy{
-  isloading: boolean = true;
-  private subscription: Subscription;
+export class HomeComponent implements OnInit{
+  loading$: Observable<any>;
   opened = true;
   menusPermitidos: any[];
   coordenadores: boolean;
-  professores:boolean;
+  professores: boolean;
   alocacoes: boolean;
   selectedMenu: MenuEnum;
 
   columns: any[] = [];
 
-  constructor(private dataService: DataService,
-              private localStorage: LocalStorageService) {
+  constructor(private dataService: DataService) {
   }
 
   ngOnInit(): void {
-    this.loadData();
-  }
-
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.loading$ = this.dataService.post('menu/list', null).pipe(
+      tap(
+        next => {
+          this.menusPermitidos = next;
+          this.loadMenus();
+        }
+      ),
+      catchError(
+        () => of([])
+      )
+    );
   }
 
   private loadMenus() {
     this.menusPermitidos.map(
       index => {
-        switch (index){
+        switch (index) {
           case MenuEnum.COORDENADORES:
             this.coordenadores = true;
             break;
@@ -55,7 +59,7 @@ export class HomeComponent implements OnInit, OnDestroy{
   }
 
   onSideBarClicked() {
-    this.opened = ! this.opened;
+    this.opened = !this.opened;
   }
 
   onBotaoProfessorClick() {
@@ -77,20 +81,4 @@ export class HomeComponent implements OnInit, OnDestroy{
     this.selectedMenu = MenuEnum.DISCIPLINA
   }
 
-  private loadData() {
-    if(this.localStorage.get('access_token')) {
-      this.subscription = this.dataService.post('menu/list', null).subscribe(
-        (result) => {
-          this.menusPermitidos = result;
-          this.loadMenus();
-          this.isloading = false;
-        },
-        (error) => {
-          throw error;
-        }
-      );
-    }else{
-      this.loadData();
-    }
-  }
 }
