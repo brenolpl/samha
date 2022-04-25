@@ -24,7 +24,7 @@ public abstract class BaseController<ENTITY, KEY extends Serializable> {
 
 
     @PostMapping("query")
-    public PagedList<ENTITY> query(@RequestBody Query query){
+    public PagedList query(@RequestBody Query query){
         return this.facade.execute(new QueryEntities<>(query, this.entityClass));
     }
 

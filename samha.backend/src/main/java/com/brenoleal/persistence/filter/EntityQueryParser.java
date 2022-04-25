@@ -31,7 +31,6 @@ public class EntityQueryParser<ENTITY, TARGET> {
         private Path<T> from;
         private boolean forceLeftJoin = false;
 
-        // TODO: Refatorar Código Complexo
         PathEntry(Path<T> from, String name, boolean forceLeftJoin) throws Exception {
             try {
                 this.from = from;
