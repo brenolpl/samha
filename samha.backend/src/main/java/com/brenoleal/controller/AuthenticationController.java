@@ -19,6 +19,8 @@ public class AuthenticationController {
 
     private final UseCaseFacade facade;
 
+    //TODO: Acrescentar no frontend a rota para utilizar o refresh_token
+
     @GetMapping("refreshToken")
     public void refreshToken(HttpServletResponse response, HttpServletRequest request) throws IOException {
         this.facade.execute(new RefreshToken(response, request));

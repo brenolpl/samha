@@ -1,19 +1,19 @@
-<mat-card>
+<mat-card class="mat-elevation-z8 m-auto mt-5 col-11">
 
-  <mat-toolbar color="accent">{{toolbarHeader}}</mat-toolbar>
-  <div class="input-group">
+  <mat-toolbar color="accent" class="toolbar-border">{{toolbarHeader}}</mat-toolbar>
+  <div class="input-group mt-3 mb-3">
     <div class="form-outline">
       <form [formGroup]="group">
-        <input type="search" id="form1" class="form-control" placeholder="Pesquisar" (change)="onChanged()" formControlName="search">
+        <input type="search" id="form1" class="form-control border-top-0 border-end-0 border-start-0" placeholder="Pesquisar" (change)="onChanged()" formControlName="search">
       </form>
     </div>
-    <button type="button" class="btn btn-primary">
+    <button type="button" mat-button>
       <i class="fas fa-search"></i>
     </button>
   </div>
 
   <div *ngIf="dataSource$ | async as dataSource; else loading">
-    <table mat-table [dataSource]="defineDataSource(dataSource)" class="mat-elevation-z8">
+    <table mat-table [dataSource]="defineDataSource(dataSource)" >
 
       <ng-container *ngFor="let column of columns" [matColumnDef]="column.columnDef">
 
@@ -28,7 +28,7 @@
       </ng-container>
 
       <ng-container matColumnDef="actions">
-        <mat-header-cell *matHeaderCellDef>Ações</mat-header-cell>
+        <mat-header-cell *matHeaderCellDef><button mat-button [disabled]="true">Ações</button></mat-header-cell>
         <mat-cell *matCellDef="let row" >
           <button mat-icon-button (click)="onEditClick(row)"><mat-icon>border_color</mat-icon></button>
           <button mat-icon-button color="warn" (click)="onDeleteClick(row)"><mat-icon>delete</mat-icon></button>

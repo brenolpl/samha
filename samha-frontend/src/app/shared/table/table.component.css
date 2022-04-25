@@ -7,7 +7,7 @@ table{
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgba(0, 0, 0, 0.15);
+  background-color: white;
 }
 
 mat-cell{
@@ -16,4 +16,28 @@ mat-cell{
 
 input{
   width: 380px;
+}
+
+.mat-button{
+  font-size: 13px
+}
+
+.action{
+  font-size: 13px;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  margin-left: 15px;
+}
+
+.mat-icon-button{
+  align-items: start;
+  justify-content: start;
+}
+
+
+.form-control{
+  border-radius: 0;
+}
+
+.toolbar-border{
+  border-radius: 4px;
 }

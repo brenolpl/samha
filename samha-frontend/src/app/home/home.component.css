@@ -8,11 +8,14 @@ mat-sidenav{
 }
 
 mat-sidenav-content{
-  background-color: rgb(0,153,102);
+  background-color: rgb(241, 240, 240);
 }
 
-button{
+.mat-button{
   display: block;
+  padding: 16px;
+  text-align: start;
+  font-size: 16px;
 }
 
 .loading-spinner{
@@ -21,4 +24,9 @@ button{
   justify-content: center;
   background-color: rgba(0, 0, 0, 0.15);
   height: 100vh;
+}
+
+.mat-card{
+  padding: 0;
+  border-radius: 0;
 }

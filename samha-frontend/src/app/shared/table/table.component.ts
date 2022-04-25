@@ -1,12 +1,10 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {Observable, of} from 'rxjs';
 import {DataService} from '../service/data.service';
-import {catchError, tap} from 'rxjs/operators';
+import {catchError} from 'rxjs/operators';
 import {Filter, Predicate, QueryMirror} from '../query-mirror';
-import {HttpEvent, HttpHeaderResponse, HttpProgressEvent, HttpResponse, HttpSentEvent, HttpUserEvent} from '@angular/common/http';
 import {Page, PagedList} from '../paged-list';
 import {TableColumnModel} from '../../meta-model/table-column-model';
-import {MatButton} from '@angular/material/button';
 import {FormBuilder, FormGroup} from '@angular/forms';
 
 /**
@@ -70,12 +68,19 @@ export class TableComponent implements OnInit {
     query.selectList(projections);
     if(filter.length > 0) query.where(orFilter);
     if(this.orderBy !== '') query.orderBy(this.orderBy);
-    return this.dataService.query(query).pipe(tap(
-    next => {
-
-      },
-      catchError(error => of([]))
-    ))
+    return this.dataService.query(query).pipe(
+      catchError( _ => {
+        let empty = {
+          listMap: [],
+          page: {
+            size: 0,
+            skip: 0,
+            totalItems: 0
+          }
+        }
+        return of(new PagedList(empty))
+      })
+    )
   }
 
   private defineDisplayedColumns() {
@@ -150,8 +155,8 @@ export class TableComponent implements OnInit {
   }
 
   private checkButtons(){
-    if(this.currentPage <= 1) this.backwardButtonDisabled = true; else this.backwardButtonDisabled = false;
-    if(this.currentPage >= this.lastPage) this.fowardButtonDisabled = true; else this.fowardButtonDisabled = false;
+    this.backwardButtonDisabled = this.currentPage <= 1;
+    this.fowardButtonDisabled = this.currentPage >= this.lastPage;
   }
 
   private calculateLastPage = () => Math.ceil(this.pagedList.page.totalItems / this.maxRows);
