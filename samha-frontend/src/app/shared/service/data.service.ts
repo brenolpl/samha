@@ -13,7 +13,6 @@ export class DataService {
   constructor(private http: HttpClient,
               private localStorage: LocalStorageService) {
   }
-  //TODO: Serviço deve passar a retornar a observable do próprio http e não Observable<any>
 
   public query(query: QueryMirror): Observable<PagedList> {
     return this.http.post<PagedList>(DataService.APIPREFIX + query.entityPath + '/query', query, this.getOptions());
