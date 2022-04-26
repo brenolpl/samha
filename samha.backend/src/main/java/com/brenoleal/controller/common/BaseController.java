@@ -25,7 +25,7 @@ public abstract class BaseController<ENTITY, KEY extends Serializable> {
 
     @PostMapping("query")
     public PagedList query(@RequestBody Query query){
-        return this.facade.execute(new QueryEntities<>(query, this.entityClass));
+        return this.buildQueryEntities(query);
     }
 
     @GetMapping("all")
@@ -51,5 +51,9 @@ public abstract class BaseController<ENTITY, KEY extends Serializable> {
     @PatchMapping("{id}")
     public ENTITY update(@PathVariable KEY id, @RequestBody ENTITY entity){
         return this.facade.execute(new UpdateEntity<>(entity));
+    }
+
+    public PagedList buildQueryEntities(Query query){
+        return this.facade.execute(new QueryEntities<>(query, this.entityClass));
     }
 }
