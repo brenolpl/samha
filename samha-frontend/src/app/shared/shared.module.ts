@@ -6,17 +6,15 @@ import {LocalStorageService} from './service/local-storage.service';
 import {ToolbarComponent} from './toolbar/toolbar.component';
 import {AppRoutingModule} from '../app-routing.module';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {LoginComponent} from '../login/login.component';
-import {HomeComponent} from '../home/home.component';
 import { TableComponent } from './table/table.component';
 import {MaterialModule} from './material/material.module';
+import { TableDialogComponent } from './table-dialog/table-dialog.component';
 
 @NgModule({
   declarations: [
-    LoginComponent,
-    HomeComponent,
     ToolbarComponent,
     TableComponent,
+    TableDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -27,11 +25,15 @@ import {MaterialModule} from './material/material.module';
     MaterialModule
   ],
   exports: [
+    MaterialModule,
+    ReactiveFormsModule,
+    ToolbarComponent,
+    TableComponent,
   ],
   providers: [
     DataService,
-    LocalStorageService
-  ]
+    LocalStorageService,
+  ],
 })
 export class SharedModule {
 }
