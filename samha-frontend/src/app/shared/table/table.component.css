@@ -41,3 +41,7 @@ input{
 .toolbar-border{
   border-radius: 4px;
 }
+
+.highlight{
+  background: #42A948; /* green */
+}

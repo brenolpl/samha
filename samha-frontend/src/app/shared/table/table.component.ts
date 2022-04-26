@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Observable, of} from 'rxjs';
 import {DataService} from '../service/data.service';
 import {catchError} from 'rxjs/operators';
@@ -23,6 +23,7 @@ import {FormBuilder, FormGroup} from '@angular/forms';
 export class TableComponent implements OnInit {
   @Input() resource: string;
   @Input() columns: TableColumnModel[];
+  @Output() onSelectedRow: EventEmitter<number> = new EventEmitter<number>();
   pagedList: PagedList;
   tenButtonSelected: boolean = true;
   fiftyButtonSelected: boolean = false;
@@ -160,6 +161,7 @@ export class TableComponent implements OnInit {
   }
 
   private calculateLastPage = () => Math.ceil(this.pagedList.page.totalItems / this.maxRows);
+  selectedRowIndex: number = 0;
 
   private calculateSkip(): number {
     if(this.pagedList !== null && this.pagedList !== undefined) this.onSelectedValueChanged();
@@ -209,5 +211,10 @@ export class TableComponent implements OnInit {
       });
     }
     this.dataSource$ = this.loadTableData(filter);
+  }
+
+  highlight(row) {
+    this.selectedRowIndex = row.id;
+    this.onSelectedRow.emit(row.id);
   }
 }
