@@ -1,6 +1,7 @@
 package com.brenoleal.controller;
 
 import com.brenoleal.commons.UseCaseFacade;
+import com.brenoleal.core.Menu;
 import com.brenoleal.domain.ListarMenu;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,7 +19,7 @@ public class MenuController {
     private final UseCaseFacade facade;
 
     @PostMapping("list")
-    public List<Integer> list(HttpServletRequest request){
+    public List<Menu> list(HttpServletRequest request){
         return this.facade.execute(new ListarMenu(request));
     }
 }

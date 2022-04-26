@@ -30,6 +30,11 @@ export class DataService {
     return this.http.post(DataService.APIPREFIX + resource, body, this.getOptions());
   }
 
+  public save(resource: string, body: any): Observable<any>{
+    return this.http.post(DataService.APIPREFIX + resource + '/insert', body, this.getOptions());
+  }
+
+
   public login(body: any){
     return this.http.post(DataService.APIPREFIX + 'login', body, {
       headers: new HttpHeaders()

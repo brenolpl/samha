@@ -38,7 +38,7 @@ public abstract class BaseController<ENTITY, KEY extends Serializable> {
         return this.facade.execute(new GetEntity<>(this.entityClass, id));
     }
 
-    @PostMapping
+    @PostMapping("insert")
     public ENTITY insert(@RequestBody ENTITY body){
         return this.facade.execute(new InsertEntity<>(body));
     }

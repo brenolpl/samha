@@ -18,7 +18,7 @@ public class QueryEntities<ENTITY> extends UseCase<PagedList> {
     public boolean distinct = false;
 
     @Inject
-    private IGenericRepository genericRepository;
+    protected IGenericRepository genericRepository;
 
     public QueryEntities(Query query, Class<ENTITY> entityClass){
         this.entityClass = entityClass;

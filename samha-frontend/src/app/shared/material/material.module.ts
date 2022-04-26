@@ -9,6 +9,9 @@ import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatSortModule} from '@angular/material/sort';
 import {MatCardModule} from '@angular/material/card';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatInputModule} from '@angular/material/input';
+import {MatSelectModule} from '@angular/material/select';
+import {MatDialogModule} from '@angular/material/dialog';
 
 
 
@@ -29,6 +32,12 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
     MatToolbarModule,
     MatCardModule,
     MatProgressSpinnerModule,
+    MatInputModule,
+    MatSelectModule,
+    MatDialogModule
+  ],
+  providers: [
+
   ]
 })
 export class MaterialModule { }
