@@ -1,6 +1,6 @@
 import {TableColumnModel} from './table-column-model';
 
-export const disciplina: TableColumnModel[] = [
+export const disciplinaColumns: TableColumnModel[] = [
   {columnDef: 'id', header: 'Id', visible: false},
   {columnDef: 'nome', header: 'Nome', visible: true},
   {columnDef: 'sigla', header: 'Sigla', visible: true},

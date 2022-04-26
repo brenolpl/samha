@@ -1,6 +1,23 @@
 export enum MenuEnum{
   PROFESSORES = 1,
-  COORDENADORES = 2,
-  ALOCACOES = 3,
-  DISCIPLINA = 4,
+  COORDENADORES,
+  ALOCACOES,
+  CURSO,
+  DISCIPLINAS,
+  TURMAS,
+  OFERTAS,
+  RELATORIOS,
+  CADASTRARUSUARIOS
 }
+
+/*
+1	Professores
+2	Coordenadores
+3	Alocações
+4	Curso
+5	Disciplinas
+6	Turmas
+7	Ofertas
+8	Relatórios
+9	Cadastrar Usuários
+ */
