@@ -25,13 +25,13 @@ public class Curso implements Serializable, Comparable<Object> {
     private String nome;
     
     @Column(nullable = false)
-    private int qtPeriodos;
+    private Integer qtPeriodos;
     
     @Column(nullable = false)
     private String nivel;
     
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "coordenadoria_id", nullable = true)
+    @JoinColumn(name = "coordenadoria_id")
     @Cascade(CascadeType.SAVE_UPDATE)
     private Coordenadoria coordenadoria;
     

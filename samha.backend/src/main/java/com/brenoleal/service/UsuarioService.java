@@ -35,7 +35,7 @@ public class UsuarioService implements IUsuarioService{
     public Usuario addPapelToUsuario(String login, String nomePapel) {
         Usuario usuario = usuarioRepository.findByLogin(login);
         Papel papel = papelRepository.findByNome(nomePapel);
-        usuario.getPapeis().add(papel);
+        usuario.setPapel(papel);
         return usuarioRepository.save(usuario);
     }
 

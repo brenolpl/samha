@@ -30,7 +30,7 @@
         <mat-form-field appearance="standard" class="d-inline-block pesquisar-field">
           <mat-label>Vincular à Servidor</mat-label>
           <ng-container *ngIf="professor$ | async as professor; else notSet">
-            <mat-select [(value)]="professor.id" [disabled]="true">
+            <mat-select [value]="setProfessorValue(professor.id)" formControlName="servidor_id">
               <mat-option [value]="professor.id">{{professor.nome}}</mat-option>
             </mat-select>
           </ng-container>

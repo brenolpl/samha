@@ -1,6 +1,7 @@
 package com.brenoleal.service;
 
 import com.brenoleal.core.Usuario;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 

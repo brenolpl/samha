@@ -26,7 +26,8 @@ export class UsuarioFormComponent implements OnInit {
     this.form = formBuilder.group({
       login: [null, Validators.required],
       senha: [null, [Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
-      papel: [null, Validators.required]
+      papel: [null, Validators.required],
+      servidor_id: []
     })
   }
 
@@ -56,7 +57,14 @@ export class UsuarioFormComponent implements OnInit {
 
   salvar() {
     console.log(this.setUsuarioData());
-    //this.dataService.post('resource', this.setUsuarioData())
+    this.dataService.save('usuario', this.setUsuarioData()).subscribe(
+      next => {
+        console.log(next);
+      },
+      error => {
+        throw error;
+      }
+    )
   }
 
   private setUsuarioData() {
@@ -64,9 +72,14 @@ export class UsuarioFormComponent implements OnInit {
       id: null,
       login: this.form.get('login').value,
       senha: this.form.get('senha').value,
-      papel: {
-        id: this.form.get('papel').value
-      }
+      papel_id: this.form.get('papel').value,
+      servidor_id: this.form.get('servidor_id').value
     }
+  }
+
+  setProfessorValue(id) {
+    this.form.get('servidor_id').setValue(id);
+    this.form.get('servidor_id').disable({onlySelf: true});
+    return id;
   }
 }

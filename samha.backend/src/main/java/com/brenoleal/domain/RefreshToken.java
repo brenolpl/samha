@@ -10,6 +10,7 @@ import com.brenoleal.util.JWTUtil;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,7 +38,8 @@ public class RefreshToken extends UseCase<Void> {
                 DecodedJWT decodedJWT = JWTUtil.verifyToken(token);
                 String login = decodedJWT.getSubject();
                 Usuario usuario = usuarioService.findByLogin(login);
-                List<String> claims = usuario.getPapeis().stream().map(Papel::getNome).collect(Collectors.toList());
+                List<String> claims = new ArrayList<>();
+                claims.add(usuario.getPapel().getNome());
                 String access_token = JWTUtil.generateAccessToken(usuario.getLogin(), claims, request.getRequestURL().toString(), 10);
                 JWTUtil.writeTokenResponse(access_token, token, response);
             } catch (Exception ex) {

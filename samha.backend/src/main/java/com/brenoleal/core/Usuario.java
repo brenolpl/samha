@@ -18,9 +18,9 @@ public class Usuario implements Serializable{
     @Column(nullable = false)
     private String senha;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "papel_id", foreignKey = @ForeignKey(name = "FK_USUARIO_PAPEL"))
-    private Set<Papel> papeis;
+    private Papel papel;
 
     public String getLogin() {
         return login;
@@ -46,11 +46,11 @@ public class Usuario implements Serializable{
         this.id = id;
     }
 
-    public Set<Papel> getPapeis() {
-        return papeis;
+    public Papel getPapel() {
+        return papel;
     }
 
-    public void setPapeis(Set<Papel> papeis) {
-        this.papeis = papeis;
+    public void setPapel(Papel papel) {
+        this.papel = papel;
     }
 }

@@ -29,7 +29,7 @@ public class SamhaUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException("Usuario não encontrado");
         }else{
             Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-            usuario.getPapeis().forEach( papel -> authorities.add(new SimpleGrantedAuthority(papel.getNome())));
+            authorities.add(new SimpleGrantedAuthority(usuario.getPapel().getNome()));
             return new User(usuario.getLogin(), usuario.getSenha(), authorities);
         }
     }
