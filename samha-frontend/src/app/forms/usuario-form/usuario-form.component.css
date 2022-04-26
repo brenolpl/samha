@@ -1,0 +1,16 @@
+.card-width{
+  width: 350px;
+}
+
+pesquisar{
+  width: 350px;
+}
+
+.pesquisar-field{
+  width: 300px;
+}
+
+.mat-button{
+  width: 50px;
+  min-width: 50px;
+}
