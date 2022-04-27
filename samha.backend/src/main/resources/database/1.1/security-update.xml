@@ -89,4 +89,13 @@
             insert into menu_papeis (menu_id, papeis_id) values ('9', '1');
         </sql>
     </changeSet>
+
+    <changeSet id="9" author="breno.leal">
+        <comment>Insere usuário administrador do sistema</comment>
+        <insert tableName="usuario">
+            <column name="login" value="admin"></column>
+            <column name="senha" value="123"></column>
+            <column name="papel_id" value="1"></column>
+        </insert>
+    </changeSet>
 </databaseChangeLog>
