@@ -13,7 +13,7 @@
       <mat-form-field appearance="outline" class="w-100">
         <mat-label><mat-icon>lock</mat-icon> Senha</mat-label>
         <input matInput [type]="hide ? 'password' : 'text'" formControlName="senha">
-        <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Esconder/Mostrar'" [attr.aria-pressed]="hide">
+        <button mat-icon-button matSuffix (mousedown)="hide = !hide" [attr.aria-label]="'Esconder/Mostrar'" [attr.aria-pressed]="hide">
           <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
         </button>
       </mat-form-field>
