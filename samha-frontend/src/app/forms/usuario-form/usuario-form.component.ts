@@ -56,10 +56,9 @@ export class UsuarioFormComponent implements OnInit {
   }
 
   salvar() {
-    console.log(this.setUsuarioData());
     this.dataService.save('usuario', this.setUsuarioData()).subscribe(
       next => {
-        console.log(next);
+
       },
       error => {
         throw error;

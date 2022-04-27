@@ -25,7 +25,7 @@ public class ConsultarCoordenadores extends QueryEntities<Professor> {
         papelNomeEqual.put("equals", "COORDENADOR_CURSO");
 
         Map<String, Object> usuarioMap = new HashMap<>();
-        usuarioMap.put("usuario.papeis.nome", papelNomeEqual);
+        usuarioMap.put("usuario.papel.nome", papelNomeEqual);
 
         this.entityQuery.getPredicates().put("and", usuarioMap);
     }
