@@ -6,6 +6,7 @@ import {Filter, Predicate, QueryMirror} from '../query-mirror';
 import {Page, PagedList} from '../paged-list';
 import {TableColumnModel} from '../../meta-model/table-column-model';
 import {FormBuilder, FormGroup} from '@angular/forms';
+import {Route, Router} from '@angular/router';
 
 /**
  * Este componente gera dinamicamente uma tabela de acordo com os parâmetros passados
@@ -40,7 +41,8 @@ export class TableComponent implements OnInit {
   group: FormGroup;
 
   constructor(private dataService: DataService,
-              private formBuilder: FormBuilder) {
+              private formBuilder: FormBuilder,
+              private router: Router) {
     this.group = this.formBuilder.group({
       search: [null]
     })
@@ -216,5 +218,9 @@ export class TableComponent implements OnInit {
   highlight(row) {
     this.selectedRowIndex = row.id;
     this.onSelectedRow.emit(row.id);
+  }
+
+  goToNew() {
+    this.router.navigate([this.resource + '/new']);
   }
 }

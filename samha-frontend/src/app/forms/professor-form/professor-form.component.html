@@ -1,0 +1,38 @@
+<samha-toolbar (sideBarClicked)="onSideBarClicked()"></samha-toolbar>
+
+<mat-card class="mat-elevation-z8 m-auto mt-5 col-11">
+  <mat-card-title class="fw-lighter">
+    Cadastro de Professores
+  </mat-card-title>
+  <mat-card-content class="mt-5 card-width">
+    <form [formGroup]="form">
+      <mat-form-field appearance="outline" class="d-block">
+        <mat-label>Nome</mat-label>
+        <input matInput formControlName="nome">
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="d-block">
+        <mat-label>E-mail</mat-label>
+        <input type="email" matInput formControlName="email">
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="d-block">
+        <mat-label>Matrícula</mat-label>
+        <input type="text" matInput formControlName="matricula">
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="d-block">
+        <mat-label>Carga Horária</mat-label>
+        <input type="email" matInput formControlName="carga_horaria">
+      </mat-form-field>
+      <mat-form-field appearance="standard" class="d-block">
+        <mat-label>Coordenadoria</mat-label>
+        <mat-select formControlName="coordenadoria" required *ngIf="coordenadoria$ | async as coordenadorias; else loadingCoord;">
+          <mat-option *ngFor="let coord of coordenadorias" [value]="coord.id">
+            {{coord.nome}}
+          </mat-option>
+        </mat-select>
+        <ng-template #loadingCoord>
+          <mat-select [disabled]="true"></mat-select>
+        </ng-template>
+      </mat-form-field>
+    </form>
+  </mat-card-content>
+</mat-card>

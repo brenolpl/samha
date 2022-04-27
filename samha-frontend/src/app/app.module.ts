@@ -9,6 +9,7 @@ import {RouterModule} from '@angular/router';
 import {UsuarioFormComponent} from './forms/usuario-form/usuario-form.component';
 import {LoginComponent} from './login/login.component';
 import {HomeComponent} from './home/home.component';
+import { ProfessorFormComponent } from './forms/professor-form/professor-form.component';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import {HomeComponent} from './home/home.component';
     UsuarioFormComponent,
     LoginComponent,
     HomeComponent,
+    ProfessorFormComponent,
   ],
   imports: [
     BrowserModule,
