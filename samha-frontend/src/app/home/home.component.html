@@ -1,42 +1,8 @@
-<ng-template #loading>
-  <div class="loading-spinner m-auto">
-    <mat-spinner></mat-spinner>
-  </div>
-</ng-template>
-<ng-container *ngIf="loading$ | async as menusSource; else loading">
-  <samha-toolbar (sideBarClicked)="onSideBarClicked()"></samha-toolbar>
-  <mat-sidenav-container>
-    <mat-sidenav mode="side" [(opened)]="opened">
-      <ng-container *ngFor="let menu of menusSource">
-        <button (click)="onMenuClick(menu.id)" mat-button>
-          <mat-icon>{{loadMatIcon(menu.id)}}</mat-icon>
-          {{menu.nome}}
-        </button>
-      </ng-container>
-    </mat-sidenav>
-    <mat-sidenav-content>
-      <div *ngIf="selectedMenu == 1">
-        <samha-table [resource]="'professor'" [columns]="columns"></samha-table>
-      </div>
-      <div *ngIf="selectedMenu == 2">
-        <samha-table [resource]="'coordenador'" [columns]="columns"></samha-table>
-      </div>
-      <div *ngIf="selectedMenu == 3">
-        <samha-table [resource]="'alocacao'" [columns]="columns"></samha-table>
-      </div>
-      <div *ngIf="selectedMenu == 4">
-        <samha-table [resource]="'curso'" [columns]="columns"></samha-table>
-      </div>
-      <div *ngIf="selectedMenu == 5">
-        <samha-table [resource]="'disciplina'" [columns]="columns"></samha-table>
-      </div>
-      <div *ngIf="selectedMenu == 6">
-        <samha-table [resource]="'turma'" [columns]="columns"></samha-table>
-      </div>
-
-      <div *ngIf="selectedMenu == 9">
-        <samha-usuario-form></samha-usuario-form>
-      </div>
-    </mat-sidenav-content>
-  </mat-sidenav-container>
-</ng-container>
+<mat-card class="w-75 m-auto mt-5 h-75">
+  <mat-card-header>
+    <h2 matCardTitle>Bem Vindo</h2>
+  </mat-card-header>
+  <mat-card-content class="p-3 ">
+    Selecione um item no Menu ao lado para iniciar.
+  </mat-card-content>
+</mat-card>

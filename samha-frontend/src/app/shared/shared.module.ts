@@ -4,11 +4,12 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {DataService} from './service/data.service';
 import {LocalStorageService} from './service/local-storage.service';
 import {ToolbarComponent} from './toolbar/toolbar.component';
-import {AppRoutingModule} from '../app-routing.module';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { TableComponent } from './table/table.component';
 import {MaterialModule} from './material/material.module';
 import { TableDialogComponent } from './table-dialog/table-dialog.component';
+import {HttpClientModule} from '@angular/common/http';
+import {AuthService} from './service/auth.service';
+import {RouterModule} from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -18,21 +19,22 @@ import { TableDialogComponent } from './table-dialog/table-dialog.component';
   ],
   imports: [
     CommonModule,
-    FormsModule,
+    MaterialModule,
     ReactiveFormsModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    MaterialModule
+    HttpClientModule,
+    RouterModule
   ],
   exports: [
     MaterialModule,
-    ReactiveFormsModule,
     ToolbarComponent,
     TableComponent,
+    ReactiveFormsModule,
+    HttpClientModule,
   ],
   providers: [
     DataService,
     LocalStorageService,
+    AuthService
   ],
 })
 export class SharedModule {

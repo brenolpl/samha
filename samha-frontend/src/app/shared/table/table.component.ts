@@ -6,7 +6,13 @@ import {Filter, Predicate, QueryMirror} from '../query-mirror';
 import {Page, PagedList} from '../paged-list';
 import {TableColumnModel} from '../../meta-model/table-column-model';
 import {FormBuilder, FormGroup} from '@angular/forms';
-import {Route, Router} from '@angular/router';
+import {ActivatedRoute, Route, Router} from '@angular/router';
+import {MenuEnum} from '../menu-enum';
+import {professorColumns} from '../../meta-model/professor';
+import {alocacaoColumns} from '../../meta-model/alocacao';
+import {disciplinaColumns} from '../../meta-model/disciplina';
+import {cursoColumns} from '../../meta-model/curso';
+import {turmaColumns} from '../../meta-model/turma';
 
 /**
  * Este componente gera dinamicamente uma tabela de acordo com os parâmetros passados
@@ -42,19 +48,21 @@ export class TableComponent implements OnInit {
 
   constructor(private dataService: DataService,
               private formBuilder: FormBuilder,
-              private router: Router) {
+              private router: Router,
+              private route: ActivatedRoute) {
     this.group = this.formBuilder.group({
       search: [null]
-    })
+    });
   }
 
   ngOnInit(): void {
-    this.defineDisplayedColumns()
+    this.setParametersByUrl();
+    this.defineDisplayedColumns();
     this.dataSource$ = this.loadTableData();
     this.defineToolbarHeader();
   }
 
-  private loadTableData(filter: Predicate[] = []): Observable<PagedList>{
+  private loadTableData(filter: Predicate[] = []): Observable<PagedList> {
     const query = new QueryMirror(this.resource);
     let projections: string[] = [];
     let page: Page = {
@@ -69,10 +77,14 @@ export class TableComponent implements OnInit {
     query.pageItem(page);
     this.columns.map(column => projections.push(column.columnDef));
     query.selectList(projections);
-    if(filter.length > 0) query.where(orFilter);
-    if(this.orderBy !== '') query.orderBy(this.orderBy);
+    if (filter.length > 0) {
+      query.where(orFilter);
+    }
+    if (this.orderBy !== '') {
+      query.orderBy(this.orderBy);
+    }
     return this.dataService.query(query).pipe(
-      catchError( _ => {
+      catchError(_ => {
         let empty = {
           listMap: [],
           page: {
@@ -80,18 +92,18 @@ export class TableComponent implements OnInit {
             skip: 0,
             totalItems: 0
           }
-        }
-        return of(new PagedList(empty))
+        };
+        return of(new PagedList(empty));
       })
-    )
+    );
   }
 
   private defineDisplayedColumns() {
     this.columns.map(column => {
-      if(column.visible){
-        this.displayedColumns.push(column.columnDef)
+      if (column.visible) {
+        this.displayedColumns.push(column.columnDef);
       }
-    })
+    });
     this.displayedColumns.push('actions');
   }
 
@@ -111,12 +123,12 @@ export class TableComponent implements OnInit {
    * @param row
    * @param column
    */
-  findColumnValue = (row, column): string => <string>column.split('.').reduce((acc, cur) => acc[cur], row);
+  findColumnValue = (row, column): string => <string> column.split('.').reduce((acc, cur) => acc[cur], row);
 
 
   setPageSize(value: number) {
     this.maxRows = value;
-    switch(value){
+    switch (value) {
       case 10:
         this.tenButtonSelected = true;
         this.fiftyButtonSelected = false;
@@ -153,11 +165,11 @@ export class TableComponent implements OnInit {
 
   backwardPage() {
     this.currentPage--;
-    this.checkButtons()
+    this.checkButtons();
     this.dataSource$ = this.loadTableData();
   }
 
-  private checkButtons(){
+  private checkButtons() {
     this.backwardButtonDisabled = this.currentPage <= 1;
     this.fowardButtonDisabled = this.currentPage >= this.lastPage;
   }
@@ -166,27 +178,31 @@ export class TableComponent implements OnInit {
   selectedRowIndex: number = 0;
 
   private calculateSkip(): number {
-    if(this.pagedList !== null && this.pagedList !== undefined) this.onSelectedValueChanged();
+    if (this.pagedList !== null && this.pagedList !== undefined) {
+      this.onSelectedValueChanged();
+    }
     return this.maxRows * (this.currentPage - 1);
   }
 
-  private onSelectedValueChanged(): void{
-    if(this.pagedList.page.totalItems != 0) {
+  private onSelectedValueChanged(): void {
+    if (this.pagedList.page.totalItems != 0) {
       let lastPage = this.calculateLastPage();
-      while (this.currentPage > lastPage) --this.currentPage;
-    }else{
+      while (this.currentPage > lastPage) {
+        --this.currentPage;
+      }
+    } else {
       this.currentPage = 1;
     }
   }
 
   sort(columnDef: string) {
-    if(this.orderBy !== '' && this.orderBy.includes(columnDef)){
-      if(this.orderBy.includes('asc')){
+    if (this.orderBy !== '' && this.orderBy.includes(columnDef)) {
+      if (this.orderBy.includes('asc')) {
         this.orderBy = this.orderBy.replace('asc', 'desc');
-      }else{
+      } else {
         this.orderBy = '';
       }
-    }else{
+    } else {
       this.orderBy = columnDef + ' asc';
     }
     this.dataSource$ = this.loadTableData();
@@ -201,8 +217,8 @@ export class TableComponent implements OnInit {
   }
 
   onChanged() {
-    let filter:Predicate[] = [];
-    if(this.group.value.search !== '') {
+    let filter: Predicate[] = [];
+    if (this.group.value.search !== '') {
       let projections = this.columns.filter(column => column.columnDef !== 'id');
       projections.forEach(column => {
         filter.push({
@@ -222,5 +238,36 @@ export class TableComponent implements OnInit {
 
   goToNew() {
     this.router.navigate([this.resource + '/new']);
+  }
+
+  private setParametersByUrl() {
+    this.resource = this.router.url.replace('/', '');
+    this.defineColumns();
+  }
+
+  private defineColumns() {
+    switch (this.resource) {
+      case 'professor':
+        this.columns = professorColumns;
+        break;
+      case 'coordenador':
+        this.columns = professorColumns;
+        break;
+      case 'disciplina':
+        this.columns = disciplinaColumns;
+        break;
+      case 'curso':
+        this.columns = cursoColumns;
+        break;
+      case 'oferta':
+        this.columns = [];
+        break;
+      case 'MenuEnum.RELATORIOS':
+        this.columns = [];
+        break;
+      case 'turma':
+        this.columns = turmaColumns;
+        break;
+    }
   }
 }

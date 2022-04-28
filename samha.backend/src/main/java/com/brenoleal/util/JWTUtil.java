@@ -20,7 +20,9 @@ import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 public abstract class JWTUtil {
@@ -115,5 +117,17 @@ public abstract class JWTUtil {
     public static List<String> getPapeisFromToken(String access_token){
         DecodedJWT decodedJWT = JWTUtil.verifyToken(access_token);
         return decodedJWT.getClaim("papeis").asList(String.class);
+    }
+
+    public static void isTokenValid(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        try {
+            String authorizationHeader = request.getHeader(AUTHORIZATION);
+            String access_token = authorizationHeader.substring("Bearer ".length());
+            JWTUtil.verifyToken(access_token);
+            response.setStatus(OK.value());
+            new ObjectMapper().writeValue(response.getOutputStream(), null);
+        } catch (JWTVerificationException e) {
+            JWTUtil.writeErrorResponse(response, e);
+        }
     }
 }

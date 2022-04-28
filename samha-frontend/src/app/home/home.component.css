@@ -29,5 +29,5 @@ mat-sidenav-content{
 
 .mat-card{
   padding: 0;
-  border-radius: 0;
+  border-radius: 4px;
 }

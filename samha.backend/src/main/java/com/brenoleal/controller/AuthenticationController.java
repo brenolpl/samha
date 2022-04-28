@@ -1,9 +1,11 @@
 package com.brenoleal.controller;
 
 import com.brenoleal.commons.UseCaseFacade;
+import com.brenoleal.domain.IsTokenValid;
 import com.brenoleal.domain.RefreshToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,5 +26,10 @@ public class AuthenticationController {
     @GetMapping("refreshToken")
     public void refreshToken(HttpServletResponse response, HttpServletRequest request) throws IOException {
         this.facade.execute(new RefreshToken(response, request));
+    }
+
+    @PostMapping("isTokenValid")
+    public void isTokenValid(HttpServletResponse response, HttpServletRequest request) throws  IOException {
+        this.facade.execute(new IsTokenValid(response, request));
     }
 }

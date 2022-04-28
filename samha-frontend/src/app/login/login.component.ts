@@ -5,6 +5,7 @@ import {DataService} from '../shared/service/data.service';
 import {Router} from '@angular/router';
 import {Subscription} from 'rxjs';
 import {TokenResponseModel} from '../meta-model/token-model';
+import {AuthService} from '../shared/service/auth.service';
 
 @Component({
   selector: 'samha-login',
@@ -16,7 +17,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   constructor(private formBuilder: FormBuilder,
               private localStorage: LocalStorageService,
-              private dataService: DataService,
+              private authService: AuthService,
               private route: Router) {
   }
 
@@ -36,13 +37,15 @@ export class LoginComponent implements OnInit, OnDestroy {
         body.set('login', this.form.value.login);
         body.set('senha', this.form.value.senha);
 
-      this.subscription = this.dataService.login(body.toString()).subscribe(
+      this.subscription = this.authService.login(body.toString()).subscribe(
           (result: TokenResponseModel)=> {
             this.localStorage.set("access_token", result.access_token);
             this.localStorage.set("refresh_token", result.refresh_token);
+            this.authService.loggedIn.emit(true);
             this.route.navigate(['home']);
           },
           (error) => {
+            this.authService.loggedIn.emit(false);
             throw error;
           }
         );

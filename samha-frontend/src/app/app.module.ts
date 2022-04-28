@@ -2,14 +2,14 @@ import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 
 import {AppComponent} from './app.component';
-import {HttpClientModule} from '@angular/common/http';
 import {SharedModule} from './shared/shared.module';
-import {FormsModule} from '@angular/forms';
-import {RouterModule} from '@angular/router';
 import {UsuarioFormComponent} from './forms/usuario-form/usuario-form.component';
 import {LoginComponent} from './login/login.component';
 import {HomeComponent} from './home/home.component';
-import { ProfessorFormComponent } from './forms/professor-form/professor-form.component';
+import {AuthGuard} from './guards/auth-guard';
+import {AppRoutingModule} from './app-routing.module';
+import {CommonModule} from '@angular/common';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -17,18 +17,18 @@ import { ProfessorFormComponent } from './forms/professor-form/professor-form.co
     UsuarioFormComponent,
     LoginComponent,
     HomeComponent,
-    ProfessorFormComponent,
   ],
   imports: [
     BrowserModule,
-    FormsModule,
-    HttpClientModule,
     SharedModule,
-    RouterModule
+    AppRoutingModule,
+    BrowserAnimationsModule
   ],
-  providers: [],
+  providers: [
+    AuthGuard
+  ],
   exports: [
-    UsuarioFormComponent
+    UsuarioFormComponent,
   ],
   bootstrap: [AppComponent]
 })
