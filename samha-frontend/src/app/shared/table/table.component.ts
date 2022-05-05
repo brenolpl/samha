@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Observable, of} from 'rxjs';
 import {DataService} from '../service/data.service';
-import {catchError} from 'rxjs/operators';
+import {catchError, first} from 'rxjs/operators';
 import {Filter, Predicate, QueryMirror} from '../query-mirror';
 import {Page, PagedList} from '../paged-list';
 import {TableColumnModel} from '../../meta-model/table-column-model';
@@ -13,6 +13,8 @@ import {alocacaoColumns} from '../../meta-model/alocacao';
 import {disciplinaColumns} from '../../meta-model/disciplina';
 import {cursoColumns} from '../../meta-model/curso';
 import {turmaColumns} from '../../meta-model/turma';
+import {ConfirmDialogComponent} from '../confirm-dialog/confirm-dialog.component';
+import {MatDialog} from '@angular/material/dialog';
 
 /**
  * Este componente gera dinamicamente uma tabela de acordo com os parâmetros passados
@@ -49,7 +51,8 @@ export class TableComponent implements OnInit {
   constructor(private dataService: DataService,
               private formBuilder: FormBuilder,
               private router: Router,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute,
+              private dialog: MatDialog) {
     this.group = this.formBuilder.group({
       search: [null]
     });
@@ -75,7 +78,7 @@ export class TableComponent implements OnInit {
       }
     };
     query.pageItem(page);
-    this.columns.map(column => projections.push(column.columnDef));
+    this.columns.forEach(column => projections.push(column.columnDef));
     query.selectList(projections);
     if (filter.length > 0) {
       query.where(orFilter);
@@ -112,10 +115,25 @@ export class TableComponent implements OnInit {
   }
 
   onEditClick(row: any) {
+    this.router.navigate([row.id], {relativeTo: this.route})
   }
 
   onDeleteClick(row: any) {
+    this.openDialog(row);
+  }
 
+  openDialog(row) {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent);
+
+    dialogRef.afterClosed().pipe(first()).subscribe(result => {
+      if(result){
+        this.dataService.delete(this.resource, row.id).pipe(first()).subscribe(
+          next => {
+            this.dataSource$ = this.loadTableData();
+          }
+        );
+      }
+    });
   }
 
   /**
@@ -237,7 +255,7 @@ export class TableComponent implements OnInit {
   }
 
   goToNew() {
-    this.router.navigate([this.resource + '/new']);
+    this.router.navigate(['new'], {relativeTo: this.route});
   }
 
   private setParametersByUrl() {

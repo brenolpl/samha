@@ -55,41 +55,46 @@ public class RestricaoProfessor implements Serializable{
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "professor_id", nullable = false)
     private Professor professor;
-    
-    public RestricaoProfessor(){    
+
+
+    public int getId() {
+        return id;
     }
 
-    public RestricaoProfessor(int id, String nome, String descricao, int dia, String turno, 
-            boolean aula1, boolean aula2, boolean aula3, boolean aula4, boolean aula5, boolean aula6, String prioridade, Professor professor) {
+    public void setId(int id) {
         this.id = id;
-        this.nome = nome;
-        this.descricao = descricao;
-        this.dia = dia;
-        this.turno = turno;
-        this.aula1 = aula1;
-        this.aula2 = aula2;
-        this.aula3 = aula3;
-        this.aula4 = aula4;
-        this.aula5 = aula5;
-        this.aula6 = aula6;
-        this.prioridade = prioridade;
-        this.professor = professor;
     }
 
-    public RestricaoProfessor(String nome, String descricao, int dia, String turno,
-            boolean aula1, boolean aula2, boolean aula3, boolean aula4, boolean aula5, boolean aula6, String prioridade, Professor professor) {
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
         this.descricao = descricao;
+    }
+
+    public int getDia() {
+        return dia;
+    }
+
+    public void setDia(int dia) {
         this.dia = dia;
+    }
+
+    public String getTurno() {
+        return turno;
+    }
+
+    public void setTurno(String turno) {
         this.turno = turno;
-        this.aula1 = aula1;
-        this.aula2 = aula2;
-        this.aula3 = aula3;
-        this.aula4 = aula4;
-        this.aula5 = aula5;
-        this.aula6 = aula6;
-        this.prioridade = prioridade;
-        this.professor = professor;
     }
 
     public boolean isAula1() {
@@ -140,46 +145,6 @@ public class RestricaoProfessor implements Serializable{
         this.aula6 = aula6;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
-    public int getDia() {
-        return dia;
-    }
-
-    public void setDia(int dia) {
-        this.dia = dia;
-    }
-
-    public String getTurno() {
-        return turno;
-    }
-
-    public void setTurno(String turno) {
-        this.turno = turno;
-    }
-
     public String getPrioridade() {
         return prioridade;
     }
@@ -194,10 +159,5 @@ public class RestricaoProfessor implements Serializable{
 
     public void setProfessor(Professor professor) {
         this.professor = professor;
-    }
-
-    @Override
-    public String toString() {
-        return nome + " - " + dia + " - " + turno;
     }
 }
