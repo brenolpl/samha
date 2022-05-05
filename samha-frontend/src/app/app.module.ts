@@ -8,8 +8,9 @@ import {LoginComponent} from './login/login.component';
 import {HomeComponent} from './home/home.component';
 import {AuthGuard} from './guards/auth-guard';
 import {AppRoutingModule} from './app-routing.module';
-import {CommonModule} from '@angular/common';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {CanDeactivateGuard} from './guards/can-deactivate-guard';
+import {FormResolver} from './guards/form-resolver';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,9 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
     BrowserAnimationsModule
   ],
   providers: [
-    AuthGuard
+    AuthGuard,
+    CanDeactivateGuard,
+    FormResolver
   ],
   exports: [
     UsuarioFormComponent,
