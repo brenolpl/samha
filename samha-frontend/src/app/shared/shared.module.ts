@@ -10,12 +10,14 @@ import { TableDialogComponent } from './table-dialog/table-dialog.component';
 import {HttpClientModule} from '@angular/common/http';
 import {AuthService} from './service/auth.service';
 import {RouterModule} from '@angular/router';
+import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 
 @NgModule({
   declarations: [
     ToolbarComponent,
     TableComponent,
     TableDialogComponent,
+    ConfirmDialogComponent,
   ],
   imports: [
     CommonModule,
