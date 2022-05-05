@@ -81,6 +81,11 @@ export class RestricaoComponent implements OnInit, IFormComponent {
   }
 
   salvar() {
+    if(this.form.invalid){
+      this.form.markAllAsTouched();
+      this.form.markAsPristine();
+      return;
+    }
     this.setNewResourceData();
     if(this.restricao.id) {
       this.dataService.update('restricaoProfessor', this.restricao.id, this.restricao).pipe(
