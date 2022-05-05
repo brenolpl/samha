@@ -36,6 +36,10 @@ export class DataService {
     return this.http.post(APIPREFIX + resource + '/insert', body, this.getOptions());
   }
 
+  public update(resource: string, id: string,  body: any): Observable<any>{
+    return this.http.patch(APIPREFIX + resource + '/' + id, body, this.getOptions())
+  }
+
   private getOptions() {
     return {
       headers: new HttpHeaders()
@@ -43,4 +47,7 @@ export class DataService {
     }
   }
 
+  public delete(resource: string, id): Observable<any> {
+    return this.http.delete(APIPREFIX + resource + '/' + id, this.getOptions());
+  }
 }
