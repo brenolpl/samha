@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RestricaoComponent } from './restricao.component';
+import { AutocompleteFieldComponent } from './autocomplete-field.component';
 
-describe('RestricaoComponent', () => {
-  let component: RestricaoComponent;
-  let fixture: ComponentFixture<RestricaoComponent>;
+describe('AutocompleteFieldComponent', () => {
+  let component: AutocompleteFieldComponent;
+  let fixture: ComponentFixture<AutocompleteFieldComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RestricaoComponent ]
+      declarations: [ AutocompleteFieldComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(RestricaoComponent);
+    fixture = TestBed.createComponent(AutocompleteFieldComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
