@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Observable, Subscription} from 'rxjs';
 import {DataService} from '../../shared/service/data.service';
@@ -12,7 +12,7 @@ import {first} from 'rxjs/operators';
   templateUrl: './professor-form.component.html',
   styleUrls: ['./professor-form.component.css']
 })
-export class ProfessorFormComponent implements OnInit, IFormComponent {
+export class ProfessorFormComponent implements OnInit, IFormComponent, OnDestroy {
   form: FormGroup;
   coordenadoria$: Observable<any>;
   professor$: Observable<any>;
@@ -43,17 +43,25 @@ export class ProfessorFormComponent implements OnInit, IFormComponent {
       return;
     }
 
-    let professor = this.setProfessorData();
-    this.dataService.save('professor', professor).pipe(first()).subscribe(
-      next => {
-        this.router.navigate(['../' + next.id], {relativeTo: this.route})
-      }
-    );
+    this.setProfessorData();
+    if(this.professor?.id){
+     this.dataService.update('professor', this.professor.id, this.professor).pipe(first()).subscribe(
+       next => {
+         this.router.navigate(['../'], {relativeTo: this.route})
+       }
+     )
+    }else {
+      this.dataService.save('professor', this.professor).pipe(first()).subscribe(
+        next => {
+          this.router.navigate(['../' + next.id], {relativeTo: this.route})
+        }
+      );
+    }
   }
 
   private setProfessorData() {
-    return {
-      id: null,
+    this.professor = {
+      id: this.professor?.id,
       nome: this.form.get('nome').value,
       coordenadoria:{
         id: this.form.get('coordenadoria').value
@@ -86,5 +94,9 @@ export class ProfessorFormComponent implements OnInit, IFormComponent {
     });
     this.coordenadoria$ = this.dataService.getAll('coordenadoria');
     this.form.get('ativo').setValue(this.professor && this.professor.ativo ? this.professor.ativo : false);
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe()
   }
 }
