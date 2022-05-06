@@ -19,6 +19,7 @@ export class DisciplinaFormComponent implements OnInit, OnDestroy {
   matriz$: Observable<any>;
   disciplina: any = {};
   private subscription: Subscription;
+  private subscription2: Subscription;
 
   constructor(private formBuilder: FormBuilder,
               private dataService: DataService,
@@ -29,6 +30,7 @@ export class DisciplinaFormComponent implements OnInit, OnDestroy {
     this.route.data.pipe(first()).subscribe(
       next => {
         this.disciplina = next.disciplina;
+        this.setCursoData();
         this.loadForm();
       }
     )
@@ -39,27 +41,26 @@ export class DisciplinaFormComponent implements OnInit, OnDestroy {
       }
     )
 
-    this.form.get('matriz').valueChanges.subscribe(
+    this.subscription2 = this.form.get('matriz').valueChanges.subscribe(
       data => {
-        console.log('i');
-        console.log(data);
-        this.form.get('matriz').addValidators(
-          [Validators.max(data.curso.qtPeriodos),
-            Validators.min(1)
-          ])
+        this.form.get('periodo').setValidators([
+          Validators.required,
+          Validators.min(1),
+          Validators.max(data.curso.qtPeriodos)
+        ])
       }
     )
   }
 
   private loadForm() {
     this.form = this.formBuilder.group({
-      matriz: [null, Validators.required],
-      nome: [null, Validators.required],
-      sigla: [null],
-      cargaHoraria: [60, [Validators.required, Validators.max(120), Validators.min(15)]],
-      qtAulas: [null],
-      periodo: [null],
-      tipo: [null]
+      matriz: [this.disciplina?.matriz, Validators.required],
+      nome: [this.disciplina?.nome, Validators.required],
+      sigla: [this.disciplina?.sigla],
+      cargaHoraria: [this.disciplina?.cargaHoraria ? this.disciplina?.cargaHoraria : 60, [Validators.required, Validators.max(120), Validators.min(15)]],
+      qtAulas: [this.disciplina?.qtAulas],
+      periodo: [this.disciplina?.periodo],
+      tipo: [this.disciplina?.tipo]
     });
 
   }
@@ -87,5 +88,57 @@ export class DisciplinaFormComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+    this.subscription2.unsubscribe();
+  }
+
+  salvar() {
+    if(this.form.invalid){
+      this.form.markAllAsTouched();
+      return;
+    }
+
+    this.buildEntityData();
+  }
+
+  private buildEntityData() {
+    this.disciplina = {
+      id: this.disciplina?.id,
+      nome: this.form.get('nome').value,
+      qtAulas: this.form.get('qtAulas').value,
+      periodo: this.form.get('periodo').value,
+      sigla: this.form.get('sigla').value,
+      tipo: this.form.get('tipo').value,
+      cargaHorara: this.form.get('cargaHoraria').value,
+      matriz: this.form.get('matriz').value
+    }
+
+  }
+
+  private setCursoData() {
+    if(this.disciplina?.id){
+      let query = new QueryMirror('matrizCurricular');
+      let projections = matrizColumns.map(matriz => matriz.columnDef);
+      let filter: Filter;
+
+      filter = {
+        and: {
+          'id': {equals: this.disciplina.matriz.id}
+        }
+      }
+
+      query.selectList(projections);
+      query.where(filter)
+
+      this.dataService.query(query).pipe(first()).subscribe(
+        data => {
+          this.cursoControl.setValue(data.listMap[0].curso);
+          this.form.get('matriz').setValue(data.listMap[0])
+        }
+      )
+    }
+  }
+
+  compareMatrizFunction(o1: any, o2: any){
+    return (o1 != null && o2 != null) && o1.id == o2.id;
   }
 }

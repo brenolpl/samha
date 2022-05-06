@@ -1,4 +1,4 @@
-<mat-card class="mat-elevation-z8 m-auto col-11 mt-5">
+<mat-card class="mat-elevation-z8 m-auto col-11 mt-5 mb-5">
   <mat-card-title>
     <mat-toolbar color="accent">Cadastrar Disciplina</mat-toolbar>
   </mat-card-title>
@@ -10,7 +10,7 @@
       <div *ngIf="cursoControl.value">
         <mat-form-field appearance="outline" class="d-block">
           <mat-label>Matriz Curricular</mat-label>
-          <mat-select *ngIf="matriz$ | async as matrizes; else loading" formControlName="matriz">
+          <mat-select *ngIf="matriz$ | async as matrizes; else loading" formControlName="matriz" [compareWith]="compareMatrizFunction">
             <mat-option *ngFor="let matriz of matrizes.listMap" [value]="matriz">{{matriz.nome}}</mat-option>
           </mat-select>
           <ng-template #loading>
@@ -51,4 +51,8 @@
       </div>
     </form>
   </mat-card-content>
+
+  <mat-card-actions>
+    <button mat-button type="submit" (click)="salvar()">Salvar</button>
+  </mat-card-actions>
 </mat-card>

@@ -16,7 +16,6 @@ import {turmaColumns} from '../../meta-model/turma';
 import {ConfirmDialogComponent} from '../confirm-dialog/confirm-dialog.component';
 import {MatDialog} from '@angular/material/dialog';
 import {usuarioColumns} from '../../meta-model/usuario';
-import {simpleCrudColumns} from '../../meta-model/simple-crud';
 import {coordenadoriaColumns} from '../../meta-model/coordenadoria';
 import {eixoColumns} from '../../meta-model/eixo';
 import {matrizColumns} from '../../meta-model/matriz-curricular';

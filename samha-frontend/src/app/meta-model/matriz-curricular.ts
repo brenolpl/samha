@@ -5,7 +5,8 @@ export const matrizColumns: TableColumnModel[] = [
   {columnDef: 'nome', header: 'Nome', visible: true},
   {columnDef: 'ano', header: 'Ano', visible: true},
   {columnDef: 'semestre', header: 'Semestre', visible: true},
-  {columnDef: 'curso.nome', header: 'Curso', visible: true}
+  {columnDef: 'curso.nome', header: 'Curso', visible: true},
+  {columnDef: 'curso', header: 'curso.id', visible: false}
 ]
 
 /*
