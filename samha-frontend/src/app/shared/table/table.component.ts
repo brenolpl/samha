@@ -15,6 +15,11 @@ import {cursoColumns} from '../../meta-model/curso';
 import {turmaColumns} from '../../meta-model/turma';
 import {ConfirmDialogComponent} from '../confirm-dialog/confirm-dialog.component';
 import {MatDialog} from '@angular/material/dialog';
+import {usuarioColumns} from '../../meta-model/usuario';
+import {simpleCrudColumns} from '../../meta-model/simple-crud';
+import {coordenadoriaColumns} from '../../meta-model/coordenadoria';
+import {eixoColumns} from '../../meta-model/eixo';
+import {matrizColumns} from '../../meta-model/matriz-curricular';
 
 /**
  * Este componente gera dinamicamente uma tabela de acordo com os parâmetros passados
@@ -59,7 +64,9 @@ export class TableComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.setParametersByUrl();
+    if(this.resource === undefined && this.columns === undefined) {
+      this.setParametersByUrl();
+    }
     this.defineDisplayedColumns();
     this.dataSource$ = this.loadTableData();
     this.defineToolbarHeader();
@@ -285,6 +292,18 @@ export class TableComponent implements OnInit {
         break;
       case 'turma':
         this.columns = turmaColumns;
+        break;
+      case 'usuario':
+        this.columns = usuarioColumns;
+        break;
+      case 'coordenadoria':
+        this.columns = coordenadoriaColumns;
+        break;
+      case 'eixo':
+        this.columns = eixoColumns;
+        break;
+      case 'matrizCurricular':
+        this.columns = matrizColumns;
         break;
     }
   }

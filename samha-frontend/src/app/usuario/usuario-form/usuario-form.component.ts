@@ -6,6 +6,8 @@ import {TableDialogComponent} from '../../shared/table-dialog/table-dialog.compo
 import {Observable, of} from 'rxjs';
 import {DataService} from '../../shared/service/data.service';
 import {servidorColumns} from '../../meta-model/servidor';
+import {ActivatedRoute} from '@angular/router';
+import {first} from 'rxjs/operators';
 
 @Component({
   selector: 'samha-usuario-form',
@@ -20,9 +22,11 @@ export class UsuarioFormComponent implements OnInit {
   resource = 'professor';
   professor$: Observable<any>;
   papeis$: Observable<any>;
+  usuario: any = {};
   constructor(private formBuilder: FormBuilder,
               public dialog: MatDialog,
-              private dataService: DataService) {
+              private dataService: DataService,
+              private route: ActivatedRoute) {
     this.form = formBuilder.group({
       login: [null, Validators.required],
       senha: [null, [Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
@@ -32,6 +36,12 @@ export class UsuarioFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.route.data.pipe(first()).subscribe(
+      next => {
+        this.usuario = next.usuario;
+        this.loadForm();
+      }
+    )
     this.papeis$ = this.dataService.getAll('papel');
   }
 
@@ -56,7 +66,7 @@ export class UsuarioFormComponent implements OnInit {
   }
 
   salvar() {
-    this.dataService.save('usuario', this.setUsuarioData()).subscribe(
+    this.dataService.post('usuario/newUser', this.setUsuarioData()).subscribe(
       next => {
 
       },
@@ -80,5 +90,14 @@ export class UsuarioFormComponent implements OnInit {
     this.form.get('servidor_id').setValue(id);
     this.form.get('servidor_id').disable({onlySelf: true});
     return id;
+  }
+
+  private loadForm() {
+    this.form = this.formBuilder.group({
+      login: [this.usuario?.login, Validators.required],
+      senha: [null, [Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
+      papel: [this.usuario?.papel, Validators.required],
+      servidor_id: []
+    })
   }
 }

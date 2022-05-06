@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ThemePalette} from '@angular/material/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Observable, Subscription} from 'rxjs';
+import {Subscription} from 'rxjs';
 import {DataService} from '../../shared/service/data.service';
 import {first} from 'rxjs/operators';
 import {IFormComponent} from '../../meta-model/iform-component';
@@ -12,7 +12,7 @@ import {IFormComponent} from '../../meta-model/iform-component';
   templateUrl: './restricao.component.html',
   styleUrls: ['./restricao.component.css']
 })
-export class RestricaoComponent implements OnInit, IFormComponent {
+export class RestricaoComponent implements OnInit, IFormComponent, OnDestroy {
   private subscription: Subscription;
   restricao: any;
   professorId: string;
@@ -179,6 +179,10 @@ export class RestricaoComponent implements OnInit, IFormComponent {
 
   canDeactivateRoute(): boolean{
     return true;
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }
 

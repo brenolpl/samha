@@ -11,6 +11,7 @@ import {HttpClientModule} from '@angular/common/http';
 import {AuthService} from './service/auth.service';
 import {RouterModule} from '@angular/router';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
+import { AutocompleteFieldComponent } from './fields/autocomplete-field/autocomplete-field.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.componen
     TableComponent,
     TableDialogComponent,
     ConfirmDialogComponent,
+    AutocompleteFieldComponent,
   ],
   imports: [
     CommonModule,
@@ -27,11 +29,11 @@ import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.componen
     RouterModule
   ],
   exports: [
-    MaterialModule,
     ToolbarComponent,
     TableComponent,
     ReactiveFormsModule,
     HttpClientModule,
+    AutocompleteFieldComponent
   ],
   providers: [
     DataService,

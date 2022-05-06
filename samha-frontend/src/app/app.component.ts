@@ -67,25 +67,22 @@ export class AppComponent implements OnInit, OnDestroy{
   onMenuClick(menu: number) {
     switch (menu) {
       case MenuEnum.PROFESSORES:
-        this.router.navigate(['professor'], {state: {
-            resource: 'professor',
-            columns: professorColumns
-          }});
+        this.router.navigate(['professor']);
         break;
       case MenuEnum.COORDENADORES:
-        this.columns = professorColumns;
+        this.router.navigate(['coordenador']);
         break;
       case MenuEnum.ALOCACOES:
         this.columns = alocacaoColumns;
         break;
       case MenuEnum.DISCIPLINAS:
-        this.columns = disciplinaColumns;
+        this.router.navigate(['disciplina']);
         break;
       case MenuEnum.CADASTRARUSUARIOS:
-        this.columns = [];
+        this.router.navigate(['usuario']);
         break;
       case MenuEnum.CURSO:
-        this.columns = cursoColumns;
+        this.router.navigate(['curso']);
         break;
       case MenuEnum.OFERTAS:
         this.columns = [];
@@ -95,6 +92,12 @@ export class AppComponent implements OnInit, OnDestroy{
         break;
       case MenuEnum.TURMAS:
         this.columns = turmaColumns;
+        break;
+      case MenuEnum.COORDENADORIA:
+        this.router.navigate(['coordenadoria']);
+        break;
+      case MenuEnum.EIXO:
+        this.router.navigate(['eixo']);
         break;
     }
   }
@@ -118,7 +121,11 @@ export class AppComponent implements OnInit, OnDestroy{
       case MenuEnum.RELATORIOS:
         return 'picture_as_pdf';
       case MenuEnum.TURMAS:
-        return 'group_work'
+        return 'group_work';
+      case MenuEnum.COORDENADORIA:
+        return 'layers'
+      case MenuEnum.EIXO:
+        return '360';
     }
   }
 
