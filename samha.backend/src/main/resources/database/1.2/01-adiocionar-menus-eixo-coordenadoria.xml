@@ -37,4 +37,21 @@
         </insert>
     </changeSet>
 
+    <changeSet id="2" author="breno.leal">
+        <insert tableName="menu">
+            <column name="id">12</column>
+            <column name="nome">Matriz Curricular</column>
+        </insert>
+
+        <insert tableName="menu_papeis">
+            <column name="papeis_id">1</column>
+            <column name="menu_id">12</column>
+        </insert>
+
+        <insert tableName="menu_papeis">
+            <column name="papeis_id">2</column>
+            <column name="menu_id">12</column>
+        </insert>
+    </changeSet>
+
 </databaseChangeLog>

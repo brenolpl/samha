@@ -6,10 +6,8 @@ import {Filter, Predicate, QueryMirror} from '../query-mirror';
 import {Page, PagedList} from '../paged-list';
 import {TableColumnModel} from '../../meta-model/table-column-model';
 import {FormBuilder, FormGroup} from '@angular/forms';
-import {ActivatedRoute, Route, Router} from '@angular/router';
-import {MenuEnum} from '../menu-enum';
+import {ActivatedRoute, Router} from '@angular/router';
 import {professorColumns} from '../../meta-model/professor';
-import {alocacaoColumns} from '../../meta-model/alocacao';
 import {disciplinaColumns} from '../../meta-model/disciplina';
 import {cursoColumns} from '../../meta-model/curso';
 import {turmaColumns} from '../../meta-model/turma';
@@ -243,7 +241,7 @@ export class TableComponent implements OnInit {
   onChanged() {
     let filter: Predicate[] = [];
     if (this.group.value.search !== '') {
-      let projections = this.columns.filter(column => column.columnDef !== 'id');
+      let projections = this.columns.filter(column => column.columnDef);
       projections.forEach(column => {
         filter.push({
           [column.columnDef]: {

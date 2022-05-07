@@ -99,6 +99,9 @@ export class AppComponent implements OnInit, OnDestroy{
       case MenuEnum.EIXO:
         this.router.navigate(['eixo']);
         break;
+      case MenuEnum.MATRIZ:
+        this.router.navigate(['matrizCurricular']);
+        break;
     }
   }
 
@@ -126,6 +129,8 @@ export class AppComponent implements OnInit, OnDestroy{
         return 'layers'
       case MenuEnum.EIXO:
         return '360';
+      case MenuEnum.MATRIZ:
+        return 'grain';
     }
   }
 

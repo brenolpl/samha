@@ -15,6 +15,7 @@ const routes: Routes = [
   { path: 'coordenadoria', canActivate: [AuthGuard], loadChildren: () => import('./coordenadoria/coordenadoria.module').then(m => m.CoordenadoriaModule)},
   { path: 'eixo', canActivate: [AuthGuard], loadChildren: () => import('./eixo/eixo.module').then(m => m.EixoModule)},
   { path: 'disciplina', canActivate: [AuthGuard], loadChildren: () => import('./disciplina/disciplina.module').then(m => m.DisciplinaModule)},
+  { path: 'matrizCurricular', canActivate: [AuthGuard], loadChildren: () => import('./matriz-curricular/matriz.module').then(m => m.MatrizModule)},
 ];
 
 @NgModule({

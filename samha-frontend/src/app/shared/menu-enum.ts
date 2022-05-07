@@ -9,7 +9,8 @@ export enum MenuEnum{
   RELATORIOS,
   CADASTRARUSUARIOS,
   EIXO,
-  COORDENADORIA
+  COORDENADORIA,
+  MATRIZ,
 }
 
 /*
