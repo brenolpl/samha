@@ -55,12 +55,12 @@ export class DisciplinaFormComponent implements OnInit, OnDestroy {
   private loadForm() {
     this.form = this.formBuilder.group({
       matriz: [this.disciplina?.matriz, Validators.required],
-      nome: [this.disciplina?.nome, Validators.required],
-      sigla: [this.disciplina?.sigla],
+      nome: [this.disciplina?.nome, [Validators.required, Validators.maxLength(255)]],
+      sigla: [this.disciplina?.sigla, Validators.required],
       cargaHoraria: [this.disciplina?.cargaHoraria ? this.disciplina?.cargaHoraria : 60, [Validators.required, Validators.max(120), Validators.min(15)]],
-      qtAulas: [this.disciplina?.qtAulas],
+      qtAulas: [this.disciplina?.qtAulas, [Validators.required]],
       periodo: [this.disciplina?.periodo],
-      tipo: [this.disciplina?.tipo]
+      tipo: [this.disciplina?.tipo, Validators.required]
     });
 
   }
