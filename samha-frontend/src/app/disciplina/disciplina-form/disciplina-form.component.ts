@@ -98,7 +98,24 @@ export class DisciplinaFormComponent implements OnInit, OnDestroy {
     }
 
     this.buildEntityData();
+
+    if(this.disciplina?.id){
+      this.dataService.update('disciplina', this.disciplina.id, this.disciplina).pipe(first()).subscribe(
+        next => {
+          this.goBack();
+        }
+      )
+    }else{
+      this.dataService.save('disciplina', this.disciplina).pipe(first()).subscribe(
+        next => {
+          this.goBack();
+        }
+      )
+    }
+
   }
+
+  goBack = () => this.router.navigate(['../'], {relativeTo: this.route});
 
   private buildEntityData() {
     this.disciplina = {
