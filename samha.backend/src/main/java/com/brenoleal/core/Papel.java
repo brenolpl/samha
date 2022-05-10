@@ -1,10 +1,13 @@
 package com.brenoleal.core;
 
+import org.hibernate.envers.Audited;
+
 import javax.persistence.*;
 
 @Entity
+@Audited
 @Table(name = "papel")
-public class Papel {
+public class Papel extends BaseLogEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

@@ -1,10 +1,13 @@
 package com.brenoleal.core;
 
+import org.hibernate.envers.Audited;
+
 import javax.persistence.*;
 import java.util.Set;
 
 @Entity
-public class Menu {
+@Audited
+public class Menu extends BaseLogEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

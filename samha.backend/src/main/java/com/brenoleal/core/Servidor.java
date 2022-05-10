@@ -1,12 +1,14 @@
 package com.brenoleal.core;
-import java.io.Serializable;
+import org.hibernate.envers.Audited;
+
 import javax.persistence.Entity;
 import javax.persistence.*;
 
 @Entity
+@Audited
 @Table(name = "servidor")
 @Inheritance(strategy=InheritanceType.JOINED)
-public class Servidor implements Serializable{
+public class Servidor extends BaseLogEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

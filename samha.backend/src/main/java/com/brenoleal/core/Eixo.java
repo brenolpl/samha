@@ -1,6 +1,7 @@
 package com.brenoleal.core;
 
-import java.io.Serializable;
+import org.hibernate.envers.Audited;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,8 +10,9 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
+@Audited
 @Table(name = "eixo")
-public class Eixo implements Serializable, Comparable<Object> {
+public class Eixo extends BaseLogEntity implements Comparable<Object> {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

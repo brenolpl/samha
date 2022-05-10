@@ -1,6 +1,7 @@
 package com.brenoleal.core;
 
-import java.io.Serializable;
+import org.hibernate.envers.Audited;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,8 +13,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
+@Audited
 @Table(name = "restricao_professor")
-public class RestricaoProfessor implements Serializable{
+public class RestricaoProfessor extends BaseLogEntity{
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

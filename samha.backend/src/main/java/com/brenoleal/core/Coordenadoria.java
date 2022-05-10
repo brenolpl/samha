@@ -4,11 +4,13 @@ import java.io.Serializable;
 import javax.persistence.*;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+import org.hibernate.envers.Audited;
 
 
 @Entity
+@Audited
 @Table(name = "coordenadoria")
-public class Coordenadoria implements Serializable, Comparable<Object> {
+public class Coordenadoria extends BaseLogEntity implements Comparable<Object> {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

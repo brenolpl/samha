@@ -1,6 +1,5 @@
 package com.brenoleal.core;
 
-import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,10 +13,12 @@ import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.envers.Audited;
 
 @Entity
+@Audited
 @Table(name = "matriz_curricular")
-public class MatrizCurricular implements Serializable, Comparable<Object> {
+public class MatrizCurricular extends BaseLogEntity implements Comparable<Object> {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

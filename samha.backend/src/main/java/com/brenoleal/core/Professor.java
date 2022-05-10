@@ -15,8 +15,10 @@ import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.envers.Audited;
 
 @Entity
+@Audited
 @Table(name = "professor")
 @PrimaryKeyJoinColumn(name = "professor_id")
 public class Professor extends Servidor implements Comparable<Object>{
