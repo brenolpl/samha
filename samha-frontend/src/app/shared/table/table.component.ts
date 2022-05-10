@@ -238,7 +238,7 @@ export class TableComponent implements OnInit {
     return this.orderBy.includes(columnDef + ' desc');
   }
 
-  onChanged() {
+  onSearchChange() {
     let filter: Predicate[] = [];
     if (this.group.value.search !== '') {
       let projections = this.columns.filter(column => column.columnDef);
