@@ -2,7 +2,7 @@ package com.brenoleal.controller;
 
 import com.brenoleal.commons.UseCaseFacade;
 import com.brenoleal.controller.common.BaseController;
-import com.brenoleal.core.Curso;
+import com.brenoleal.domain.Curso;
 import org.springframework.web.bind.annotation.*;
 
 

@@ -1,4 +1,4 @@
-package com.brenoleal.domain.commons;
+package com.brenoleal.application.commons;
 
 import com.brenoleal.commons.UseCase;
 import com.brenoleal.persistence.generics.IGenericRepository;

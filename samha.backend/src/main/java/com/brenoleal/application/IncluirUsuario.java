@@ -1,11 +1,11 @@
-package com.brenoleal.domain;
+package com.brenoleal.application;
+
 
 import com.brenoleal.commons.UseCase;
-import com.brenoleal.core.Papel;
-import com.brenoleal.core.Servidor;
-import com.brenoleal.core.Usuario;
 import com.brenoleal.core.UsuarioDto;
-import com.brenoleal.persistence.IPapelRepository;
+import com.brenoleal.domain.Papel;
+import com.brenoleal.domain.Servidor;
+import com.brenoleal.domain.Usuario;
 import com.brenoleal.persistence.generics.IGenericRepository;
 import com.brenoleal.service.IUsuarioService;
 

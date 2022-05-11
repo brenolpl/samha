@@ -1,4 +1,4 @@
-package com.brenoleal.core;
+package com.brenoleal.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

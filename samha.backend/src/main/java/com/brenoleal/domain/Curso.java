@@ -1,4 +1,4 @@
-package com.brenoleal.core;
+package com.brenoleal.domain;
 
 import java.io.Serializable;
 import javax.persistence.Column;
@@ -12,8 +12,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 

@@ -1,6 +1,5 @@
-package com.brenoleal.core;
+package com.brenoleal.domain;
 
-import java.io.Serializable;
 import javax.persistence.*;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;

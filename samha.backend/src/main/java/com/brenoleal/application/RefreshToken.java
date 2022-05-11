@@ -1,9 +1,8 @@
-package com.brenoleal.domain;
+package com.brenoleal.application;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.brenoleal.commons.UseCase;
-import com.brenoleal.core.Papel;
-import com.brenoleal.core.Usuario;
+import com.brenoleal.domain.Usuario;
 import com.brenoleal.service.IUsuarioService;
 import com.brenoleal.util.JWTUtil;
 

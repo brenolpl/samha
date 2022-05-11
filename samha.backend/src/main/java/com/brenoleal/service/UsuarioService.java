@@ -1,7 +1,8 @@
 package com.brenoleal.service;
 
-import com.brenoleal.core.Papel;
-import com.brenoleal.core.Usuario;
+
+import com.brenoleal.domain.Papel;
+import com.brenoleal.domain.Usuario;
 import com.brenoleal.persistence.IPapelRepository;
 import com.brenoleal.persistence.IUsuarioRepository;
 import lombok.RequiredArgsConstructor;

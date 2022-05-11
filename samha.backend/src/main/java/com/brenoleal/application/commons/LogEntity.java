@@ -1,11 +1,10 @@
-package com.brenoleal.domain.commons;
+package com.brenoleal.application.commons;
 
 import com.brenoleal.commons.UseCase;
 import com.brenoleal.persistence.filter.Page;
 import com.brenoleal.persistence.filter.PagedList;
 import com.brenoleal.persistence.filter.Query;
 import com.brenoleal.persistence.generics.IGenericRepository;
-import org.hibernate.CacheMode;
 import org.hibernate.envers.AuditReader;
 import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.order.AuditOrder;

@@ -1,6 +1,6 @@
 package com.brenoleal.persistence;
 
-import com.brenoleal.core.Papel;
+import com.brenoleal.domain.Papel;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface IPapelRepository extends JpaRepository<Papel, Integer> {

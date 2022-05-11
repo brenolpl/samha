@@ -1,15 +1,15 @@
-package com.brenoleal.domain;
+package com.brenoleal.application;
 
-import com.brenoleal.core.Turma;
-import com.brenoleal.domain.commons.QueryEntities;
+
+import com.brenoleal.application.commons.QueryEntities;
+import com.brenoleal.domain.Turma;
 import com.brenoleal.persistence.filter.PagedList;
 import com.brenoleal.persistence.filter.Query;
 
-import java.text.ParseException;
+
 import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.logging.Logger;
 
 public class ConsultarTurmas extends QueryEntities<Turma> {
 

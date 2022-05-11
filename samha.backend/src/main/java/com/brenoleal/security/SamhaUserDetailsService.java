@@ -1,6 +1,7 @@
 package com.brenoleal.security;
 
-import com.brenoleal.core.Usuario;
+
+import com.brenoleal.domain.Usuario;
 import com.brenoleal.service.IUsuarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

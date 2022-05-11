@@ -1,4 +1,4 @@
-package com.brenoleal.core;
+package com.brenoleal.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,49 +17,44 @@ import org.hibernate.envers.Audited;
 
 @Entity
 @Audited
-@Table(name = "turma")
-public class Turma extends BaseLogEntity implements Comparable<Object> {
+@Table(name = "matriz_curricular")
+public class MatrizCurricular extends BaseLogEntity implements Comparable<Object> {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     
-    @Column(nullable = false, unique = true)
-    private String nome;
-    
     @Column(nullable = false)
-    private String turno;
+    private String nome;
     
     @Column(nullable = false)
     private int ano;
     
     @Column(nullable = false)
     private int semestre;
-    
+       
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "matriz_curricular_id", nullable = false)
+    @JoinColumn(name = "curso_id", nullable = false)
     @OnDelete(action = OnDeleteAction.NO_ACTION)
     @Cascade(CascadeType.SAVE_UPDATE)
-    private MatrizCurricular matriz;
-    
-    public Turma() {
+    private Curso curso;
+
+    public MatrizCurricular() {
     }
 
-    public Turma(int id, String nome, int ano, int semestre, String turno, MatrizCurricular matriz) {
+    public MatrizCurricular(int id, String nome, int ano, int semestre, Curso curso) {
         this.id = id;
         this.nome = nome;
         this.ano = ano;
         this.semestre = semestre;
-        this.matriz = matriz;
-        this.turno = turno;
+        this.curso = curso;
     }
 
-    public Turma(String nome, int ano, int semestre, String turno, MatrizCurricular matriz) {
+    public MatrizCurricular(String nome, int ano, int semestre, Curso curso) {
         this.nome = nome;
         this.ano = ano;
         this.semestre = semestre;
-        this.matriz = matriz;
-        this.turno = turno;
+        this.curso = curso;
     }
 
     public int getId() {
@@ -82,8 +77,8 @@ public class Turma extends BaseLogEntity implements Comparable<Object> {
         return ano;
     }
 
-    public void setAno(int ano) {
-        this.ano = ano;
+    public void setAno(int anoCriacao) {
+        this.ano = anoCriacao;
     }
 
     public int getSemestre() {
@@ -93,41 +88,27 @@ public class Turma extends BaseLogEntity implements Comparable<Object> {
     public void setSemestre(int semestre) {
         this.semestre = semestre;
     }
-    
-    public MatrizCurricular getMatriz() {
-        return matriz;
+
+    public Curso getCurso() {
+        return curso;
     }
 
-    public void setMatriz(MatrizCurricular matriz) {
-        this.matriz = matriz;
+    public void setCurso(Curso curso) {
+        this.curso = curso;
     }
     
-    public String getTurno() {
-        return turno;
-    }
-
-    public void setTurno(String turno) {
-        this.turno = turno;
-    }
-   
     @Override
     public String toString() {
         return nome;
     }
-    
+   
     public Object[] toArray() {
-        return new Object[] { this, getAnoSemestre(), getMatriz().getNome(), getMatriz().getCurso().getNome(), getTurno() };
-    }
-    
-    public String getAnoSemestre(){
-        return String.valueOf(getAno()) + "/" + String.valueOf(getSemestre());
+        return new Object[] { this };
     }
 
     @Override
     public int compareTo(Object o) {
-        
-        Turma other = (Turma) o;
+        MatrizCurricular other = (MatrizCurricular) o;
         return this.getNome().compareTo(other.getNome());
-        
     }
 }

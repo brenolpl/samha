@@ -1,4 +1,4 @@
-package com.brenoleal.core;
+package com.brenoleal.domain;
 
 import com.brenoleal.persistence.filter.Query;
 import lombok.Data;

@@ -1,8 +1,7 @@
 package com.brenoleal.controller.common;
 
+import com.brenoleal.application.commons.*;
 import com.brenoleal.commons.UseCaseFacade;
-import com.brenoleal.domain.commons.*;
-import com.brenoleal.persistence.filter.Page;
 import com.brenoleal.persistence.filter.PagedList;
 import com.brenoleal.persistence.filter.Query;
 import org.springframework.util.Assert;

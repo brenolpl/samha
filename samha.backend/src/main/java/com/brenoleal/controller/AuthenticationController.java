@@ -1,8 +1,8 @@
 package com.brenoleal.controller;
 
+import com.brenoleal.application.IsTokenValid;
+import com.brenoleal.application.RefreshToken;
 import com.brenoleal.commons.UseCaseFacade;
-import com.brenoleal.domain.IsTokenValid;
-import com.brenoleal.domain.RefreshToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;

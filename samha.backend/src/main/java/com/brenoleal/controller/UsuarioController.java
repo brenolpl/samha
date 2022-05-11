@@ -1,13 +1,11 @@
 package com.brenoleal.controller;
 
+import com.brenoleal.application.IncluirUsuario;
 import com.brenoleal.commons.UseCaseFacade;
 import com.brenoleal.controller.common.BaseController;
-import com.brenoleal.core.Usuario;
 import com.brenoleal.core.UsuarioDto;
-import com.brenoleal.domain.IncluirUsuario;
+import com.brenoleal.domain.Usuario;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("api/usuario")

@@ -1,9 +1,9 @@
 package com.brenoleal.controller;
 
+import com.brenoleal.application.ConsultarCoordenadores;
 import com.brenoleal.commons.UseCaseFacade;
 import com.brenoleal.controller.common.BaseController;
-import com.brenoleal.core.Professor;
-import com.brenoleal.domain.ConsultarCoordenadores;
+import com.brenoleal.domain.Professor;
 import com.brenoleal.persistence.filter.PagedList;
 import com.brenoleal.persistence.filter.Query;
 import org.springframework.web.bind.annotation.RequestMapping;

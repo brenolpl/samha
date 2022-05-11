@@ -1,4 +1,4 @@
-package com.brenoleal.domain;
+package com.brenoleal.application;
 
 import com.brenoleal.commons.UseCase;
 import com.brenoleal.util.JWTUtil;

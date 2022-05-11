@@ -1,7 +1,7 @@
-package com.brenoleal.domain;
+package com.brenoleal.application;
 
-import com.brenoleal.core.Professor;
-import com.brenoleal.domain.commons.QueryEntities;
+import com.brenoleal.application.commons.QueryEntities;
+import com.brenoleal.domain.Professor;
 import com.brenoleal.persistence.filter.PagedList;
 import com.brenoleal.persistence.filter.Query;
 

@@ -1,8 +1,7 @@
-package com.brenoleal.core;
+package com.brenoleal.domain;
 
 import org.hibernate.envers.Audited;
 
-import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
