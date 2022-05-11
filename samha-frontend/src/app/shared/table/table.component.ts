@@ -34,6 +34,7 @@ import {matrizColumns} from '../../meta-model/matriz-curricular';
 export class TableComponent implements OnInit {
   @Input() resource: string;
   @Input() columns: TableColumnModel[];
+  @Input() toolbarHeader: string;
   @Output() onSelectedRow: EventEmitter<number> = new EventEmitter<number>();
   pagedList: PagedList;
   tenButtonSelected: boolean = true;
@@ -46,15 +47,14 @@ export class TableComponent implements OnInit {
   backwardButtonDisabled: boolean = true;
   dataSource$: Observable<PagedList>;
   displayedColumns: string[] = [];
-  toolbarHeader: string;
   orderBy: string = '';
   group: FormGroup;
 
-  constructor(private dataService: DataService,
-              private formBuilder: FormBuilder,
-              private router: Router,
-              private route: ActivatedRoute,
-              private dialog: MatDialog) {
+  constructor(protected dataService: DataService,
+              protected formBuilder: FormBuilder,
+              protected router: Router,
+              protected route: ActivatedRoute,
+              protected dialog: MatDialog) {
     this.group = this.formBuilder.group({
       search: [null]
     });
@@ -66,10 +66,9 @@ export class TableComponent implements OnInit {
     }
     this.defineDisplayedColumns();
     this.dataSource$ = this.loadTableData();
-    this.defineToolbarHeader();
   }
 
-  private loadTableData(filter: Predicate[] = []): Observable<PagedList> {
+  loadTableData(filter: Predicate[] = []): Observable<PagedList> {
     const query = new QueryMirror(this.resource);
     let projections: string[] = [];
     let page: Page = {
@@ -105,17 +104,13 @@ export class TableComponent implements OnInit {
     );
   }
 
-  private defineDisplayedColumns() {
+  defineDisplayedColumns() {
     this.columns.map(column => {
       if (column.visible) {
         this.displayedColumns.push(column.columnDef);
       }
     });
     this.displayedColumns.push('actions');
-  }
-
-  private defineToolbarHeader() {
-    this.toolbarHeader = this.resource.charAt(0).toUpperCase() + this.resource.slice(1);
   }
 
   onEditClick(row: any) {
@@ -191,22 +186,22 @@ export class TableComponent implements OnInit {
     this.dataSource$ = this.loadTableData();
   }
 
-  private checkButtons() {
+  checkButtons() {
     this.backwardButtonDisabled = this.currentPage <= 1;
     this.fowardButtonDisabled = this.currentPage >= this.lastPage;
   }
 
-  private calculateLastPage = () => Math.ceil(this.pagedList.page.totalItems / this.maxRows);
+  calculateLastPage = () => Math.ceil(this.pagedList.page.totalItems / this.maxRows);
   selectedRowIndex: number = 0;
 
-  private calculateSkip(): number {
+  calculateSkip(): number {
     if (this.pagedList !== null && this.pagedList !== undefined) {
       this.onSelectedValueChanged();
     }
     return this.maxRows * (this.currentPage - 1);
   }
 
-  private onSelectedValueChanged(): void {
+  onSelectedValueChanged(): void {
     if (this.pagedList.page.totalItems != 0) {
       let lastPage = this.calculateLastPage();
       while (this.currentPage > lastPage) {
@@ -262,12 +257,13 @@ export class TableComponent implements OnInit {
     this.router.navigate(['new'], {relativeTo: this.route});
   }
 
-  private setParametersByUrl() {
+  setParametersByUrl() {
     this.resource = this.router.url.replace('/', '');
+    console.log(this.resource);
     this.defineColumns();
   }
 
-  private defineColumns() {
+  defineColumns() {
     switch (this.resource) {
       case 'professor':
         this.columns = professorColumns;
