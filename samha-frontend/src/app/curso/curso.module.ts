@@ -5,6 +5,7 @@ import {MaterialModule} from '../shared/material/material.module';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {CommonModule} from '@angular/common';
 import {SharedModule} from '../shared/shared.module';
+import { CursoComponent } from './curso/curso.component';
 
 @NgModule({
   imports: [
@@ -17,7 +18,8 @@ import {SharedModule} from '../shared/shared.module';
 
   ],
   declarations: [
-    CursoFormComponent
+    CursoFormComponent,
+    CursoComponent
   ]
 })
 export class CursoModule {}

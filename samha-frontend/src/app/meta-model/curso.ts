@@ -1,4 +1,5 @@
 import {TableColumnModel} from './table-column-model';
+import {commonLogColumns} from './log';
 
 export const cursoColumns: TableColumnModel[] = [
   {columnDef: 'id', header: 'id', visible: false},
@@ -7,6 +8,14 @@ export const cursoColumns: TableColumnModel[] = [
   {columnDef: 'nivel', header: 'Nível', visible: true},
   {columnDef: 'coordenadoria.nome', header: 'Coordenadoria', visible: true},
   {columnDef: 'professor.nome', header: 'Coordenador', visible: true}
+]
+
+export const cursoComLogColumns: TableColumnModel[] = [
+  {columnDef: 'id', header: 'id', visible: true},
+  {columnDef: 'nome', header: 'Nome', visible: true},
+  {columnDef: 'qtPeriodos', header: 'Períodos', visible: true},
+  {columnDef: 'nivel', header: 'Nível', visible: true},
+  ...commonLogColumns
 ]
 
 /*

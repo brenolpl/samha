@@ -12,13 +12,15 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 
 @Entity
 @Audited
 @Table(name = "curso")
-public class Curso extends BaseLogEntity implements Comparable<Object> {
+public class Curso extends BaseLogEntity implements Comparable<Object>, Serializable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

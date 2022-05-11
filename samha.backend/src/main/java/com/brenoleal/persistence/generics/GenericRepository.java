@@ -1,20 +1,18 @@
 package com.brenoleal.persistence.generics;
 
-import com.brenoleal.commons.UseCase;
 import com.brenoleal.persistence.filter.PagedList;
 import com.brenoleal.persistence.filter.Page;
+import org.hibernate.envers.AuditReader;
+import org.hibernate.envers.AuditReaderFactory;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Tuple;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Repository
 public class GenericRepository implements IGenericRepository{
@@ -92,6 +90,11 @@ public class GenericRepository implements IGenericRepository{
         List<TARGET> resultList = entityManager.createQuery(query).setMaxResults(1).getResultList();
         if(resultList.isEmpty()) return null;
         return resultList.get(0);
+    }
+
+    @Override
+    public AuditReader getReader() {
+        return AuditReaderFactory.get(this.entityManager);
     }
 
 

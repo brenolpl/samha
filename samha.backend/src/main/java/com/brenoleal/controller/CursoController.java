@@ -3,8 +3,8 @@ package com.brenoleal.controller;
 import com.brenoleal.commons.UseCaseFacade;
 import com.brenoleal.controller.common.BaseController;
 import com.brenoleal.core.Curso;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 
 @RestController
 @RequestMapping("api/curso")

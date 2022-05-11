@@ -2,6 +2,7 @@ package com.brenoleal.persistence.generics;
 
 import com.brenoleal.persistence.filter.Page;
 import com.brenoleal.persistence.filter.PagedList;
+import org.hibernate.envers.AuditReader;
 
 import java.io.Serializable;
 import java.util.List;
@@ -27,4 +28,6 @@ public interface IGenericRepository {
     <ENTITY> ENTITY findSingle(Class<ENTITY> entityClass, IQueryBuilder<ENTITY, ENTITY> queryBuilder);
 
     <ENTITY, TARGET> TARGET findsingle(Class<ENTITY> entityClass, Class<TARGET> targetClass, IQueryBuilder<ENTITY, TARGET> queryBuilder);
+
+    AuditReader getReader();
 }

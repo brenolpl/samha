@@ -1,14 +1,17 @@
 import {RouterModule, Routes} from '@angular/router';
-import {TableComponent} from '../shared/table/table.component';
 import {NgModule} from '@angular/core';
 import {CursoFormComponent} from './curso-form/curso-form.component';
 import {FormResolver} from '../guards/form-resolver';
+import {CursoComponent} from './curso/curso.component';
+import {LogComponent} from '../shared/log/log.component';
 
 export const cursoRoutes: Routes = [
   {path: '', children: [
-      {path: '', component: TableComponent},
+      {path: '', component: CursoComponent},
       {path: 'new', component: CursoFormComponent},
-      {path: ':entity', component: CursoFormComponent, resolve: {curso: FormResolver}}
+      {path: 'log', component: LogComponent},
+      {path: ':entity', component: CursoFormComponent, resolve: {curso: FormResolver}},
+
     ]}
 ]
 

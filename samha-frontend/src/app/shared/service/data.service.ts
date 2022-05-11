@@ -3,7 +3,7 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {LocalStorageService} from './local-storage.service';
 import {QueryMirror} from '../query-mirror';
-import {PagedList} from '../paged-list';
+import {Page, PagedList} from '../paged-list';
 import {catchError, tap} from 'rxjs/operators';
 import {APIPREFIX} from '../../app.component';
 
@@ -18,6 +18,10 @@ export class DataService {
 
   public query(query: QueryMirror): Observable<PagedList> {
     return this.http.post<PagedList>(APIPREFIX + query.entityPath + '/query', query, this.getOptions());
+  }
+
+  public queryLog(query: QueryMirror): Observable<PagedList> {
+    return this.http.post<PagedList>(APIPREFIX + query.entityPath + '/log', query, this.getOptions());
   }
 
   public get(resource: string, id: string): Observable<any>{

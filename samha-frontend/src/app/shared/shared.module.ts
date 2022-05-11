@@ -12,6 +12,7 @@ import {AuthService} from './service/auth.service';
 import {RouterModule} from '@angular/router';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { AutocompleteFieldComponent } from './fields/autocomplete-field/autocomplete-field.component';
+import { LogComponent } from './log/log.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { AutocompleteFieldComponent } from './fields/autocomplete-field/autocomp
     TableDialogComponent,
     ConfirmDialogComponent,
     AutocompleteFieldComponent,
+    LogComponent,
   ],
   imports: [
     CommonModule,

@@ -4,6 +4,7 @@ export class PagedList {
   listMap: any;
 
   constructor(public pagedList: any) {
+    this.list = pagedList.list;
     this.listMap = pagedList.listMap;
     this.page = pagedList.page;
   }
