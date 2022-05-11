@@ -1,18 +1,13 @@
-import {Component, EventEmitter, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Observable, of, Subscription} from 'rxjs';
 import {MenuEnum} from './shared/menu-enum';
-import {professorColumns} from './meta-model/professor';
 import {alocacaoColumns} from './meta-model/alocacao';
-import {disciplinaColumns} from './meta-model/disciplina';
-import {cursoColumns} from './meta-model/curso';
-import {turmaColumns} from './meta-model/turma';
 import {TableColumnModel} from './meta-model/table-column-model';
 import {DataService} from './shared/service/data.service';
 import {LocalStorageService} from './shared/service/local-storage.service';
 import {Router} from '@angular/router';
 import {AuthService} from './shared/service/auth.service';
 import {catchError, map, tap} from 'rxjs/operators';
-import {MatButton} from '@angular/material/button';
 
 @Component({
   selector: 'samha-root',
@@ -21,7 +16,6 @@ import {MatButton} from '@angular/material/button';
 })
 export class AppComponent implements OnInit, OnDestroy{
   columns: TableColumnModel[];
-  selectedMenu: number;
   opened = false;
   menus$: Observable<any>;
   showMenu: Observable<boolean>;
@@ -91,7 +85,7 @@ export class AppComponent implements OnInit, OnDestroy{
         this.columns = [];
         break;
       case MenuEnum.TURMAS:
-        this.columns = turmaColumns;
+        this.router.navigate(['turma']);
         break;
       case MenuEnum.COORDENADORIA:
         this.router.navigate(['coordenadoria']);

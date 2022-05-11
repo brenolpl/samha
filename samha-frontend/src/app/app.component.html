@@ -7,10 +7,12 @@
   </ng-template>
   <mat-sidenav mode="side" [(opened)]="opened" *ngIf="menus$ | async as menusSource; else loading">
     <ng-container *ngFor="let menu of menusSource">
-      <button (click)="onMenuClick(menu.id)" mat-button>
-        <mat-icon>{{loadMatIcon(menu.id)}}</mat-icon>
-        {{menu.nome}}
-      </button>
+      <div class="botao-menu">
+        <button (click)="onMenuClick(menu.id)" mat-button class="menu-height">
+          <mat-icon>{{loadMatIcon(menu.id)}}</mat-icon>
+          {{menu.nome}}
+        </button>
+      </div>
     </ng-container>
   </mat-sidenav>
   <mat-sidenav-content>

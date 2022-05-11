@@ -18,6 +18,8 @@ public class PagedList<T> implements Serializable {
         this.list = list;
     }
 
+    public PagedList(){}
+
     public PagedList(List<T> list, Page page){
         this.list = list;
         this.page = page;

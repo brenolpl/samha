@@ -19,14 +19,6 @@ mat-sidenav-content{
   width: 100%;
 }
 
-.loading-spinner{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: rgba(0, 0, 0, 0.15);
-  height: 100vh;
-}
-
 .mat-card{
   padding: 0;
   border-radius: 4px;

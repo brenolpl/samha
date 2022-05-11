@@ -1,11 +1,15 @@
 package com.brenoleal;
 
 import com.brenoleal.core.Usuario;
+import com.brenoleal.core.Usuario_;
+import com.brenoleal.persistence.IUsuarioRepository;
+import com.brenoleal.persistence.generics.IGenericRepository;
 import com.brenoleal.service.IUsuarioService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.List;
 
