@@ -1,4 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Router} from '@angular/router';
+import {LocalStorageService} from '../service/local-storage.service';
 
 @Component({
   selector: 'samha-toolbar',
@@ -12,12 +14,18 @@ export class ToolbarComponent implements OnInit {
    */
   @Output() sideBarClicked: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-  constructor() { }
+  constructor(private router: Router,
+              private localStorage: LocalStorageService) { }
 
   ngOnInit(): void {
   }
 
   onClick() {
     this.sideBarClicked.emit(null);
+  }
+
+  onExitClick() {
+    this.localStorage.clear();
+    window.location.reload();
   }
 }
