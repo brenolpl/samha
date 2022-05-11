@@ -6,3 +6,16 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .custom-dialog-container{
   width: 1200px;
 }
+
+.loading-spinner{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  height: 100vh;
+}
+
+.sub-toolbar{
+  background-color: white;
+  box-shadow: 0 0 5px 0 black;
+}
