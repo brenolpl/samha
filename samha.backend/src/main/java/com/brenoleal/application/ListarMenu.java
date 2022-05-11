@@ -1,7 +1,10 @@
-package com.brenoleal.domain;
+package com.brenoleal.application;
 
 import com.brenoleal.commons.UseCase;
-import com.brenoleal.core.*;
+import com.brenoleal.domain.Menu;
+import com.brenoleal.domain.Menu_;
+import com.brenoleal.domain.Papel;
+import com.brenoleal.domain.Papel_;
 import com.brenoleal.persistence.generics.IGenericRepository;
 import com.brenoleal.util.JWTUtil;
 
