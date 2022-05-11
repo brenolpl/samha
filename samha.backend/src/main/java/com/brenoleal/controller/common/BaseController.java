@@ -2,6 +2,7 @@ package com.brenoleal.controller.common;
 
 import com.brenoleal.commons.UseCaseFacade;
 import com.brenoleal.domain.commons.*;
+import com.brenoleal.persistence.filter.Page;
 import com.brenoleal.persistence.filter.PagedList;
 import com.brenoleal.persistence.filter.Query;
 import org.springframework.util.Assert;
@@ -51,6 +52,11 @@ public abstract class BaseController<ENTITY, KEY extends Serializable> {
     @PatchMapping("{id}")
     public ENTITY update(@PathVariable KEY id, @RequestBody ENTITY entity){
         return this.facade.execute(new UpdateEntity<>(entity));
+    }
+
+    @PostMapping("log")
+    public PagedList<ENTITY> logEntities(@RequestBody Query query){
+        return this.facade.execute(new LogEntity<>(entityClass, query));
     }
 
     public PagedList buildQueryEntities(Query query){

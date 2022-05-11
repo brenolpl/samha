@@ -16,6 +16,7 @@ const routes: Routes = [
   { path: 'eixo', canActivate: [AuthGuard], loadChildren: () => import('./eixo/eixo.module').then(m => m.EixoModule)},
   { path: 'disciplina', canActivate: [AuthGuard], loadChildren: () => import('./disciplina/disciplina.module').then(m => m.DisciplinaModule)},
   { path: 'matrizCurricular', canActivate: [AuthGuard], loadChildren: () => import('./matriz-curricular/matriz.module').then(m => m.MatrizModule)},
+  { path: 'turma', canActivate: [AuthGuard], loadChildren: () => import('./turma/turma.module').then(m => m.TurmaModule)},
 ];
 
 @NgModule({
