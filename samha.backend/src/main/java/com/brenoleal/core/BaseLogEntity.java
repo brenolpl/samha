@@ -16,24 +16,25 @@ import java.sql.Timestamp;
 @EntityListeners(AuditingEntityListener.class)
 public class BaseLogEntity implements Serializable {
 
-    @Column(name = "created_date", nullable = false, updatable = false)
+    @Column(name = "created_date", updatable = false)
     @CreatedDate
-    private long createdDate;
+    private Long createdDate;
 
-    @Column(name = "modified_date", nullable = false)
+    @Column(name = "modified_date")
     @LastModifiedDate
-    private long modifiedDate;
+    private Long modifiedDate;
 
-    @Column(name = "created_by", nullable = false, updatable = false)
+    @Column(name = "created_by", updatable = false)
     @CreatedBy
     private String createdBy;
 
-    @Column(name = "modified_by", nullable = false)
+    @Column(name = "modified_by")
     @LastModifiedBy
     private String modifiedBy;
 
     public Timestamp getCreatedDate() {
-        return new Timestamp(createdDate);
+        if(createdDate != null) return new Timestamp(createdDate);
+        else return null;
     }
 
     public void setCreatedDate(long createdDate) {
@@ -41,7 +42,8 @@ public class BaseLogEntity implements Serializable {
     }
 
     public Timestamp getModifiedDate() {
-        return new Timestamp(modifiedDate);
+        if(modifiedDate != null) return new Timestamp(modifiedDate);
+        else return null;
     }
 
     public void setModifiedDate(long modifiedDate) {
