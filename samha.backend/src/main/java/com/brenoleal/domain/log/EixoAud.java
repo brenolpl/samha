@@ -15,4 +15,31 @@ public class EixoAud extends BaseLogEntity {
 
     @Column(name = "nome", updatable = false)
     private String nome;
+
+    @Column(name = "revtype", updatable = false)
+    private Integer revtype;
+
+    public AuditCompositeKey getPk() {
+        return pk;
+    }
+
+    public void setPk(AuditCompositeKey pk) {
+        this.pk = pk;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public Integer getRevtype() {
+        return revtype;
+    }
+
+    public void setRevtype(Integer revtype) {
+        this.revtype = revtype;
+    }
 }

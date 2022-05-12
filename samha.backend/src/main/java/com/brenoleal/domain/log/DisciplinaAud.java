@@ -12,6 +12,9 @@ public class DisciplinaAud extends BaseLogEntity {
     @EmbeddedId
     private AuditCompositeKey pk;
 
+    @Column(name = "revtype", updatable = false)
+    private Integer revtype;
+
     @Column(name = "nome", updatable = false)
     private String nome;
 
@@ -36,6 +39,14 @@ public class DisciplinaAud extends BaseLogEntity {
 
     public AuditCompositeKey getPk() {
         return pk;
+    }
+
+    public Integer getRevtype() {
+        return revtype;
+    }
+
+    public void setRevtype(Integer revtype) {
+        this.revtype = revtype;
     }
 
     public void setPk(AuditCompositeKey pk) {

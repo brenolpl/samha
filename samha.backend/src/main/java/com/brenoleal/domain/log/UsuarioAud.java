@@ -12,6 +12,9 @@ public class UsuarioAud extends BaseLogEntity {
     @EmbeddedId
     private AuditCompositeKey pk;
 
+    @Column(name = "revtype", updatable = false)
+    private Integer revtype;
+
     @Column(name = "login", updatable = false)
     private String login;
 
@@ -21,6 +24,14 @@ public class UsuarioAud extends BaseLogEntity {
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "papel_id", updatable = false)
     private Papel papel;
+
+    public Integer getRevtype() {
+        return revtype;
+    }
+
+    public void setRevtype(Integer revtype) {
+        this.revtype = revtype;
+    }
 
     public AuditCompositeKey getPk() {
         return pk;

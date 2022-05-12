@@ -12,6 +12,9 @@ public class RestricaoProfessorAud extends BaseLogEntity {
     @EmbeddedId
     private AuditCompositeKey pk;
 
+    @Column(name = "revtype", updatable = false)
+    private Integer revtype;
+
     @Column(name = "nome", updatable = false)
     private String nome;
 
@@ -48,6 +51,14 @@ public class RestricaoProfessorAud extends BaseLogEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "professor_id", updatable = false)
     private Professor professor;
+
+    public Integer getRevtype() {
+        return revtype;
+    }
+
+    public void setRevtype(Integer revtype) {
+        this.revtype = revtype;
+    }
 
     public AuditCompositeKey getPk() {
         return pk;

@@ -1,0 +1,9 @@
+<mat-toolbar class="sub-toolbar" style="height: 65px">
+  <div class="d-flex justify-content-end w-100">
+    <button mat-button (click)="goToLog()">Log de Alterações</button>
+
+  </div>
+</mat-toolbar>
+
+<samha-table [resource]="'professor'" [columns]="professorColumns" [toolbarHeader]="'Professores'"></samha-table>
+

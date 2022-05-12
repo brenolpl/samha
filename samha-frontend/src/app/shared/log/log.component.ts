@@ -4,13 +4,13 @@ import {DataService} from '../service/data.service';
 import {FormBuilder} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
-import {cursoComLogColumns} from '../../meta-model/curso';
+import {cursoLogColumns} from '../../meta-model/curso';
 import {Filter, Predicate, QueryMirror} from '../query-mirror';
 import {Page, PagedList} from '../paged-list';
 import {catchError} from 'rxjs/operators';
 import {Observable, of} from 'rxjs';
 import {DomSanitizer} from '@angular/platform-browser';
-import {professorColumns} from '../../meta-model/professor';
+import {professorColumns, professorLogColumns} from '../../meta-model/professor';
 import {disciplinaColumns} from '../../meta-model/disciplina';
 import {turmaColumns} from '../../meta-model/turma';
 import {usuarioColumns} from '../../meta-model/usuario';
@@ -35,7 +35,9 @@ export class LogComponent extends TableComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.setParametersByUrl();
+    if(this.resource === undefined && this.columns === undefined) {
+      this.setParametersByUrl();
+    }
     this.defineDisplayedColumns();
     this.displayedColumns.pop(); //dropa coluna actions para nao precisar sobrescrever o método
     this.orderBy = 'modifiedDate desc';
@@ -87,7 +89,7 @@ export class LogComponent extends TableComponent implements OnInit {
   defineColumns() {
     switch (this.resource) {
       case 'professor':
-        this.columns = professorColumns;
+        this.columns = professorLogColumns;
         break;
       case 'coordenador':
         this.columns = professorColumns;
@@ -96,7 +98,7 @@ export class LogComponent extends TableComponent implements OnInit {
         this.columns = disciplinaColumns;
         break;
       case 'curso':
-        this.columns = cursoComLogColumns;
+        this.columns = cursoLogColumns;
         break;
       case 'oferta':
         this.columns = [];

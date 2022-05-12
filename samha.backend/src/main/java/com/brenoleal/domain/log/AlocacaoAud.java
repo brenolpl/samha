@@ -13,6 +13,9 @@ public class AlocacaoAud extends BaseLogEntity {
     @EmbeddedId
     private AuditCompositeKey pk;
 
+    @Column(name = "revtype", updatable = false)
+    private Integer revtype;
+
     @Column(name = "ano", updatable = false)
     private int ano;
 
@@ -30,6 +33,22 @@ public class AlocacaoAud extends BaseLogEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "professor2_id", updatable = false)
     private Professor professor2;
+
+    public AuditCompositeKey getPk() {
+        return pk;
+    }
+
+    public void setPk(AuditCompositeKey pk) {
+        this.pk = pk;
+    }
+
+    public Integer getRevtype() {
+        return revtype;
+    }
+
+    public void setRevtype(Integer revtype) {
+        this.revtype = revtype;
+    }
 
     public int getAno() {
         return ano;

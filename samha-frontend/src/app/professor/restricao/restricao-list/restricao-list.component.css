@@ -1,13 +1,1 @@
 
-.mat-card {
-  overflow-x: scroll;
-}
-
-.mat-row,
-.mat-header-row {
-  min-width: 1200px;
-}
-
-.mat-toolbar{
-  min-width: 1183px;
-}

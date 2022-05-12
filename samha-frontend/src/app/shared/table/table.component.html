@@ -4,51 +4,67 @@
   <div class="input-group mt-3 mb-3">
     <div class="form-outline">
       <form [formGroup]="group">
-        <input type="search" id="form1" class="form-control border-top-0 border-end-0 border-start-0" placeholder="Pesquisar" (change)="onSearchChange()" formControlName="search">
+        <input type="search" id="form1" class="form-control border-top-0 border-end-0 border-start-0"
+               placeholder="Pesquisar" (change)="onSearchChange()" formControlName="search">
       </form>
     </div>
     <button type="button" mat-button color="accent">
       <i class="fas fa-search"></i>
     </button>
-    <button type="button" mat-button (click)="goToNew()"><mat-icon>add</mat-icon></button>
+    <button type="button" mat-button (click)="goToNew()">
+      <mat-icon>add</mat-icon>
+    </button>
   </div>
 
-  <div *ngIf="dataSource$ | async as dataSource; else loading">
-    <table mat-table [dataSource]="defineDataSource(dataSource)" >
+  <mat-card-content>
+    <div *ngIf="dataSource$ | async as dataSource; else loading">
+      <table mat-table [dataSource]="defineDataSource(dataSource)">
 
-      <ng-container *ngFor="let column of columns" [matColumnDef]="column.columnDef">
+        <ng-container *ngFor="let column of columns" [matColumnDef]="column.columnDef">
 
-        <mat-header-cell *matHeaderCellDef >
-          <button mat-button (click)="sort(column.columnDef)">
-            {{ column.header }}
-            <mat-icon *ngIf="showArrowUp(column.columnDef)">arrow_drop_up</mat-icon>
-            <mat-icon *ngIf="showArrowDown(column.columnDef)">arrow_drop_down</mat-icon>
-          </button>
-        </mat-header-cell>
-        <mat-cell *matCellDef="let row" [innerHTML]="findColumnValue(row, column)"></mat-cell>
-      </ng-container>
+          <mat-header-cell *matHeaderCellDef>
+            <button mat-button (click)="sort(column.columnDef)">
+              {{ column.header }}
+              <mat-icon *ngIf="showArrowUp(column.columnDef)">arrow_drop_up</mat-icon>
+              <mat-icon *ngIf="showArrowDown(column.columnDef)">arrow_drop_down</mat-icon>
+            </button>
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row" [innerHTML]="findColumnValue(row, column)"></mat-cell>
+        </ng-container>
 
-      <ng-container matColumnDef="actions">
-        <mat-header-cell *matHeaderCellDef><button mat-button [disabled]="true">Ações</button></mat-header-cell>
-        <mat-cell *matCellDef="let row" >
-          <button mat-icon-button (click)="onEditClick(row)"><mat-icon>border_color</mat-icon></button>
-          <button mat-icon-button color="warn" (click)="onDeleteClick(row)"><mat-icon>delete</mat-icon></button>
-        </mat-cell>
-      </ng-container>
+        <ng-container matColumnDef="actions">
+          <mat-header-cell *matHeaderCellDef>
+            <button mat-button [disabled]="true">Ações</button>
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            <button mat-icon-button (click)="onEditClick(row)">
+              <mat-icon>border_color</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" (click)="onDeleteClick(row)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </mat-cell>
+        </ng-container>
 
-      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: displayedColumns" [ngClass]="{'highlight': selectedRowIndex == row.id}" (click)="highlight(row)"></mat-row>
-    </table>
-    <div class="d-inline">
-      <button mat-button class="mt-3" (click)="setPageSize(10)" [disabled]="tenButtonSelected">10</button>
-      <button mat-button class="mt-3" (click)="setPageSize(50)" [disabled]="fiftyButtonSelected">50</button>
-      <button mat-button class="mt-3" (click)="setPageSize(100)" [disabled]="handredButtonSelected">100</button>
-      <span>Página {{currentPage}} de {{this.lastPage}}</span>
-      <button mat-icon-button class="mt-3" (click)="backwardPage()" [disabled]="backwardButtonDisabled"><mat-icon>keyboard_arrow_left</mat-icon></button>
-      <button mat-icon-button class="mt-3" (click)="fowardPage()" [disabled]="fowardButtonDisabled"><mat-icon>keyboard_arrow_right</mat-icon></button>
-      <span>Total {{pagedList.page.totalItems}}</span>
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns" [ngClass]="{'highlight': selectedRowIndex == row.id}"
+                 (click)="highlight(row)"></mat-row>
+      </table>
+      <div class="d-inline">
+        <button mat-button class="mt-3" (click)="setPageSize(10)" [disabled]="tenButtonSelected">10</button>
+        <button mat-button class="mt-3" (click)="setPageSize(50)" [disabled]="fiftyButtonSelected">50</button>
+        <button mat-button class="mt-3" (click)="setPageSize(100)" [disabled]="handredButtonSelected">100</button>
+        <span>Página {{currentPage}} de {{this.lastPage}}</span>
+        <button mat-icon-button class="mt-3" (click)="backwardPage()" [disabled]="backwardButtonDisabled">
+          <mat-icon>keyboard_arrow_left</mat-icon>
+        </button>
+        <button mat-icon-button class="mt-3" (click)="fowardPage()" [disabled]="fowardButtonDisabled">
+          <mat-icon>keyboard_arrow_right</mat-icon>
+        </button>
+        <span>Total {{pagedList.page.totalItems}}</span>
+      </div>
     </div>
-  </div>
+  </mat-card-content>
   <ng-template #loading>
     <div class="loading-spinner">
       <mat-spinner></mat-spinner>

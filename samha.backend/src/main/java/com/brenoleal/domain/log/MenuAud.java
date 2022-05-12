@@ -15,9 +15,20 @@ public class MenuAud extends BaseLogEntity {
     @Column(name = "nome", updatable = false)
     private String nome;
 
+    @Column(name = "revtype", updatable = false)
+    private Integer revtype;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "papel_id", updatable = false)
     private Set<Papel> papeis;
+
+    public Integer getRevtype() {
+        return revtype;
+    }
+
+    public void setRevtype(Integer revtype) {
+        this.revtype = revtype;
+    }
 
     public AuditCompositeKey getPk() {
         return pk;

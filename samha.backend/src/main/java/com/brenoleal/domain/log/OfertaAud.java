@@ -11,6 +11,9 @@ public class OfertaAud extends BaseLogEntity {
     @EmbeddedId
     private AuditCompositeKey pk;
 
+    @Column(name = "revtype", updatable = false)
+    private Integer revtype;
+
     @Column(name = "ano", updatable = false)
     private int ano;
 
@@ -26,6 +29,14 @@ public class OfertaAud extends BaseLogEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "turma_id", updatable = false)
     private Turma turma;
+
+    public Integer getRevtype() {
+        return revtype;
+    }
+
+    public void setRevtype(Integer revtype) {
+        this.revtype = revtype;
+    }
 
     public AuditCompositeKey getPk() {
         return pk;

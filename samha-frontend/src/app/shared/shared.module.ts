@@ -30,13 +30,14 @@ import { LogComponent } from './log/log.component';
     HttpClientModule,
     RouterModule
   ],
-  exports: [
-    ToolbarComponent,
-    TableComponent,
-    ReactiveFormsModule,
-    HttpClientModule,
-    AutocompleteFieldComponent
-  ],
+    exports: [
+        ToolbarComponent,
+        TableComponent,
+        ReactiveFormsModule,
+        HttpClientModule,
+        AutocompleteFieldComponent,
+        LogComponent
+    ],
   providers: [
     DataService,
     LocalStorageService,

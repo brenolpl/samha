@@ -68,7 +68,8 @@ export class ProfessorFormComponent implements OnInit, IFormComponent, OnDestroy
       },
       matricula: this.form.get('matricula').value,
       email: this.form.get('email').value,
-      cargaHoraria: this.form.get('carga_horaria').value
+      cargaHoraria: this.form.get('carga_horaria').value,
+      ativo: this.form.get('ativo').value
     }
   }
 

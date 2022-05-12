@@ -10,14 +10,8 @@ export const cursoColumns: TableColumnModel[] = [
   {columnDef: 'professor.nome', header: 'Coordenador', visible: true}
 ]
 
-export const cursoComLogColumns: TableColumnModel[] = [
-  {columnDef: 'pk.id', header: 'ID', visible: true},
-  {columnDef: 'pk.rev', header: 'Revisão', visible: true},
-  {columnDef: 'nome', header: 'Nome', visible: true},
-  {columnDef: 'qtPeriodos', header: 'Períodos', visible: true},
-  {columnDef: 'nivel', header: 'Nível', visible: true},
-  {columnDef: 'coordenadoria.nome', header: 'Coordenadoria', visible: true},
-  {columnDef: 'professor.nome', header: 'Coordenador', visible: true},
+export const cursoLogColumns: TableColumnModel[] = [
+  ...cursoColumns.filter(column => column.columnDef !== 'id'),
   ...commonLogColumns
 ]
 

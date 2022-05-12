@@ -24,7 +24,7 @@
             <mat-icon *ngIf="showArrowDown(column.columnDef)">arrow_drop_down</mat-icon>
           </button>
         </mat-header-cell>
-        <mat-cell *matCellDef="let row">{{ findColumnValue(row, column) }}</mat-cell>
+        <mat-cell *matCellDef="let row" [innerHTML]="findColumnValue(row, column)"></mat-cell>
       </ng-container>
 
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

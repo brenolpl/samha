@@ -152,8 +152,11 @@ export class TableComponent implements OnInit {
         value = data.toLocaleDateString() + ' às ' + data.toLocaleTimeString();
         return value;
       case FieldEnum.BOOLEAN:
-        let booleanValue: boolean = value;
-        value = '<input type="checkbox" disabled="true" checked="'+booleanValue+'">';
+        let checkedValue = '';
+        if(value){
+          checkedValue =  'checked';
+        }
+        value = '<input type="checkbox" disabled="true" '+ checkedValue +'>';
         return this.sanitizer.bypassSecurityTrustHtml(value);
       case FieldEnum.OPERATION:
         switch(value){
@@ -260,6 +263,7 @@ export class TableComponent implements OnInit {
   }
 
   showArrowDown(columnDef: string): boolean {
+    if(columnDef.includes('modifiedDate')) {console.log(columnDef)};
     return this.orderBy.includes(columnDef + ' desc');
   }
 

@@ -12,6 +12,9 @@ public class TurmaAud extends BaseLogEntity {
     @EmbeddedId
     private AuditCompositeKey pk;
 
+    @Column(name = "revtype", updatable = false)
+    private Integer revtype;
+
     @Column(name = "nome", updatable = false)
     private String nome;
 
@@ -27,6 +30,14 @@ public class TurmaAud extends BaseLogEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "matriz_curricular_id", updatable = false)
     private MatrizCurricular matriz;
+
+    public Integer getRevtype() {
+        return revtype;
+    }
+
+    public void setRevtype(Integer revtype) {
+        this.revtype = revtype;
+    }
 
     public AuditCompositeKey getPk() {
         return pk;

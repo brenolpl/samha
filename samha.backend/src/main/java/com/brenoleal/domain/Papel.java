@@ -10,7 +10,7 @@ import javax.persistence.*;
 public class Papel extends BaseLogEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private int id;
 
     @Column(nullable = false, unique = true)
     private String nome;

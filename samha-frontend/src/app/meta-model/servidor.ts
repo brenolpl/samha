@@ -1,4 +1,5 @@
 import {TableColumnModel} from './table-column-model';
+import {commonLogColumns} from './log';
 
 export const servidorColumns: TableColumnModel[] = [
   {columnDef: 'id', header: 'id', visible: false},
@@ -7,17 +8,7 @@ export const servidorColumns: TableColumnModel[] = [
   {columnDef: 'email', header: 'E-mail', visible: true}
 ]
 
-/*
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-
-    @Column(nullable = false)
-    private String nome;
-
-    @Column(nullable = false)
-    private String matricula;
-
-    @Column(unique = true)
-    private String email;
- */
+export const servidorLogColumns: TableColumnModel[] = [
+  ...servidorColumns.filter(column => column.columnDef !== 'id'),
+  ...commonLogColumns
+]

@@ -11,6 +11,9 @@ public class CoordenadoriaAud extends BaseLogEntity {
     @EmbeddedId
     private AuditCompositeKey pk;
 
+    @Column(name = "revtype", updatable = false)
+    private Integer revtype;
+
     @Column(name = "nome", updatable = false)
     private String nome;
 

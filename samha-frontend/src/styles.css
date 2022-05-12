@@ -19,3 +19,16 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   background-color: white;
   box-shadow: 0 0 5px 0 black;
 }
+
+.margem{
+  margin: 15px 15px 30px 15px;
+}
+
+.mat-row,
+.mat-header-row {
+  min-width: 1200px;
+}
+
+.mat-toolbar{
+  min-width: 1183px;
+}

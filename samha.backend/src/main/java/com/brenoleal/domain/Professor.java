@@ -19,7 +19,7 @@ public class Professor extends Servidor implements Comparable<Object>{
     @Column(nullable = false)
     private double cargaHoraria;
 
-    @Column(nullable = false, unique = false)
+    @Column(nullable = false)
     private boolean ativo;
 
     @ManyToOne(fetch = FetchType.EAGER)

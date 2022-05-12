@@ -1,7 +1,11 @@
 package com.brenoleal;
 
+import com.brenoleal.domain.Usuario;
+import com.brenoleal.service.IUsuarioService;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 
 
 @SpringBootApplication

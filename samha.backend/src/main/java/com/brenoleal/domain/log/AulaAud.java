@@ -13,6 +13,9 @@ public class AulaAud extends BaseLogEntity {
     @EmbeddedId
     private AuditCompositeKey pk;
 
+    @Column(name = "revtype", updatable = false)
+    private Integer revtype;
+
     @Column(name = "numero", updatable = false)
     private int numero;
 
@@ -32,6 +35,14 @@ public class AulaAud extends BaseLogEntity {
 
     public AuditCompositeKey getPk() {
         return pk;
+    }
+
+    public Integer getRevtype() {
+        return revtype;
+    }
+
+    public void setRevtype(Integer revtype) {
+        this.revtype = revtype;
     }
 
     public void setPk(AuditCompositeKey pk) {
