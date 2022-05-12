@@ -9,11 +9,19 @@ import {Filter, Predicate, QueryMirror} from '../query-mirror';
 import {Page, PagedList} from '../paged-list';
 import {catchError} from 'rxjs/operators';
 import {Observable, of} from 'rxjs';
+import {DomSanitizer} from '@angular/platform-browser';
+import {professorColumns} from '../../meta-model/professor';
+import {disciplinaColumns} from '../../meta-model/disciplina';
+import {turmaColumns} from '../../meta-model/turma';
+import {usuarioColumns} from '../../meta-model/usuario';
+import {coordenadoriaColumns} from '../../meta-model/coordenadoria';
+import {eixoColumns} from '../../meta-model/eixo';
+import {matrizColumns} from '../../meta-model/matriz-curricular';
 
 @Component({
   selector: 'samha-log',
   templateUrl: './log.component.html',
-  styleUrls: ['./log.component.css']
+  styleUrls: ['../table/table.component.css']
 })
 export class LogComponent extends TableComponent implements OnInit {
 
@@ -21,17 +29,15 @@ export class LogComponent extends TableComponent implements OnInit {
               formBuilder: FormBuilder,
               router: Router,
               route: ActivatedRoute,
-              dialog: MatDialog) {
-    super(dataService, formBuilder, router, route, dialog);
+              dialog: MatDialog,
+              sanitizer: DomSanitizer) {
+    super(dataService, formBuilder, router, route, dialog, sanitizer);
   }
 
   ngOnInit(): void {
-    this.columns = cursoComLogColumns;
-    this.resource = 'curso';
-    if(this.resource === undefined && this.columns === undefined) {
-      this.setParametersByUrl();
-    }
+    this.setParametersByUrl();
     this.defineDisplayedColumns();
+    this.displayedColumns.pop(); //dropa coluna actions para nao precisar sobrescrever o método
     this.orderBy = 'modifiedDate desc';
     this.dataSource$ = this.loadTableData();
   }
@@ -62,7 +68,6 @@ export class LogComponent extends TableComponent implements OnInit {
       catchError(_ => {
         let empty = {
           listMap: [],
-          list: [],
           page: {
             size: 0,
             skip: 0,
@@ -74,12 +79,47 @@ export class LogComponent extends TableComponent implements OnInit {
     );
   }
 
-  defineDataSource(dataSource: PagedList) {
-    this.pagedList = new PagedList(dataSource);
-    this.lastPage = this.calculateLastPage();
-    this.checkButtons();
-    return dataSource.list;
+  setParametersByUrl() {
+    this.resource = this.router.url.split('/')[1];
+    this.defineColumns();
   }
 
+  defineColumns() {
+    switch (this.resource) {
+      case 'professor':
+        this.columns = professorColumns;
+        break;
+      case 'coordenador':
+        this.columns = professorColumns;
+        break;
+      case 'disciplina':
+        this.columns = disciplinaColumns;
+        break;
+      case 'curso':
+        this.columns = cursoComLogColumns;
+        break;
+      case 'oferta':
+        this.columns = [];
+        break;
+      case 'MenuEnum.RELATORIOS':
+        this.columns = [];
+        break;
+      case 'turma':
+        this.columns = turmaColumns;
+        break;
+      case 'usuario':
+        this.columns = usuarioColumns;
+        break;
+      case 'coordenadoria':
+        this.columns = coordenadoriaColumns;
+        break;
+      case 'eixo':
+        this.columns = eixoColumns;
+        break;
+      case 'matrizCurricular':
+        this.columns = matrizColumns;
+        break;
+    }
+  }
 
 }
