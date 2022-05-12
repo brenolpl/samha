@@ -1,6 +1,6 @@
 package com.brenoleal.controller;
 
-import com.brenoleal.application.ConsultarCoordenadores;
+import com.brenoleal.application.coordenador.ConsultarCoordenadores;
 import com.brenoleal.commons.UseCaseFacade;
 import com.brenoleal.controller.common.BaseController;
 import com.brenoleal.domain.Professor;

@@ -1,6 +1,7 @@
 package com.brenoleal.controller;
 
-import com.brenoleal.application.ConsultarTurmas;
+
+import com.brenoleal.application.turma.ConsultarTurmas;
 import com.brenoleal.commons.UseCaseFacade;
 import com.brenoleal.controller.common.BaseController;
 import com.brenoleal.domain.Turma;

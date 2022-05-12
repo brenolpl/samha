@@ -1,7 +1,7 @@
 package com.brenoleal.controller;
 
+import com.brenoleal.application.menu.ListarMenu;
 import com.brenoleal.commons.UseCaseFacade;
-import com.brenoleal.domain.ListarMenu;
 import com.brenoleal.domain.Menu;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
