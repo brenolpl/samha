@@ -17,6 +17,9 @@ import {usuarioColumns} from '../../meta-model/usuario';
 import {coordenadoriaColumns} from '../../meta-model/coordenadoria';
 import {eixoColumns} from '../../meta-model/eixo';
 import {matrizColumns} from '../../meta-model/matriz-curricular';
+import {FieldEnum} from '../field-enum';
+import {OperationEnum} from '../operation-enum';
+import {DomSanitizer} from '@angular/platform-browser';
 
 /**
  * Este componente gera dinamicamente uma tabela de acordo com os parâmetros passados
@@ -54,7 +57,8 @@ export class TableComponent implements OnInit {
               protected formBuilder: FormBuilder,
               protected router: Router,
               protected route: ActivatedRoute,
-              protected dialog: MatDialog) {
+              protected dialog: MatDialog,
+              protected sanitizer: DomSanitizer) {
     this.group = this.formBuilder.group({
       search: [null]
     });
@@ -140,7 +144,33 @@ export class TableComponent implements OnInit {
    * @param row
    * @param column
    */
-  findColumnValue = (row, column): string => <string> column.split('.').reduce((acc, cur) => acc[cur], row);
+  findColumnValue(row, column: TableColumnModel) {
+    let value = column.columnDef.split('.').reduce((acc, cur) => acc[cur], row);
+    switch (column.type) {
+      case FieldEnum.DATE:
+        let data = new Date(value);
+        value = data.toLocaleDateString() + ' às ' + data.toLocaleTimeString();
+        return value;
+      case FieldEnum.BOOLEAN:
+        let booleanValue: boolean = value;
+        value = '<input type="checkbox" disabled="true" checked="'+booleanValue+'">';
+        return this.sanitizer.bypassSecurityTrustHtml(value);
+      case FieldEnum.OPERATION:
+        switch(value){
+          case OperationEnum.INSERT:
+            value = 'INSERT';
+            return value;
+          case OperationEnum.UPDATE:
+            value = 'UPDATE';
+            return value;
+          case OperationEnum.DELETE:
+            value = 'DELETE';
+            return value;
+        }
+      default:
+        return value;
+    }
+  }
 
 
   setPageSize(value: number) {
