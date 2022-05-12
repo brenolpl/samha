@@ -95,7 +95,7 @@ public class EntityQueryParser<ENTITY, TARGET> {
                 forceLeftJoin = entry.forceLeftJoin;
             }
         } catch (Exception e) {
-            throw new RuntimeException("Path not found");
+            throw new RuntimeException("Path not found | key: " + key + " | value: " + value );
         }
 
         if(entry == null) throw new RuntimeException("Path invalid");

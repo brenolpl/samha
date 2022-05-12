@@ -3,17 +3,18 @@ package com.brenoleal.domain.log;
 import com.brenoleal.domain.BaseLogEntity;
 import com.brenoleal.domain.Coordenadoria;
 import com.brenoleal.domain.Professor;
-import lombok.Data;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 @Entity
 @Table(name = "curso_aud")
 public class CursoAud extends BaseLogEntity {
 
     @EmbeddedId
-    private CursoAudPK pk;
+    private AuditCompositeKey pk;
+
+    @Column(name = "revtype", updatable = false)
+    private Integer revtype;
 
     @Column(name = "nome", updatable = false)
     private String nome;
@@ -32,19 +33,11 @@ public class CursoAud extends BaseLogEntity {
     @JoinColumn(name = "professor_id", updatable = false)
     private Professor professor;
 
-
-    @Data
-    @Embeddable
-    class CursoAudPK implements Serializable {
-        private Integer id;
-        private Integer rev;
-    }
-
-    public CursoAudPK getPk() {
+    public AuditCompositeKey getPk() {
         return pk;
     }
 
-    public void setPk(CursoAudPK pk) {
+    public void setPk(AuditCompositeKey pk) {
         this.pk = pk;
     }
 
@@ -86,5 +79,13 @@ public class CursoAud extends BaseLogEntity {
 
     public void setProfessor(Professor professor) {
         this.professor = professor;
+    }
+
+    public Integer getRevtype() {
+        return revtype;
+    }
+
+    public void setRevtype(Integer revtype) {
+        this.revtype = revtype;
     }
 }

@@ -33,13 +33,11 @@ public class Curso extends BaseLogEntity implements Comparable<Object>, Serializ
     @Column(nullable = false)
     private String nivel;
 
-    @NotAudited
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "coordenadoria_id")
     @Cascade(CascadeType.SAVE_UPDATE)
     private Coordenadoria coordenadoria;
 
-    @NotAudited
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "professor_id")
     @Cascade(CascadeType.SAVE_UPDATE)

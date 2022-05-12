@@ -1,6 +1,56 @@
 package com.brenoleal.domain.log;
 
 import com.brenoleal.domain.BaseLogEntity;
+import com.brenoleal.domain.Papel;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "usuario_aud")
 public class UsuarioAud extends BaseLogEntity {
+
+    @EmbeddedId
+    private AuditCompositeKey pk;
+
+    @Column(name = "login", updatable = false)
+    private String login;
+
+    @Column(name = "senha", updatable = false)
+    private String senha;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "papel_id", updatable = false)
+    private Papel papel;
+
+    public AuditCompositeKey getPk() {
+        return pk;
+    }
+
+    public void setPk(AuditCompositeKey pk) {
+        this.pk = pk;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
+
+    public Papel getPapel() {
+        return papel;
+    }
+
+    public void setPapel(Papel papel) {
+        this.papel = papel;
+    }
 }
