@@ -1,4 +1,4 @@
-package com.brenoleal.application;
+package com.brenoleal.application.token;
 
 import com.brenoleal.commons.UseCase;
 import com.brenoleal.util.JWTUtil;

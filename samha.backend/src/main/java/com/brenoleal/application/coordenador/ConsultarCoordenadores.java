@@ -1,4 +1,4 @@
-package com.brenoleal.application;
+package com.brenoleal.application.coordenador;
 
 import com.brenoleal.application.commons.QueryEntities;
 import com.brenoleal.domain.Professor;

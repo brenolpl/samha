@@ -1,4 +1,4 @@
-package com.brenoleal.application;
+package com.brenoleal.application.turma;
 
 
 import com.brenoleal.application.commons.QueryEntities;

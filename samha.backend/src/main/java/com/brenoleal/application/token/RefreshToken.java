@@ -1,4 +1,4 @@
-package com.brenoleal.application;
+package com.brenoleal.application.token;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.brenoleal.commons.UseCase;

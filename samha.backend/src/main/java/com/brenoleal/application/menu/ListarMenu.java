@@ -1,4 +1,4 @@
-package com.brenoleal.application;
+package com.brenoleal.application.menu;
 
 import com.brenoleal.commons.UseCase;
 import com.brenoleal.domain.Menu;
