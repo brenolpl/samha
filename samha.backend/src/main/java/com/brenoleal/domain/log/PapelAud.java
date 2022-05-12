@@ -1,4 +1,6 @@
 package com.brenoleal.domain.log;
 
-public class PapelAud {
+import com.brenoleal.domain.BaseLogEntity;
+
+public class PapelAud extends BaseLogEntity {
 }

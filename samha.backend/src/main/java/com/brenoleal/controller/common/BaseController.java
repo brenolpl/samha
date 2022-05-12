@@ -2,6 +2,7 @@ package com.brenoleal.controller.common;
 
 import com.brenoleal.application.commons.*;
 import com.brenoleal.commons.UseCaseFacade;
+import com.brenoleal.domain.BaseLogEntity;
 import com.brenoleal.persistence.filter.PagedList;
 import com.brenoleal.persistence.filter.Query;
 import org.springframework.util.Assert;
@@ -11,15 +12,18 @@ import java.io.Serializable;
 import java.util.List;
 
 @RestController
-public abstract class BaseController<ENTITY, KEY extends Serializable> {
+public abstract class BaseController<ENTITY, LOG_TARGET extends BaseLogEntity, KEY extends Serializable> {
 
     private final Class<ENTITY> entityClass;
+    private final Class<LOG_TARGET> logTargetClass;
     protected final UseCaseFacade facade;
 
-    public BaseController(Class<ENTITY> entityClass, UseCaseFacade facade){
+    public BaseController(Class<ENTITY> entityClass, Class<LOG_TARGET> logTargetClass, UseCaseFacade facade){
         this.facade = facade;
         Assert.notNull(entityClass, "EntityClass can not be null");
+        Assert.notNull(logTargetClass, "LogTargetClass can not be null");
         this.entityClass = entityClass;
+        this.logTargetClass = logTargetClass;
     }
 
 
@@ -54,8 +58,8 @@ public abstract class BaseController<ENTITY, KEY extends Serializable> {
     }
 
     @PostMapping("log")
-    public PagedList<ENTITY> logEntities(@RequestBody Query query){
-        return this.facade.execute(new LogEntity<>(entityClass, query));
+    public PagedList<LOG_TARGET> logEntities(@RequestBody Query query){
+        return this.facade.execute(new QueryEntities<>(query, logTargetClass));
     }
 
     public PagedList buildQueryEntities(Query query){

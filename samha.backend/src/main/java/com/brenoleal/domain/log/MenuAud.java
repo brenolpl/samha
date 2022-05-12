@@ -1,4 +1,6 @@
 package com.brenoleal.domain.log;
 
-public class MenuAud {
+import com.brenoleal.domain.BaseLogEntity;
+
+public class MenuAud extends BaseLogEntity {
 }

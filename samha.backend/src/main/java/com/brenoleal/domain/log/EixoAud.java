@@ -1,4 +1,6 @@
 package com.brenoleal.domain.log;
 
-public class EixoAud {
+import com.brenoleal.domain.BaseLogEntity;
+
+public class EixoAud extends BaseLogEntity {
 }

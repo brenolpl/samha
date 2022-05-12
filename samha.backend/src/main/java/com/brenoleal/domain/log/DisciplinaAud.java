@@ -1,4 +1,6 @@
 package com.brenoleal.domain.log;
 
-public class DisciplinaAud {
+import com.brenoleal.domain.BaseLogEntity;
+
+public class DisciplinaAud extends BaseLogEntity {
 }

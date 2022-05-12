@@ -1,4 +1,6 @@
 package com.brenoleal.domain.log;
 
-public class CoordenadoriaAud {
+import com.brenoleal.domain.BaseLogEntity;
+
+public class CoordenadoriaAud extends BaseLogEntity {
 }

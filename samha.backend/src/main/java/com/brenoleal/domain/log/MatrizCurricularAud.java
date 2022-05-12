@@ -1,4 +1,6 @@
 package com.brenoleal.domain.log;
 
-public class MatrizCurricularAud {
+import com.brenoleal.domain.BaseLogEntity;
+
+public class MatrizCurricularAud extends BaseLogEntity {
 }

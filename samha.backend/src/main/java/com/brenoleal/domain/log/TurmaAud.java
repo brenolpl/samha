@@ -1,4 +1,6 @@
 package com.brenoleal.domain.log;
 
-public class TurmaAud {
+import com.brenoleal.domain.BaseLogEntity;
+
+public class TurmaAud extends BaseLogEntity {
 }
