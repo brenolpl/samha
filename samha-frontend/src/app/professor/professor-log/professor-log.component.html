@@ -1,0 +1,18 @@
+<mat-card class="mat-elevation-z8 margem">
+  <mat-card-header>
+    <mat-card-title>
+      Logs de Professor e Servidor
+    </mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <samha-log [resource]="'professor'" [columns]="professorLogColumns" [toolbarHeader]="'Professor'"></samha-log>
+  </mat-card-content>
+
+  <hr>
+
+  <mat-card-content>
+    <samha-log [resource]="'servidor'" [columns]="servidorLogColumns" [toolbarHeader]="'Servidor'"></samha-log>
+  </mat-card-content>
+
+</mat-card>
