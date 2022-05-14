@@ -54,50 +54,5 @@ public class ConsultarTurmas extends QueryEntities<Turma> {
         }
     }
 
-    public boolean verificarTurmaAtiva(Turma turma, int semestreAtual){
 
-        int anoAtual = Calendar.getInstance().get(Calendar.YEAR);
-
-        int anoInicial = turma.getAno();
-        int semestreInicial = turma.getSemestre();
-        String p = null;
-
-        if(turma.getMatriz().getCurso().getNivel().equalsIgnoreCase("ENSINO MÉDIO INTEGRADO")){
-
-            p = calcularAnoAtual(anoAtual, anoInicial);
-        }else{
-
-            p = calcularPeriodoAtual(anoAtual, semestreAtual, anoInicial, semestreInicial);
-        }
-
-        int anoPeriodo = Integer.valueOf(p);
-
-        if(anoPeriodo > turma.getMatriz().getCurso().getQtPeriodos() || anoPeriodo < 1)
-            return false;
-
-        return true;
-    }
-
-    public String calcularAnoAtual(int anoAtual, int anoInicial){
-
-        int qtAnos = (anoAtual - anoInicial) + 1;
-        String ano = String.valueOf(qtAnos);
-
-        return ano;
-    }
-
-    public String calcularPeriodoAtual(int anoAtual, int semestreAtual, int anoInicial, int semestreInicial){
-
-        int qtAnos = ((anoAtual - anoInicial) * 2);
-
-        if(semestreAtual == semestreInicial){
-            qtAnos+=1;
-        }else if(semestreAtual == 2 && semestreInicial == 1){
-            qtAnos+=2;
-        }
-
-        String periodo = String.valueOf(qtAnos);
-
-        return periodo;
-    }
 }

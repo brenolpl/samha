@@ -35,6 +35,9 @@ public class Turma extends BaseLogEntity implements Comparable<Object> {
     
     @Column(nullable = false)
     private int semestre;
+
+    @Column(name = "ativa", nullable = false)
+    private Boolean ativa;
     
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "matriz_curricular_id", nullable = false)
@@ -52,6 +55,14 @@ public class Turma extends BaseLogEntity implements Comparable<Object> {
         this.semestre = semestre;
         this.matriz = matriz;
         this.turno = turno;
+    }
+
+    public Boolean getAtiva() {
+        return ativa;
+    }
+
+    public void setAtiva(Boolean ativa) {
+        this.ativa = ativa;
     }
 
     public Turma(String nome, int ano, int semestre, String turno, MatrizCurricular matriz) {
