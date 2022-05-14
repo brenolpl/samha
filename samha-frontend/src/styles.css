@@ -4,7 +4,7 @@ html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .custom-dialog-container{
-  width: 1200px;
+  min-width: 600px;
 }
 
 .loading-spinner{
@@ -16,6 +16,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 }
 
 .sub-toolbar{
+  height: 65px;
+  width: 100%;
+  margin-right: 15px;
   background-color: white;
   box-shadow: 0 0 5px 0 black;
 }
@@ -24,11 +27,11 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   margin: 15px 15px 30px 15px;
 }
 
-.mat-row,
-.mat-header-row {
-  min-width: 1200px;
+.mat-card, .sub-toolbar{
+  min-width: 700px;
 }
 
-.mat-toolbar{
-  min-width: 1183px;
+.mat-card{
+  margin-right: 15px;
+  overflow: auto;
 }
