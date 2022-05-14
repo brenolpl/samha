@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "professor_aud")
-public class ProfessorAud implements Serializable {
+public class ProfessorAud extends BaseLogEntity{
     @EmbeddedId
     private ProfessorAuditPK pk;
 
