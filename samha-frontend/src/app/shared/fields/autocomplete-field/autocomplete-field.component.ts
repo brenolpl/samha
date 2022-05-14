@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {Observable} from 'rxjs';
 import {first, map, startWith} from 'rxjs/operators';
@@ -13,6 +13,7 @@ export class AutocompleteFieldComponent implements OnInit {
   @Input() resource: string;
   @Input() control: FormControl;
   @Input() label: string;
+  @Output() onChange = new EventEmitter<any>();
   filteredOptions: Observable<any[]>;
   list: any[];
 
@@ -40,5 +41,9 @@ export class AutocompleteFieldComponent implements OnInit {
     const filterValue = nome.toLowerCase();
 
     return this.list.filter(entity => entity.nome.toLowerCase().includes(filterValue));
+  }
+
+  onAutocompleteChange($event: any) {
+    this.onChange.emit($event);
   }
 }
