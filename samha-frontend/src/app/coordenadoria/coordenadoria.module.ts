@@ -5,10 +5,12 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {SharedModule} from '../shared/shared.module';
 import {MaterialModule} from '../shared/material/material.module';
 import {CoordenadoriaFormComponent} from './coordenadoria-form/coordenadoria-form.component';
+import { CoordenadoriaComponent } from './coordenadoria/coordenadoria.component';
 
 @NgModule({
   declarations:[
-    CoordenadoriaFormComponent
+    CoordenadoriaFormComponent,
+    CoordenadoriaComponent
   ],
   imports: [
     CoordenadoriaRoutingModule,

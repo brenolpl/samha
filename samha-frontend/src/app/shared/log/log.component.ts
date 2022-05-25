@@ -14,7 +14,7 @@ import {professorColumns, professorLogColumns} from '../../meta-model/professor'
 import {disciplinaLogColumns} from '../../meta-model/disciplina';
 import {turmaLogColumns} from '../../meta-model/turma';
 import {usuarioColumns} from '../../meta-model/usuario';
-import {coordenadoriaColumns} from '../../meta-model/coordenadoria';
+import {coordenadoriaLogColumns} from '../../meta-model/coordenadoria';
 import {eixoColumns} from '../../meta-model/eixo';
 import {matrizColumns} from '../../meta-model/matriz-curricular';
 
@@ -113,7 +113,7 @@ export class LogComponent extends TableComponent implements OnInit {
         this.columns = usuarioColumns;
         break;
       case 'coordenadoria':
-        this.columns = coordenadoriaColumns;
+        this.columns = coordenadoriaLogColumns;
         break;
       case 'eixo':
         this.columns = eixoColumns;
