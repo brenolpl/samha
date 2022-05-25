@@ -17,6 +17,7 @@ import {catchError, first} from "rxjs/operators";
 export class TurmaListComponent extends TableComponent implements OnInit, OnDestroy {
   cursoControl = new FormControl();
   ativasControl = new FormControl();
+  cursoFilter: Filter = undefined;
   ativasFilter: Filter = {
     and: {
       'ativa': {equals: true}
@@ -57,6 +58,7 @@ export class TurmaListComponent extends TableComponent implements OnInit, OnDest
       });
     }
     whereList.push(this.ativasFilter);
+    if(this.cursoFilter !== undefined) whereList.push(this.cursoFilter);
     query.pageItem(page);
     this.columns.forEach(column => projections.push(column.columnDef));
     query.selectList(projections);
@@ -112,6 +114,19 @@ export class TurmaListComponent extends TableComponent implements OnInit, OnDest
   }
 
   onCursoChange() {
-    console.log(this.cursoControl.value);
+    this.cursoFilter = {
+      and: {
+        'matriz.curso.id': {equals: this.cursoControl.value.id}
+      }
+    }
+
+    this.dataSource$ = this.loadTableData();
+  }
+
+  clearCursoFiltro() {
+    this.cursoFilter = undefined;
+    this.cursoControl.setValue('');
+
+    this.dataSource$ = this.loadTableData();
   }
 }

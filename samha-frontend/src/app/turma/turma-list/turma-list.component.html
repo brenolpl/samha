@@ -11,15 +11,23 @@
 
   <mat-card-content class="mt-2 mb-2">
     <mat-card-title>Filtro</mat-card-title>
-    <div class="col-4">
-      <samha-autocomplete-field
-        [resource]="'curso'"
-        [control]="cursoControl"
-        [label]="'Curso'"
-        (onChange)="onCursoChange()"
-      ></samha-autocomplete-field>
-    </div>
-    <mat-checkbox [formControl]="ativasControl" class="d-inline" (change)="onAtivasChange()">Ativas</mat-checkbox>
+
+
+      <div class="col-11 d-flex flex-row mt-3 mb-3" style="height: 55px">
+        <samha-autocomplete-field
+          class="col-4 h-100"
+          [resource]="'curso'"
+          [control]="cursoControl"
+          [label]="'Curso'"
+          (onChange)="onCursoChange()"
+        >
+        </samha-autocomplete-field>
+        <button mat-button (click)="clearCursoFiltro()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      <mat-checkbox [formControl]="ativasControl" class="d-inline mt-2" (change)="onAtivasChange()">Ativas</mat-checkbox>
+
   </mat-card-content>
   <hr>
 
