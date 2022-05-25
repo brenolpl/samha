@@ -12,7 +12,7 @@ import {Observable, of} from 'rxjs';
 import {DomSanitizer} from '@angular/platform-browser';
 import {professorColumns, professorLogColumns} from '../../meta-model/professor';
 import {disciplinaColumns} from '../../meta-model/disciplina';
-import {turmaColumns} from '../../meta-model/turma';
+import {turmaLogColumns} from '../../meta-model/turma';
 import {usuarioColumns} from '../../meta-model/usuario';
 import {coordenadoriaColumns} from '../../meta-model/coordenadoria';
 import {eixoColumns} from '../../meta-model/eixo';
@@ -107,7 +107,7 @@ export class LogComponent extends TableComponent implements OnInit {
         this.columns = [];
         break;
       case 'turma':
-        this.columns = turmaColumns;
+        this.columns = turmaLogColumns;
         break;
       case 'usuario':
         this.columns = usuarioColumns;
