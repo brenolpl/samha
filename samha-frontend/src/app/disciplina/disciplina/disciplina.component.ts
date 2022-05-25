@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
+import {disciplinaColumns} from '../../meta-model/disciplina';
 import {ActivatedRoute, Router} from '@angular/router';
-import {professorColumns} from '../../meta-model/professor';
 
 @Component({
-  selector: 'samha-professor',
-  templateUrl: './professor.component.html',
+  selector: 'samha-disciplina',
+  templateUrl: './disciplina.component.html',
   styleUrls: ['../../shared/table/table.component.css']
 })
-export class ProfessorComponent implements OnInit {
-  professorColumns = professorColumns;
+export class DisciplinaComponent implements OnInit {
+  disciplinaColumns = disciplinaColumns;
 
   constructor(private router: Router,
               private route: ActivatedRoute) { }

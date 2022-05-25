@@ -11,7 +11,7 @@ import {catchError} from 'rxjs/operators';
 import {Observable, of} from 'rxjs';
 import {DomSanitizer} from '@angular/platform-browser';
 import {professorColumns, professorLogColumns} from '../../meta-model/professor';
-import {disciplinaColumns} from '../../meta-model/disciplina';
+import {disciplinaLogColumns} from '../../meta-model/disciplina';
 import {turmaLogColumns} from '../../meta-model/turma';
 import {usuarioColumns} from '../../meta-model/usuario';
 import {coordenadoriaColumns} from '../../meta-model/coordenadoria';
@@ -95,7 +95,7 @@ export class LogComponent extends TableComponent implements OnInit {
         this.columns = professorColumns;
         break;
       case 'disciplina':
-        this.columns = disciplinaColumns;
+        this.columns = disciplinaLogColumns;
         break;
       case 'curso':
         this.columns = cursoLogColumns;

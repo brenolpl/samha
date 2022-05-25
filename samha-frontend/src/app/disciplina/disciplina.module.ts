@@ -5,6 +5,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {CommonModule} from '@angular/common';
 import {SharedModule} from '../shared/shared.module';
 import {DisciplinaFormComponent} from './disciplina-form/disciplina-form.component';
+import { DisciplinaComponent } from './disciplina/disciplina.component';
 
 @NgModule({
   imports: [
@@ -17,7 +18,8 @@ import {DisciplinaFormComponent} from './disciplina-form/disciplina-form.compone
 
   ],
   declarations: [
-    DisciplinaFormComponent
+    DisciplinaFormComponent,
+    DisciplinaComponent
   ]
 })
 export class DisciplinaModule {}

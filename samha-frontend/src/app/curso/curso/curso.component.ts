@@ -5,7 +5,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 @Component({
   selector: 'samha-curso',
   templateUrl: './curso.component.html',
-  styleUrls: ['./curso.component.css']
+  styleUrls: ['../../shared/table/table.component.css']
 })
 export class CursoComponent implements OnInit {
   cursoColumns = cursoColumns;

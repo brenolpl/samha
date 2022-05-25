@@ -1,4 +1,5 @@
 import {TableColumnModel} from './table-column-model';
+import {commonLogColumns} from './log';
 
 export const disciplinaColumns: TableColumnModel[] = [
   {columnDef: 'id', header: 'Id', visible: false},
@@ -9,4 +10,9 @@ export const disciplinaColumns: TableColumnModel[] = [
   {columnDef: 'cargaHoraria', header: 'Carga Horária', visible: true},
   {columnDef: 'qtAulas', header: 'Quantidade de Aulas', visible: true},
   {columnDef: 'periodo', header: 'Período', visible: true}
+]
+
+export const disciplinaLogColumns: TableColumnModel[] = [
+  ...commonLogColumns,
+  ...disciplinaColumns.filter(column => column.columnDef !== 'id')
 ]
