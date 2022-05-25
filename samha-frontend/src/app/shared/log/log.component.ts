@@ -16,7 +16,7 @@ import {turmaLogColumns} from '../../meta-model/turma';
 import {usuarioColumns} from '../../meta-model/usuario';
 import {coordenadoriaLogColumns} from '../../meta-model/coordenadoria';
 import {eixoLogColumns} from '../../meta-model/eixo';
-import {matrizColumns} from '../../meta-model/matriz-curricular';
+import {matrizLogColumns} from '../../meta-model/matriz-curricular';
 
 @Component({
   selector: 'samha-log',
@@ -119,7 +119,7 @@ export class LogComponent extends TableComponent implements OnInit {
         this.columns = eixoLogColumns;
         break;
       case 'matrizCurricular':
-        this.columns = matrizColumns;
+        this.columns = matrizLogColumns;
         break;
     }
   }
