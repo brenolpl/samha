@@ -263,7 +263,6 @@ export class TableComponent implements OnInit {
   }
 
   showArrowDown(columnDef: string): boolean {
-    if(columnDef.includes('modifiedDate')) {console.log(columnDef)};
     return this.orderBy.includes(columnDef + ' desc');
   }
 
@@ -293,7 +292,6 @@ export class TableComponent implements OnInit {
 
   setParametersByUrl() {
     this.resource = this.router.url.replace('/', '');
-    console.log(this.resource);
     this.defineColumns();
   }
 

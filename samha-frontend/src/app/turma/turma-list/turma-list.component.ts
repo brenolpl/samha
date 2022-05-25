@@ -85,15 +85,11 @@ export class TurmaListComponent extends TableComponent implements OnInit, OnDest
   }
 
   goToLog() {
-
+    this.router.navigate(['log'], {relativeTo: this.route});
   }
 
   atualizarTurmasAtivas() {
-    this.dataService.post('turma/atualizarTurmas', null).pipe(first()).subscribe(
-      data => {
-        console.log(data);
-      }
-    )
+    this.dataService.post('turma/atualizarTurmas', null).pipe(first()).subscribe();
   }
 
   onAtivasChange() {
