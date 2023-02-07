@@ -16,7 +16,7 @@ import {MaterialModule} from './shared/material/material.module';
   declarations: [
     AppComponent,
     LoginComponent,
-    HomeComponent,
+    HomeComponent
   ],
   imports: [
     MaterialModule,

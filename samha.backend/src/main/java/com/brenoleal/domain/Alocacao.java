@@ -53,26 +53,6 @@ public class Alocacao extends BaseLogEntity implements Comparable<Object>{
     @OnDelete(action = OnDeleteAction.NO_ACTION)
     private Professor professor2;
 
-    public Alocacao() {
-    }
-
-    public Alocacao(int id, int ano, int semestre, Disciplina disciplina, Professor professor1, Professor professor2) {
-        this.id = id;
-        this.ano = ano;
-        this.semestre = semestre;
-        this.disciplina = disciplina;
-        this.professor1 = professor1;
-        this.professor2 = professor2;
-    }
-
-    public Alocacao(int ano, int semestre, Disciplina disciplina, Professor professor1, Professor professor2) {
-        this.ano = ano;
-        this.semestre = semestre;
-        this.disciplina = disciplina;
-        this.professor1 = professor1;
-        this.professor2 = professor2;
-    }
-
     public int getId() {
         return id;
     }

@@ -67,7 +67,7 @@ export class AppComponent implements OnInit, OnDestroy{
         this.router.navigate(['coordenador']);
         break;
       case MenuEnum.ALOCACOES:
-        this.columns = alocacaoColumns;
+        this.router.navigate(['alocacao']);
         break;
       case MenuEnum.DISCIPLINAS:
         this.router.navigate(['disciplina']);

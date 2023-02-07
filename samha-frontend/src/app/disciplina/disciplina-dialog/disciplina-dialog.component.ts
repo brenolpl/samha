@@ -1,19 +1,21 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {TableColumnModel} from '../../meta-model/table-column-model';
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {DialogData} from "../../meta-model/dialog-data";
+import {Observable} from "rxjs";
+import {FormControl, FormGroup} from "@angular/forms";
 
 @Component({
-  selector: 'samha-table-dialog',
-  templateUrl: './table-dialog.component.html',
-  styleUrls: ['./table-dialog.component.css']
+  selector: 'samha-disciplina-dialog',
+  templateUrl: './disciplina-dialog.component.html',
+  styleUrls: ['./disciplina-dialog.component.css']
 })
-export class TableDialogComponent implements OnInit {
+export class DisciplinaDialogComponent implements OnInit {
 
   entityId: number = null;
+  curso$: Observable<any>;
 
   constructor(
-    public dialogRef: MatDialogRef<TableDialogComponent>,
+    public dialogRef: MatDialogRef<DisciplinaDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
   ) {}
 
@@ -28,6 +30,7 @@ export class TableDialogComponent implements OnInit {
   setEntityId($event: number) {
     this.entityId = $event;
   }
+
   salvar(): void{
     this.dialogRef.close(this.entityId);
   }

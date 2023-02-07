@@ -14,7 +14,7 @@ import {catchError, first} from "rxjs/operators";
   templateUrl: './turma-list.component.html',
   styleUrls: ['./turma-list.component.css', '../../shared/table/table.component.css']
 })
-export class TurmaListComponent extends TableComponent implements OnInit, OnDestroy {
+export class TurmaListComponent extends TableComponent implements OnInit {
   cursoControl = new FormControl();
   ativasControl = new FormControl();
   cursoFilter: Filter = undefined;
@@ -79,9 +79,6 @@ export class TurmaListComponent extends TableComponent implements OnInit, OnDest
         return of(new PagedList(empty));
       })
     );
-  }
-
-  ngOnDestroy() {
   }
 
   goToLog() {

@@ -1,6 +1,6 @@
 <h2 mat-dialog-title>Selecione</h2>
-<mat-dialog-content class="p-0">
-  <samha-table [columns]="data.columns" [resource]="data.resource" [toolbarHeader]="data.toolbarHeader" (onSelectedRow)="setEntityId($event)"></samha-table>
+<mat-dialog-content class="p-0 h-100">
+  <samha-disciplina-list></samha-disciplina-list>
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-button (click)="onNoClick()">Fechar</button>

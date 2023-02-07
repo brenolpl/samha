@@ -20,6 +20,7 @@ import {matrizColumns} from '../../meta-model/matriz-curricular';
 import {FieldEnum} from '../field-enum';
 import {OperationEnum} from '../operation-enum';
 import {DomSanitizer} from '@angular/platform-browser';
+import {ToolbarAction} from "../../meta-model/toolbar-action";
 
 /**
  * Este componente gera dinamicamente uma tabela de acordo com os parâmetros passados
@@ -39,6 +40,12 @@ export class TableComponent implements OnInit {
   @Input() columns: TableColumnModel[];
   @Input() toolbarHeader: string;
   @Output() onSelectedRow: EventEmitter<number> = new EventEmitter<number>();
+  @Input() disableNew: boolean;
+  @Input() disableEdit: boolean;
+  @Input() disableDelete: boolean;
+  @Input() toolbarActions: ToolbarAction[];
+  @Input() filterChange: EventEmitter<Filter> = new EventEmitter<Filter>();
+
   pagedList: PagedList;
   tenButtonSelected: boolean = true;
   fiftyButtonSelected: boolean = false;
@@ -52,6 +59,7 @@ export class TableComponent implements OnInit {
   displayedColumns: string[] = [];
   orderBy: string = '';
   group: FormGroup;
+  filter: Filter;
 
   constructor(protected dataService: DataService,
               protected formBuilder: FormBuilder,
@@ -68,8 +76,13 @@ export class TableComponent implements OnInit {
     if(this.resource === undefined && this.columns === undefined) {
       this.setParametersByUrl();
     }
+    this.filterChange.subscribe(( filter => {
+      this.filter = filter;
+      this.dataSource$ = this.loadTableData([])
+    }));
     this.defineDisplayedColumns();
     this.dataSource$ = this.loadTableData();
+
   }
 
   loadTableData(filter: Predicate[] = []): Observable<PagedList> {
@@ -90,6 +103,8 @@ export class TableComponent implements OnInit {
     if (filter.length > 0) {
       query.where(orFilter);
     }
+    console.log(this.filter);
+    if(this.filter != undefined) query.where(this.filter);
     if (this.orderBy !== '') {
       query.orderBy(this.orderBy);
     }
@@ -331,5 +346,11 @@ export class TableComponent implements OnInit {
         this.columns = matrizColumns;
         break;
     }
+  }
+
+  enableNew() {
+    if(this.disableNew) return false;
+
+    return true;
   }
 }

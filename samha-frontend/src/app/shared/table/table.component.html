@@ -11,9 +11,16 @@
     <button type="button" mat-button color="accent">
       <i class="fas fa-search"></i>
     </button>
+    <ng-container *ngIf="enableNew()">
     <button type="button" mat-button (click)="goToNew()">
       <mat-icon>add</mat-icon>
     </button>
+    </ng-container>
+    <ng-container *ngFor="let action of toolbarActions">
+      <button type="button" mat-button (click)="action.onClick($event)">
+        <mat-icon>{{action.icon}}</mat-icon> {{action?.text}}
+      </button>
+    </ng-container>
   </div>
 
   <mat-card-content>

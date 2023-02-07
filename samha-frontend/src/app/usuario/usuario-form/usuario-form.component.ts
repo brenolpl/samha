@@ -50,12 +50,12 @@ export class UsuarioFormComponent implements OnInit {
     const dialogRef = this.dialog.open(TableDialogComponent, {
       panelClass: 'custom-dialog-container',
 
-      data: {columns: servidorColumns, resource: 'servidor'},
+      data: {columns: servidorColumns, resource: 'servidor', toolbarHeader: 'Servidores'},
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if(result !== null && result !== undefined) {
-        this.professor$ = this.dataService.get('professor', result);
+    dialogRef.afterClosed().subscribe(entityId => {
+      if(entityId) {
+        this.professor$ = this.dataService.get('professor', entityId);
       }else{
         this.professor$ = of({
           id: -1,

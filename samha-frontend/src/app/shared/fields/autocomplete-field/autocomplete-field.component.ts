@@ -25,7 +25,7 @@ export class AutocompleteFieldComponent implements OnInit {
         this.list = next;
         this.filteredOptions = this.control.valueChanges.pipe(
           startWith(''),
-          map(value => (typeof value === 'string' ? value : value.name)),
+          map(value => (typeof value === 'string' ? value : value?.name)),
           map(name => (name ? this._filter(name) : this.list.slice())),
         );
       }

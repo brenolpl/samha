@@ -10,6 +10,7 @@ const routes: Routes = [
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard]},
   { path: 'professor', canActivate: [AuthGuard], loadChildren: () => import('./professor/professor.module').then(m => m.ProfessorModule) },
   { path: 'coordenador', canActivate: [AuthGuard], loadChildren: () => import('./coordenador/coordenador.module').then(m => m.CoordenadorModule)},
+  { path: 'alocacao', canActivate: [AuthGuard], loadChildren: () => import('./alocacao/alocacao.module').then(m => m.AlocacaoModule)},
   { path: 'usuario', canActivate: [AuthGuard], loadChildren: () => import('./usuario/usuario.module').then(m => m.UsuarioModule)},
   { path: 'curso', canActivate: [AuthGuard], loadChildren: () => import('./curso/curso.module').then(m => m.CursoModule)},
   { path: 'coordenadoria', canActivate: [AuthGuard], loadChildren: () => import('./coordenadoria/coordenadoria.module').then(m => m.CoordenadoriaModule)},
