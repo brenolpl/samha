@@ -1,16 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {Observable, of} from "rxjs";
 import {MatDialog} from "@angular/material/dialog";
 import {DataService} from "../../shared/service/data.service";
 import {ActivatedRoute} from "@angular/router";
-import {TableDialogComponent} from "../../shared/table-dialog/table-dialog.component";
-import {servidorColumns} from "../../meta-model/servidor";
 import {ComponentType} from "@angular/cdk/overlay";
-import {DisciplinaComponent} from "../../disciplina/disciplina/disciplina.component";
 import {disciplinaColumns} from "../../meta-model/disciplina";
 import {DialogData} from "../../meta-model/dialog-data";
-import {DisciplinaListComponent} from "../../disciplina/disciplina-list/disciplina-list.component";
 import {DisciplinaDialogComponent} from "../../disciplina/disciplina-dialog/disciplina-dialog.component";
 
 @Component({
@@ -22,7 +18,7 @@ export class AlocacaoFormComponent implements OnInit {
   form: FormGroup;
   disciplina$: Observable<any>;
   disciplinaData = {columns: disciplinaColumns, resource: 'disciplina', toolbarHeader: 'Disciplinas'};
-  obs$: Observable<any>;
+  professor$: Observable<any>;
 
   constructor(private formBuilder: FormBuilder,
               public dialog: MatDialog,
@@ -37,7 +33,9 @@ export class AlocacaoFormComponent implements OnInit {
   }
 
   setDisciplinaValue(id) {
-
+    this.form.get('disciplina_id').setValue(id);
+    this.form.get('disciplina_id').disable({onlySelf: true});
+    return id;
   }
 
   salvar() {
@@ -55,10 +53,14 @@ export class AlocacaoFormComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(entityId => {
-      if(entityId) {
-        this.obs$ = this.dataService.get(data.resource, entityId);
-      }else{
-        this.obs$ = of({
+      if (entityId) {
+        if (data.resource == 'disciplina') {
+          this.disciplina$ = this.dataService.get(data.resource, entityId);
+        } else if (data.resource == 'professor') {
+          this.professor$ = this.dataService.get(data.resource, entityId);
+        }
+      } else {
+        this.professor$ = of({
           id: -1,
           nome: ''
         });
