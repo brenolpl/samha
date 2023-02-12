@@ -14,6 +14,7 @@ export class AutocompleteFieldComponent implements OnInit {
   @Input() control: FormControl;
   @Input() label: string;
   @Output() onChange = new EventEmitter<any>();
+  @Output() loaded = new EventEmitter<any>();
   filteredOptions: Observable<any[]>;
   list: any[];
 
@@ -23,6 +24,7 @@ export class AutocompleteFieldComponent implements OnInit {
     this.dataService.getAll(this.resource).pipe(first()).subscribe(
       next =>{
         this.list = next;
+        this.loaded.emit(next);
         this.filteredOptions = this.control.valueChanges.pipe(
           startWith(''),
           map(value => (typeof value === 'string' ? value : value?.name)),

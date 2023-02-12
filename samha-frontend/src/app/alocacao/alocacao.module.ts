@@ -6,6 +6,8 @@ import { AlocacaoFormComponent } from './alocacao-form/alocacao-form.component';
 import {MaterialModule} from "../shared/material/material.module";
 import {CommonModule} from "@angular/common";
 import { AlocacaoMainComponent } from './alocacao-main/alocacao-main.component';
+import {MatDividerModule} from "@angular/material/divider";
+import {MatRadioModule} from "@angular/material/radio";
 
 
 @NgModule({
@@ -14,6 +16,6 @@ import { AlocacaoMainComponent } from './alocacao-main/alocacao-main.component';
     AlocacaoFormComponent,
     AlocacaoMainComponent,
   ],
-  imports: [AlocacaoRoutingModule, SharedModule, MaterialModule, CommonModule]
+  imports: [AlocacaoRoutingModule, SharedModule, MaterialModule, CommonModule, MatDividerModule, MatRadioModule]
 })
 export class AlocacaoModule {}
