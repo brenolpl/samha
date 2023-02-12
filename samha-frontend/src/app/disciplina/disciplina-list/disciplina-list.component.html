@@ -25,4 +25,4 @@
     <button mat-button (click)="clearFilters()" color="warn">Limpar</button>
   </mat-card-content>
 </mat-card>
-<samha-table [resource]="'disciplina'" [columns]="disciplinaColumns" [toolbarHeader]="'Disciplinas'" [filterChange]="filterChange"></samha-table>
+<samha-table [resource]="'disciplina'" [columns]="disciplinaColumns" [toolbarHeader]="'Disciplinas'" [filterChange]="filterChange" (onSelectedRow)="onSelectedRow($event)"></samha-table>

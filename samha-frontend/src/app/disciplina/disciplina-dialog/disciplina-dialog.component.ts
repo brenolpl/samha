@@ -12,14 +12,13 @@ import {FormControl, FormGroup} from "@angular/forms";
 export class DisciplinaDialogComponent implements OnInit {
 
   entityId: number = null;
-  curso$: Observable<any>;
 
   constructor(
     public dialogRef: MatDialogRef<DisciplinaDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
   ) {}
 
-  onNoClick(): void {
+  onClose(): void {
     this.entityId = null;
     this.dialogRef.close();
   }
@@ -31,7 +30,12 @@ export class DisciplinaDialogComponent implements OnInit {
     this.entityId = $event;
   }
 
-  salvar(): void{
+  onSave(): void{
     this.dialogRef.close(this.entityId);
   }
+
+  onSelectedRow(idDisciplina: number) {
+      this.entityId = idDisciplina;
+  }
+
 }

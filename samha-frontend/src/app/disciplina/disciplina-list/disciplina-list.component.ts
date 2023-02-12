@@ -1,11 +1,10 @@
-import {Component, EventEmitter, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {disciplinaColumns} from "../../meta-model/disciplina";
-import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {Observable} from "rxjs";
 import {Filter, QueryMirror} from "../../shared/query-mirror";
 import {matrizColumns} from "../../meta-model/matriz-curricular";
 import {DataService} from "../../shared/service/data.service";
-import {$e} from "codelyzer/angular/styles/chars";
 import {MatOptionSelectionChange} from "@angular/material/core";
 
 @Component({
@@ -14,6 +13,7 @@ import {MatOptionSelectionChange} from "@angular/material/core";
   styleUrls: ['./disciplina-list.component.css']
 })
 export class DisciplinaListComponent implements OnInit {
+  @Output() selectedRow = new EventEmitter<number>();
   disciplinaColumns = disciplinaColumns;
   matriz$: Observable<any>;
   form: FormGroup;
@@ -90,5 +90,9 @@ export class DisciplinaListComponent implements OnInit {
     this.form.get('matriz').setValue(null);
     this.showPeriodo = false;
     this.onFilterChange(true);
+  }
+
+  onSelectedRow($event: number) {
+    this.selectedRow.emit($event);
   }
 }
