@@ -12,7 +12,7 @@
 }
 
 .base-block {
-  max-height: 800px;
+  max-height: 790px;
 }
 
 .base-overflow {
@@ -25,4 +25,29 @@
   border: 1px solid;
   border-radius: 60px;
   opacity: 1;
+}
+
+.new-button-border {
+  border: 0.5px solid green;
+  border-radius: 5px;
+}
+
+.delete-button-border {
+  border: 0.5px solid red;
+  border-radius: 5px;
+}
+
+.search-button-border {
+  border: 0.5px solid green;
+  border-radius: 5px;
+}
+
+.sub-toolbar-button {
+  background-color: #4caf50;
+  color: white;
+  margin: 2px;
+}
+
+.fim-tabela {
+  opacity: 0;
 }

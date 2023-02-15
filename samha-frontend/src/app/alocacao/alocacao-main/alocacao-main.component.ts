@@ -10,6 +10,8 @@ import {tap} from "rxjs/operators";
 import {PagedList} from "../../shared/paged-list";
 import {professorColumns} from "../../meta-model/professor";
 import {MatRadioChange} from "@angular/material/radio";
+import {ActivatedRoute, Router} from "@angular/router";
+import {alocacaoColumns} from "../../meta-model/alocacao";
 
 @Component({
   selector: 'samha-alocacao-main',
@@ -28,6 +30,7 @@ export class AlocacaoMainComponent implements OnInit {
   public matriz$: Observable<any>;
   public showPeriodo: boolean = true;
   public qtPeriodos: number = 1;
+  public matrizControl = new FormControl();
 
   //Bloco 2
   public eixoControl = new FormControl();
@@ -37,8 +40,16 @@ export class AlocacaoMainComponent implements OnInit {
   public professor$: Observable<any>;
   public searchText: string;
 
+  //Bloco 3
+  public alocacaoForm: FormGroup;
+  public alocacao$: Observable<any>;
+  public alocacaoColumns = alocacaoColumns;
+  public alocacaoDisplayedColumns = [];
+
   constructor(private dataService: DataService,
-              private formBuilder: FormBuilder) {
+              private formBuilder: FormBuilder,
+              private router: Router,
+              private route: ActivatedRoute) {
     this.disciplinaForm = this.formBuilder.group({
       periodo: [1],
       matriz: [null]
@@ -48,17 +59,37 @@ export class AlocacaoMainComponent implements OnInit {
       eixo: [1],
       search: ['']
     });
+
+    this.alocacaoForm = this.formBuilder.group({
+      ano: [new Date().getFullYear()],
+      semestre: [1]
+    })
   }
 
   ngOnInit(): void {
     this.disciplinaDisplayedColumns.push('nome');
+    this.setAlocacaoDisplayedColumns();
   }
 
   findColumnValue = (row, column): string => <string> column.split('.').reduce((acc, cur) => acc[cur], row);
 
+  private getAlocacao$(matrizId: number): Observable<any>{
+    let query = new QueryMirror('alocacao');
+    let projections = alocacaoColumns.map(column => column.columnDef);
+    query.selectList(projections);
+    let filter = {
+      and: {
+        'ano': {equals: this.alocacaoForm.get('ano').value},
+        'semestre': {equals: this.alocacaoForm.get('semestre').value},
+        'disciplina.matriz.curso.id': {equals: this.cursoControl.value.id},
+        'disciplina.matriz.id': {equals: matrizId},
+        'disciplina.periodo': {equals: this.disciplinaForm.get('periodo').value}
+      }
+    }
+    query.where(filter);
 
-
-
+    return this.dataService.query(query);
+  }
 
   compareFunction(o1: any, o2: any) {
     return (o1 != null && o2 != null && o1.id == o2.id);
@@ -74,9 +105,9 @@ export class AlocacaoMainComponent implements OnInit {
     this.loadMatrizes(this.cursoControl.value.id);
   }
 
-  onMatrizChanged($event: MatOptionSelectionChange<any>) {
-    this.disciplinaForm.get('matriz').setValue($event.source.value);
+  onMatrizChanged() {
     this.onFilterChange();
+    this.alocacao$ = this.getAlocacao$(this.matrizControl.value.id);
   }
 
   onFilterChange() {
@@ -85,7 +116,7 @@ export class AlocacaoMainComponent implements OnInit {
     query.orderBy('nome asc');
     query.where({
       and: {
-        'matriz.id': {equals: this.disciplinaForm.get('matriz').value.id},
+        'matriz.id': {equals: this.matrizControl.value.id},
         'periodo': {equals: this.disciplinaForm.get('periodo').value}
       }
     });
@@ -112,7 +143,10 @@ export class AlocacaoMainComponent implements OnInit {
     query.where(filter)
 
     this.matriz$ = this.dataService.query(query).pipe(
-      tap( (matrizes:PagedList) => this.disciplinaForm.get('matriz').setValue(matrizes.listMap[0]))
+      tap( (matrizes:PagedList) => {
+        this.matrizControl.setValue(matrizes.listMap[0]);
+        this.onMatrizChanged();
+      })
     );
   }
 
@@ -165,5 +199,38 @@ export class AlocacaoMainComponent implements OnInit {
   onSearchChange() {
     this.searchText = this.professorForm.get('search').value;
     this.loadProfessores(this.eixoControl.value, );
+  }
+
+  new() {
+
+  }
+
+  delete() {
+
+  }
+
+  goToLog() {
+    this.router.navigate(['log'], {relativeTo: this.route});
+  }
+
+  private setAlocacaoDisplayedColumns() {
+    this.alocacaoColumns.forEach(column => {
+      if (column.visible) {
+        this.alocacaoDisplayedColumns.push(column.columnDef);
+      }
+    });
+  }
+
+  public onPeriodoChange() {
+    this.onFilterChange();
+    this.alocacao$ = this.getAlocacao$(this.matrizControl.value.id);
+  }
+
+  onFilterAlocacaoChange() {
+    this.alocacao$ = this.getAlocacao$(this.matrizControl.value.id);
+  }
+
+  teste($event) {
+    console.log($event);
   }
 }

@@ -1,3 +1,9 @@
+<mat-toolbar class="sub-toolbar">
+  <div class="d-flex justify-content-end w-100">
+    <button mat-button (click)="goToLog()" class="sub-toolbar-button"><mat-icon>info</mat-icon> Log de Alterações</button>
+  </div>
+</mat-toolbar>
+
 <mat-card class="margem mb-5 col-md-12 col-sm-6 base-block" style="overflow: hidden">
   <!--Bloco 1-->
   <mat-card-content class="w-25 d-inline-block">
@@ -12,23 +18,23 @@
 
       <mat-form-field appearance="outline" class="d-block">
         <mat-label>Matriz Curricular</mat-label>
-        <mat-select *ngIf="matriz$ | async as matrizes; else loading" formControlName="matriz"
-                    [compareWith]="compareFunction">
-          <mat-option *ngFor="let matriz of matrizes.listMap" [value]="matriz"
-                      (onSelectionChange)="onMatrizChanged($event)">{{matriz.nome}}</mat-option>
+        <mat-select *ngIf="matriz$ | async as matrizes; else mLoading" [formControl]="matrizControl"
+                    [compareWith]="compareFunction" (selectionChange)="onMatrizChanged()">
+          <mat-option *ngFor="let matriz of matrizes.listMap" [value]="matriz">{{matriz.nome}}</mat-option>
         </mat-select>
-        <ng-template #loading>
+        <ng-template #mLoading>
           <mat-select [disabled]="true"></mat-select>
         </ng-template>
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="d-block" *ngIf="showPeriodo">
         <mat-label>Período</mat-label>
-        <input matInput type="number" formControlName="periodo" min="1" [max]="qtPeriodos" (change)="onFilterChange()">
+        <input matInput type="number" formControlName="periodo" min="1" [max]="qtPeriodos" (change)="onPeriodoChange()">
       </mat-form-field>
     </form>
     <hr class="separator">
-    <div *ngIf="disciplinaDataSource$ | async as dataSource; else loading" class="base-block base-overflow hide-scrollbar">
+    <div *ngIf="disciplinaDataSource$ | async as dataSource; else loading"
+         class="base-block base-overflow hide-scrollbar">
       <table mat-table [dataSource]="defineDataSource(dataSource)" class="w-100">
 
         <ng-container *ngFor="let column of disciplinaColumns" [matColumnDef]="column.columnDef">
@@ -42,6 +48,7 @@
                  [ngClass]="{'highlight': selectedDisciplinaRowIndex == row.id}"
                  (click)="highlightDisciplina(row)"></mat-row>
       </table>
+      <hr class="mt-1 fim-tabela">
     </div>
   </mat-card-content>
   <!--Fim do bloco 1-->
@@ -52,31 +59,31 @@
   <mat-card-content class="w-25 d-inline-block" style="margin-left: 10px">
     <mat-card-subtitle>Professor</mat-card-subtitle>
     <div style="height: 217px;">
-    <form [formGroup]="professorForm">
-      <mat-radio-group aria-label="Selecione uma opção" formControlName="eixo" (change)="onRadioChange($event)">
-        <mat-radio-button value="1" class="m-2" [checked]="true">Eixo</mat-radio-button>
-        <mat-radio-button value="2">Todos</mat-radio-button>
-      </mat-radio-group>
+      <form [formGroup]="professorForm">
+        <mat-radio-group aria-label="Selecione uma opção" formControlName="eixo" (change)="onRadioChange($event)">
+          <mat-radio-button value="1" class="m-2" [checked]="true">Eixo</mat-radio-button>
+          <mat-radio-button value="2">Todos</mat-radio-button>
+        </mat-radio-group>
 
 
-      <samha-autocomplete-field
-        *ngIf="professorForm.get('eixo').value == 1"
-        [resource]="'eixo'"
-        [label]="'Eixo'"
-        [control]="eixoControl"
-        (onChange)="onEixoChange($event)"
-        (loaded)="onEixoLoaded($event)">
-      </samha-autocomplete-field>
+        <samha-autocomplete-field
+          *ngIf="professorForm.get('eixo').value == 1"
+          [resource]="'eixo'"
+          [label]="'Eixo'"
+          [control]="eixoControl"
+          (onChange)="onEixoChange($event)"
+          (loaded)="onEixoLoaded($event)">
+        </samha-autocomplete-field>
 
-      <mat-form-field appearance="outline" class="d-block">
-        <mat-label>Pesquisar</mat-label>
-        <input matInput type="text" placeholder="Pesquisar" (keyup)="onSearchChange()" formControlName="search">
-      </mat-form-field>
-    </form>
+        <mat-form-field appearance="outline" class="d-block">
+          <mat-label>Pesquisar</mat-label>
+          <input matInput type="text" placeholder="Pesquisar" (keyup)="onSearchChange()" formControlName="search">
+        </mat-form-field>
+      </form>
 
     </div>
     <hr class="separator">
-    <div *ngIf="professor$ | async as profSource; else loading" class="base-block base-overflow hide-scrollbar">
+    <div *ngIf="professor$ | async as profSource; else loading2" class="base-block base-overflow hide-scrollbar">
 
       <table mat-table [dataSource]="defineDataSource(profSource)" class="w-100">
 
@@ -91,19 +98,73 @@
                  [ngClass]="{'highlight': selectedProfessorRowIndex == row.id}"
                  (click)="highlightProfessor(row)"></mat-row>
       </table>
+      <hr class="mt-1 fim-tabela">
     </div>
   </mat-card-content>
   <!--Fim do bloco 2-->
 
   <div class="bloco1 d-inline-block" style="height: 100vh;"></div>
 
-  <mat-card-content class="d-inline-block base-block base-overflow hide-scrollbar" style="width: 45%; margin-left: 10px">
+  <mat-card-content class="d-inline-block"
+                    style="width: 43%; margin-left: 10px">
     <mat-card-subtitle>Alocações</mat-card-subtitle>
-    <span
-      >tst</span>
+    <div style="height: 217px;">
+      <form [formGroup]="alocacaoForm">
+        <mat-form-field appearance="outline" class="d-block">
+          <mat-label>Ano</mat-label>
+          <input matInput type="number" formControlName="ano" (change)="onFilterAlocacaoChange()">
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="d-block">
+          <mat-label>Semestre</mat-label>
+          <input matInput type="number" [min]="1" [max]="2" formControlName="semestre" (change)="onFilterAlocacaoChange()">
+        </mat-form-field>
+      </form>
+      <button mat-button type="submit" color="accent" class="new-button-border" (click)="delete()">
+        <mat-icon>query_builder</mat-icon> Carga Horária
+      </button>
+      <span class="m-1"></span>
+      <button mat-button type="submit" color="primary" class="new-button-border" (click)="new()">
+        <mat-icon>add</mat-icon>
+      </button>
+      <span class="m-1"></span>
+      <button mat-button type="submit" color="warn" class="delete-button-border" (click)="delete()">
+        <mat-icon>delete</mat-icon>
+      </button>
+      <span class="m-1"></span>
+    </div>
+    <hr class="separator">
+    <div *ngIf="alocacao$ | async as dataSource; else loading3" class="base-block base-overflow hide-scrollbar">
+      <table mat-table [dataSource]="defineDataSource(dataSource)" class="w-100">
+
+        <ng-container *ngFor="let column of alocacaoColumns" [matColumnDef]="column.columnDef">
+
+          <mat-header-cell *matHeaderCellDef>{{column.header}}</mat-header-cell>
+          <mat-cell *matCellDef="let row" [innerHTML]="findColumnValue(row, column.columnDef)"></mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="alocacaoDisplayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: alocacaoDisplayedColumns"
+                 [ngClass]="{'highlight': selectedDisciplinaRowIndex == row.id}"
+                 (click)="highlightDisciplina(row)"></mat-row>
+      </table>
+      <hr class="mt-1 fim-tabela">
+    </div>
   </mat-card-content>
 </mat-card>
+
 <ng-template #loading>
+  <div class="loading-spinner">
+    <mat-spinner></mat-spinner>
+  </div>
+</ng-template>
+
+<ng-template #loading2>
+  <div class="loading-spinner">
+    <mat-spinner></mat-spinner>
+  </div>
+</ng-template>
+
+<ng-template #loading3>
   <div class="loading-spinner">
     <mat-spinner></mat-spinner>
   </div>
