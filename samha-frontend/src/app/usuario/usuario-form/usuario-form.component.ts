@@ -6,7 +6,7 @@ import {TableDialogComponent} from '../../shared/table-dialog/table-dialog.compo
 import {Observable, of} from 'rxjs';
 import {DataService} from '../../shared/service/data.service';
 import {servidorColumns} from '../../meta-model/servidor';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {first} from 'rxjs/operators';
 
 @Component({
@@ -26,7 +26,8 @@ export class UsuarioFormComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
               public dialog: MatDialog,
               private dataService: DataService,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute,
+              private router: Router) {
     this.form = formBuilder.group({
       login: [null, Validators.required],
       senha: [null, [Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
@@ -99,5 +100,9 @@ export class UsuarioFormComponent implements OnInit {
       papel: [this.usuario?.papel, Validators.required],
       servidor_id: []
     })
+  }
+
+  goBack() {
+    this.router.navigate(['../'], {relativeTo: this.route});
   }
 }

@@ -19,10 +19,10 @@ public class CursoAud extends BaseLogEntity {
     @Column(name = "nome", updatable = false)
     private String nome;
 
-    @Column(name = "qt_periodos", nullable = false, updatable = false)
+    @Column(name = "qt_periodos", updatable = false)
     private Integer qtPeriodos;
 
-    @Column(name = "nivel", nullable = false, updatable = false)
+    @Column(name = "nivel", updatable = false)
     private String nivel;
 
     @OneToOne(fetch = FetchType.EAGER)

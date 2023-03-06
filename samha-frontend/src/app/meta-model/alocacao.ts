@@ -1,4 +1,5 @@
 import {TableColumnModel} from './table-column-model';
+import {commonLogColumns} from "./log";
 
 export const alocacaoColumns: TableColumnModel[] = [
   {columnDef: 'id', header: 'Id', visible: false},
@@ -8,4 +9,9 @@ export const alocacaoColumns: TableColumnModel[] = [
   {columnDef: 'professor2.nome', header: 'Professor 2', visible: true},
   {columnDef: 'ano', header: 'Ano', visible: false},
   {columnDef: 'semestre', header: 'Semestre', visible: false},
+]
+
+export const alocacaoLogColumns: TableColumnModel[] = [
+  ...commonLogColumns,
+  ...alocacaoColumns.filter(column => column.columnDef !== 'id')
 ]

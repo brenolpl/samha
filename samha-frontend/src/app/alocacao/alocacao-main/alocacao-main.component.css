@@ -21,6 +21,7 @@
 
 .separator {
   color: #4caf50;
+  background-color: #4caf50;
   height: 10px;
   border: 1px solid;
   border-radius: 60px;

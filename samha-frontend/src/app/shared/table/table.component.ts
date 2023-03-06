@@ -21,6 +21,8 @@ import {FieldEnum} from '../field-enum';
 import {OperationEnum} from '../operation-enum';
 import {DomSanitizer} from '@angular/platform-browser';
 import {ToolbarAction} from "../../meta-model/toolbar-action";
+import {alocacaoColumns} from "../../meta-model/alocacao";
+import {NotificationService} from "../service/notification.service";
 
 /**
  * Este componente gera dinamicamente uma tabela de acordo com os parâmetros passados
@@ -66,7 +68,8 @@ export class TableComponent implements OnInit {
               protected router: Router,
               protected route: ActivatedRoute,
               protected dialog: MatDialog,
-              protected sanitizer: DomSanitizer) {
+              protected sanitizer: DomSanitizer,
+              protected notification: NotificationService) {
     this.group = this.formBuilder.group({
       search: [null]
     });
@@ -103,7 +106,6 @@ export class TableComponent implements OnInit {
     if (filter.length > 0) {
       query.where(orFilter);
     }
-    console.log(this.filter);
     if(this.filter != undefined) query.where(this.filter);
     if (this.orderBy !== '') {
       query.orderBy(this.orderBy);
@@ -142,12 +144,17 @@ export class TableComponent implements OnInit {
 
   openDialog(row) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent);
-
-    dialogRef.afterClosed().pipe(first()).subscribe(result => {
+    dialogRef.afterClosed().pipe(first()).subscribe(
+      result => {
       if(result){
         this.dataService.delete(this.resource, row.id).pipe(first()).subscribe(
           next => {
+            this.notification.success('Registro excluído com sucesso!');
             this.dataSource$ = this.loadTableData();
+          },
+          error => {
+            this.notification.error('Erro ao excluir registro');
+            throw error;
           }
         );
       }
@@ -317,6 +324,7 @@ export class TableComponent implements OnInit {
         break;
       case 'coordenador':
         this.columns = professorColumns;
+        this.toolbarHeader = 'Coordenadores';
         break;
       case 'disciplina':
         this.columns = disciplinaColumns;
@@ -335,6 +343,7 @@ export class TableComponent implements OnInit {
         break;
       case 'usuario':
         this.columns = usuarioColumns;
+        this.toolbarHeader = 'Usuários';
         break;
       case 'coordenadoria':
         this.columns = coordenadoriaColumns;
@@ -344,6 +353,9 @@ export class TableComponent implements OnInit {
         break;
       case 'matrizCurricular':
         this.columns = matrizColumns;
+        break;
+      case 'alocacao':
+        this.columns = alocacaoColumns;
         break;
     }
   }

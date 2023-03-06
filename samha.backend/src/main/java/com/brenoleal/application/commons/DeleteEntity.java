@@ -2,6 +2,7 @@ package com.brenoleal.application.commons;
 
 import com.brenoleal.commons.UseCase;
 import com.brenoleal.persistence.generics.IGenericRepository;
+import lombok.NoArgsConstructor;
 
 import javax.inject.Inject;
 import java.io.Serializable;
@@ -11,7 +12,8 @@ public class DeleteEntity<ENTITY, KEY extends Serializable> extends UseCase<Void
     private final Class<ENTITY> entityClass;
     private final KEY id;
 
-    public DeleteEntity(Class<ENTITY> entityClass, KEY id){
+    @Inject
+    public DeleteEntity(Class<ENTITY> entityClass, KEY id) {
         this.entityClass = entityClass;
         this.id = id;
     }

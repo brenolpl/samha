@@ -1,3 +1,9 @@
+<mat-toolbar class="sub-toolbar" *ngIf="ativarToolbar">
+  <div class="d-flex justify-content-start w-100">
+    <button mat-button (click)="goBack()" class="sub-toolbar-button"><mat-icon>keyboard_arrow_left</mat-icon></button>
+  </div>
+</mat-toolbar>
+
 <mat-card class="mb-5 margem">
 
   <mat-toolbar color="accent" class="toolbar-border">Log de {{resource}}</mat-toolbar>
@@ -7,7 +13,7 @@
         <input type="search" id="form1" class="form-control border-top-0 border-end-0 border-start-0" placeholder="Pesquisar" (change)="onSearchChange()" formControlName="search">
       </form>
     </div>
-    <button type="button" mat-button color="accent">
+    <button type="button" class="search-button" mat-button>
       <i class="fas fa-search"></i>
     </button>
   </div>

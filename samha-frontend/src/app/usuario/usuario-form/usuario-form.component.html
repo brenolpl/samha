@@ -1,7 +1,10 @@
+<mat-toolbar class="sub-toolbar">
+  <div class="d-flex justify-content-start w-100">
+    <button mat-button (click)="goBack()" class="sub-toolbar-button"><mat-icon>keyboard_arrow_left</mat-icon></button>
+  </div>
+</mat-toolbar>
 <mat-card class="mat-elevation-z8 m-auto mt-5 col-11">
-  <mat-card-title class="fw-lighter">
-    Cadastro de usuários
-  </mat-card-title>
+  <mat-toolbar class="toolbar-border"><span style="color: #4caf50;">Cadastrar Usuários</span></mat-toolbar>
   <mat-card-content class="mt-5 card-width">
     <form [formGroup]="form">
       <mat-form-field appearance="outline" class="d-block">
@@ -30,20 +33,21 @@
         <mat-form-field appearance="standard" class="d-inline-block pesquisar-field">
           <mat-label>Vincular à Servidor</mat-label>
           <ng-container *ngIf="professor$ | async as professor; else notSet">
-            <mat-select [value]="setProfessorValue(professor.id)" formControlName="servidor_id">
+            <mat-select [value]="setProfessorValue(professor.id)" formControlName="servidor_id" (click)="openDialog()">
               <mat-option [value]="professor.id">{{professor.nome}}</mat-option>
             </mat-select>
           </ng-container>
           <ng-template #notSet>
-            <mat-select [disabled]="true"></mat-select>
+            <mat-select [disabled]="true" (click)="openDialog()"></mat-select>
           </ng-template>
         </mat-form-field>
-        <button type="button" mat-button (click)="openDialog()">
+        <button type="button" class="search-button search-servidor" mat-button (click)="openDialog()">
           <i class="fas fa-search"></i>
         </button>
       </div>
-      <mat-card-actions>
-        <button mat-button (click)="salvar()" [disabled]="!form.valid" ><mat-icon>save</mat-icon> Salvar</button>
+      <mat-card-actions class="d-flex justify-content-end">
+        <button mat-button (click)="salvar()" [disabled]="!form.valid" class="sub-toolbar-button"><mat-icon>save</mat-icon>  Salvar</button>
+        <button mat-button class="cancelar-button" (click)="goBack()"><mat-icon>cancel</mat-icon> Cancelar</button>
       </mat-card-actions>
     </form>
   </mat-card-content>

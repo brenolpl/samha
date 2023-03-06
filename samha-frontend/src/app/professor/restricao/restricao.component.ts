@@ -6,6 +6,7 @@ import {Subscription} from 'rxjs';
 import {DataService} from '../../shared/service/data.service';
 import {first} from 'rxjs/operators';
 import {IFormComponent} from '../../meta-model/iform-component';
+import {NotificationService} from "../../shared/service/notification.service";
 
 @Component({
   selector: 'samha-restricao',
@@ -34,7 +35,8 @@ export class RestricaoComponent implements OnInit, IFormComponent, OnDestroy {
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute,
               private dataService: DataService,
-              private router: Router) {
+              private router: Router,
+              private notification: NotificationService) {
 
   }
 
@@ -42,9 +44,9 @@ export class RestricaoComponent implements OnInit, IFormComponent, OnDestroy {
     this.professorId = this.route.snapshot.params['entity'];
     this.subscription = this.route.data.subscribe(
       data => {
-        if(data.restricao !== undefined) {
+        if (data.restricao !== undefined) {
           this.restricao = data.restricao;
-        }else{
+        } else {
           this.restricao = {
             aula1: false,
             aula2: false,
@@ -81,22 +83,36 @@ export class RestricaoComponent implements OnInit, IFormComponent, OnDestroy {
   }
 
   salvar() {
-    if(this.form.invalid){
+    if (this.form.invalid) {
       this.form.markAllAsTouched();
       this.form.markAsPristine();
       return;
     }
     this.setNewResourceData();
-    if(this.restricao.id) {
+    if (this.restricao.id) {
       this.dataService.update('restricaoProfessor', this.restricao.id, this.restricao).pipe(
         first()
       ).subscribe(
         data => {
-          this.router.navigate(['../../'], {relativeTo: this.route});
+          this.restricao = data;
+          this.notification.success('A Restrição foi atualizada com sucesso!');
+        },
+        error => {
+          this.notification.error('Falha ao atualizar restrição!');
+          throw error;
         }
       )
-    }else{
-      this.dataService.save('restricaoProfessor', this.restricao).pipe(first()).subscribe(next => this.router.navigate(['../../'], {relativeTo: this.route}));
+    } else {
+      this.dataService.save('restricaoProfessor', this.restricao).pipe(first()).subscribe(
+        next => {
+          this.restricao = next;
+          this.notification.success('A Restrição foi criada com sucesso!');
+        },
+        error => {
+          this.notification.error('Falha ao criar restrição!');
+          throw error;
+        }
+      );
     }
   }
 
@@ -119,7 +135,7 @@ export class RestricaoComponent implements OnInit, IFormComponent, OnDestroy {
 
   private loadCheckboxes() {
     this.aula.aulaItems.forEach(aula => {
-      switch (aula.name){
+      switch (aula.name) {
         case 'Aula 1':
           aula.completed = this.restricao?.aula1;
           break;
@@ -143,7 +159,7 @@ export class RestricaoComponent implements OnInit, IFormComponent, OnDestroy {
   }
 
   updateEntity(aula: Aula) {
-    switch (aula.name){
+    switch (aula.name) {
       case 'Aula 1':
         this.restricao.aula1 = aula.completed;
         break;
@@ -177,12 +193,16 @@ export class RestricaoComponent implements OnInit, IFormComponent, OnDestroy {
     this.restricao.prioridade = this.form.get('prioridade').value;
   }
 
-  canDeactivateRoute(): boolean{
+  canDeactivateRoute(): boolean {
     return true;
   }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+  }
+
+  goBack() {
+    this.router.navigate(['../../'], {relativeTo: this.route});
   }
 }
 

@@ -3,12 +3,14 @@ import {NgModule} from '@angular/core';
 import {AlocacaoComponent} from "./alocacao-edit/alocacao.component";
 import {AlocacaoFormComponent} from "./alocacao-form/alocacao-form.component";
 import {AlocacaoMainComponent} from "./alocacao-main/alocacao-main.component";
+import {LogComponent} from "../shared/log/log.component";
 
 
 export const alocacaoRoutes: Routes = [
   {path: '', children: [
       {path: '', component: AlocacaoMainComponent},
-      {path: 'new', component: AlocacaoFormComponent}
+      {path: 'new', component: AlocacaoFormComponent},
+      {path: 'log', component: LogComponent}
     ]
   }
 ]

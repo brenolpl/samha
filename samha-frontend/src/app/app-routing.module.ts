@@ -5,7 +5,7 @@ import {LoginComponent} from './login/login.component';
 import {AuthGuard} from './guards/auth-guard';
 
 const routes: Routes = [
-  { path: '', pathMatch: 'full', redirectTo: 'login'},
+  { path: '', pathMatch: 'full', redirectTo: 'home'},
   { path: 'login', component: LoginComponent},
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard]},
   { path: 'professor', canActivate: [AuthGuard], loadChildren: () => import('./professor/professor.module').then(m => m.ProfessorModule) },
@@ -18,6 +18,7 @@ const routes: Routes = [
   { path: 'disciplina', canActivate: [AuthGuard], loadChildren: () => import('./disciplina/disciplina.module').then(m => m.DisciplinaModule)},
   { path: 'matrizCurricular', canActivate: [AuthGuard], loadChildren: () => import('./matriz-curricular/matriz.module').then(m => m.MatrizModule)},
   { path: 'turma', canActivate: [AuthGuard], loadChildren: () => import('./turma/turma.module').then(m => m.TurmaModule)},
+  { path: '**', redirectTo: '/home'}
 ];
 
 @NgModule({

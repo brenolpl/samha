@@ -95,7 +95,7 @@ public abstract class JWTUtil {
         response.setHeader("error", ex.getMessage());
         response.setStatus(FORBIDDEN.value());
         Map<String, String> error = new HashMap<>();
-        error.put("errorMessage", ex.getMessage());
+        error.put("errorMessage", "Usuário não encontrado");
         error.put("cause", ex.getClass().toString());
         response.setContentType(APPLICATION_JSON_VALUE);
         new ObjectMapper().writeValue(response.getOutputStream(), error);

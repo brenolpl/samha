@@ -1,9 +1,12 @@
 <div mat-dialog-title>
-  Confirmar Exclusão
+  <mat-icon color="warn" class="float-end">report_problem</mat-icon> Excluir
 </div>
+<mat-dialog-content class="mb-2">
+  Deseja realmente excluir este registro?
+</mat-dialog-content>
 <mat-dialog-actions class="d-flex justify-content-center">
 
-  <button mat-button (click)="onNoClick()" cdkFocusInitial class="w-25">Não</button>
-  <button mat-button (click)="onSimClick()" color="warn" class="w-25">Sim</button>
-
+  <button mat-button (click)="onSimClick()" class="w-25 p-1 sim-button" style="min-width: 100px;">Sim</button>
+  <button mat-button (click)="onNoClick()" cdkFocusInitial class="w-25 p-1 nao-button" style="min-width: 100px;">Não</button>
 </mat-dialog-actions>
+

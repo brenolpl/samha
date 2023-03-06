@@ -4,6 +4,7 @@ import {DataService} from '../../shared/service/data.service';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {first} from 'rxjs/operators';
+import {NotificationService} from "../../shared/service/notification.service";
 
 @Component({
   selector: 'samha-coordenadoria',
@@ -19,7 +20,8 @@ export class CoordenadoriaFormComponent implements OnInit {
   constructor(private dataService: DataService,
               private formBuilder: FormBuilder,
               private route: ActivatedRoute,
-              private router: Router) { }
+              private router: Router,
+              private notification: NotificationService) { }
 
   ngOnInit(): void {
     this.eixos$ = this.dataService.getAll('eixo');
@@ -43,13 +45,23 @@ export class CoordenadoriaFormComponent implements OnInit {
     if(this.coord?.id){
       this.dataService.update('coordenadoria', this.coord.id, this.coord).pipe(first()).subscribe(
         next => {
-          this.goBack();
+          this.coord = next;
+          this.notification.success('Coordenadoria atualizada com sucesso!');
+        },
+        error => {
+          this.notification.error('Falha ao atualizar coordenadoria!');
+          throw error;
         }
       )
     }else{
       this.dataService.save('coordenadoria', this.coord).pipe(first()).subscribe(
         next => {
-          this.goBack();
+          this.notification.success('Coordenadoria criada com sucesso!');
+          this.coord = next;
+        },
+        error => {
+          this.notification.error('Falha ao criar coordenadoria!');
+          throw error;
         }
       )
     }

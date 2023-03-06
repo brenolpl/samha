@@ -6,6 +6,7 @@ import {Router} from '@angular/router';
 import {Subscription} from 'rxjs';
 import {TokenResponseModel} from '../meta-model/token-model';
 import {AuthService} from '../shared/service/auth.service';
+import {NotificationService} from "../shared/service/notification.service";
 
 @Component({
   selector: 'samha-login',
@@ -18,7 +19,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   constructor(private formBuilder: FormBuilder,
               private localStorage: LocalStorageService,
               private authService: AuthService,
-              private route: Router) {
+              private route: Router,
+              private notification: NotificationService) {
   }
 
   form: FormGroup;
@@ -46,6 +48,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           },
           (error) => {
             this.authService.loggedIn.emit(false);
+            this.notification.error("Usuário não encontrado");
             throw error;
           }
         );

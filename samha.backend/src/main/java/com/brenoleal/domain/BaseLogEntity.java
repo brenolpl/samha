@@ -11,7 +11,9 @@ import javax.persistence.Column;
 import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 /**
  * Para a implementação desta classe, foi realizada uma junção de Hibernate Envers com o Spring Entity Listeners.
@@ -45,8 +47,9 @@ public class BaseLogEntity implements Serializable {
     @LastModifiedBy
     private String modifiedBy;
 
-    public Timestamp getCreatedDate() {
-        if(createdDate != null) return new Timestamp(createdDate);
+    public LocalDateTime getCreatedDate() {
+
+        if(createdDate != null) return LocalDateTime.ofInstant(Instant.ofEpochMilli(createdDate), ZoneOffset.UTC);
         else return null;
     }
 
@@ -54,8 +57,8 @@ public class BaseLogEntity implements Serializable {
         this.createdDate = createdDate;
     }
 
-    public Timestamp getModifiedDate() {
-        if(modifiedDate != null) return new Timestamp(modifiedDate);
+    public LocalDateTime getModifiedDate() {
+        if(modifiedDate != null) return LocalDateTime.ofInstant(Instant.ofEpochMilli(modifiedDate), ZoneOffset.UTC);
         else return null;
     }
 

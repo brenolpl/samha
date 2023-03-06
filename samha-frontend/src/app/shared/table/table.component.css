@@ -38,16 +38,6 @@ input{
   border-radius: 0;
 }
 
-.toolbar-border{
-  border-radius: 4px;
-}
-
 .highlight{
   background: #42A948; /* green */
-}
-
-.sub-toolbar-button{
-  background-color: #4caf50;
-  color: white;
-  margin: 2px;
 }

@@ -100,4 +100,8 @@ export class ProfessorFormComponent implements OnInit, IFormComponent, OnDestroy
   ngOnDestroy() {
     this.subscription.unsubscribe()
   }
+
+  goBack() {
+    this.router.navigate(['../'], {relativeTo: this.route});
+  }
 }

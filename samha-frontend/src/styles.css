@@ -49,3 +49,25 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .mat-card-subtitle {
   color: #4caf50;
 }
+
+.sub-toolbar-button{
+  background-color: #4caf50;
+  color: white;
+  margin: 2px;
+}
+
+.search-button {
+  color: rgb(2,125,233);
+}
+
+.toolbar-border{
+  background: none;
+  margin-bottom: 10px;
+  border-bottom: 1px solid black;
+  width: 100%;
+}
+
+.cancelar-button {
+  background-color: rgb(244 67 54);
+  color: white;
+}

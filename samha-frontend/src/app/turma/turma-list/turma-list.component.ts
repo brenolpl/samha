@@ -9,6 +9,7 @@ import {Filter, Predicate, QueryMirror} from "../../shared/query-mirror";
 import {Observable, of} from "rxjs";
 import {Page, PagedList} from "../../shared/paged-list";
 import {catchError, first} from "rxjs/operators";
+import {NotificationService} from "../../shared/service/notification.service";
 @Component({
   selector: 'samha-turma-list',
   templateUrl: './turma-list.component.html',
@@ -29,8 +30,9 @@ export class TurmaListComponent extends TableComponent implements OnInit {
               protected router: Router,
               protected route: ActivatedRoute,
               protected dialog: MatDialog,
-              protected sanitizer: DomSanitizer) {
-    super(dataService, formBuilder, router, route, dialog, sanitizer);
+              protected sanitizer: DomSanitizer,
+              protected notification: NotificationService) {
+    super(dataService, formBuilder, router, route, dialog, sanitizer, notification);
   }
 
   ngOnInit(): void {
@@ -86,7 +88,15 @@ export class TurmaListComponent extends TableComponent implements OnInit {
   }
 
   atualizarTurmasAtivas() {
-    this.dataService.post('turma/atualizarTurmas', null).pipe(first()).subscribe();
+    this.dataService.post('turma/atualizarTurmas', null).pipe(first()).subscribe(
+      _ => {
+        this.notification.success('Turmas atualizadas com sucesso!');
+      },
+       error => {
+        this.notification.error('Não foi possível atualizar as turmas!');
+        throw error;
+       }
+    );
   }
 
   onAtivasChange() {

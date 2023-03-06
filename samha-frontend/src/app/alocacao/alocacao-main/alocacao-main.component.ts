@@ -1,17 +1,18 @@
 import {Component, EventEmitter, OnInit} from '@angular/core';
 import {disciplinaColumns} from "../../meta-model/disciplina";
-import {Observable} from "rxjs";
+import {Notification, Observable, of} from "rxjs";
 import {DataService} from "../../shared/service/data.service";
 import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
-import {MatOptionSelectionChange} from "@angular/material/core";
 import {Filter, QueryMirror} from "../../shared/query-mirror";
 import {matrizColumns} from "../../meta-model/matriz-curricular";
-import {tap} from "rxjs/operators";
+import {catchError, first, tap} from "rxjs/operators";
 import {PagedList} from "../../shared/paged-list";
 import {professorColumns} from "../../meta-model/professor";
 import {MatRadioChange} from "@angular/material/radio";
 import {ActivatedRoute, Router} from "@angular/router";
 import {alocacaoColumns} from "../../meta-model/alocacao";
+import {NotificationService} from "../../shared/service/notification.service";
+import {error} from "protractor";
 
 @Component({
   selector: 'samha-alocacao-main',
@@ -39,17 +40,23 @@ export class AlocacaoMainComponent implements OnInit {
   public selectedProfessorRowIndex: number;
   public professor$: Observable<any>;
   public searchText: string;
+  public selectedProfessorRowIndexes: string[] = [];
 
   //Bloco 3
   public alocacaoForm: FormGroup;
   public alocacao$: Observable<any>;
   public alocacaoColumns = alocacaoColumns;
   public alocacaoDisplayedColumns = [];
+  public selectedAlocacaoRowIndex: number;
+
+  isVisible: any;
 
   constructor(private dataService: DataService,
               private formBuilder: FormBuilder,
               private router: Router,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute,
+              private notificationService: NotificationService,
+              private notification: NotificationService) {
     this.disciplinaForm = this.formBuilder.group({
       periodo: [1],
       matriz: [null]
@@ -71,9 +78,10 @@ export class AlocacaoMainComponent implements OnInit {
     this.setAlocacaoDisplayedColumns();
   }
 
-  findColumnValue = (row, column): string => <string> column.split('.').reduce((acc, cur) => acc[cur], row);
+  findColumnValue = (row, column): string => <string>column.split('.').reduce((acc, cur) => acc[cur], row);
 
-  private getAlocacao$(matrizId: number): Observable<any>{
+
+  private getAlocacao$(matrizId: number): Observable<any> {
     let query = new QueryMirror('alocacao');
     let projections = alocacaoColumns.map(column => column.columnDef);
     query.selectList(projections);
@@ -143,7 +151,7 @@ export class AlocacaoMainComponent implements OnInit {
     query.where(filter)
 
     this.matriz$ = this.dataService.query(query).pipe(
-      tap( (matrizes:PagedList) => {
+      tap((matrizes: PagedList) => {
         this.matrizControl.setValue(matrizes.listMap[0]);
         this.onMatrizChanged();
       })
@@ -168,28 +176,36 @@ export class AlocacaoMainComponent implements OnInit {
     query.projections = professorColumns.map(column => column.columnDef);
     query.orderBy('nome asc');
     let and = {};
-    if(this.professorForm.get('eixo').value == 1) {
+    if (this.professorForm.get('eixo').value == 1) {
       Object.assign(and, {'coordenadoria.eixo.id': {equals: $eventElement.id}});
     }
 
-    if(this.searchText) {
+    if (this.searchText) {
       Object.assign(and, {'nome': {contains: this.searchText}});
     }
 
-    if(Object.entries(and).length !== 0) {
+    if (Object.entries(and).length !== 0) {
       query.where({
         and: and
       });
     }
 
 
-
-
     this.professor$ = this.dataService.query(query);
   }
 
   highlightProfessor(row) {
-    this.selectedProfessorRowIndex = row.id;
+    let index = this.selectedProfessorRowIndexes.indexOf(this.selectedProfessorRowIndexes.find(i => i == row.id));
+
+    if (index == -1) {
+      this.selectedProfessorRowIndexes.push(row.id);
+    } else {
+      this.selectedProfessorRowIndexes.splice(index, 1);
+    }
+  }
+
+  highlightAlocacao(row) {
+    this.selectedAlocacaoRowIndex = row.id;
   }
 
   onRadioChange($event: MatRadioChange) {
@@ -198,15 +214,57 @@ export class AlocacaoMainComponent implements OnInit {
 
   onSearchChange() {
     this.searchText = this.professorForm.get('search').value;
-    this.loadProfessores(this.eixoControl.value, );
+    this.loadProfessores(this.eixoControl.value,);
   }
 
   new() {
+    if (!this.verificarDados()) return;
 
+    let alocacao = {
+      "ano": this.alocacaoForm.get("ano").value,
+      "semestre": this.alocacaoForm.get("semestre").value,
+      "disciplina": {
+        "id": this.selectedDisciplinaRowIndex
+      },
+      "professor1": {
+        "id": this.selectedProfessorRowIndexes[0]
+      }
+    }
+
+    if (this.selectedProfessorRowIndexes.length > 1) {
+      Object.assign(alocacao, {
+        "professor2": {
+          "id": this.selectedProfessorRowIndexes[1]
+        }
+      })
+    }
+
+    this.dataService.save('alocacao', alocacao).subscribe(
+      _ => {
+        this.alocacao$ = this.getAlocacao$(this.matrizControl.value.id);
+        this.notification.success('Alocação incluída com sucesso!');
+      },
+      (err) => {
+        this.notification.error(err.message, err.name);
+        return of(new Error(err));
+      });
   }
 
   delete() {
-
+    if (this.selectedAlocacaoRowIndex != null) {
+      this.dataService.delete("alocacao", this.selectedAlocacaoRowIndex).pipe(first())
+        .subscribe(
+          _ => {
+            this.alocacao$ = this.getAlocacao$(this.matrizControl.value.id);
+            this.selectedAlocacaoRowIndex = null;
+            this.notification.success('Alocação excluída com sucesso!');
+          },
+          err => {
+            this.notification.error('Falha ao excluir alocação');
+          });
+    } else {
+      this.notification.error('Selecione uma alocação para ser excluída.');
+    }
   }
 
   goToLog() {
@@ -232,5 +290,24 @@ export class AlocacaoMainComponent implements OnInit {
 
   teste($event) {
     console.log($event);
+  }
+
+  public highlightProfessorRow(row): boolean {
+    return this.selectedProfessorRowIndexes.find(i => i == row.id) ? true : false;
+  }
+
+  private verificarDados() {
+    if (this.selectedDisciplinaRowIndex == null || this.selectedDisciplinaRowIndex == undefined
+      || this.selectedProfessorRowIndexes.length == 0) {
+      this.notification.error('Selecione uma disciplina e pelo menos 1 (Um) professor!');
+      return false;
+    }
+
+    if (this.selectedProfessorRowIndexes.length > 2) {
+      this.notification.error('Selecione no mínimo 1 (Um) e no máximo 2 (Dois) professores!');
+      return false;
+    }
+
+    return true;
   }
 }

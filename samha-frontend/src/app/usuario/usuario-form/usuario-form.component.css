@@ -1,6 +1,3 @@
-.card-width{
-  width: 350px;
-}
 
 pesquisar{
   width: 350px;
@@ -10,7 +7,7 @@ pesquisar{
   width: 300px;
 }
 
-.mat-button{
+.search-servidor{
   width: 50px;
   min-width: 50px;
 }

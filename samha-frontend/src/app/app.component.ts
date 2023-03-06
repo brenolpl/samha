@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Observable, of, Subscription} from 'rxjs';
 import {MenuEnum} from './shared/menu-enum';
 import {alocacaoColumns} from './meta-model/alocacao';
@@ -8,6 +8,7 @@ import {LocalStorageService} from './shared/service/local-storage.service';
 import {Router} from '@angular/router';
 import {AuthService} from './shared/service/auth.service';
 import {catchError, map, tap} from 'rxjs/operators';
+import {ToastContainerDirective, ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'samha-root',
@@ -15,6 +16,7 @@ import {catchError, map, tap} from 'rxjs/operators';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit, OnDestroy{
+  @ViewChild(ToastContainerDirective, { static: true }) toastContainer: ToastContainerDirective;
   columns: TableColumnModel[];
   opened = false;
   menus$: Observable<any>;
@@ -23,11 +25,13 @@ export class AppComponent implements OnInit, OnDestroy{
   constructor(private dataService: DataService,
               private localStorage: LocalStorageService,
               private router: Router,
-              private authService: AuthService) {
+              private authService: AuthService,
+              private toastrService: ToastrService) {
 
   }
 
   ngOnInit(): void {
+    this.toastrService.overlayContainer = this.toastContainer;
     this.showMenu = this.authService.isTokenValid().pipe(
       map( _ => {
         this.opened = true;

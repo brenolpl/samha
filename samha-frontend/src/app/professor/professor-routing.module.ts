@@ -16,6 +16,7 @@ export const professorRoutes: Routes = [
       {path: ':entity', children:[
           {path: '', component: ProfessorFormComponent, resolve: {professor: FormResolver}},
           {path :'restricaoProfessor', children: [
+              // {path: '', pathMatch: 'full', },
               {path: 'new', component: RestricaoComponent},
               {path: 'log', component: LogComponent},
               {path: ':target', component: RestricaoComponent, resolve: {restricao: FormResolver}}

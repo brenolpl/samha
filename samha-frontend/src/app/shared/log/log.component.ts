@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {TableComponent} from '../table/table.component';
 import {DataService} from '../service/data.service';
 import {FormBuilder} from '@angular/forms';
@@ -17,6 +17,9 @@ import {usuarioColumns} from '../../meta-model/usuario';
 import {coordenadoriaLogColumns} from '../../meta-model/coordenadoria';
 import {eixoLogColumns} from '../../meta-model/eixo';
 import {matrizLogColumns} from '../../meta-model/matriz-curricular';
+import {alocacaoLogColumns} from "../../meta-model/alocacao";
+import {NotificationService} from "../service/notification.service";
+import {not} from "rxjs/internal-compatibility";
 
 @Component({
   selector: 'samha-log',
@@ -24,14 +27,16 @@ import {matrizLogColumns} from '../../meta-model/matriz-curricular';
   styleUrls: ['../table/table.component.css']
 })
 export class LogComponent extends TableComponent implements OnInit {
+  @Input() ativarToolbar = true;
 
   constructor(dataService: DataService,
               formBuilder: FormBuilder,
               router: Router,
               route: ActivatedRoute,
               dialog: MatDialog,
-              sanitizer: DomSanitizer) {
-    super(dataService, formBuilder, router, route, dialog, sanitizer);
+              sanitizer: DomSanitizer,
+              notification: NotificationService) {
+    super(dataService, formBuilder, router, route, dialog, sanitizer, notification);
   }
 
   ngOnInit(): void {
@@ -121,7 +126,13 @@ export class LogComponent extends TableComponent implements OnInit {
       case 'matrizCurricular':
         this.columns = matrizLogColumns;
         break;
+      case 'alocacao':
+        this.columns = alocacaoLogColumns;
+        break;
     }
   }
 
+  goBack() {
+    this.router.navigate(['../'], {relativeTo: this.route});
+  }
 }

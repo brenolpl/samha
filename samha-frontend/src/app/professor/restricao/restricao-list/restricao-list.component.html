@@ -6,11 +6,11 @@
 <div *ngIf="dataSource$ | async as dataSource; else loading">
   <mat-card class="mat-elevation-z8 m-auto mt-5 col-11 mb-5">
     <mat-card-title>
-      <mat-toolbar color="accent">Restrições</mat-toolbar>
+      <mat-toolbar class="toolbar-border"><span style="color: #4caf50;">Restrições</span></mat-toolbar>
     </mat-card-title>
 
     <mat-card-content>
-        <button mat-button class="p-2" (click)="goToNew()">
+        <button mat-button class="mt-1 mb-1 sub-toolbar-button" (click)="goToNew()">
           <mat-icon>add</mat-icon>
           Adicionar Restrição
         </button>

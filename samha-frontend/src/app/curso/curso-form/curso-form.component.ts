@@ -5,6 +5,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {first} from 'rxjs/operators';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatButton} from '@angular/material/button';
+import {NotificationService} from "../../shared/service/notification.service";
 
 @Component({
   selector: 'samha-curso-form',
@@ -19,7 +20,8 @@ export class CursoFormComponent implements OnInit {
   constructor(private dataService: DataService,
               private formBuilder: FormBuilder,
               private router: Router,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute,
+              private notification: NotificationService) {
   }
 
 
@@ -41,13 +43,22 @@ export class CursoFormComponent implements OnInit {
     if (!this.curso.id) {
       this.dataService.save('curso', this.curso).pipe(first()).subscribe(
         next => {
-          this.router.navigate(['../'], {relativeTo: this.route});
+          this.notification.success('Curso criado com sucesso!');
+        },
+        error => {
+          this.notification.error('Não foi possível criar o curso');
+          throw error;
         }
       );
     } else {
       this.dataService.update('curso', this.curso.id, this.curso).pipe(first()).subscribe(
         next => {
-          this.router.navigate(['../'], {relativeTo: this.route});
+          this.curso = next;
+          this.notification.success('Curso atualizado com sucesso!');
+        },
+        error => {
+          this.notification.error('Erro ao atualizar curso!');
+          throw error;
         }
       );
     }
@@ -76,6 +87,10 @@ export class CursoFormComponent implements OnInit {
 
   compareFunction(o1: string, o2: string) {
     return (o1 != null && o2 != null && o1.toUpperCase() == o2.toUpperCase());
+  }
+
+  goBack() {
+    this.router.navigate(['../'], {relativeTo: this.route});
   }
 }
 

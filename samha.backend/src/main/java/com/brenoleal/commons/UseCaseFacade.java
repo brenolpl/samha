@@ -1,6 +1,11 @@
 package com.brenoleal.commons;
 
+import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.access.AuthorizationServiceException;
+
 import javax.transaction.Transactional;
+import java.util.Set;
 
 public class UseCaseFacade {
 
@@ -30,10 +35,16 @@ public class UseCaseFacade {
     }
 
     private <T> T executeAndHandleExceptions(UseCase<T> useCase){
-        try{
+        try {
             return useCase.execute();
+        } catch (BusinessException | UnexpectedException | AuthorizationServiceException ex) {
+            throw new BusinessException(ex.getMessage(), ex);
+        } catch (ConstraintViolationException ex) {
+            throw new BusinessException(ex.getMessage(), ex);
+        } catch (DataIntegrityViolationException ex) {
+            throw new BusinessException(ex.getMessage(), ex);
         } catch (Throwable ex) {
-            throw new RuntimeException(ex.getMessage());
+            throw new UnexpectedException(ex.getMessage(), ex);
         }
     }
 

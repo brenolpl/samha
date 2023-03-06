@@ -1,13 +1,13 @@
 <mat-toolbar class="sub-toolbar">
-  <div class="d-flex justify-content-end w-100">
-    <button mat-button (click)="atualizarTurmasAtivas()" class="sub-toolbar-button"><mat-icon>update</mat-icon> Atualizar Turmas Ativas</button>
-    <button mat-button (click)="goToLog()" class="sub-toolbar-button"><mat-icon>info</mat-icon> Log de Alterações</button>
+  <div class="d-flex justify-content-end w-100 ">
+    <button mat-button (click)="atualizarTurmasAtivas()" class="sub-toolbar-button" style="margin-right: 10px;"><mat-icon>sync</mat-icon> Atualizar Turmas Ativas</button>
+    <button mat-button (click)="goToLog()" class="sub-toolbar-button"><mat-icon>history</mat-icon> Log de Alterações</button>
   </div>
 </mat-toolbar>
 
 <mat-card class="mb-5 margem">
 
-  <mat-toolbar color="accent" class="toolbar-border">Listagem de Turma</mat-toolbar>
+  <mat-toolbar class="toolbar-border"><span style="color: #4caf50;">Listagem de Turmas</span></mat-toolbar>
 
   <mat-card-content class="mt-2 mb-2">
     <mat-card-title>Filtro</mat-card-title>
@@ -38,10 +38,10 @@
                placeholder="Pesquisar" (change)="onSearchChange()" formControlName="search">
       </form>
     </div>
-    <button type="button" mat-button color="accent">
+    <button type="button" mat-button class="search-button">
       <i class="fas fa-search"></i>
     </button>
-    <button type="button" mat-button (click)="goToNew()">
+    <button type="button" class="sub-toolbar-button" mat-button (click)="goToNew()">
       <mat-icon>add</mat-icon>
     </button>
   </div>

@@ -1,6 +1,12 @@
+<mat-toolbar class="sub-toolbar">
+  <div class="d-flex justify-content-start w-100">
+    <button mat-button (click)="goBack()" class="sub-toolbar-button"><mat-icon>keyboard_arrow_left</mat-icon></button>
+  </div>
+</mat-toolbar>
+
 <mat-card class="mat-elevation-z8 m-auto mt-5 col-11">
   <mat-card-title>
-    <mat-toolbar color="accent">Cadastro de Turmas</mat-toolbar>
+    <mat-toolbar class="toolbar-border"><span style="color: #4caf50;">Cadastrar Turma</span></mat-toolbar>
   </mat-card-title>
 
   <mat-card-content class="w-100">
@@ -50,6 +56,6 @@
   </mat-card-content>
 
   <mat-card-actions class="d-flex justify-content-end">
-    <button mat-button (click)="salvar()" color="primary"><mat-icon>save</mat-icon> Salvar</button>
+    <button mat-button (click)="salvar()" class="sub-toolbar-button"><mat-icon>save</mat-icon> Salvar</button>
   </mat-card-actions>
 </mat-card>

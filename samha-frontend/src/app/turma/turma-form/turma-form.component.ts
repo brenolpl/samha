@@ -110,7 +110,7 @@ export class TurmaFormComponent implements OnInit {
     }
   }
 
-  private goBack() {
+  public goBack() {
     this.router.navigate(['../'], {relativeTo: this.route});
   }
 }

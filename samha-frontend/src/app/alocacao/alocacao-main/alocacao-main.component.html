@@ -1,6 +1,6 @@
 <mat-toolbar class="sub-toolbar">
   <div class="d-flex justify-content-end w-100">
-    <button mat-button (click)="goToLog()" class="sub-toolbar-button"><mat-icon>info</mat-icon> Log de Alterações</button>
+    <button mat-button (click)="goToLog()" class="sub-toolbar-button"><mat-icon>history</mat-icon> Log de Alterações</button>
   </div>
 </mat-toolbar>
 
@@ -95,7 +95,7 @@
 
         <mat-header-row *matHeaderRowDef="disciplinaDisplayedColumns"></mat-header-row>
         <mat-row *matRowDef="let row; columns: disciplinaDisplayedColumns"
-                 [ngClass]="{'highlight': selectedProfessorRowIndex == row.id}"
+                 [ngClass]="{'highlight': highlightProfessorRow(row)}"
                  (click)="highlightProfessor(row)"></mat-row>
       </table>
       <hr class="mt-1 fim-tabela">
@@ -123,7 +123,7 @@
         <mat-icon>query_builder</mat-icon> Carga Horária
       </button>
       <span class="m-1"></span>
-      <button mat-button type="submit" color="primary" class="new-button-border" (click)="new()">
+      <button mat-button type="submit" color="primary" class="sub-toolbar-button" (click)="new()">
         <mat-icon>add</mat-icon>
       </button>
       <span class="m-1"></span>
@@ -144,8 +144,8 @@
 
         <mat-header-row *matHeaderRowDef="alocacaoDisplayedColumns"></mat-header-row>
         <mat-row *matRowDef="let row; columns: alocacaoDisplayedColumns"
-                 [ngClass]="{'highlight': selectedDisciplinaRowIndex == row.id}"
-                 (click)="highlightDisciplina(row)"></mat-row>
+                 [ngClass]="{'highlight': selectedAlocacaoRowIndex == row.id}"
+                 (click)="highlightAlocacao(row)"></mat-row>
       </table>
       <hr class="mt-1 fim-tabela">
     </div>

@@ -1,6 +1,6 @@
-<mat-card class="mb-5 margem">
 
-  <mat-toolbar color="accent" class="toolbar-border">Listagem de {{toolbarHeader}}</mat-toolbar>
+<mat-card class="mb-5 margem">
+  <mat-toolbar class="toolbar-border"><span style="color: #4caf50;">Listagem de {{toolbarHeader}}</span></mat-toolbar>
   <div class="input-group mt-3 mb-3">
     <div class="form-outline">
       <form [formGroup]="group">
@@ -8,11 +8,11 @@
                placeholder="Pesquisar" (change)="onSearchChange()" formControlName="search">
       </form>
     </div>
-    <button type="button" mat-button color="accent">
+    <button type="button" class="search-button" mat-button>
       <i class="fas fa-search"></i>
     </button>
     <ng-container *ngIf="enableNew()">
-    <button type="button" mat-button (click)="goToNew()">
+    <button type="button" class="sub-toolbar-button" mat-button (click)="goToNew()">
       <mat-icon>add</mat-icon>
     </button>
     </ng-container>

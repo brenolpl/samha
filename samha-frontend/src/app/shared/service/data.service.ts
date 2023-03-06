@@ -3,9 +3,9 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {LocalStorageService} from './local-storage.service';
 import {QueryMirror} from '../query-mirror';
-import {Page, PagedList} from '../paged-list';
-import {catchError, tap} from 'rxjs/operators';
+import {PagedList} from '../paged-list';
 import {APIPREFIX} from '../../app.component';
+import {NotificationService} from "./notification.service";
 
 @Injectable({providedIn: 'root'})
 export class DataService {
@@ -13,10 +13,11 @@ export class DataService {
   showMenu: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   constructor(private http: HttpClient,
-              private localStorage: LocalStorageService) {
+              private localStorage: LocalStorageService,
+              private notification: NotificationService) {
   }
 
-  public query(query: QueryMirror): Observable<PagedList> {
+  public query(query: QueryMirror): Observable<PagedList | any> {
     return this.http.post<PagedList>(APIPREFIX + query.entityPath + '/query', query, this.getOptions());
   }
 
