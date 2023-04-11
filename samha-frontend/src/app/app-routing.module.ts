@@ -18,6 +18,7 @@ const routes: Routes = [
   { path: 'disciplina', canActivate: [AuthGuard], loadChildren: () => import('./disciplina/disciplina.module').then(m => m.DisciplinaModule)},
   { path: 'matrizCurricular', canActivate: [AuthGuard], loadChildren: () => import('./matriz-curricular/matriz.module').then(m => m.MatrizModule)},
   { path: 'turma', canActivate: [AuthGuard], loadChildren: () => import('./turma/turma.module').then(m => m.TurmaModule)},
+  { path: 'oferta', canActivate: [AuthGuard], loadChildren: () => import('./oferta/oferta.module').then(m => m.OfertaModule)},
   { path: '**', redirectTo: '/home'}
 ];
 

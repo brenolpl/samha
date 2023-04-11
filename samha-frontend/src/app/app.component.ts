@@ -83,7 +83,8 @@ export class AppComponent implements OnInit, OnDestroy{
         this.router.navigate(['curso']);
         break;
       case MenuEnum.OFERTAS:
-        this.columns = [];
+        this.opened = false;
+        this.router.navigate(['oferta']);
         break;
       case MenuEnum.RELATORIOS:
         this.columns = [];

@@ -20,6 +20,7 @@ import {matrizLogColumns} from '../../meta-model/matriz-curricular';
 import {alocacaoLogColumns} from "../../meta-model/alocacao";
 import {NotificationService} from "../service/notification.service";
 import {not} from "rxjs/internal-compatibility";
+import {ofertaLogColumns} from "../../meta-model/oferta";
 
 @Component({
   selector: 'samha-log',
@@ -106,7 +107,7 @@ export class LogComponent extends TableComponent implements OnInit {
         this.columns = cursoLogColumns;
         break;
       case 'oferta':
-        this.columns = [];
+        this.columns = ofertaLogColumns;
         break;
       case 'MenuEnum.RELATORIOS':
         this.columns = [];

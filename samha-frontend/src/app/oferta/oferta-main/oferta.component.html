@@ -1,0 +1,164 @@
+<mat-toolbar class="sub-toolbar">
+  <div class="d-flex justify-content-end w-100">
+    <button mat-button (click)="goToLog()" class="sub-toolbar-button">
+      <mat-icon>history</mat-icon>
+      Log de Alterações
+    </button>
+  </div>
+</mat-toolbar>
+
+<mat-card class="margem mb-5 col-md-12 col-sm-6 d-flex base-block" style="overflow: hidden;">
+
+  <mat-card-content class="d-inline-block w-25">
+    <mat-card-subtitle>Alocações</mat-card-subtitle>
+    <form [formGroup]="formGroup">
+      <samha-autocomplete-field
+        [resource]="'curso'"
+        [label]="'Curso'"
+        [control]="cursoControl"
+        (onChange)="onCursoChange($event)"
+        (loaded)="onCursoLoaded($event)"></samha-autocomplete-field>
+
+      <mat-form-field appearance="outline" class="d-block">
+        <mat-label>Turno</mat-label>
+        <mat-select formControlName="turno" [compareWith]="compareFunction" (selectionChange)="onTurnoChange()">
+          <mat-option [value]="'Matutino'">Matutino</mat-option>
+          <mat-option [value]="'Vespertino'">Vespertino</mat-option>
+          <mat-option [value]="'Noturno'">Noturno</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="d-block" appearance="outline">
+        <mat-label>Turma</mat-label>
+        <input type="text" matInput [formControl]="turmaControl" [matAutocomplete]="auto">
+        <mat-autocomplete
+          autoActiveFirstOption #auto="matAutocomplete"
+          [displayWith]="displayFn">
+          <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+            {{option.nome}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="d-block">
+        <mat-label>Ano/Semestre</mat-label>
+        <input matInput type="number" formControlName="ano" (change)="onAnoChange()">
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="d-block">
+        <input matInput type="number" [min]="1" [max]="2" formControlName="semestre" (change)="onAnoChange()">
+      </mat-form-field>
+    </form>
+
+    <div cdkDropList class="border hide-scrollbar" id="primary-list" style="max-height: 480px; overflow: scroll"
+         (cdkDropListDropped)="drop($event)"
+         #primaryList="cdkDropList"
+         [cdkDropListData]="movies"
+         cdkDropListSortingDisabled
+         [cdkDropListConnectedTo]="[segundaList, tercaList, quartaList, quintaList, sextaList]"
+         [cdkDropListEnterPredicate]="noReturnPredicate"
+    >
+      <div cdkDrag class="box" *ngFor="let movie of movies">{{movie}}</div>
+    </div>
+
+  </mat-card-content>
+
+  <div class="divider d-inline-block"></div>
+
+  <mat-card-content class="d-block" style="width: 50%; min-width: 30%;">
+    <mat-card-subtitle>Grade de Horários</mat-card-subtitle>
+    <div class="d-flex flex-row">
+      <p class="m-auto" style="width: 70px; min-width: 70px;"></p>
+      <div
+        cdkDropList
+        cdkDropListOrientation="horizontal"
+        class="disabled-list"
+        cdkDropListDisabled>
+        <div class="disabled-box" *ngFor="let item of horarios" cdkDrag>{{item}}</div>
+      </div>
+    </div>
+
+    <div class="d-flex flex-row">
+      <p class="m-auto" style="width: 70px; min-width: 70px;">Segunda</p>
+      <div
+        cdkDropList
+        #segundaList="cdkDropList"
+        [cdkDropListData]="segundaArray"
+        [cdkDropListConnectedTo]="[primaryList, tercaList, quartaList, quintaList, sextaList]"
+        cdkDropListOrientation="horizontal"
+        class="horizontal-list"
+        (cdkDropListDropped)="drop($event)">
+        <div class="horizontal-box" *ngFor="let item of segundaArray" cdkDrag>{{item}}</div>
+      </div>
+    </div>
+
+    <div class="d-flex flex-row">
+      <p class="m-auto" style="width: 70px; min-width: 70px;">Terça</p>
+      <div
+        cdkDropList
+        #tercaList="cdkDropList"
+        [cdkDropListData]="tercaArray"
+        [cdkDropListConnectedTo]="[primaryList, segundaList, quartaList, quintaList, sextaList]"
+        cdkDropListOrientation="horizontal"
+        class="horizontal-list"
+        (cdkDropListDropped)="drop($event)">
+        <div class="horizontal-box" *ngFor="let item of tercaArray" cdkDrag>{{item}}</div>
+      </div>
+    </div>
+
+    <div class="d-flex flex-row">
+      <p class="m-auto" style="width: 70px; min-width: 70px;">Quarta</p>
+      <div
+        cdkDropList
+        #quartaList="cdkDropList"
+        [cdkDropListData]="quartaArray"
+        [cdkDropListConnectedTo]="[primaryList, segundaList, tercaList, quintaList, sextaList]"
+        cdkDropListOrientation="horizontal"
+        class="horizontal-list"
+        (cdkDropListDropped)="drop($event)">
+        <div class="horizontal-box" *ngFor="let item of quartaArray" cdkDrag>{{item}}</div>
+      </div>
+    </div>
+
+    <div class="d-flex flex-row">
+      <p class="m-auto" style="width: 70px; min-width: 70px;">Quinta</p>
+      <div
+        cdkDropList
+        #quintaList="cdkDropList"
+        [cdkDropListData]="quintaArray"
+        [cdkDropListConnectedTo]="[primaryList, segundaList, tercaList, quartaList, sextaList]"
+        cdkDropListOrientation="horizontal"
+        class="horizontal-list"
+        (cdkDropListDropped)="drop($event)">
+        <div class="horizontal-box" *ngFor="let item of quintaArray" cdkDrag>{{item}}</div>
+      </div>
+    </div>
+
+    <div class="d-flex flex-row">
+      <p class="m-auto" style="width: 70px; min-width: 70px;">Sexta</p>
+      <div
+        cdkDropList
+        #sextaList="cdkDropList"
+        [cdkDropListData]="sextaArray"
+        [cdkDropListConnectedTo]="[primaryList, segundaList, tercaList, quartaList, quintaList]"
+        cdkDropListOrientation="horizontal"
+        class="horizontal-list"
+        (cdkDropListDropped)="drop($event)">
+        <div class="horizontal-box" *ngFor="let item of sextaArray" cdkDrag>{{item}}</div>
+      </div>
+    </div>
+  </mat-card-content>
+
+  <div class="divider d-inline-block"></div>
+
+  <mat-card-content class="d-block" style="width: 20%">
+    <mat-card-subtitle>Notificações</mat-card-subtitle>
+  </mat-card-content>
+
+</mat-card>
+
+
+<ng-template #loading>
+  <div class="loading-spinner">
+    <mat-spinner></mat-spinner>
+  </div>
+</ng-template>
