@@ -30,6 +30,37 @@ export class OfertaComponent implements OnInit {
   public alocacao$: Observable<any>;
   public alocacaoColumns = alocacaoColumns;
   public alocacaoDisplayedColumns = alocacaoColumns.filter(c => c.visible).map(c => c.columnDef);
+  public qtPeriodos = 1;
+  public alocacoes = [];
+  public segundaArray = ['', '', '', '', '', ''];
+  public tercaArray = ['', '', '', '', '', ''];
+  public quartaArray = ['', '', '', '', '', ''];
+  public quintaArray = ['', '', '', '', '', ''];
+  public sextaArray = ['', '', '', '', '', ''];
+  public horarioNoturno = [
+    '18:50 a 19:35',
+    '19:35 a 20:20',
+    '20:30 a 21:15',
+    '21:15 a 22:00',
+    '-',
+    '-'
+  ];
+  public horarioVespertino = [
+    '12:50 a 13:40',
+    '13:45 a 14:35',
+    '14:40 a 15:30',
+    '15:50 a 16:40',
+    '16:45 a 17:35',
+    '17:40 a 18:30'
+  ];
+  public horarioMatutino = [
+    '07:00 a 07:50',
+    '07:55 a 08:45',
+    '08:50 a 09:40',
+    '10:00 a 10:50',
+    '10:55 a 11:45',
+    '11:50 a 12:40'
+  ]
   private list: any[];
 
 
@@ -43,7 +74,8 @@ export class OfertaComponent implements OnInit {
     this.formGroup = formBuilder.group({
       turno: ['Matutino'],
       ano: [new Date().getUTCFullYear()],
-      semestre: [1]
+      semestre: [1],
+      periodo: [1]
     });
   }
 
@@ -55,11 +87,13 @@ export class OfertaComponent implements OnInit {
   }
 
   onCursoChange(_) {
+    this.qtPeriodos = this.cursoControl.value.qtPeriodos;
     this.loadTurmas();
   }
 
   onCursoLoaded($event: any[]) {
     this.cursoControl.setValue($event[0]);
+    this.qtPeriodos = this.cursoControl.value.qtPeriodos;
     this.loadTurmas();
   }
 
@@ -75,18 +109,21 @@ export class OfertaComponent implements OnInit {
   private loadTurmas() {
     this.dataService.query(
       new QueryMirror('turma')
-        .selectList(['id', 'nome'])
+        .selectList(['id', 'nome', 'matriz.id'])
         .where({
             and: {
-              'turno': {equals: (this.formGroup.get('turno').value as string).toUpperCase()},
-              'matriz.curso': {equals: this.cursoControl.value.id}
+              'matriz.curso.id': {equals: this.cursoControl.value.id},
+              'ativa': {equals: true}
             }
           }
         )
     ).pipe(first()).subscribe(
       data => {
         this.list = data.listMap;
-        if(this.list.length > 0) this.turmaControl.setValue(this.list[0]);
+        if(this.list.length > 0 && !this.turmaControl.value) {
+          this.turmaControl.setValue(this.list[0]);
+          this.onTurmaChange();
+        }
         this.filteredOptions = this.turmaControl.valueChanges.pipe(
           startWith(''),
           map(value => (typeof value === 'string' ? value : value?.name)),
@@ -101,34 +138,23 @@ export class OfertaComponent implements OnInit {
   }
 
   onAnoChange() {
-
+    this.dataService.query(new QueryMirror('alocacao')
+      .selectList(['id', 'disciplina.sigla', 'professor1.nome', 'professor2.nome', 'ano', 'semestre'])
+      .where({
+        and: {
+          'disciplina.periodo': {equals: this.formGroup.get('periodo').value},
+          'ano': {equals: this.formGroup.get('ano').value},
+          'semestre': {equals: this.formGroup.get('semestre').value},
+          'disciplina.matriz.id': {equals: this.turmaControl.value.matriz.id}
+        }
+      })
+    ).pipe(first())
+      .subscribe(
+        data => {
+          this.alocacoes = data.listMap
+        }
+      )
   }
-
-  segundaArray = ['', '', '', '', '', ''];
-  tercaArray = ['', '', '', '', '', ''];
-  quartaArray = ['', '', '', '', '', ''];
-  quintaArray = ['', '', '', '', '', ''];
-  sextaArray = ['', '', '', '', '', ''];
-
-  movies = [
-    'Episode I - The Phantom Menace',
-    'Episode II - Attack of the Clones',
-    'Episode III - Revenge of the Sith',
-    'Episode IV - A New Hope',
-    'Episode V - The Empire Strikes Back',
-    'Episode VI - Return of the Jedi',
-    'Episode VII - The Force Awakens',
-    'Episode VIII - The Last Jedi',
-  ];
-
-  horarios = [
-    '18:50 a 19:35',
-    '19:35 a 20:20',
-    '20:30 a 21:15',
-    '21:15 a 22:00',
-    '-',
-    '-'
-  ];
 
   noReturnPredicate() {
     return false;
@@ -164,5 +190,46 @@ export class OfertaComponent implements OnInit {
     if(itemFromTargetArray !== undefined) {
       targetArray[targetIndex] = itemFromCurrentArray;
     }
+  }
+
+  onTurmaChange() {
+    this.dataService.get('turma/getPeriodoAtual', this.turmaControl.value.id)
+      .pipe(first())
+      .subscribe(data => {
+        this.formGroup.get('periodo').setValue(data);
+        this.onAnoChange();
+      })
+  }
+
+  getNomeEncurtadoProfessor(nome: string) {
+    if(nome != null) {
+      let nomes = nome.split(' ');
+      let siglas = nomes.map(n => n.substring(0, 1)).splice(1).join('');
+      let nomeEncutado = nomes[0] + ' ' + siglas;
+      return nomeEncutado;
+    }
+
+    return '';
+  }
+
+  getListValue(alocacao: any) {
+    if(typeof alocacao === 'string') return alocacao
+    else return alocacao.disciplina.sigla + ' - ' + this.getNomeEncurtadoProfessor(alocacao.professor1.nome) + ' ' + this.getNomeEncurtadoProfessor(alocacao.professor2?.nome)
+  }
+
+  getHorario() {
+    let turno = this.formGroup.get('turno').value.toUpperCase();
+    if(turno == 'MATUTINO') return this.horarioMatutino;
+    else if (turno == 'VESPERTINO') return this.horarioVespertino;
+    else return this.horarioNoturno;
+  }
+
+  delete(event: CdkDragDrop<any[], any>) {
+    this.tradeArrayItem(
+      event.previousContainer.data,
+      [''],
+      event.previousIndex,
+      0
+    )
   }
 }
