@@ -5,7 +5,7 @@ import {SharedModule} from "../shared/shared.module";
 import {OfertaRoutingModule} from "./oferta-routing.module";
 import {OfertaComponent} from "./oferta-main/oferta.component";
 import {DragDropModule} from "@angular/cdk/drag-drop";
-
+import {DxDraggableModule, DxSchedulerModule, DxScrollViewModule} from "devextreme-angular";
 @NgModule({
   declarations: [
     OfertaComponent
@@ -15,7 +15,10 @@ import {DragDropModule} from "@angular/cdk/drag-drop";
     MaterialModule,
     CommonModule,
     SharedModule,
-    DragDropModule
+    DragDropModule,
+    DxSchedulerModule,
+    DxScrollViewModule,
+    DxDraggableModule
   ]
 })
 export class OfertaModule {}

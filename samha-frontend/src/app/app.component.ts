@@ -9,6 +9,7 @@ import {Router} from '@angular/router';
 import {AuthService} from './shared/service/auth.service';
 import {catchError, map, tap} from 'rxjs/operators';
 import {ToastContainerDirective, ToastrService} from "ngx-toastr";
+import { locale, loadMessages } from "devextreme/localization";
 
 @Component({
   selector: 'samha-root',
@@ -27,7 +28,7 @@ export class AppComponent implements OnInit, OnDestroy{
               private router: Router,
               private authService: AuthService,
               private toastrService: ToastrService) {
-
+    locale(navigator.language);
   }
 
   ngOnInit(): void {
