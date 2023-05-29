@@ -6,9 +6,11 @@ import {OfertaRoutingModule} from "./oferta-routing.module";
 import {OfertaComponent} from "./oferta-main/oferta.component";
 import {DragDropModule} from "@angular/cdk/drag-drop";
 import {DxDraggableModule, DxSchedulerModule, DxScrollViewModule} from "devextreme-angular";
+import { OfertaGridComponent } from './oferta-grid/oferta-grid.component';
 @NgModule({
   declarations: [
-    OfertaComponent
+    OfertaComponent,
+    OfertaGridComponent
   ],
   imports: [
     OfertaRoutingModule,

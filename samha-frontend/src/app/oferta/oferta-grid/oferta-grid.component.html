@@ -1,0 +1,24 @@
+<table class="w-100">
+  <thead>
+    <tr>
+      <td class="cell"></td>
+      <td class="cell" *ngFor="let horario of getHorarios()" style="text-align: center">{{horario}}</td>
+    </tr>
+  </thead>
+  <tr *ngFor="let row of matriz; let i = index">
+    <td class="cell">{{getDia(i)}}</td>
+    <td *ngFor="let item of row; let j = index" tabindex="0" class="cell cell-border"
+        [class.highlighted]="highlightedRowIndex === i && highlightedColIndex === j"
+        (dragover)="onDragOver($event, i, j)"
+        (dragleave)="onDragLeave($event, i, j)"
+        (drop)="onItemDrop($event, i, j)"
+        (click)="onClick($event, i, j)"
+        (keydown)="onKeyDown($event, i, j)">
+      <div class="horizontal-box" draggable="true"
+           (dragstart)="onDragStart($event, i, j)"
+           (dragend)="onDragEnd($event)">
+        <p style="text-overflow: ellipsis">{{(item?.alocacao?.disciplina?.sigla || '') + ' - ' + getNomeEncurtadoProfessor(item?.alocacao?.professor1?.nome) + ' ' + getNomeEncurtadoProfessor(item?.alocacao?.professor2?.nome)}}</p>
+      </div>
+    </td>
+  </tr>
+</table>

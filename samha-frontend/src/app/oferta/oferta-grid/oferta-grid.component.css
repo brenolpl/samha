@@ -1,0 +1,46 @@
+.horizontal-box {
+  padding: 20px 10px;
+  color: rgba(0, 0, 0, 0.87);
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  cursor: move;
+  background: white;
+  font-size: 14px;
+  height: 100%;
+  transition: transform 0.3s ease;
+}
+
+.cell {
+  width: 80px;
+  height: 74px;
+}
+
+.cell-border {
+  border: 1px solid #4caf50;
+}
+
+.dragging {
+  transform: scale(0.98);
+}
+
+.horizontal-box:hover {
+  cursor: move;
+  background-color: rgba(26,125,233, 0.1);
+}
+
+.horizontal-box::placeholder {
+  background-color: red;
+}
+
+.horizontal-box.dragging {
+  box-shadow: rgb(26,125,233);
+  opacity: 1;
+  border: 1px solid #ddd;
+}
+
+.highlighted {
+  background-color: rgb(26,125,233);
+  box-sizing: border-box;
+  box-shadow: rgb(26,125,233);
+}
