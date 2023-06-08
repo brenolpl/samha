@@ -1,10 +1,10 @@
-import {Component, EventEmitter, OnInit} from '@angular/core';
+import {Component, ElementRef, EventEmitter, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {DataService} from "../../shared/service/data.service";
 import {NotificationService} from "../../shared/service/notification.service";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {Observable} from "rxjs";
-import {first, map, startWith} from "rxjs/operators";
+import {Observable, range} from "rxjs";
+import {first, map, startWith, toArray} from "rxjs/operators";
 import {QueryMirror} from "../../shared/query-mirror";
 import {alocacaoColumns} from "../../meta-model/alocacao";
 import {
@@ -15,6 +15,10 @@ import {
   CdkDrag,
   CdkDropList, CdkDragEnter
 } from "@angular/cdk/drag-drop";
+import {ConfirmDialogComponent} from "../../shared/confirm-dialog/confirm-dialog.component";
+import {MatDialog} from "@angular/material/dialog";
+import {AlteracaoDialogComponent} from "../../shared/alteracao-dialog/alteracao-dialog.component";
+import {MatAutocompleteActivatedEvent} from "@angular/material/autocomplete";
 
 
 @Component({
@@ -23,6 +27,9 @@ import {
   styleUrls: ['./oferta.component.css', '../oferta-grid/oferta-grid.component.css']
 })
 export class OfertaComponent implements OnInit {
+  @ViewChild('anoInput', {static: false}) anoInput: ElementRef;
+  @ViewChild('semestreInput', {static: false}) semestreInput: ElementRef;
+  @ViewChild('periodoInput', {static: false}) periodoInput: ElementRef;
   public cursoControl = new FormControl();
   public turmaControl = new FormControl();
   public formGroup: FormGroup;
@@ -31,25 +38,23 @@ export class OfertaComponent implements OnInit {
   public alocacaoColumns = alocacaoColumns;
   public alocacaoDisplayedColumns = alocacaoColumns.filter(c => c.visible).map(c => c.columnDef);
   public qtPeriodos = 1;
+  public tempoMaximo = '11';
+  public intervaloMinimo = '11';
+  public ofertaChanged: boolean = false;
   public alocacoes = [];
-  public segundaArray = ['', '', '', '', '', ''];
-  public tercaArray = ['', '', '', '', '', ''];
-  public quartaArray = ['', '', '', '', '', ''];
-  public quintaArray = ['', '', '', '', '', ''];
-  public sextaArray = ['', '', '', '', '', ''];
-  public matriz = [
-    this.segundaArray,
-    this.tercaArray,
-    this.quartaArray,
-    this.quintaArray,
-    this.sextaArray
-  ]
+  public alocacaoSelecionada: any;
+  public matriz: any[][] = [[]];
+  public oferta: any;
   private list: any[];
   public novaAula: any;
   private aulasMatutinas: any[] = [];
   private aulasVespertinas: any[] = [];
   private aulasNoturnas: any[] = [];
-  private oferta: any;
+  private turmaCurrentValue: any;
+  private cursoCurrentValue: any;
+  private anoCurrentValue: any;
+  private semestreCurrentValue: any;
+  private periodoCurrentValue: any;
 
 
   constructor(
@@ -57,7 +62,8 @@ export class OfertaComponent implements OnInit {
     private router: Router,
     private dataService: DataService,
     private notification: NotificationService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private dialog: MatDialog
   ) {
     this.formGroup = formBuilder.group({
       turno: ['Matutino'],
@@ -65,6 +71,8 @@ export class OfertaComponent implements OnInit {
       semestre: [1],
       periodo: [1]
     });
+    this.anoCurrentValue = this.formGroup.get('ano').value;
+    this.semestreCurrentValue = 1;
   }
 
   ngOnInit(): void {
@@ -95,6 +103,32 @@ export class OfertaComponent implements OnInit {
 
 
   private loadTurmas() {
+    if (this.ofertaChanged){
+      const dialogRef = this.openDialog();
+      dialogRef.afterClosed().pipe(first()).subscribe(
+        (result: string) => {
+          if(result === 'salvar') {
+            //todo: implement
+          } else if (result === 'descartar'){
+            this.executeTurmaQuery();
+          } else {
+            this.cursoControl.setValue(this.cursoCurrentValue);
+            this.turmaControl.setValue(this.turmaCurrentValue);
+          }
+        }
+      )
+    } else {
+      this.executeTurmaQuery();
+    }
+
+  }
+
+  onTurnoChange() {
+    this.buildMatriz();
+  }
+
+  executeTurmaQuery() {
+    this.ofertaChanged = false;
     this.dataService.query(
       new QueryMirror('turma')
         .selectList(['id', 'nome', 'matriz.id'])
@@ -123,13 +157,31 @@ export class OfertaComponent implements OnInit {
     )
   }
 
-  onTurnoChange() {
-    this.loadTurmas();
+  onAnoChange(value: any) {
+    if(this.ofertaChanged) {
+      const dialogRef = this.openDialog();
+      dialogRef.afterClosed().pipe(first()).subscribe(
+        (result: string) => {
+          if(result === 'salvar') {
+            //todo: implement
+          } else if(result === 'descartar') {
+            this.anoCurrentValue = value;
+            this.executeAnoQuery();
+          } else {
+            this.formGroup.get('ano').setValue(this.anoCurrentValue);
+          }
+        }
+      )
+    } else {
+      this.anoCurrentValue = value;
+      this.executeAnoQuery();
+    }
   }
 
-  onAnoChange() {
+  private executeAnoQuery() {
+    this.ofertaChanged = false;
     this.dataService.query(new QueryMirror('alocacao')
-      .selectList(['id', 'disciplina.sigla', 'professor1.nome', 'professor2.nome', 'ano', 'semestre'])
+      .selectList(['id', 'disciplina.sigla', 'professor1.nome', 'professor1.id', 'professor2.nome', 'professor2.id', 'ano', 'semestre'])
       .where({
         and: {
           'disciplina.periodo': {equals: this.formGroup.get('periodo').value},
@@ -141,51 +193,82 @@ export class OfertaComponent implements OnInit {
     ).pipe(first())
       .subscribe(
         data => {
-          this.alocacoes = data.listMap
-          this.dataService.query(new QueryMirror('oferta')
-            .selectList(['id', 'ano', 'semestre', 'tempoMaximoTrabalho', 'intervaloMinimo', 'turma.id'])
-            .where({
-              and: {
-                'ano': {equals: this.formGroup.get('ano').value},
-                'semestre': {equals: this.formGroup.get('semestre').value},
-                'turma.id': {equals: this.turmaControl.value.id},
-                'tempoMaximoTrabalho': {equals: 11},
-                'intervaloMinimo': {equals: 11}
-              }
-            })
-          ).pipe(first()).subscribe(
-            next => {
-              if (next.listMap.length > 0) {
-                this.oferta = next.listMap[0];
-                this.dataService.query(new QueryMirror('aula')
-                  .selectList(['id', 'numero', 'dia', 'turno', 'alocacao.id', 'oferta.id', 'alocacao.disciplina.sigla', 'alocacao.professor1.nome', 'alocacao.professor2.nome'])
-                  .where({
-                    and: {
-                      'oferta.id': {equals: next.listMap[0].id}
-                    }
-                  })).pipe(first()).subscribe(
-                  next => {
-                    let list = next.listMap as any[];
-                    this.aulasMatutinas = list.filter(a => a.numero <= 5);
-                    this.aulasVespertinas = list.filter(a => a.numero > 5 && a.numero <= 11);
-                    this.aulasNoturnas = list.filter(a => a.numero > 11);
-                    this.buildMatriz();
-                  }
-                )
-              }
-            }
-          )
+          this.alocacoes = data.listMap;
+          this.executeOfertaQuery();
         }
       );
   }
 
+
+  private executeOfertaQuery() {
+    this.dataService.query(new QueryMirror('oferta')
+      .selectList(['id', 'ano', 'semestre', 'tempoMaximoTrabalho', 'intervaloMinimo', 'turma.id'])
+      .where({
+        and: {
+          'ano': {equals: this.formGroup.get('ano').value},
+          'semestre': {equals: this.formGroup.get('semestre').value},
+          'turma.id': {equals: this.turmaControl.value.id},
+          'tempoMaximoTrabalho': {equals: 11},
+          'intervaloMinimo': {equals: 11}
+        }
+      })
+    ).pipe(first()).subscribe(
+      next => {
+        if (next.listMap.length > 0) {
+          this.oferta = next.listMap[0];
+          this.dataService.query(new QueryMirror('aula')
+            .selectList(['id', 'numero', 'dia', 'turno', 'oferta.id', 'alocacao.id', 'alocacao.disciplina.sigla', 'alocacao.professor1', 'alocacao.professor2'])
+            .where({
+              and: {
+                'oferta.id': {equals: next.listMap[0].id}
+              }
+            })).pipe(first()).subscribe(
+            next => {
+              let list = next.listMap as any[];
+              this.aulasMatutinas = list.filter(a => a.numero <= 5);
+              this.aulasVespertinas = list.filter(a => a.numero > 5 && a.numero <= 11);
+              this.aulasNoturnas = list.filter(a => a.numero > 11);
+              this.buildMatriz();
+            }
+          )
+        } else {
+          this.aulasVespertinas = [];
+          this.aulasMatutinas = [];
+          this.aulasNoturnas = [];
+          this.buildMatriz();
+        }
+      }
+    )
+  }
+
   onTurmaChange() {
+    if (this.ofertaChanged) {
+      const dialogRef = this.openDialog();
+      dialogRef.afterClosed().pipe(first()).subscribe(
+        (result: string) => {
+          if(result === 'salvar') {
+            //todo: implement
+          } else if(result === 'descartar') {
+            this.executePeriodoAtualQuery();
+          } else {
+            this.turmaControl.setValue(this.turmaCurrentValue);
+          }
+        }
+      )
+    } else {
+      this.executePeriodoAtualQuery();
+    }
+  }
+
+  private executePeriodoAtualQuery() {
+    this.ofertaChanged = false;
     this.dataService.get('turma/getPeriodoAtual', this.turmaControl.value.id)
       .pipe(first())
       .subscribe(data => {
         this.formGroup.get('periodo').setValue(data);
-        this.onAnoChange();
-      })
+        this.periodoCurrentValue = data;
+        this.onAnoChange(this.anoCurrentValue);
+      });
   }
 
   getNomeEncurtadoProfessor(nome: string) {
@@ -197,11 +280,6 @@ export class OfertaComponent implements OnInit {
     }
 
     return '';
-  }
-  onDragStart(event: DragEvent, rowIndex: number, colIndex: number) {
-    const target = event.target as HTMLElement;
-    target.classList.add('dragging');
-    event.dataTransfer?.setData('text/plain', JSON.stringify({ rowIndex, colIndex }));
   }
 
   onDragEnd(event: DragEvent) {
@@ -225,34 +303,43 @@ export class OfertaComponent implements OnInit {
 
   private buildMatriz() {
     this.matriz = [[]];
-    //preencho a matriz com elementos vazios, para não perder os elementos da tabela de arrasta e solta
-    for (let i = 0; i < 5; i++) {
-      this.matriz[i] = [];
-      for (let j = 0; j < 6; j++) {
-        this.matriz[i][j] = '';
+    const turno = (this.formGroup.get('turno').value as string).toUpperCase();
+
+    const matriz$: Observable<any[][]> = range(0, 5).pipe(
+      map(() => Array.from({ length: 6 }, () => '')),
+      toArray()
+    );
+
+    matriz$.subscribe(m => {
+      this.matriz = m;
+
+      switch (turno) {
+        case 'MATUTINO':
+          this.aulasMatutinas.forEach(aula => this.matriz[aula.dia][aula.numero] = aula);
+          break;
+        case 'VESPERTINO':
+          this.aulasVespertinas.forEach(aula => this.matriz[aula.dia][aula.numero % 6] = aula);
+          break;
+        default:
+          this.aulasNoturnas.forEach(aula => this.matriz[aula.dia][aula.numero % 6] = aula);
+          break;
       }
-    }
-    if((this.formGroup.get('turno').value as string).toUpperCase() == 'MATUTINO') {
-      this.aulasMatutinas.forEach(aula => this.matriz[aula.dia][aula.numero] = aula);
-    } else if ((this.formGroup.get('turno').value as string).toUpperCase() == 'VESPERTINO'){
-      this.aulasVespertinas.forEach(aula => this.matriz[aula.dia][aula.numero % 6] = aula);
-    } else {
-      this.aulasNoturnas.forEach(aula => this.matriz[aula.dia][aula.numero % 6] = aula);
-    }
+    });
+
     return this.matriz;
   }
 
   onAulaChanged(event: any) {
-    console.log(event);
+    this.ofertaChanged = true;
     switch (event.turno){
       case 0:
         this.aulasMatutinas.push(event);
         break;
       case 6:
-        this.aulasVespertinas[event.numero % 6] = event;
+        this.aulasVespertinas.push(event);
         break;
       case 12:
-        this.aulasNoturnas[event.numero % 6] = event;
+        this.aulasNoturnas.push(event);
         break;
     }
     this.buildMatriz();
@@ -275,4 +362,67 @@ export class OfertaComponent implements OnInit {
     if(event.currItem.item !== undefined && !(event.currItem.item instanceof String)) this.onAulaChanged(event.currItem)
     else this.matriz[event.currItem.rowIndex][event.currItem.colIndex] = event.item;
   }
+
+  onAulaDeleted(event: any) {
+    this.ofertaChanged = true;
+    if(event.numero < 6) {
+      this.aulasMatutinas = this.aulasMatutinas.filter(a => !(a.dia == event.dia && a.numero == event.numero));
+    } else if (event.numero < 12 && event.numero >= 6){
+      this.aulasVespertinas = this.aulasVespertinas.filter(a => !(a.dia == event.dia && a.numero == event.numero));
+    } else if (event.numero < 16 && event.numero >= 12) {
+      this.aulasNoturnas = this.aulasNoturnas.filter(a => !(a.dia == event.dia && a.numero == event.numero));
+    }
+    this.buildMatriz();
+  }
+
+  onSemestreChange(value: any) {
+    if(this.ofertaChanged) {
+      const dialogRef = this.openDialog();
+      dialogRef.afterClosed().pipe(first()).subscribe(
+        (result: string) => {
+          if(result === 'salvar') {
+            //todo: implement
+          } else if(result === 'descartar') {
+            this.semestreCurrentValue = value;
+            this.executeAnoQuery();
+          } else {
+            this.formGroup.get('semestre').setValue(this.semestreCurrentValue);
+          }
+        }
+      )
+    } else {
+      this.semestreCurrentValue = value;
+      this.executeAnoQuery();
+    }
+  }
+
+  onPeriodoChange(value: any) {
+    if (this.ofertaChanged) {
+      const dialogRef = this.openDialog();
+      dialogRef.afterClosed().pipe(first()).subscribe(
+        (result: string) => {
+          if (result === 'salvar') {
+            //todo: implement
+          } else if (result === 'descartar') {
+            this.periodoCurrentValue = value;
+            this.executeAnoQuery();
+          } else {
+            this.formGroup.get('periodo').setValue(this.periodoCurrentValue);
+          }
+        }
+      )
+    } else {
+      this.periodoCurrentValue = value;
+      this.executeAnoQuery();
+    }
+  }
+
+  selectAlocacao = (alocacao: any) => {
+    if(alocacao.id === this.alocacaoSelecionada?.id) this.alocacaoSelecionada = undefined;
+    else this.alocacaoSelecionada = alocacao;
+  }
+  getAulas = () => [...this.aulasMatutinas, ...this.aulasVespertinas, ...this.aulasNoturnas];
+  openDialog = () => this.dialog.open(AlteracaoDialogComponent);
+  onTurmaSelectOpened = () => this.turmaCurrentValue = this.turmaControl.value;
+  onCursoSelectionOpened = () => this.cursoCurrentValue = this.cursoControl.value;
 }

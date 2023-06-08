@@ -7,9 +7,9 @@
   </div>
 </mat-toolbar>
 
-<mat-card class="margem mb-5 col-md-12 col-sm-6 d-flex base-block" style="overflow: hidden;">
+<mat-card class="margem mb-5 col-md-12 col-sm-6 d-flex base-block" style="overflow: hidden; overflow-x: auto">
 
-  <mat-card-content class="d-inline-block w-25">
+  <mat-card-content class="d-inline-block" style="width: 15%;">
     <mat-card-subtitle>Alocações</mat-card-subtitle>
     <form [formGroup]="formGroup">
       <samha-autocomplete-field
@@ -17,76 +17,170 @@
         [label]="'Curso'"
         [control]="cursoControl"
         (onChange)="onCursoChange($event)"
-        (loaded)="onCursoLoaded($event)"></samha-autocomplete-field>
+        (loaded)="onCursoLoaded($event)"
+        (onOpened)="onCursoSelectionOpened()"></samha-autocomplete-field>
 
-      <mat-form-field appearance="outline" class="d-block">
-        <mat-label>Turno</mat-label>
-        <mat-select formControlName="turno" [compareWith]="compareFunction" (selectionChange)="onTurnoChange()">
-          <mat-option [value]="'Matutino'">Matutino</mat-option>
-          <mat-option [value]="'Vespertino'">Vespertino</mat-option>
-          <mat-option [value]="'Noturno'">Noturno</mat-option>
-        </mat-select>
+      <div class="d-block">
+        <mat-form-field class="d-inline-block w-50" appearance="outline">
+          <mat-label>Turma</mat-label>
+          <input type="text" matInput [formControl]="turmaControl" [matAutocomplete]="auto">
+          <mat-autocomplete
+            (optionSelected)="onTurmaChange()"
+            (opened)="onTurmaSelectOpened()"
+            autoActiveFirstOption #auto="matAutocomplete"
+            [displayWith]="displayFn">
+            <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+              {{option.nome}}
+            </mat-option>
+          </mat-autocomplete>
       </mat-form-field>
 
-      <mat-form-field class="d-block" appearance="outline">
-        <mat-label>Turma</mat-label>
-        <input type="text" matInput [formControl]="turmaControl" [matAutocomplete]="auto">
-        <mat-autocomplete
-          (optionSelected)="onTurmaChange()"
-          autoActiveFirstOption #auto="matAutocomplete"
-          [displayWith]="displayFn">
-          <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-            {{option.nome}}
-          </mat-option>
-        </mat-autocomplete>
-      </mat-form-field>
+        <mat-form-field appearance="outline" class="d-inline-block w-50">
+          <mat-label>Turno</mat-label>
+          <mat-select formControlName="turno" [compareWith]="compareFunction" (selectionChange)="onTurnoChange()">
+            <mat-option [value]="'Matutino'">Matutino</mat-option>
+            <mat-option [value]="'Vespertino'">Vespertino</mat-option>
+            <mat-option [value]="'Noturno'">Noturno</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
 
       <div class="d-block">
         <mat-form-field appearance="outline" class="d-inline-block w-75">
           <mat-label>Ano</mat-label>
-          <input matInput type="number" formControlName="ano" (change)="onAnoChange()">
+          <input matInput type="number" formControlName="ano" (change)="onAnoChange($event.target.value)" #anoInput>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="d-inline-block w-25">
           <mat-label>Semestre</mat-label>
-          <input matInput type="number" [min]="1" [max]="2" formControlName="semestre" (change)="onAnoChange()">
+          <input matInput type="number" [min]="1" [max]="2" formControlName="semestre" (change)="onSemestreChange($event.target.value)"  #semestreInput>
         </mat-form-field>
       </div>
 
       <mat-form-field appearance="outline" class="d-block">
         <mat-label>Período</mat-label>
-        <input matInput type="number" [min]="1" [max]="qtPeriodos" formControlName="periodo" (change)="onAnoChange()">
+        <input matInput type="number" [min]="1" [max]="qtPeriodos" formControlName="periodo" (change)="onPeriodoChange($event.target.value)"  #periodoInput>
       </mat-form-field>
     </form>
 
-    <div class="drag-border horizontal-box" style="height: 59px !important;"
-         *ngFor="let alocacao of alocacoes"
-          draggable="true"
-         (dragstart)="onListDraggerStart(alocacao)"
-         (dragend)="onDragEnd($event)">
-      {{alocacao.disciplina.sigla + ' - ' + getNomeEncurtadoProfessor(alocacao.professor1.nome) + ' ' + getNomeEncurtadoProfessor(alocacao.professor2?.nome)}}
+    <div class="drag-list hide-scrollbar">
+      <div class="drag-border horizontal-box" style="height: 59px !important;" #element
+           *ngFor="let alocacao of alocacoes"
+           draggable="true"
+           [ngClass]="alocacaoSelecionada?.id === alocacao?.id ? 'highlight-professor' : ''"
+           (click)="selectAlocacao(alocacao)"
+           (dragstart)="onListDraggerStart(alocacao)"
+           (dragend)="onDragEnd($event)">
+        {{alocacao.disciplina.sigla + ' - ' + getNomeEncurtadoProfessor(alocacao.professor1.nome) + ' ' + getNomeEncurtadoProfessor(alocacao.professor2?.nome)}}
+      </div>
+      <ng-container *ngIf="!turmaControl.value">
+        <span>Nenhuma turma encontrada!</span>
+      </ng-container>
+
+      <ng-container *ngIf="!(alocacoes.length > 0) && this.turmaControl.value">
+        <span>Nenhuma alocação encontrada!</span>
+      </ng-container>
     </div>
 
-    <ng-container *ngIf="!turmaControl.value">
-      <span>Nenhuma turma encontrada!</span>
-    </ng-container>
+      <mat-card-footer class="d-block p-3">
+        <div class="mb-2 d-block">
+          <div class="row">
+            <div class="col-sm-8">
+              <dx-button
+                class="w-100 footer-button"
+                icon="check"
+                text="Validar"
+                hint="Validar Aulas"
+                [disabled]="!ofertaChanged"
+              >
+              </dx-button>
+            </div>
+            <div class="col-sm-4">
+              <dx-button
+                class="w-100 footer-button"
+                icon="dragvertical"
+                hint="Controle de quantidade de disciplinas">
+              </dx-button>
+            </div>
+          </div>
+        </div>
 
-    <ng-container *ngIf="!(alocacoes.length > 0) && this.turmaControl.value">
-      <span>Nenhuma alocação encontrada!</span>
-    </ng-container>
+        <div class="d-block">
+          <div class="row">
+            <div class="col-sm-8">
+              <dx-button
+                class="w-100 footer-button"
+                icon="save"
+                type="success"
+                text="Salvar"
+                [disabled]="!ofertaChanged"
+              >
+              </dx-button>
+            </div>
+            <div class="col-sm-4">
+              <dx-button
+                class="w-100 footer-button"
+                icon="undo"
+                hint="Desfazer alterações"
+                [disabled]="!ofertaChanged"
+              >
+              </dx-button>
+            </div>
+          </div>
+        </div>
+        <hr>
+        <div class="d-block">
+            <mat-form-field appearance="outline" class="col-6 d-inline-block">
+              <mat-label>Tempo máximo</mat-label>
+              <input matInput type="number" [value]="tempoMaximo">
+            </mat-form-field>
+              <mat-form-field appearance="outline"class="col-6 d-inline-block">
+                <mat-label>Intevalo mínimo</mat-label>
+                <input matInput type="number" [value]="intervaloMinimo">
+              </mat-form-field>
+        </div>
+
+        <div class="d-block">
+          <div class="row">
+            <div class="col-12">
+              <dx-button
+                icon="checklist"
+                text="Validar Turmas"
+                hint="Validar Aulas"
+                class="w-100 footer-button">
+              </dx-button>
+            </div>
+          </div>
+        </div>
+      </mat-card-footer>
 
   </mat-card-content>
 
   <div class="divider d-inline-block"></div>
 
-  <mat-card-content class="d-block" style="width: 50%; min-width: 30%;">
+  <mat-card-content class="d-block" style="width: 70%; min-width: 700px;">
     <mat-card-subtitle>Grade de Horários</mat-card-subtitle>
-    <samha-oferta-grid [matriz]="matriz" (aulaIndexChanged)="onAulaIndexChanged($event)" (novaAulaCreated)="onAulaChanged($event)" [novaAula]="novaAula" [turno]="formGroup.get('turno').value"></samha-oferta-grid>
+    <samha-oferta-grid
+      [matriz]="matriz"
+      [turno]="formGroup.get('turno').value"
+      [novaAula]="novaAula"
+      [turmaName]="turmaControl.value?.nome"
+      (onAulaIndexChange)="onAulaIndexChanged($event)"
+      (onNovaAulaCreated)="onAulaChanged($event)"
+      (onAulaDeleted)="onAulaDeleted($event)"
+      ></samha-oferta-grid>
+
+    <hr>
+
+    <samha-professor-grid [ofertaId]="oferta?.id"
+                          [ano]="this.formGroup.get('ano').value"
+                          [semestre]="this.formGroup.get('semestre').value"
+                          [alocacao]="alocacaoSelecionada"></samha-professor-grid>
 
   </mat-card-content>
   <div class="divider d-inline-block"></div>
 
-  <mat-card-content class="d-block" style="width: 20%">
+  <mat-card-content class="d-block" style="width: 15%;min-width: 200px">
     <mat-card-subtitle>Notificações</mat-card-subtitle>
   </mat-card-content>
 

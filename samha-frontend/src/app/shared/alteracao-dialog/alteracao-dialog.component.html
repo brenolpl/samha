@@ -1,0 +1,10 @@
+<div mat-dialog-title>Aulas alteradas</div>
+<mat-dialog-content class="mb-2">
+  Você possui alterações não salvas. O que deseja fazer?
+</mat-dialog-content>
+<mat-dialog-actions class="d-flex justify-content-center">
+
+  <button mat-button (click)="onDescartarClick()" class="w-25 p-1 sim-button" style="min-width: 100px;">Descartar</button>
+  <button mat-button (click)="onCancelarClick()" cdkFocusInitial class="w-25 p-1 cancelar" style="min-width: 100px;">Cancelar</button>
+  <button mat-button (click)="onSalvarClick()" cdkFocusInitial class="w-25 p-1 nao-button" style="min-width: 100px;">Salvar</button>
+</mat-dialog-actions>

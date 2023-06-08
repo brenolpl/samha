@@ -5,12 +5,14 @@ import {SharedModule} from "../shared/shared.module";
 import {OfertaRoutingModule} from "./oferta-routing.module";
 import {OfertaComponent} from "./oferta-main/oferta.component";
 import {DragDropModule} from "@angular/cdk/drag-drop";
-import {DxDraggableModule, DxSchedulerModule, DxScrollViewModule} from "devextreme-angular";
+import {DxButtonModule, DxDraggableModule, DxSchedulerModule, DxScrollViewModule} from "devextreme-angular";
 import { OfertaGridComponent } from './oferta-grid/oferta-grid.component';
+import { ProfessorGridComponent } from './professor-grid/professor-grid.component';
 @NgModule({
   declarations: [
     OfertaComponent,
-    OfertaGridComponent
+    OfertaGridComponent,
+    ProfessorGridComponent
   ],
   imports: [
     OfertaRoutingModule,
@@ -20,7 +22,8 @@ import { OfertaGridComponent } from './oferta-grid/oferta-grid.component';
     DragDropModule,
     DxSchedulerModule,
     DxScrollViewModule,
-    DxDraggableModule
+    DxDraggableModule,
+    DxButtonModule
   ]
 })
 export class OfertaModule {}

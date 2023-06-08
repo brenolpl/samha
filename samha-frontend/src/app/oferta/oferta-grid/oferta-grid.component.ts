@@ -1,49 +1,20 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 
 @Component({
   selector: 'samha-oferta-grid',
   templateUrl: './oferta-grid.component.html',
   styleUrls: ['./oferta-grid.component.css']
 })
-export class OfertaGridComponent implements OnInit, OnChanges {
+export class OfertaGridComponent {
   @Input() matriz: any[][] = [[]];
   @Input() novaAula: any;
   @Input() turno: string;
-  @Output() public novaAulaCreated = new EventEmitter<any>();
-  @Output() public  aulaIndexChanged = new EventEmitter<any>();
+  @Input() turmaName: string = '';
+  @Output() public onNovaAulaCreated = new EventEmitter<any>();
+  @Output() public onAulaIndexChange = new EventEmitter<any>();
+  @Output() public onAulaDeleted = new EventEmitter<any>();
   highlightedRowIndex: number = -1;
   highlightedColIndex: number = -1;
-  public horarioNoturno = [
-    '18:50 a 19:35',
-    '19:35 a 20:20',
-    '20:30 a 21:15',
-    '21:15 a 22:00',
-    '-',
-    '-'
-  ];
-  public horarioVespertino = [
-    '12:50 a 13:40',
-    '13:45 a 14:35',
-    '14:40 a 15:30',
-    '15:50 a 16:40',
-    '16:45 a 17:35',
-    '17:40 a 18:30'
-  ];
-  public horarioMatutino = [
-    '07:00 a 07:50',
-    '07:55 a 08:45',
-    '08:50 a 09:40',
-    '10:00 a 10:50',
-    '10:55 a 11:45',
-    '11:50 a 12:40'
-  ]
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-  }
 
   onDragOver(event: DragEvent, rowIndex: number, colIndex: number) {
     event.preventDefault();
@@ -81,7 +52,7 @@ export class OfertaGridComponent implements OnInit, OnChanges {
         oferta: this.novaAula.oferta,
         turma: this.novaAula.turma
       }
-      this.novaAulaCreated.emit(aula);
+      this.onNovaAulaCreated.emit(aula);
     } else {
       const data = JSON.parse(event.dataTransfer?.getData('text/plain') || '');
       const prevRowIndex = data.rowIndex;
@@ -100,7 +71,7 @@ export class OfertaGridComponent implements OnInit, OnChanges {
         prevItem.numero = colIndex + prevItem.turno;
       }
 
-      this.aulaIndexChanged.emit({
+      this.onAulaIndexChange.emit({
         prevItem: {
           prevRowIndex: prevRowIndex,
           prevColIndex: prevColIndex,
@@ -128,9 +99,9 @@ export class OfertaGridComponent implements OnInit, OnChanges {
     }
   }
 
-  onKeyDown(event: KeyboardEvent, i: number, j: number) {
+  onKeyDown(event: KeyboardEvent, item: any) {
     if (event.key === 'Delete' || event.key === 'Backspace') {
-      this.matriz[i][j] = undefined;
+      this.onAulaDeleted.emit(item);
     }
   }
 
@@ -145,25 +116,13 @@ export class OfertaGridComponent implements OnInit, OnChanges {
     return '';
   }
 
-  getHorarios(): string[] {
-    switch (this.turno) {
-      case 'Matutino':
-        return this.horarioMatutino;
-      case 'Vespertino':
-        return this.horarioVespertino;
-      case 'Noturno':
-        return this.horarioNoturno;
-      default: return [];
-    }
-  }
-
   getDia(i: number) {
     switch (i) {
-      case 0:return 'Segunda-feira';
-      case 1: return 'Terça-feira';
-      case 2: return 'Quarta-feira';
-      case 3: return 'Quinta-feira';
-      case 4: return 'Sexta-feira';
+      case 0:return 'Segunda';
+      case 1: return 'Terça';
+      case 2: return 'Quarta';
+      case 3: return 'Quinta';
+      case 4: return 'Sexta';
       default: return 'Inexistente';
     }
   }

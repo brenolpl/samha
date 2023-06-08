@@ -1,0 +1,16 @@
+.sim-button {
+  color: rgb(82, 82, 82);
+  background-color: transparent;
+  border: 1px solid rgb(52, 52, 52);
+}
+
+
+.nao-button {
+  color: white;
+  background-color: #42A948;
+}
+
+.cancelar {
+  color: white;
+  background-color: dodgerblue;
+}

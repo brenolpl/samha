@@ -1,5 +1,5 @@
 .horizontal-box {
-  padding: 20px 10px;
+  padding: 0.5rem 0.2rem;
   color: rgba(0, 0, 0, 0.87);
   align-items: center;
   justify-content: space-between;
@@ -11,13 +11,51 @@
   transition: transform 0.3s ease;
 }
 
+.cell-header {
+  width: 30px;
+  text-align: center;
+  background-color: #eeeded;
+  font-size: 11pt;
+}
+
 .cell {
-  width: 80px;
-  height: 74px;
+  height: 4rem;
+  white-space: pre-wrap;
+  text-align: center;
 }
 
 .cell-border {
   border: 1px solid #4caf50;
+}
+
+.cell-title {
+  border-top: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+  border-left: 1px solid #ccc;
+  text-align: center;
+  width: 80px;
+  height: 20px;
+  font-size: 9pt;
+}
+
+.invisible-cell {
+  width: 30px;
+  height: 20px;
+}
+
+.turma-cell-header {
+  width: 30px;
+  height: 40px;
+  font-size: 13pt;
+  text-align: center;
+  vertical-align: center;
+  border-bottom: 1px solid #ccc;
+}
+
+.turma-cell-content {
+  text-align: center;
+  font-size: 13pt;
+  background-color: #eeeded;
 }
 
 .dragging {
@@ -43,4 +81,29 @@
   background-color: rgb(26,125,233);
   box-sizing: border-box;
   box-shadow: rgb(26,125,233);
+}
+
+
+.professor-cell-content {
+  text-align: center;
+  font-size: 12pt;
+  background-color: #eeeded;
+}
+
+.professor-cell-header {
+  width: 20px;
+  padding: 2px;
+  text-align: center;
+  background-color: #eeeded;
+}
+
+.professor-cell {
+  width: 40px;
+  max-width: 50px;
+  height: 70px;
+  text-overflow: ellipsis;
+  text-align: center;
+  white-space: pre-line;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

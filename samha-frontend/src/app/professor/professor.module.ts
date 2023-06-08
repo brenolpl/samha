@@ -11,15 +11,18 @@ import { ProfessorComponent } from './professor/professor.component';
 import { ProfessorLogComponent } from './professor-log/professor-log.component';
 
 @NgModule({
-  declarations: [ProfessorFormComponent, RestricaoComponent, RestricaoListComponent, ProfessorComponent, ProfessorLogComponent],
-  imports: [
-    CommonModule,
-    ProfessorRoutingModule,
-    FormsModule,
-    MaterialModule,
-    ReactiveFormsModule,
-    SharedModule
-  ],
+    declarations: [ProfessorFormComponent, RestricaoComponent, RestricaoListComponent, ProfessorComponent, ProfessorLogComponent],
+    imports: [
+        CommonModule,
+        ProfessorRoutingModule,
+        FormsModule,
+        MaterialModule,
+        ReactiveFormsModule,
+        SharedModule
+    ],
+    exports: [
+        ProfessorComponent
+    ]
 })
 export class ProfessorModule{
 

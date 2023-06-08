@@ -14,6 +14,7 @@ import {AutocompleteFieldComponent} from './fields/autocomplete-field/autocomple
 import {LogComponent} from './log/log.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {NotificationService} from "./service/notification.service";
+import { AlteracaoDialogComponent } from './alteracao-dialog/alteracao-dialog.component';
 
 
 @NgModule({
@@ -23,7 +24,8 @@ import {NotificationService} from "./service/notification.service";
     TableDialogComponent,
     ConfirmDialogComponent,
     AutocompleteFieldComponent,
-    LogComponent
+    LogComponent,
+    AlteracaoDialogComponent
   ],
   imports: [
     CommonModule,

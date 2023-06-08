@@ -15,6 +15,7 @@ export class AutocompleteFieldComponent implements OnInit {
   @Input() label: string;
   @Output() onChange = new EventEmitter<any>();
   @Output() loaded = new EventEmitter<any>();
+  @Output() onOpened = new EventEmitter<void>();
   filteredOptions: Observable<any[]>;
   list: any[];
 
@@ -47,5 +48,9 @@ export class AutocompleteFieldComponent implements OnInit {
 
   onAutocompleteChange($event: any) {
     this.onChange.emit($event);
+  }
+
+  onSelectionOpened() {
+    this.onOpened.emit()
   }
 }

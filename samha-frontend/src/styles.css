@@ -19,7 +19,6 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .sub-toolbar{
   height: 65px;
   width: 100%;
-  margin-right: 15px;
   background-color: white;
   box-shadow: 0 0 5px 0 black;
 }
@@ -32,11 +31,6 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   min-width: 700px;
 }
 
-.mat-card{
-  margin-right: 15px;
-  overflow: auto;
-}
-
 .hide-scrollbar {
   -ms-overflow-style: none;  /* Internet Explorer 10+ */
   scrollbar-width: none;  /* Firefox */
@@ -44,6 +38,10 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .hide-scrollbar::-webkit-scrollbar {
   display: none;  /* Safari and Chrome */
+}
+
+body::-webkit-scrollbar {
+  display: none;
 }
 
 .mat-card-subtitle {

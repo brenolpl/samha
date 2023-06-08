@@ -1,0 +1,44 @@
+<table class="w-100" *ngIf="alocacao; else notLoaded">
+  <thead>
+  <tr style="line-height: 25px;">
+    <td class="turma-cell-header">Select</td>
+    <td style="width: 7px"></td>
+    <td colspan="16" class="professor-cell-content">{{this.alocacao?.professor1.nome}}</td>
+  </tr>
+  <tr style="height: 7px"></tr>
+  <tr>
+    <td class="invisible-cell"></td>
+    <td style="width: 7px;"></td>
+    <td class="cell-title">07:00</td>
+    <td class="cell-title">07:55</td>
+    <td class="cell-title">08:50</td>
+    <td class="cell-title">10:00</td>
+    <td class="cell-title">10:55</td>
+    <td class="cell-title">11:50</td>
+    <td class="cell-title">12:50</td>
+    <td class="cell-title">13:45</td>
+    <td class="cell-title">14:40</td>
+    <td class="cell-title">15:50</td>
+    <td class="cell-title">16:45</td>
+    <td class="cell-title">17:40</td>
+    <td class="cell-title">18:50</td>
+    <td class="cell-title">19:35</td>
+    <td class="cell-title">20:30</td>
+    <td class="cell-title">21:15</td>
+  </tr>
+  </thead>
+  <tbody>
+    <ng-container *ngIf="aulas$ | async as aulasProfessor">
+      <tr *ngFor="let aulas of getMatrizAulasProfessor(aulasProfessor); let i = index">
+        <td class="professor-cell-header">{{getDia(i)}}</td>
+        <td style="width: 7px;"></td>
+        <td *ngFor="let aula of aulas" class="professor-cell cell-border">
+          <p style="text-overflow: ellipsis">{{aula.oferta?.turma?.nome}}</p>
+        </td>
+      </tr>
+    </ng-container>
+  </tbody>
+</table>
+<ng-template #notLoaded>
+  <span>Selecione um professor.</span>
+</ng-template>

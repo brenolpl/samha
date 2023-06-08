@@ -36,8 +36,6 @@ public class Aula extends BaseLogEntity implements Comparable<Object> {
  
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "alocacao_id")
-    @OnDelete(action = OnDeleteAction.NO_ACTION)
-    @Cascade(CascadeType.SAVE_UPDATE)
     private Alocacao alocacao;
      
     @ManyToOne(fetch = FetchType.EAGER)
