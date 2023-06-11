@@ -7,7 +7,7 @@
   </div>
 </mat-toolbar>
 
-<mat-card class="margem mb-5 col-md-12 col-sm-6 d-flex base-block" style="overflow: hidden; overflow-x: auto">
+<mat-card class="margem col-md-12 col-sm-6 d-flex base-block hide-scrollbar" style="overflow-x: auto; height: 100vh">
 
   <mat-card-content class="d-inline-block" style="width: 15%;">
     <mat-card-subtitle>Alocações</mat-card-subtitle>
@@ -20,30 +20,29 @@
         (loaded)="onCursoLoaded($event)"
         (onOpened)="onCursoSelectionOpened()"></samha-autocomplete-field>
 
-      <div class="d-block">
-        <mat-form-field class="d-inline-block w-50" appearance="outline">
-          <mat-label>Turma</mat-label>
-          <input type="text" matInput [formControl]="turmaControl" [matAutocomplete]="auto">
-          <mat-autocomplete
-            (optionSelected)="onTurmaChange()"
-            (opened)="onTurmaSelectOpened()"
-            autoActiveFirstOption #auto="matAutocomplete"
-            [displayWith]="displayFn">
-            <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-              {{option.nome}}
-            </mat-option>
-          </mat-autocomplete>
-      </mat-form-field>
 
-        <mat-form-field appearance="outline" class="d-inline-block w-50">
-          <mat-label>Turno</mat-label>
-          <mat-select formControlName="turno" [compareWith]="compareFunction" (selectionChange)="onTurnoChange()">
-            <mat-option [value]="'Matutino'">Matutino</mat-option>
-            <mat-option [value]="'Vespertino'">Vespertino</mat-option>
-            <mat-option [value]="'Noturno'">Noturno</mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
+      <mat-form-field class="d-block" appearance="outline">
+        <mat-label>Turma</mat-label>
+        <input type="text" matInput [formControl]="turmaControl" [matAutocomplete]="auto">
+        <mat-autocomplete
+          (optionSelected)="onTurmaChange()"
+          (opened)="onTurmaSelectOpened()"
+          autoActiveFirstOption #auto="matAutocomplete"
+          [displayWith]="displayFn">
+          <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+            {{option.nome}}
+          </mat-option>
+        </mat-autocomplete>
+    </mat-form-field>
+
+      <mat-form-field appearance="outline" class="d-block">
+        <mat-label>Turno</mat-label>
+        <mat-select formControlName="turno" [compareWith]="compareFunction" (selectionChange)="onTurnoChange()">
+          <mat-option [value]="'Matutino'">Matutino</mat-option>
+          <mat-option [value]="'Vespertino'">Vespertino</mat-option>
+          <mat-option [value]="'Noturno'">Noturno</mat-option>
+        </mat-select>
+      </mat-form-field>
 
       <div class="d-block">
         <mat-form-field appearance="outline" class="d-inline-block w-75">
@@ -182,6 +181,39 @@
 
   <mat-card-content class="d-block" style="width: 15%;min-width: 200px">
     <mat-card-subtitle>Notificações</mat-card-subtitle>
+    <dx-scroll-view>
+    <cdk-accordion class="example-accordion">
+      <cdk-accordion-item
+        *ngFor="let item of notificacoes; let index = index;"
+        #accordionItem="cdkAccordionItem"
+        class="example-accordion-item accordion-config"
+        role="button"
+        tabindex="0"
+        [attr.id]="'accordion-header-' + index"
+        [attr.aria-expanded]="accordionItem.expanded"
+        [attr.aria-controls]="'accordion-body-' + index">
+        <div class="example-accordion-item-header notification w-100" (click)="accordionItem.toggle()">
+          {{ item.professor.nome }}
+          <span class="example-accordion-item-description">
+      </span>
+          <span id="red" *ngIf="getQuantidadeNotificacao(item, 1) > 0">{{getQuantidadeNotificacao(item, 1)}}</span>
+          <span id="yellow" *ngIf="getQuantidadeNotificacao(item, 2) > 0">{{getQuantidadeNotificacao(item, 2)}}</span>
+          <span id="blue" *ngIf="getQuantidadeNotificacao(item, 3) > 0">{{getQuantidadeNotificacao(item, 3)}}</span>
+        </div>
+        <div
+          class="example-accordion-item-body"
+          role="region"
+          [style.display]="accordionItem.expanded ? '' : 'none'"
+          [attr.id]="'accordion-body-' + index"
+          [attr.aria-labelledby]="'accordion-header-' + index">
+          <div *ngFor="let mensagem of item.mensagens" style="border-radius: 5px;border: 1px solid {{mensagem.cor}}" class="mb-2 p-1">
+            <h5 style="font-weight: lighter; color: {{mensagem.cor}}">{{mensagem.titulo}}</h5>
+            <p *ngFor="let restricao of mensagem.restricoes">{{restricao}}</p>
+          </div>
+        </div>
+      </cdk-accordion-item>
+    </cdk-accordion>
+    </dx-scroll-view>
   </mat-card-content>
 
 </mat-card>

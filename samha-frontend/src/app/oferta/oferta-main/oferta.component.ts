@@ -4,7 +4,7 @@ import {DataService} from "../../shared/service/data.service";
 import {NotificationService} from "../../shared/service/notification.service";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {Observable, range} from "rxjs";
-import {first, map, startWith, toArray} from "rxjs/operators";
+import {first, map, startWith, tap, toArray} from "rxjs/operators";
 import {QueryMirror} from "../../shared/query-mirror";
 import {alocacaoColumns} from "../../meta-model/alocacao";
 import {
@@ -19,6 +19,7 @@ import {ConfirmDialogComponent} from "../../shared/confirm-dialog/confirm-dialog
 import {MatDialog} from "@angular/material/dialog";
 import {AlteracaoDialogComponent} from "../../shared/alteracao-dialog/alteracao-dialog.component";
 import {MatAutocompleteActivatedEvent} from "@angular/material/autocomplete";
+import {PagedList} from "../../shared/paged-list";
 
 
 @Component({
@@ -45,6 +46,7 @@ export class OfertaComponent implements OnInit {
   public alocacaoSelecionada: any;
   public matriz: any[][] = [[]];
   public oferta: any;
+  public notificacoes: any[] = [];
   private list: any[];
   public novaAula: any;
   private aulasMatutinas: any[] = [];
@@ -139,7 +141,18 @@ export class OfertaComponent implements OnInit {
             }
           }
         )
-    ).pipe(first()).subscribe(
+    ).pipe(
+      first(),
+      tap(
+        (next: PagedList) => {
+          next.listMap.sort((a, b) => {
+            if (a.nome > b.nome) return 1;
+            else if(a.nome < b.nome) return -1;
+            else return 0;
+          })
+        }
+      )
+      ).subscribe(
       data => {
         this.list = data.listMap;
         if(this.list.length > 0 && !this.turmaControl.value) {
@@ -217,7 +230,7 @@ export class OfertaComponent implements OnInit {
         if (next.listMap.length > 0) {
           this.oferta = next.listMap[0];
           this.dataService.query(new QueryMirror('aula')
-            .selectList(['id', 'numero', 'dia', 'turno', 'oferta.id', 'alocacao.id', 'alocacao.disciplina.sigla', 'alocacao.professor1', 'alocacao.professor2'])
+            .selectList(['id', 'numero', 'dia', 'turno', 'oferta.id', 'oferta.turma.nome', 'alocacao.id', 'alocacao.disciplina.sigla', 'alocacao.disciplina.tipo', 'alocacao.professor1', 'alocacao.professor2', 'alocacao.ano', 'alocacao.semestre'])
             .where({
               and: {
                 'oferta.id': {equals: next.listMap[0].id}
@@ -225,6 +238,7 @@ export class OfertaComponent implements OnInit {
             })).pipe(first()).subscribe(
             next => {
               let list = next.listMap as any[];
+              this.executeAulasRestricaoQuery(next.listMap);
               this.aulasMatutinas = list.filter(a => a.numero <= 5);
               this.aulasVespertinas = list.filter(a => a.numero > 5 && a.numero <= 11);
               this.aulasNoturnas = list.filter(a => a.numero > 11);
@@ -425,4 +439,17 @@ export class OfertaComponent implements OnInit {
   openDialog = () => this.dialog.open(AlteracaoDialogComponent);
   onTurmaSelectOpened = () => this.turmaCurrentValue = this.turmaControl.value;
   onCursoSelectionOpened = () => this.cursoCurrentValue = this.cursoControl.value;
+
+  private executeAulasRestricaoQuery(aulas: any[]) {
+    this.dataService.post('aula/obter-restricoes', aulas).pipe(first()).subscribe(
+      next => {
+          this.notificacoes = next;
+      }
+    )
+  }
+
+  getQuantidadeNotificacao(item: any, tipo: number) {
+    let mensagens = item.mensagens as any[];
+    return mensagens.filter(m => m.tipo == tipo).length;
+  }
 }

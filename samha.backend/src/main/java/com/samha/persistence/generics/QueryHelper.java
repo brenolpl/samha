@@ -53,6 +53,12 @@ public class QueryHelper<ENTITY, TARGET> implements IQueryHelper<ENTITY, TARGET>
     }
 
     @Override
+    public IQueryHelper<ENTITY, TARGET> orderBy(Order... orders) {
+        if (orders != null && orders[0] != null) this.query.orderBy(orders);
+        return this;
+    }
+
+    @Override
     public Predicate equal(Expression<?> var1, Object var2) {
         if(var2 == null) return builder.and();
         return builder.equal(var1, var2);

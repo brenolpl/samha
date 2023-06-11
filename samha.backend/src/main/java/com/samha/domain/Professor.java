@@ -28,38 +28,27 @@ public class Professor extends Servidor implements Comparable<Object>{
     @JoinColumn(name = "coordenadoria_id", nullable = false)
     private Coordenadoria coordenadoria;
 
+    public String obterNomeAbreviado(){
 
-//    public String obterNomeAbreviado(){
-//
-//        int espaco = this.getNome().indexOf(" ");
-//
-//        if(espaco > 0){
-//
-//            String nomeAbreviado = this.getNome().substring(0, espaco) + " ";
-//
-//            for(int indice = espaco; indice < this.getNome().length() - 1; indice++){
-//                char caractere = this.getNome().charAt(indice);
-//                if(caractere == ' '){
-//                    char letra = this.getNome().charAt(indice + 1);
-//                    if(letra != 'd')
-//                        nomeAbreviado = nomeAbreviado + letra;
-//                }
-//            }
-//
-//            return nomeAbreviado;
-//        }
-//        return getNome();
-//    }
+        int espaco = this.getNome().indexOf(" ");
 
-//    public String obterPrimeiroNome(){
-//
-//        int espaco = this.getNome().indexOf(" ");
-//
-//        if(espaco > 0)
-//            return this.getNome().substring(0, espaco);
-//
-//        return getNome();
-//    }
+        if(espaco > 0){
+
+            String nomeAbreviado = this.getNome().substring(0, espaco) + " ";
+
+            for(int indice = espaco; indice < this.getNome().length() - 1; indice++){
+                char caractere = this.getNome().charAt(indice);
+                if(caractere == ' '){
+                    char letra = this.getNome().charAt(indice + 1);
+                    if(letra != 'd')
+                        nomeAbreviado = nomeAbreviado + letra;
+                }
+            }
+
+            return nomeAbreviado;
+        }
+        return getNome();
+    }
 
     public double getCargaHoraria() {
         return cargaHoraria;

@@ -24,7 +24,7 @@ public class RestricaoProfessor extends BaseLogEntity{
     @Column(nullable = false)
     private String nome;
     
-    @Column(nullable = true)
+    @Column()
     private String descricao;
     
     @Column(nullable = false)

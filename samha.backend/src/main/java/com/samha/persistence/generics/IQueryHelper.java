@@ -15,6 +15,8 @@ public interface IQueryHelper<ENTITY, TARGET> {
 
     IQueryHelper<ENTITY, TARGET> where(Predicate... restrictions);
 
+    IQueryHelper<ENTITY, TARGET> orderBy(Order... orders);
+
     Predicate equal(Expression<?> var1, Object var2);
 
     Predicate notEqual(Expression<?> var1, Object var2);

@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {Observable} from 'rxjs';
-import {first, map, startWith} from 'rxjs/operators';
+import {first, map, startWith, tap} from 'rxjs/operators';
 import {DataService} from '../../service/data.service';
 
 @Component({
@@ -22,7 +22,18 @@ export class AutocompleteFieldComponent implements OnInit {
   constructor(private dataService: DataService) {}
 
   ngOnInit() {
-    this.dataService.getAll(this.resource).pipe(first()).subscribe(
+    this.dataService.getAll(this.resource).pipe(
+      first(),
+      tap(
+        (next: any[]) => {
+          next.sort((a, b) => {
+            if (a?.nome > b?.nome) return 1;
+            else if(a?.nome < b?.nome) return -1;
+            else return 0;
+          });
+        }
+      )
+    ).subscribe(
       next =>{
         this.list = next;
         this.loaded.emit(next);

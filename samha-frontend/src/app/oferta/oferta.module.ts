@@ -8,6 +8,7 @@ import {DragDropModule} from "@angular/cdk/drag-drop";
 import {DxButtonModule, DxDraggableModule, DxSchedulerModule, DxScrollViewModule} from "devextreme-angular";
 import { OfertaGridComponent } from './oferta-grid/oferta-grid.component';
 import { ProfessorGridComponent } from './professor-grid/professor-grid.component';
+import {CdkAccordionModule} from "@angular/cdk/accordion";
 @NgModule({
   declarations: [
     OfertaComponent,
@@ -23,7 +24,8 @@ import { ProfessorGridComponent } from './professor-grid/professor-grid.componen
     DxSchedulerModule,
     DxScrollViewModule,
     DxDraggableModule,
-    DxButtonModule
+    DxButtonModule,
+    CdkAccordionModule
   ]
 })
 export class OfertaModule {}
