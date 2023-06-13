@@ -1,4 +1,5 @@
-<mat-card class="mb-5 margem">
+<div class="base-padding">
+  <mat-card class="mb-5">
   <mat-card-title class="m-2 mb-3">Filtro</mat-card-title>
   <mat-card-content>
     <form [formGroup]="form">
@@ -25,4 +26,5 @@
     <button mat-button class="filter-button" (click)="clearFilters()">Limpar</button>
   </mat-card-content>
 </mat-card>
-<samha-table [resource]="'disciplina'" [columns]="disciplinaColumns" [toolbarHeader]="'Disciplinas'" [filterChange]="filterChange" (onSelectedRow)="onSelectedRow($event)"></samha-table>
+  <samha-table [resource]="'disciplina'" [columns]="disciplinaColumns" [toolbarHeader]="'Disciplinas'" [filterChange]="filterChange" (onSelectedRow)="onSelectedRow($event)"></samha-table>
+</div>

@@ -17,18 +17,18 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 }
 
 .sub-toolbar{
-  height: 65px;
+  height: 45px;
   width: 100%;
   background-color: white;
   box-shadow: 0 0 5px 0 black;
 }
 
-.margem{
-  margin: 15px 15px 15px 15px;
+.base-padding{
+  padding: 15px;
 }
 
-.mat-card, .sub-toolbar{
-  min-width: 700px;
+.mat-card {
+  min-width: 720px;
 }
 
 .hide-scrollbar {
