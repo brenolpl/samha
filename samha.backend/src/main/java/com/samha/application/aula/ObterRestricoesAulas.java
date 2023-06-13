@@ -85,7 +85,7 @@ public class ObterRestricoesAulas extends UseCase<List<Conflito>> {
             resposta = identificarNumeroAulaConflitante(restricao, aula.getNumero());
 
             if (resposta) {
-                restricoesMensagens.add("Aula: " + aula.getNumero() + 1);
+                restricoesMensagens.add("Aula: " +(aula.getNumero() + 1));
                 restricoesMensagens.add("Descrição: " + restricao.getNome());
                 if (restricao.getDescricao() != null) restricoesMensagens.add(restricao.getDescricao());
                 mensagem.setRestricoes(restricoesMensagens);

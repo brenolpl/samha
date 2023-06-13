@@ -1,25 +1,25 @@
 .horizontal-box {
-  padding: 0.5rem 0.2rem;
   color: rgba(0, 0, 0, 0.87);
   text-align: center;
   box-sizing: border-box;
   cursor: move;
   background: white;
-  font-size: 14px;
-  height: 100%;
+  font-size: 9pt;
   transition: 0.3s;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .cell-header {
   width: 30px;
   text-align: center;
   background-color: #eeeded;
-  font-size: 11pt;
+  font-size: 9pt;
 }
 
 .cell {
-  height: 4rem;
-  white-space: pre-wrap;
+  width: 80px;
+  max-width: 80px;
   text-align: center;
 }
 
@@ -33,7 +33,6 @@
   border-left: 1px solid #ccc;
   text-align: center;
   width: 80px;
-  height: 20px;
   font-size: 9pt;
 }
 
@@ -44,8 +43,7 @@
 
 .turma-cell-header {
   width: 30px;
-  height: 40px;
-  font-size: 13pt;
+  font-size: 11pt;
   text-align: center;
   vertical-align: center;
   border-bottom: 1px solid #ccc;
@@ -53,7 +51,7 @@
 
 .turma-cell-content {
   text-align: center;
-  font-size: 13pt;
+  font-size: 11pt;
   background-color: #eeeded;
 }
 
@@ -85,7 +83,7 @@
 
 .professor-cell-content {
   text-align: center;
-  font-size: 12pt;
+  font-size: 10pt;
   background-color: #eeeded;
 }
 
@@ -98,11 +96,10 @@
 
 .professor-cell {
   width: 40px;
-  max-width: 50px;
-  height: 70px;
-  text-overflow: ellipsis;
-  text-align: center;
-  white-space: pre-line;
+  max-width: 40px;
+  font-size: 8pt;
+  max-height: 40px;
   overflow: hidden;
   text-overflow: ellipsis;
+  text-align: center;
 }

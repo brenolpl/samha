@@ -20,12 +20,27 @@ import {MatDialog} from "@angular/material/dialog";
 import {AlteracaoDialogComponent} from "../../shared/alteracao-dialog/alteracao-dialog.component";
 import {MatAutocompleteActivatedEvent} from "@angular/material/autocomplete";
 import {PagedList} from "../../shared/paged-list";
+import {animate, state, style, transition, trigger} from "@angular/animations";
 
 
 @Component({
   selector: 'samha-oferta',
   templateUrl: './oferta.component.html',
-  styleUrls: ['./oferta.component.css', '../oferta-grid/oferta-grid.component.css']
+  styleUrls: ['./oferta.component.css', '../oferta-grid/oferta-grid.component.css'],
+  animations: [
+    trigger('pushInOut', [
+      state('void', style({ transform: 'translateX(100%)' })),
+      state('*', style({ transform: 'translateX(0)' })),
+      transition(':enter', animate('200ms linear')),
+      transition(':leave', animate('200ms linear'))
+    ]),
+    trigger('verticalInOut', [
+      state('void', style({ transform: 'translateY(-100%)' })),
+      state('*', style({ transform: 'translateY(0)' })),
+      transition(':leave', animate('200ms ease-out')),
+      transition(':enter', animate('200ms ease-in'))
+    ])
+  ]
 })
 export class OfertaComponent implements OnInit {
   @ViewChild('anoInput', {static: false}) anoInput: ElementRef;
@@ -47,6 +62,8 @@ export class OfertaComponent implements OnInit {
   public matriz: any[][] = [[]];
   public oferta: any;
   public notificacoes: any[] = [];
+  public filterOpened: boolean = true;
+  public notificacoesOpened: boolean = false;
   private list: any[];
   public novaAula: any;
   private aulasMatutinas: any[] = [];
@@ -238,7 +255,7 @@ export class OfertaComponent implements OnInit {
             })).pipe(first()).subscribe(
             next => {
               let list = next.listMap as any[];
-              this.executeAulasRestricaoQuery(next.listMap);
+              if (next.listMap.length > 0) this.executeAulasRestricaoQuery(next.listMap);
               this.aulasMatutinas = list.filter(a => a.numero <= 5);
               this.aulasVespertinas = list.filter(a => a.numero > 5 && a.numero <= 11);
               this.aulasNoturnas = list.filter(a => a.numero > 11);

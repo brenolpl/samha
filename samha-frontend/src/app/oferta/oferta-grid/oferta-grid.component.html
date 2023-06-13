@@ -1,6 +1,6 @@
 <table class="w-100">
   <thead>
-    <tr style="line-height: 40px;">
+    <tr style="line-height: 20px;">
       <td class="turma-cell-header">Turma</td>
       <td style="width: 7px"></td>
       <td colspan="6" class="turma-cell-content">{{turmaName}}</td>
@@ -35,7 +35,7 @@
       </ng-container>
     </tr>
   </thead>
-  <tr *ngFor="let row of matriz; let i = index">
+  <tr *ngFor="let row of matriz; let i = index" style="line-height: 40px; overflow-y: clip">
     <td class="cell-header">{{getDia(i)}}</td>
     <td style="width: 7px;"></td>
     <td *ngFor="let item of row; let j = index" tabindex="0" class="cell cell-border"
@@ -48,7 +48,7 @@
       <div class="horizontal-box" draggable="true" style="height: inherit"
            (dragstart)="onDragStart($event, i, j)"
            (dragend)="onDragEnd($event)">
-        <p style="text-overflow: ellipsis" *ngIf="item?.alocacao">{{(item?.alocacao?.disciplina?.sigla || '') + ' - ' + getNomeEncurtadoProfessor(item?.alocacao?.professor1?.nome) + ' ' + getNomeEncurtadoProfessor(item?.alocacao?.professor2?.nome)}}</p>
+        <span style="text-overflow: ellipsis; white-space: nowrap" *ngIf="item?.alocacao">{{(item?.alocacao?.disciplina?.sigla || '') + ' - ' + getNomeEncurtadoProfessor(item?.alocacao?.professor1?.nome) + ' ' + getNomeEncurtadoProfessor(item?.alocacao?.professor2?.nome)}}</span>
       </div>
     </td>
   </tr>
