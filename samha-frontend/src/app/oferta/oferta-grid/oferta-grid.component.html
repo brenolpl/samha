@@ -46,6 +46,7 @@
         (click)="onClick($event, i, j)"
         (keydown)="onKeyDown($event, item)">
       <div class="horizontal-box" draggable="true" style="height: inherit"
+           [ngClass]="verificarAula(item)"
            (dragstart)="onDragStart($event, i, j)"
            (dragend)="onDragEnd($event)">
         <span style="text-overflow: ellipsis; white-space: nowrap" *ngIf="item?.alocacao">{{(item?.alocacao?.disciplina?.sigla || '') + ' - ' + getNomeEncurtadoProfessor(item?.alocacao?.professor1?.nome) + ' ' + getNomeEncurtadoProfessor(item?.alocacao?.professor2?.nome)}}</span>

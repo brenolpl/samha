@@ -10,6 +10,7 @@ export class OfertaGridComponent {
   @Input() novaAula: any;
   @Input() turno: string;
   @Input() turmaName: string = '';
+  @Input() aulasConflitantes: any[] = [];
   @Output() public onNovaAulaCreated = new EventEmitter<any>();
   @Output() public onAulaIndexChange = new EventEmitter<any>();
   @Output() public onAulaDeleted = new EventEmitter<any>();
@@ -125,5 +126,32 @@ export class OfertaGridComponent {
       case 4: return 'Sexta';
       default: return 'Inexistente';
     }
+  }
+
+  verificarAula(item: any): string {
+    if (!(typeof item === 'string')) {
+      let aula = undefined;
+
+      if(item.alocacao.disciplina.tipo === 'ESPECIAL') {
+        aula = this.aulasConflitantes.find(a => a.numero === item.numero &&
+          a.dia === item.dia &&
+          a.turno === item.turno &&
+          a.alocacao.professor1?.id === item.alocacao.professor1.id &&
+          a.alocacao.professor2?.id === item.alocacao.professor2?.id);
+      } else {
+        aula = this.aulasConflitantes.find(a => a.numero === item.numero &&
+          a.dia === item.dia &&
+          a.turno === item.turno &&
+          a.alocacao.professor1?.id === item.alocacao.professor1.id);
+      }
+      if (aula !== undefined) {
+        switch (aula.tipo as number) {
+          case 1: return 'background-red';
+          case 2: return 'background-yellow';
+          case 3: return 'background-blue';
+        }
+      }
+    }
+    return 'background-white';
   }
 }

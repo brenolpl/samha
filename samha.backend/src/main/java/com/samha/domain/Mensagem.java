@@ -10,6 +10,8 @@ public class Mensagem {
     //1 vermelho, 2 amarelo, 3 azul.
     private int tipo;
 
+    private List<Aula> aulas = new ArrayList<>();
+
 
     public List<String> getRestricoes() {
         return restricoes;
@@ -41,5 +43,13 @@ public class Mensagem {
 
     public void setTipo(int tipo) {
         this.tipo = tipo;
+    }
+
+    public List<Aula> getAulas() {
+        return aulas;
+    }
+
+    public void setAulas(List<Aula> aulas) {
+        this.aulas = aulas;
     }
 }

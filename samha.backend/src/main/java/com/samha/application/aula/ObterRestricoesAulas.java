@@ -85,7 +85,7 @@ public class ObterRestricoesAulas extends UseCase<List<Conflito>> {
             resposta = identificarNumeroAulaConflitante(restricao, aula.getNumero());
 
             if (resposta) {
-                restricoesMensagens.add("Aula: " +(aula.getNumero() + 1));
+                restricoesMensagens.add("Aula: " + (aula.getNumero() + 1));
                 restricoesMensagens.add("Descrição: " + restricao.getNome());
                 if (restricao.getDescricao() != null) restricoesMensagens.add(restricao.getDescricao());
                 mensagem.setRestricoes(restricoesMensagens);
@@ -95,6 +95,7 @@ public class ObterRestricoesAulas extends UseCase<List<Conflito>> {
 
         if(mensagensRestricao.size() > 0) {
             Optional<Conflito> conflitoOptional = conflitos.stream().filter(c -> c.getProfessor().getId() == professor.getId()).findFirst();
+            mensagensRestricao.get(0).getAulas().add(aula);
             Conflito conflito;
             if (conflitoOptional.isPresent()) {
                 conflito = conflitoOptional.get();
@@ -232,6 +233,8 @@ public class ObterRestricoesAulas extends UseCase<List<Conflito>> {
 
         mensagem.setTitulo("Intervalo mínimo de descanso inferior ao permitido: " + tempo + " horas.");
         mensagem.setCor(CorEnum.VERMELHO.getId());
+        mensagem.getAulas().add(ultima);
+        mensagem.getAulas().add(primeira);
         mensagem.setTipo(1);
 
         List<String> restricoes = new ArrayList<>();
@@ -289,6 +292,8 @@ public class ObterRestricoesAulas extends UseCase<List<Conflito>> {
 
         mensagem.setTitulo("Tempo máximo de trabalho superior ao permitido:");
         mensagem.setCor(CorEnum.VERMELHO.getId());
+        mensagem.getAulas().add(ultima);
+        mensagem.getAulas().add(primeira);
         mensagem.setTipo(1);
         List<String> restricoes = new ArrayList<>();
         restricoes.add(primeira.getOferta().getTurma().getNome() + ": Aula " + (primeira.getNumero() + 1));
@@ -336,6 +341,7 @@ public class ObterRestricoesAulas extends UseCase<List<Conflito>> {
             mensagem.setTipo(1);
             for (Aula restricao : aulasProfessor) {
                 mensagem.getRestricoes().add(restricao.getOferta().getTurma().getNome() + " - " + restricao.getAlocacao().getDisciplina().getNome() + ". ");
+                mensagem.getAulas().add(aula);
             }
             novoConflito.getMensagens().add(mensagem);
         }

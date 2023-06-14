@@ -21,6 +21,7 @@ import {AlteracaoDialogComponent} from "../../shared/alteracao-dialog/alteracao-
 import {MatAutocompleteActivatedEvent} from "@angular/material/autocomplete";
 import {PagedList} from "../../shared/paged-list";
 import {animate, state, style, transition, trigger} from "@angular/animations";
+import {OfertaGridComponent} from "../oferta-grid/oferta-grid.component";
 
 
 @Component({
@@ -62,6 +63,7 @@ export class OfertaComponent implements OnInit {
   public matriz: any[][] = [[]];
   public oferta: any;
   public notificacoes: any[] = [];
+  public aulasConflitantes: any[] = [];
   public filterOpened: boolean = true;
   public notificacoesOpened: boolean = false;
   private list: any[];
@@ -461,6 +463,12 @@ export class OfertaComponent implements OnInit {
     this.dataService.post('aula/obter-restricoes', aulas).pipe(first()).subscribe(
       next => {
           this.notificacoes = next;
+          next.forEach(conflito => {
+            conflito.mensagens.forEach(mensagem => {
+              let aulas = mensagem.aulas.map(a => Object.assign(a, {tipo: mensagem.tipo}));
+              this.aulasConflitantes.push(...aulas);
+            })
+          });
       }
     )
   }
