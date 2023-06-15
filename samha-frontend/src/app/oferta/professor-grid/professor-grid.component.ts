@@ -1,9 +1,9 @@
 import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {DataService} from "../../shared/service/data.service";
 import {Observable, range} from "rxjs";
-import {PagedList} from "../../shared/paged-list";
+import {Page, PagedList} from "../../shared/paged-list";
 import {Filter, QueryMirror} from "../../shared/query-mirror";
-import {map, toArray} from "rxjs/operators";
+import {first, map, tap, toArray} from "rxjs/operators";
 
 @Component({
   selector: 'samha-professor-grid',
@@ -15,6 +15,7 @@ export class ProfessorGridComponent implements OnChanges{
   @Input() public ofertaId: string;
   @Input() public ano: string;
   @Input() public semestre: string;
+  public aulasConflitantes: any[] = [];
   public aulas$: Observable<PagedList>;
 
   constructor(private dataService: DataService) { }
@@ -33,7 +34,7 @@ export class ProfessorGridComponent implements OnChanges{
 
     if(this.alocacao) {
       this.aulas$ = this.dataService.query(new QueryMirror('aula')
-        .selectList(['id', 'numero', 'dia', 'turno', 'oferta.turma.nome', 'alocacao.id', 'alocacao.professor1', 'alocacao.professor2'])
+        .selectList(['id', 'numero', 'dia', 'turno', 'oferta', 'alocacao.id', 'alocacao.disciplina', 'alocacao.professor1', 'alocacao.professor2', 'alocacao.ano', 'alocacao.semestre'])
         .where({
           or: {
             'alocacao.professor1.id': {equals: this.alocacao?.professor1?.id},
@@ -43,7 +44,23 @@ export class ProfessorGridComponent implements OnChanges{
             'oferta.semestre': {equals: this.semestre},
             'oferta.ano': {equals: this.ano}
           }
-        }));
+        }))
+        .pipe(
+          tap((next: PagedList) => {
+            if (next.listMap.length > 0) {
+              this.dataService.post('aula/obter-restricoes', next.listMap).pipe(first()).subscribe(
+                next => {
+                  next.forEach(conflito => {
+                    conflito.mensagens.forEach(mensagem => {
+                      let aulas = mensagem.aulas.map(a => Object.assign(a, {tipo: mensagem.tipo}));
+                      this.aulasConflitantes.push(...aulas);
+                    })
+                  });
+                }
+              )
+            }
+          })
+        );
     }
   }
 
@@ -69,5 +86,32 @@ export class ProfessorGridComponent implements OnChanges{
     matriz$.subscribe(m => matriz = m);
     aulas.forEach(a => matriz[a.dia][a.numero] = a);
     return matriz;
+  }
+
+  verificarAula(item: any): string {
+    if (!(typeof item === 'string')) {
+      let aula;
+
+      if(item.alocacao.disciplina.tipo === 'ESPECIAL') {
+        aula = this.aulasConflitantes.find(a => a.numero === item.numero &&
+          a.dia === item.dia &&
+          a.turno === item.turno &&
+          a.alocacao.professor1?.id === item.alocacao.professor1.id &&
+          a.alocacao.professor2?.id === item.alocacao.professor2?.id);
+      } else {
+        aula = this.aulasConflitantes.find(a => a.numero === item.numero &&
+          a.dia === item.dia &&
+          a.turno === item.turno &&
+          a.alocacao.professor1?.id === item.alocacao.professor1.id);
+      }
+      if (aula !== undefined) {
+        switch (aula.tipo as number) {
+          case 1: return 'background-red';
+          case 2: return 'background-yellow';
+          case 3: return 'background-blue';
+        }
+      }
+    }
+    return 'background-white';
   }
 }

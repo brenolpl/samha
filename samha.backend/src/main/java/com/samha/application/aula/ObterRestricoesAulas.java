@@ -7,7 +7,6 @@ import com.samha.domain.Aula;
 import com.samha.domain.Aula_;
 import com.samha.domain.Conflito;
 import com.samha.domain.Mensagem;
-import com.samha.domain.Oferta;
 import com.samha.domain.Oferta_;
 import com.samha.domain.Professor;
 import com.samha.domain.Professor_;
@@ -19,6 +18,7 @@ import com.samha.util.Horarios;
 
 import javax.inject.Inject;
 import javax.persistence.criteria.Predicate;
+import javax.swing.text.html.Option;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.ResolverStyle;
@@ -32,15 +32,18 @@ import java.util.stream.Collectors;
 import static com.samha.util.Horarios.obterStringDia;
 
 public class ObterRestricoesAulas extends UseCase<List<Conflito>> {
-
-    private Oferta oferta;
     private List<Aula> aulas;
 
     private List<Conflito> conflitos = new ArrayList<>();
 
-    @Inject
     public ObterRestricoesAulas(List<Aula> aulas) {
         this.aulas = aulas;
+    }
+
+    @Inject
+    public ObterRestricoesAulas(List<Aula> aulas, IGenericRepository genericRepository) {
+        this.aulas = aulas;
+        this.genericRepository = genericRepository;
     }
 
     @Inject
@@ -48,15 +51,13 @@ public class ObterRestricoesAulas extends UseCase<List<Conflito>> {
 
     @Override
     protected List<Conflito> execute() throws Exception {
-        this.oferta = genericRepository.get(Oferta.class, aulas.get(0).getOferta().getId());
-
         for (Aula aula : aulas) {
             setConflitoProfessorTurma(aula, aula.getAlocacao().getProfessor1());
-            setConflitoIntervaloMinimoTempoMaximoProfessor(aula, aula.getAlocacao().getProfessor1(), 1);
+            setConflitoIntervaloMinimoTempoMaximoProfessor(aula, aula.getAlocacao().getProfessor1());
             setConflitoRestricaoProfessor(aula, aula.getAlocacao().getProfessor1());
             if (aula.getAlocacao().getDisciplina().getTipo().equalsIgnoreCase("especial") && aula.getAlocacao().getProfessor2() != null) {
                 setConflitoProfessorTurma(aula, aula.getAlocacao().getProfessor2());
-                setConflitoIntervaloMinimoTempoMaximoProfessor(aula, aula.getAlocacao().getProfessor2(), 2);
+                setConflitoIntervaloMinimoTempoMaximoProfessor(aula, aula.getAlocacao().getProfessor2());
                 setConflitoRestricaoProfessor(aula, aula.getAlocacao().getProfessor2());
             }
 
@@ -166,13 +167,14 @@ public class ObterRestricoesAulas extends UseCase<List<Conflito>> {
         }
     }
 
-    private void setConflitoIntervaloMinimoTempoMaximoProfessor(Aula aula, Professor professor, int professorNum) {
-        List<Aula> aulasProfessor = genericRepository.find(Aula.class, q -> q.where(
-                q.equal(q.get(Aula_.alocacao).get(Alocacao_.ano), aula.getAlocacao().getAno()),
-                q.equal(q.get(Aula_.alocacao).get(Alocacao_.semestre), aula.getAlocacao().getSemestre()),
-                getDiaAulaPredicate(aula, q),
-                getProfessorPredicate(q, professor, professorNum)
-        ));
+    private void setConflitoIntervaloMinimoTempoMaximoProfessor(Aula aula, Professor professor) {
+        List<Aula> aulasProfessor = aulas.stream().filter(a -> {
+            if (a.getAlocacao().getDisciplina().getTipo().equalsIgnoreCase("especial") && a.getAlocacao().getProfessor2() != null) {
+                return a.getAlocacao().getProfessor1().getId() == professor.getId() || a.getAlocacao().getProfessor2().getId() == professor.getId();
+            } else {
+                return a.getAlocacao().getProfessor1().getId() == professor.getId();
+            }
+        }).collect(Collectors.toList());
 
         setConflitoIntervaloMinimoProfessor(aulasProfessor, aula, professor);
         setConflitoTempoMaximoProfessor(aulasProfessor.stream().filter(a -> a.getDia() == aula.getDia()).collect(Collectors.toList()), aula, professor);
@@ -201,14 +203,11 @@ public class ObterRestricoesAulas extends UseCase<List<Conflito>> {
         if (!aulaDiaAnterior.isEmpty() && !aulaProxDia.isEmpty()) {
             Aula ultimaAula = aulaDiaAnterior.get(aulaDiaAnterior.size() - 1);
             Aula primeiraAula = aulaProxDia.get(0);
-
             if(aula.getDia() != 0){
                 primeiraAula = aula;
             }
-
             int tempo = obterQuantidadeHoras(primeiraAula, ultimaAula, Horarios.INTERVALO_MINIMO);
-
-            if(tempo < oferta.getIntervaloMinimo()) montarMensagemIntervaloMinimo(ultimaAula, primeiraAula, tempo, professor);
+            if(tempo < aula.getOferta().getIntervaloMinimo()) montarMensagemIntervaloMinimo(ultimaAula, primeiraAula, tempo, professor);
         }
     }
 
@@ -219,6 +218,7 @@ public class ObterRestricoesAulas extends UseCase<List<Conflito>> {
             novoConflito = conflitoRegistrado.get();
         } else {
             novoConflito = new Conflito();
+            novoConflito.setProfessor(professor);
             conflitos.add(novoConflito);
         }
 
@@ -243,7 +243,17 @@ public class ObterRestricoesAulas extends UseCase<List<Conflito>> {
         restricoes.add(primeira.getOferta().getTurma().getNome() + ": "+ diaAtual + " - " + horarioInicial + ".");
 
         mensagem.setRestricoes(restricoes);
-        novoConflito.getMensagens().add(mensagem);
+        if(verificarMensagemExistente(mensagem, novoConflito)) novoConflito.getMensagens().add(mensagem);
+    }
+
+    private boolean verificarMensagemExistente(Mensagem mensagem, Conflito novoConflito) {
+        Optional<Mensagem> mensagemRegistrada = novoConflito.getMensagens().stream().filter(m -> m.getTitulo().equals(mensagem.getTitulo()) &&
+                m.getRestricoes().equals(mensagem.getRestricoes()) &&
+                m.getAulas().equals(mensagem.getAulas()) &&
+                m.getTipo() == mensagem.getTipo() &&
+                m.getCor().equals(mensagem.getCor())).findFirst();
+
+        return !mensagemRegistrada.isPresent();
     }
 
 
@@ -262,18 +272,21 @@ public class ObterRestricoesAulas extends UseCase<List<Conflito>> {
     }
 
     private void setConflitoTempoMaximoProfessor(List<Aula> aulasProfessor, Aula aula, Professor professor) {
-        if (!aulasProfessor.isEmpty())
-        aulasProfessor = aulasProfessor.stream().sorted(Comparator.comparing(Aula::getNumero)).collect(Collectors.toList());
-        Aula primeira = aulasProfessor.get(0);
-        Aula ultima = aulasProfessor.get(aulasProfessor.size() - 1);
+        if (!aulasProfessor.isEmpty()) {
+            aulasProfessor = aulasProfessor.stream().sorted(Comparator.comparing(Aula::getNumero)).collect(Collectors.toList());
 
-        if(aula.getId() != ultima.getId()){
-            primeira = aula;
+            Aula primeira = aulasProfessor.get(0);
+            Aula ultima = aulasProfessor.get(aulasProfessor.size() - 1);
+
+            if (aula.getId() != ultima.getId()) {
+                primeira = aula;
+            }
+
+            int tempo = obterQuantidadeHoras(primeira, ultima, Horarios.TEMPO_MAXIMO);
+
+            if (tempo > aula.getOferta().getTempoMaximoTrabalho())
+                montarMensagemTempoMaximo(ultima, primeira, tempo, professor);
         }
-
-        int tempo = obterQuantidadeHoras(primeira, ultima, Horarios.TEMPO_MAXIMO);
-
-        if (tempo > oferta.getTempoMaximoTrabalho()) montarMensagemTempoMaximo(ultima, primeira, tempo, professor);
     }
 
     public void montarMensagemTempoMaximo(Aula ultima, Aula primeira, int tempo, Professor professor) {
@@ -300,7 +313,7 @@ public class ObterRestricoesAulas extends UseCase<List<Conflito>> {
         restricoes.add(ultima.getOferta().getTurma().getNome() + ": Aula " + (ultima.getNumero() + 1) + " - " + tempo + " horas.");
 
         mensagem.setRestricoes(restricoes);
-        novoConflito.getMensagens().add(mensagem);
+        if(verificarMensagemExistente(mensagem, novoConflito)) novoConflito.getMensagens().add(mensagem);
     }
 
     /**
@@ -320,8 +333,9 @@ public class ObterRestricoesAulas extends UseCase<List<Conflito>> {
                         q.equal(q.get(Aula_.alocacao).get(Alocacao_.professor1).get(Professor_.id), professor.getId()),
                         q.equal(q.get(Aula_.alocacao).get(Alocacao_.professor2).get(Professor_.id), professor.getId())
                 ),
-                q.notEqual(q.get(Aula_.oferta).get(Oferta_.id), oferta.getId())
-
+                q.notEqual(q.get(Aula_.oferta).get(Oferta_.id), aula.getOferta().getId()),
+                q.equal(q.get(Aula_.oferta).get(Oferta_.ano), aula.getAlocacao().getAno()),
+                q.equal(q.get(Aula_.oferta).get(Oferta_.semestre), aula.getAlocacao().getSemestre())
         ));
 
         if (!aulasProfessor.isEmpty()) {

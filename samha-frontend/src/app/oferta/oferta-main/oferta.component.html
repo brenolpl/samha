@@ -100,15 +100,17 @@
             <div class="col-sm-8">
               <dx-button
                 class="w-100 footer-button"
+                stylingMode="outlined"
                 icon="check"
                 text="Validar"
                 hint="Validar Aulas"
-                [disabled]="!ofertaChanged"
+                (onClick)="onValidarAulasClick()"
               >
               </dx-button>
             </div>
             <div class="col-sm-4">
               <dx-button
+                (onClick)="onControleQuantidadeDisciplinasClick()"
                 class="w-100 footer-button"
                 icon="dragvertical"
                 hint="Controle de quantidade de disciplinas">
@@ -125,6 +127,7 @@
                 icon="save"
                 type="success"
                 text="Salvar"
+                (onClick)="onSalvarClicked()"
                 [disabled]="!ofertaChanged"
               >
               </dx-button>
@@ -134,6 +137,7 @@
                 class="w-100 footer-button"
                 icon="undo"
                 hint="Desfazer alterações"
+                (onClick)="onDesfazerAlteracoesClicked()"
                 [disabled]="!ofertaChanged"
               >
               </dx-button>
@@ -159,8 +163,20 @@
                 icon="checklist"
                 text="Validar Turmas"
                 hint="Validar Aulas"
+                (onClick)="onValidarTurmasClick()"
                 class="w-100 footer-button">
               </dx-button>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-block mt-2" *ngIf="notificacaoTurma">
+          <div class="row">
+            <div class="col-12">
+              <dx-progress-bar
+                [statusFormat]="format"
+                [value]="progresso"
+                [class.complete]="progresso == 100"></dx-progress-bar>
             </div>
           </div>
         </div>
@@ -205,7 +221,8 @@
         <mat-card-subtitle class="mt-3">
           <span>Notificações</span>
         </mat-card-subtitle>
-          <cdk-accordion class="example-accordion">
+          <!-- notificações normais -->
+          <cdk-accordion class="example-accordion" *ngIf="!notificacaoTurma">
             <cdk-accordion-item
               *ngFor="let item of notificacoes; let index = index;"
               #accordionItem="cdkAccordionItem"
@@ -216,11 +233,10 @@
               [attr.aria-expanded]="accordionItem.expanded"
               [attr.aria-controls]="'accordion-body-' + index">
               <div class="example-accordion-item-header notification w-100" (click)="accordionItem.toggle()">
-                <p style="font-size: 10pt">{{ item.professor.nome }}</p>
+                <p style="font-size: 10pt">{{ item.professor?.nome }}</p>
                 <span class="example-accordion-item-description">
                   <span id="red" *ngIf="getQuantidadeNotificacao(item, 1) > 0">{{getQuantidadeNotificacao(item, 1)}}</span>
-                  <span id="yellow"
-                        *ngIf="getQuantidadeNotificacao(item, 2) > 0">{{getQuantidadeNotificacao(item, 2)}}</span>
+                  <span id="yellow" *ngIf="getQuantidadeNotificacao(item, 2) > 0">{{getQuantidadeNotificacao(item, 2)}}</span>
                   <span id="blue" *ngIf="getQuantidadeNotificacao(item, 3) > 0">{{getQuantidadeNotificacao(item, 3)}}</span>
                 </span>
               </div>
@@ -236,6 +252,63 @@
                   <p style="font-size: 8pt" *ngFor="let restricao of mensagem.restricoes">{{restricao}}</p>
                 </div>
               </div>
+            </cdk-accordion-item>
+          </cdk-accordion>
+
+          <!-- notificações agrupadas por turma-->
+          <cdk-accordion class="example-accordion" *ngIf="notificacaoTurma; else loading">
+            <cdk-accordion-item
+              *ngFor="let itemTurma of notificacoes; let index = index;"
+              #accordionItemTurma="cdkAccordionItem"
+              class="example-accordion-item accordion-config"
+              role="button"
+              tabindex="0"
+              [attr.id]="'accordion-header-' + index"
+              [attr.aria-expanded]="accordionItemTurma.expanded"
+              [attr.aria-controls]="'accordion-body-' + index">
+              <div class="example-accordion-item-header notification w-100" (click)="accordionItemTurma.toggle()">
+                <p style="font-size: 10pt">{{ itemTurma.turma.nome }}</p>
+                <span class="example-accordion-item-description">
+                  <span id="red-turma" *ngIf="getQuantidadeNotificacaoTurma(itemTurma, 1) > 0">{{getQuantidadeNotificacaoTurma(itemTurma, 1)}}</span>
+                  <span id="yellow-turma" *ngIf="getQuantidadeNotificacaoTurma(itemTurma, 2) > 0">{{getQuantidadeNotificacaoTurma(itemTurma, 2)}}</span>
+                  <span id="blue-turma" *ngIf="getQuantidadeNotificacaoTurma(itemTurma, 3) > 0">{{getQuantidadeNotificacaoTurma(itemTurma, 3)}}</span>
+                </span>
+              </div>
+              <div
+                class="example-accordion-item-body"
+                role="region"
+                [style.display]="accordionItemTurma.expanded ? '' : 'none'"
+                [attr.id]="'accordion-body-' + index"
+                [attr.aria-labelledby]="'accordion-header-' + index">
+                <cdk-accordion class="example-accordion">
+                  <cdk-accordion-item
+                    *ngFor="let item of itemTurma.conflitos; let j = index"
+                    #accordionItem="cdkAccordionItem"
+                    class="example-accordion-item accordion-config"
+                    role="button"
+                    tabindex="1"
+                    [attr.id]="'accordion-header-' + index + '-' + j"
+                    [attr.aria-expanded]="accordionItem.expanded"
+                    [attr.aria-controls]="'accordion-body-' + index + '-' + j">
+                    <div class="example-accordion-item-header notification w-100" (click)="accordionItem.toggle()">
+                      <p style="font-size: 10pt">{{ item.professor?.nome }}</p>
+                    </div>
+                    <div
+                      class="example-accordion-item-body"
+                      role="region"
+                      [style.display]="accordionItemTurma.expanded ? '' : 'none'"
+                      [attr.id]="'accordion-body-' + index + '-' + j"
+                      [attr.aria-labelledby]="'accordion-header-' + index + '-' + j">
+                      <div *ngFor="let mensagem of item.mensagens" style="border-radius: 5px;border: 1px solid {{mensagem.cor}}"
+                           class="mb-2 p-1">
+                        <span style="font-size: 10pt;font-weight: lighter; color: {{mensagem.cor}}">{{mensagem.titulo}}</span>
+                        <p style="font-size: 8pt" *ngFor="let restricao of mensagem.restricoes">{{restricao}}</p>
+                      </div>
+                    </div>
+                  </cdk-accordion-item>
+                </cdk-accordion>
+              </div>
+
             </cdk-accordion-item>
           </cdk-accordion>
         </dx-scroll-view>
@@ -258,7 +331,7 @@
 
 
   <ng-template #loading>
-    <div class="loading-spinner">
+    <div class="loading-spinner" *ngIf="isNotificacaoTurmaLoading">
       <mat-spinner></mat-spinner>
     </div>
   </ng-template>

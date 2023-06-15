@@ -50,6 +50,7 @@ export class AppComponent implements OnInit, OnDestroy{
               if(next) this.ngOnInit();
             },
             error => {
+              this.router.navigate(['/login']).then(_ => location.reload());
               throw error;
             }
           )

@@ -1,27 +1,18 @@
-import {Component, ElementRef, EventEmitter, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, EventEmitter, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {DataService} from "../../shared/service/data.service";
 import {NotificationService} from "../../shared/service/notification.service";
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {Observable, range} from "rxjs";
-import {first, map, startWith, tap, toArray} from "rxjs/operators";
+import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
+import {Observable, of, range, Subscription} from "rxjs";
+import {catchError, finalize, first, map, startWith, tap, toArray} from "rxjs/operators";
 import {QueryMirror} from "../../shared/query-mirror";
 import {alocacaoColumns} from "../../meta-model/alocacao";
-import {
-  CdkDragDrop,
-  moveItemInArray,
-  copyArrayItem,
-  transferArrayItem,
-  CdkDrag,
-  CdkDropList, CdkDragEnter
-} from "@angular/cdk/drag-drop";
-import {ConfirmDialogComponent} from "../../shared/confirm-dialog/confirm-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
 import {AlteracaoDialogComponent} from "../../shared/alteracao-dialog/alteracao-dialog.component";
-import {MatAutocompleteActivatedEvent} from "@angular/material/autocomplete";
 import {PagedList} from "../../shared/paged-list";
 import {animate, state, style, transition, trigger} from "@angular/animations";
-import {OfertaGridComponent} from "../oferta-grid/oferta-grid.component";
+import notify from "devextreme/ui/notify";
+import {HttpEvent, HttpEventType} from "@angular/common/http";
 
 
 @Component({
@@ -43,10 +34,11 @@ import {OfertaGridComponent} from "../oferta-grid/oferta-grid.component";
     ])
   ]
 })
-export class OfertaComponent implements OnInit {
+export class OfertaComponent implements OnInit, OnDestroy {
   @ViewChild('anoInput', {static: false}) anoInput: ElementRef;
   @ViewChild('semestreInput', {static: false}) semestreInput: ElementRef;
   @ViewChild('periodoInput', {static: false}) periodoInput: ElementRef;
+  private validarTurmasSub: Subscription;
   public cursoControl = new FormControl();
   public turmaControl = new FormControl();
   public formGroup: FormGroup;
@@ -66,6 +58,7 @@ export class OfertaComponent implements OnInit {
   public aulasConflitantes: any[] = [];
   public filterOpened: boolean = true;
   public notificacoesOpened: boolean = false;
+  public notificacaoTurma: boolean = false;
   private list: any[];
   public novaAula: any;
   private aulasMatutinas: any[] = [];
@@ -76,6 +69,7 @@ export class OfertaComponent implements OnInit {
   private anoCurrentValue: any;
   private semestreCurrentValue: any;
   private periodoCurrentValue: any;
+  private progresso: number = 0;
 
 
   constructor(
@@ -213,7 +207,7 @@ export class OfertaComponent implements OnInit {
   private executeAnoQuery() {
     this.ofertaChanged = false;
     this.dataService.query(new QueryMirror('alocacao')
-      .selectList(['id', 'disciplina.sigla', 'professor1.nome', 'professor1.id', 'professor2.nome', 'professor2.id', 'ano', 'semestre'])
+      .selectList(['id', 'disciplina.sigla', 'disciplina.id', 'disciplina.tipo', 'professor1', 'professor2', 'ano', 'semestre'])
       .where({
         and: {
           'disciplina.periodo': {equals: this.formGroup.get('periodo').value},
@@ -234,7 +228,7 @@ export class OfertaComponent implements OnInit {
 
   private executeOfertaQuery() {
     this.dataService.query(new QueryMirror('oferta')
-      .selectList(['id', 'ano', 'semestre', 'tempoMaximoTrabalho', 'intervaloMinimo', 'turma.id'])
+      .selectList(['id', 'ano', 'semestre', 'tempoMaximoTrabalho', 'intervaloMinimo', 'turma.id', 'turma.nome'])
       .where({
         and: {
           'ano': {equals: this.formGroup.get('ano').value},
@@ -249,7 +243,7 @@ export class OfertaComponent implements OnInit {
         if (next.listMap.length > 0) {
           this.oferta = next.listMap[0];
           this.dataService.query(new QueryMirror('aula')
-            .selectList(['id', 'numero', 'dia', 'turno', 'oferta.id', 'oferta.turma.nome', 'alocacao.id', 'alocacao.disciplina.sigla', 'alocacao.disciplina.tipo', 'alocacao.professor1', 'alocacao.professor2', 'alocacao.ano', 'alocacao.semestre'])
+            .selectList(['id', 'numero', 'dia', 'turno', 'oferta', 'alocacao.id', 'alocacao.disciplina', 'alocacao.professor1', 'alocacao.professor2', 'alocacao.ano', 'alocacao.semestre'])
             .where({
               and: {
                 'oferta.id': {equals: next.listMap[0].id}
@@ -265,6 +259,14 @@ export class OfertaComponent implements OnInit {
             }
           )
         } else {
+          this.oferta = {
+            id: null,
+            ano: this.formGroup.get('ano').value,
+            semestre: this.formGroup.get('semestre').value,
+            turma: this.turmaControl.value,
+            tempoMaximoTrabalho: this.tempoMaximo,
+            intervaloMinimo: this.intervaloMinimo,
+          }
           this.aulasVespertinas = [];
           this.aulasMatutinas = [];
           this.aulasNoturnas = [];
@@ -323,11 +325,11 @@ export class OfertaComponent implements OnInit {
   }
 
   onListDraggerStart(alocacao: any) {
+    if (this.oferta.id === null) this.createOferta();
     let novaAula = {
       alocacao: alocacao,
       dia: null,
       numero: null,
-      turma: this.turmaControl.value,
       turno: this.getValorTurno(),
       oferta: this.oferta
     }
@@ -476,5 +478,92 @@ export class OfertaComponent implements OnInit {
   getQuantidadeNotificacao(item: any, tipo: number) {
     let mensagens = item.mensagens as any[];
     return mensagens.filter(m => m.tipo == tipo).length;
+  }
+
+  getQuantidadeNotificacaoTurma(itemTurma: any, tipo: number) {
+    let qtd = 0;
+    itemTurma.conflitos.forEach(item => {
+      qtd += this.getQuantidadeNotificacao(item, tipo);
+    })
+    return qtd;
+  }
+
+  onValidarAulasClick = () => {
+    this.notificacaoTurma = false;
+    this.notificacoes = [];
+    this.executeAulasRestricaoQuery([...this.aulasVespertinas, ...this.aulasMatutinas, ...this.aulasNoturnas]);
+  }
+
+  onControleQuantidadeDisciplinasClick() {
+    this.notificacaoTurma = false;
+    this.notificacoes = [];
+    let aulas = [...this.aulasMatutinas, ...this.aulasVespertinas, ...this.aulasNoturnas];
+    if (aulas.length > 0) {
+      this.dataService.post('aula/controle-qtd-disciplina', [...this.aulasMatutinas, ...this.aulasVespertinas, ...this.aulasNoturnas]).pipe(first())
+        .subscribe(next => {
+          if (next.length > 0) {
+            this.notificacoes = next;
+          }
+        })
+    }else {
+      notify('Ainda não há aulas para esta oferta.', 'error', 2000);
+    }
+  }
+
+  onSalvarClicked() {
+    let aulas = [...this.aulasMatutinas, ...this.aulasVespertinas, ...this.aulasNoturnas];
+    if (aulas.length > 0) {
+      this.dataService.post('aula/salvar-aulas', aulas).pipe(first()).subscribe(
+        next => {
+          this.executeOfertaQuery();
+          notify('As aulas foram salvas com sucesso!', 'success', 2000);
+        },
+        catchError( err => {
+          notify(err.message, 'error', 2000);
+          return of(new Error(err))
+        })
+      )
+    } else {
+      notify('Ainda não há aulas para esta oferta.', 'error', 2000);
+    }
+  }
+
+  private createOferta = () => this.oferta = this.dataService.save('oferta', this.oferta).pipe(first()).subscribe();
+
+  onDesfazerAlteracoesClicked() {
+    this.ofertaChanged = false;
+    this.executeOfertaQuery();
+  }
+
+  onValidarTurmasClick() {
+    this.notificacoes = [];
+    this.progresso = 0;
+    if(this.ofertaChanged) {
+      notify('Você possui alterações que precisam ser salvas antes de realizar esta ação!', 'error', 2000);
+      return;
+    }
+    this.notificacaoTurma = true;
+    notify('Este processo pode demorar um pouco! Você pode conferir seu progresso na barra de carregamento abaixo!', 'warning', 4000);
+    const timer = setInterval(() => {
+      this.progresso += 1; // Incrementa o progresso em 5%
+
+      if (this.progresso >= 95) {
+        clearInterval(timer); // Interrompe o timer quando o progresso atingir 95%
+      }
+    }, 200);
+    this.validarTurmasSub = this.dataService.asyncPost('aula/validar-turmas/' + this.formGroup.get('ano').value + '/' + this.formGroup.get('semestre').value, null)
+      .subscribe((event: HttpEvent<any>) => {
+        if (event.type === HttpEventType.DownloadProgress) {
+        } else if (event.type === HttpEventType.Response) {
+          this.progresso = 100;
+          clearInterval(timer);
+          this.notificacoes = event.body;
+        }
+      });
+  }
+  format = (ratio) => `Progresso: ${parseInt((ratio * 100).toString())}%`;
+
+  ngOnDestroy() {
+    this.validarTurmasSub?.unsubscribe();
   }
 }

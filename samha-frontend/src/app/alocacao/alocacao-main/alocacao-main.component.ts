@@ -245,7 +245,7 @@ export class AlocacaoMainComponent implements OnInit {
         this.notification.success('Alocação incluída com sucesso!');
       },
       (err) => {
-        this.notification.error(err.message, err.name);
+        this.notification.error(err.message);
         return of(new Error(err));
       });
   }

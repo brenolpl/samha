@@ -1,5 +1,5 @@
 import {EventEmitter, Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient, HttpEvent, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {LocalStorageService} from './local-storage.service';
 import {QueryMirror} from '../query-mirror';
@@ -35,6 +35,15 @@ export class DataService {
 
   public post(resource: string, body: any): Observable<any>{
     return this.http.post(APIPREFIX + resource, body, this.getOptions());
+  }
+
+  public asyncPost(resource: string, body: any): Observable<HttpEvent<Object>> {
+    return this.http.post(APIPREFIX + resource, body, {
+      headers: new HttpHeaders()
+        .set('Authorization', 'Bearer ' + this.localStorage.get('access_token')),
+      observe: 'events',
+      reportProgress: true
+    })
   }
 
   public save(resource: string, body: any): Observable<any>{
