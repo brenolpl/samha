@@ -1,9 +1,14 @@
 <table class="w-100" *ngIf="alocacao; else notLoaded">
   <thead>
   <tr style="line-height: 25px;">
-    <td class="turma-cell-header">Select</td>
+    <td class="turma-cell-header">
+      <select [formControl]="selectionControl">
+        <option>1</option>
+        <option>2</option>
+      </select>
+    </td>
     <td style="width: 7px"></td>
-    <td colspan="16" class="professor-cell-content">{{this.alocacao?.professor1.nome}}</td>
+    <td colspan="16" class="professor-cell-content">{{getNomeProfessor()}}</td>
   </tr>
   <tr style="height: 7px"></tr>
   <tr>

@@ -123,7 +123,7 @@ export class OfertaComponent implements OnInit, OnDestroy {
       dialogRef.afterClosed().pipe(first()).subscribe(
         (result: string) => {
           if(result === 'salvar') {
-            //todo: implement
+            this.onSalvarClicked();
           } else if (result === 'descartar'){
             this.executeTurmaQuery();
           } else {
@@ -146,14 +146,14 @@ export class OfertaComponent implements OnInit, OnDestroy {
     this.ofertaChanged = false;
     this.dataService.query(
       new QueryMirror('turma')
-        .selectList(['id', 'nome', 'matriz.id'])
+        .selectList(['id', 'nome', 'matriz.id', 'matriz.curso.id'])
         .where({
             and: {
               'matriz.curso.id': {equals: this.cursoControl.value.id},
               'ativa': {equals: true}
             }
           }
-        )
+        ).orderBy('nome asc')
     ).pipe(
       first(),
       tap(
@@ -169,6 +169,9 @@ export class OfertaComponent implements OnInit, OnDestroy {
       data => {
         this.list = data.listMap;
         if(this.list.length > 0 && !this.turmaControl.value) {
+          this.turmaControl.setValue(this.list[0]);
+          this.onTurmaChange();
+        } else if(this.turmaControl.value.matriz.curso.id !== this.cursoControl.value.id) {
           this.turmaControl.setValue(this.list[0]);
           this.onTurmaChange();
         } else {
@@ -189,7 +192,7 @@ export class OfertaComponent implements OnInit, OnDestroy {
       dialogRef.afterClosed().pipe(first()).subscribe(
         (result: string) => {
           if(result === 'salvar') {
-            //todo: implement
+            this.onSalvarClicked()
           } else if(result === 'descartar') {
             this.anoCurrentValue = value;
             this.executeAnoQuery();
@@ -282,7 +285,7 @@ export class OfertaComponent implements OnInit, OnDestroy {
       dialogRef.afterClosed().pipe(first()).subscribe(
         (result: string) => {
           if(result === 'salvar') {
-            //todo: implement
+            this.onSalvarClicked()
           } else if(result === 'descartar') {
             this.executePeriodoAtualQuery();
           } else {
@@ -416,7 +419,7 @@ export class OfertaComponent implements OnInit, OnDestroy {
       dialogRef.afterClosed().pipe(first()).subscribe(
         (result: string) => {
           if(result === 'salvar') {
-            //todo: implement
+            this.onSalvarClicked();
           } else if(result === 'descartar') {
             this.semestreCurrentValue = value;
             this.executeAnoQuery();
@@ -437,7 +440,7 @@ export class OfertaComponent implements OnInit, OnDestroy {
       dialogRef.afterClosed().pipe(first()).subscribe(
         (result: string) => {
           if (result === 'salvar') {
-            //todo: implement
+            this.onSalvarClicked();
           } else if (result === 'descartar') {
             this.periodoCurrentValue = value;
             this.executeAnoQuery();
