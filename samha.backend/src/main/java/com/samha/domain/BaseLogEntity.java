@@ -13,7 +13,10 @@ import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.temporal.TemporalField;
 
 /**
  * Para a implementação desta classe, foi realizada uma junção de Hibernate Envers com o Spring Entity Listeners.
@@ -53,8 +56,13 @@ public class BaseLogEntity implements Serializable {
         else return null;
     }
 
-    public void setCreatedDate(long createdDate) {
-        this.createdDate = createdDate;
+    public void setCreatedDate(LocalDateTime createdDate) {
+        if (createdDate != null) {
+            ZonedDateTime zdt = ZonedDateTime.of(createdDate, ZoneId.systemDefault());
+            this.createdDate = zdt.toInstant().toEpochMilli();
+        } else {
+            this.createdDate = null;
+        }
     }
 
     public LocalDateTime getModifiedDate() {
@@ -62,8 +70,13 @@ public class BaseLogEntity implements Serializable {
         else return null;
     }
 
-    public void setModifiedDate(long modifiedDate) {
-        this.modifiedDate = modifiedDate;
+    public void setModifiedDate(LocalDateTime modifiedDate) {
+        if (modifiedDate != null) {
+            ZonedDateTime zdt = ZonedDateTime.of(modifiedDate, ZoneId.systemDefault());
+            this.modifiedDate = zdt.toInstant().toEpochMilli();;
+        } else {
+         this.modifiedDate = null;
+        }
     }
 
     public String getCreatedBy() {
