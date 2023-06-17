@@ -41,7 +41,7 @@ public class ObterConflitosQtdDisciplina extends UseCase<List<Conflito>> {
 
         for (Integer id : disciplinasId) {
             Disciplina disciplina = genericRepository.get(Disciplina.class, id);
-            List<Aula> aulasDisciplina = aulas.stream().filter(a -> a.getAlocacao().getDisciplina().getId() == id).collect(Collectors.toList());
+            List<Aula> aulasDisciplina = aulas.stream().filter(a -> a.getAlocacao().getDisciplina().getId().equals(id)).collect(Collectors.toList());
 
             if (disciplina.getQtAulas() != aulasDisciplina.size()) {
                 Conflito conflito = new Conflito();

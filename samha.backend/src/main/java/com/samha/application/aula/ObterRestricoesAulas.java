@@ -95,7 +95,7 @@ public class ObterRestricoesAulas extends UseCase<List<Conflito>> {
         }
 
         if(mensagensRestricao.size() > 0) {
-            Optional<Conflito> conflitoOptional = conflitos.stream().filter(c -> c.getProfessor().getId() == professor.getId()).findFirst();
+            Optional<Conflito> conflitoOptional = conflitos.stream().filter(c -> c.getProfessor().getId().equals(professor.getId())).findFirst();
             mensagensRestricao.get(0).getAulas().add(aula);
             Conflito conflito;
             if (conflitoOptional.isPresent()) {
@@ -170,22 +170,14 @@ public class ObterRestricoesAulas extends UseCase<List<Conflito>> {
     private void setConflitoIntervaloMinimoTempoMaximoProfessor(Aula aula, Professor professor) {
         List<Aula> aulasProfessor = aulas.stream().filter(a -> {
             if (a.getAlocacao().getDisciplina().getTipo().equalsIgnoreCase("especial") && a.getAlocacao().getProfessor2() != null) {
-                return a.getAlocacao().getProfessor1().getId() == professor.getId() || a.getAlocacao().getProfessor2().getId() == professor.getId();
+                return a.getAlocacao().getProfessor1().getId().equals(professor.getId()) || a.getAlocacao().getProfessor2().getId().equals(professor.getId());
             } else {
-                return a.getAlocacao().getProfessor1().getId() == professor.getId();
+                return a.getAlocacao().getProfessor1().getId().equals(professor.getId());
             }
         }).collect(Collectors.toList());
 
         setConflitoIntervaloMinimoProfessor(aulasProfessor, aula, professor);
         setConflitoTempoMaximoProfessor(aulasProfessor.stream().filter(a -> a.getDia() == aula.getDia()).collect(Collectors.toList()), aula, professor);
-    }
-
-    private Predicate getProfessorPredicate(IQueryHelper<Aula, Aula> q, Professor professor, int professorNum) {
-        if (professorNum == 1) {
-            return q.equal(q.get(Aula_.alocacao).get(Alocacao_.professor1).get(Professor_.id), professor.getId());
-        } else {
-            return q.equal(q.get(Aula_.alocacao).get(Alocacao_.professor2).get(Professor_.id), professor.getId());
-        }
     }
 
     private void setConflitoIntervaloMinimoProfessor(List<Aula> aulasProfessor, Aula aula, Professor professor) {
@@ -213,7 +205,7 @@ public class ObterRestricoesAulas extends UseCase<List<Conflito>> {
 
     private void montarMensagemIntervaloMinimo(Aula ultima, Aula primeira, int tempo, Professor professor) {
         Conflito novoConflito;
-        Optional<Conflito> conflitoRegistrado = conflitos.stream().filter(c -> c.getProfessor().getId() == professor.getId()).findFirst();
+        Optional<Conflito> conflitoRegistrado = conflitos.stream().filter(c -> c.getProfessor().getId().equals(professor.getId())).findFirst();
         if (conflitoRegistrado.isPresent()) {
             novoConflito = conflitoRegistrado.get();
         } else {
@@ -291,7 +283,7 @@ public class ObterRestricoesAulas extends UseCase<List<Conflito>> {
 
     public void montarMensagemTempoMaximo(Aula ultima, Aula primeira, int tempo, Professor professor) {
         Conflito novoConflito;
-        Optional<Conflito> conflito = conflitos.stream().filter(c -> c.getProfessor().getId() == professor.getId()).findFirst();
+        Optional<Conflito> conflito = conflitos.stream().filter(c -> c.getProfessor().getId().equals(professor.getId())).findFirst();
         if(conflito.isPresent()) {
             novoConflito = conflito.get();
         } else {
@@ -339,7 +331,7 @@ public class ObterRestricoesAulas extends UseCase<List<Conflito>> {
         ));
 
         if (!aulasProfessor.isEmpty()) {
-            Optional<Conflito> conflitoRegistrado = conflitos.stream().filter(c -> c.getProfessor().getId() == professor.getId()).findFirst();
+            Optional<Conflito> conflitoRegistrado = conflitos.stream().filter(c -> c.getProfessor().getId().equals(professor.getId())).findFirst();
             Conflito novoConflito;
             if (conflitoRegistrado.isPresent()) {
                 novoConflito = conflitoRegistrado.get();
