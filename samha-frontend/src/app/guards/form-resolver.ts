@@ -13,7 +13,6 @@ export class FormResolver implements Resolve<Observable<any>>{
     let parts = state.url.split('/');
     let id = parts[parts.length-1];
     let resource = parts[parts.length-2];
-
     return this.dataService.get(resource, id);
   }
 

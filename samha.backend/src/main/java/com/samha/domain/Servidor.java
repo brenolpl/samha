@@ -12,7 +12,7 @@ public class Servidor extends BaseLogEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @Column(nullable = false)
     private String nome;
@@ -27,11 +27,11 @@ public class Servidor extends BaseLogEntity{
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

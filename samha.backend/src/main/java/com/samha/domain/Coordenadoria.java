@@ -37,11 +37,11 @@ public class Coordenadoria extends BaseLogEntity implements Comparable<Object> {
         this.eixo = eixo;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

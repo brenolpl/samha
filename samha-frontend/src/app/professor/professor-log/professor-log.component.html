@@ -1,26 +1,29 @@
 <mat-toolbar class="sub-toolbar">
   <div class="d-flex justify-content-start w-100">
-    <button mat-button (click)="goBack()" class="sub-toolbar-button"><mat-icon>keyboard_arrow_left</mat-icon></button>
+    <dx-button
+      style="border: none"
+      type="success"
+      stylingMode="outlined"
+      (onClick)="goBack()"
+      [icon]="'chevronprev'"
+    ></dx-button>
   </div>
 </mat-toolbar>
 
 <div class="base-padding">
 <mat-card class="mat-elevation-z8 base-padding">
   <mat-card-header>
-    <mat-card-title>
-      Logs de Professor e Servidor
-    </mat-card-title>
+    <mat-card-subtitle>Logs de Professor e Servidor</mat-card-subtitle>
   </mat-card-header>
-
-  <mat-card-content>
-    <samha-log [resource]="'professor'" [columns]="professorLogColumns" [toolbarHeader]="'Professor'" [ativarToolbar]="false"></samha-log>
-  </mat-card-content>
-
-  <hr>
 
   <mat-card-content>
     <samha-log [resource]="'servidor'" [columns]="servidorLogColumns" [toolbarHeader]="'Servidor'" [ativarToolbar]="false"></samha-log>
   </mat-card-content>
 
+  <hr>
+
+  <mat-card-content>
+    <samha-log [resource]="'professor'" [columns]="professorLogColumns" [toolbarHeader]="'Professor'" [ativarToolbar]="false"></samha-log>
+  </mat-card-content>
 </mat-card>
 </div>

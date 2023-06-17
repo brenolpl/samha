@@ -26,13 +26,12 @@ export class TurmaListComponent extends TableComponent implements OnInit {
   };
 
   constructor(protected dataService: DataService,
-              protected formBuilder: FormBuilder,
               protected router: Router,
               protected route: ActivatedRoute,
               protected dialog: MatDialog,
               protected sanitizer: DomSanitizer,
               protected notification: NotificationService) {
-    super(dataService, formBuilder, router, route, dialog, sanitizer, notification);
+    super(dataService, router, route, dialog, sanitizer, notification);
   }
 
   ngOnInit(): void {

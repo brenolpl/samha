@@ -6,17 +6,19 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {CommonModule} from '@angular/common';
 import {SharedModule} from '../shared/shared.module';
 import { CursoComponent } from './curso/curso.component';
+import {DxButtonModule} from "devextreme-angular";
 
 @NgModule({
-  imports: [
-    MaterialModule,
-    ReactiveFormsModule,
-    FormsModule,
-    CursoRoutingModule,
-    CommonModule,
-    SharedModule,
+    imports: [
+        MaterialModule,
+        ReactiveFormsModule,
+        FormsModule,
+        CursoRoutingModule,
+        CommonModule,
+        SharedModule,
+        DxButtonModule,
 
-  ],
+    ],
   declarations: [
     CursoFormComponent,
     CursoComponent

@@ -21,7 +21,7 @@ public class Curso extends BaseLogEntity implements Comparable<Object>, Serializ
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     
     @Column(nullable = false, unique = true)
     private String nome;
@@ -43,11 +43,11 @@ public class Curso extends BaseLogEntity implements Comparable<Object>, Serializ
     private Professor professor;
 
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

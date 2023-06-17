@@ -9,6 +9,7 @@ import { RestricaoListComponent } from './restricao/restricao-list/restricao-lis
 import {MaterialModule} from '../shared/material/material.module';
 import { ProfessorComponent } from './professor/professor.component';
 import { ProfessorLogComponent } from './professor-log/professor-log.component';
+import {DxButtonModule} from "devextreme-angular";
 
 @NgModule({
     declarations: [ProfessorFormComponent, RestricaoComponent, RestricaoListComponent, ProfessorComponent, ProfessorLogComponent],
@@ -18,7 +19,8 @@ import { ProfessorLogComponent } from './professor-log/professor-log.component';
         FormsModule,
         MaterialModule,
         ReactiveFormsModule,
-        SharedModule
+        SharedModule,
+        DxButtonModule
     ],
     exports: [
         ProfessorComponent

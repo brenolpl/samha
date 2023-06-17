@@ -4,16 +4,21 @@ import {UsuarioRoutingModule} from './usuario-routing.module';
 import {MaterialModule} from '../shared/material/material.module';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {CommonModule} from '@angular/common';
+import { UsuarioListComponent } from './usuario-list/usuario-list.component';
+import {DxButtonModule} from "devextreme-angular";
+import {SharedModule} from "../shared/shared.module";
 
 
 @NgModule({
-  declarations: [UsuarioFormComponent],
+  declarations: [UsuarioFormComponent, UsuarioListComponent],
   imports: [
     UsuarioRoutingModule,
     MaterialModule,
     ReactiveFormsModule,
     FormsModule,
-    CommonModule
+    CommonModule,
+    DxButtonModule,
+    SharedModule
   ],
   exports: []
 })

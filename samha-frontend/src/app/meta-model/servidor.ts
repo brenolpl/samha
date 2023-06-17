@@ -12,3 +12,9 @@ export const servidorLogColumns: TableColumnModel[] = [
   ...servidorColumns.filter(column => column.columnDef !== 'id'),
   ...commonLogColumns
 ]
+
+export const coordenadorColumns: TableColumnModel[] = [
+  {columnDef: 'usuario.papel.nome', header: 'Papel', visible: true},
+  {columnDef: 'usuario.login', header: 'Login', visible: true},
+  ...servidorColumns
+]

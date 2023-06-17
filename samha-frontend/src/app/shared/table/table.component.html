@@ -1,35 +1,47 @@
 <mat-card class="mb-5">
   <mat-toolbar class="toolbar-border"><span style="color: #4caf50;">Listagem de {{toolbarHeader}}</span></mat-toolbar>
-  <div class="input-group mt-3 mb-3">
-    <div class="form-outline">
-      <form [formGroup]="group">
-        <input type="search" id="form1" class="form-control border-top-0 border-end-0 border-start-0"
-               placeholder="Pesquisar" (change)="onSearchChange()" formControlName="search">
-      </form>
-    </div>
-    <button type="button" class="search-button" mat-button>
-      <i class="fas fa-search"></i>
-    </button>
+
+  <div class="d-flex flex-row">
+    <dx-text-box
+      style="margin-right: 1em;"
+      class="no-border-radius"
+      [formControl]="search"
+      (onValueChanged)="onSearchChange()"
+      type="text"
+      mode="search"
+      width="30%"
+      placeholder="Pesquisar"
+      (onEnterKey)="onSearchChange()"></dx-text-box>
     <ng-container *ngIf="enableNew()">
-    <button type="button" class="sub-toolbar-button" mat-button (click)="goToNew()">
-      <mat-icon>add</mat-icon>
-    </button>
+      <dx-button
+        class="no-border-radius"
+        width="5%"
+        icon="add"
+        stylingMode="outlined"
+        type="normal"
+        (onClick)="goToNew()">
+      </dx-button>
     </ng-container>
     <ng-container *ngFor="let action of toolbarActions">
-      <button type="button" mat-button (click)="action.onClick($event)">
-        <mat-icon>{{action.icon}}</mat-icon> {{action?.text}}
-      </button>
+      <dx-button
+        class="no-border-radius"
+        width="5%"
+        [icon]="action.icon"
+        stylingMode="outlined"
+        type="normal"
+        [text]="action.text"
+        (onClick)="action.onClick($event)">
+      </dx-button>
     </ng-container>
   </div>
-
   <mat-card-content>
     <div *ngIf="dataSource$ | async as dataSource; else loading">
-      <table mat-table [dataSource]="defineDataSource(dataSource)">
+      <table mat-table [dataSource]="defineDataSource(dataSource)" style="overflow-x: auto">
 
         <ng-container *ngFor="let column of columns" [matColumnDef]="column.columnDef">
 
           <mat-header-cell *matHeaderCellDef>
-            <button mat-button (click)="sort(column.columnDef)">
+            <button mat-button (click)="sort(column.columnDef)" class="w-100 p-0" style="text-align: start">
               {{ column.header }}
               <mat-icon *ngIf="showArrowUp(column.columnDef)">arrow_drop_up</mat-icon>
               <mat-icon *ngIf="showArrowDown(column.columnDef)">arrow_drop_down</mat-icon>
@@ -38,17 +50,24 @@
           <mat-cell *matCellDef="let row" [innerHTML]="findColumnValue(row, column)"></mat-cell>
         </ng-container>
 
-        <ng-container matColumnDef="actions">
-          <mat-header-cell *matHeaderCellDef>
-            <button mat-button [disabled]="true">Ações</button>
-          </mat-header-cell>
-          <mat-cell *matCellDef="let row">
-            <button mat-icon-button (click)="onEditClick(row)">
-              <mat-icon>border_color</mat-icon>
-            </button>
-            <button mat-icon-button color="warn" (click)="onDeleteClick(row)">
-              <mat-icon>delete</mat-icon>
-            </button>
+        <ng-container matColumnDef="actions" *ngIf="!hideActions">
+          <mat-header-cell *matHeaderCellDef class="align-items-center align-content-center justify-content-center">Ações</mat-header-cell>
+          <mat-cell *matCellDef="let row" class="align-items-center align-content-center justify-content-center"
+                    style="z-index: 1">
+            <dx-button
+              style="border: none"
+              type="default"
+              stylingMode="outlined"
+              (onClick)="onEditClick(row)"
+              [icon]="'edit'">
+            </dx-button>
+            <dx-button
+              style="border: none"
+              type="danger"
+              stylingMode="outlined"
+              (onClick)="onDeleteClick(row)"
+              [icon]="'trash'">
+            </dx-button>
           </mat-cell>
         </ng-container>
 

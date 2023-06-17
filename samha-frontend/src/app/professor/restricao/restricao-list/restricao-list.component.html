@@ -4,16 +4,20 @@
   </div>
 </ng-template>
 <div *ngIf="dataSource$ | async as dataSource; else loading">
-  <mat-card class="mat-elevation-z8 m-auto mt-5 col-11 mb-5">
+  <div class="base-padding">
+    <mat-card class="mat-elevation-z8 m-auto mb-5">
     <mat-card-title>
       <mat-toolbar class="toolbar-border"><span style="color: #4caf50;">Restrições</span></mat-toolbar>
     </mat-card-title>
 
     <mat-card-content>
-        <button mat-button class="mt-1 mb-1 sub-toolbar-button" (click)="goToNew()">
-          <mat-icon>add</mat-icon>
-          Adicionar Restrição
-        </button>
+      <dx-button
+        [text]="'Adicionar Restrição'"
+        [icon]="'add'"
+        stylingMode="outlined"
+        type="normal"
+        (onClick)="goToNew()">
+      </dx-button>
       <table mat-table [dataSource]="defineDataSource(dataSource)" class="w-100">
 
         <ng-container *ngFor="let column of columns" [matColumnDef]="column.columnDef">
@@ -26,12 +30,20 @@
             <button mat-button [disabled]="true">Ações</button>
           </mat-header-cell>
           <mat-cell *matCellDef="let row">
-            <button mat-icon-button (click)="onEditClick(row)">
-              <mat-icon>border_color</mat-icon>
-            </button>
-            <button mat-icon-button color="warn" (click)="onDeleteClick(row)">
-              <mat-icon>delete</mat-icon>
-            </button>
+            <dx-button
+              style="border: none"
+              type="default"
+              stylingMode="outlined"
+              (onClick)="onEditClick(row)"
+              [icon]="'edit'">
+            </dx-button>
+            <dx-button
+              style="border: none"
+              type="danger"
+              stylingMode="outlined"
+              (onClick)="onDeleteClick(row)"
+              [icon]="'trash'">
+            </dx-button>
           </mat-cell>
         </ng-container>
 
@@ -40,4 +52,5 @@
       </table>
     </mat-card-content>
   </mat-card>
+  </div>
 </div>

@@ -39,19 +39,13 @@
     </mat-card-content>
     <hr>
 
-    <div class="input-group mt-3 mb-3">
-      <div class="form-outline">
-        <form [formGroup]="group">
-          <input type="search" id="form1" class="form-control border-top-0 border-end-0 border-start-0"
-                 placeholder="Pesquisar" (change)="onSearchChange()" formControlName="search">
-        </form>
-      </div>
-      <button type="button" mat-button class="search-button">
-        <i class="fas fa-search"></i>
-      </button>
-      <button type="button" class="sub-toolbar-button" mat-button (click)="goToNew()">
-        <mat-icon>add</mat-icon>
-      </button>
+    <div class="d-flex flex-row">
+      <dx-text-box
+        [formControl]="search"
+        (onValueChanged)="onSearchChange()"
+        type="text"
+        placeholder="Pesquisar"
+        (onEnterKey)="onSearchChange()"></dx-text-box>
     </div>
 
     <mat-card-content>

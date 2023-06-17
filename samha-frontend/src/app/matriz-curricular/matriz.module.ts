@@ -6,6 +6,7 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {MatrizFormComponent} from "./matriz-form/matriz-form.component";
 import {SharedModule} from "../shared/shared.module";
 import { MatrizCurricularComponent } from './matriz-curricular/matriz-curricular.component';
+import {DxButtonModule} from "devextreme-angular";
 
 
 @NgModule({
@@ -13,12 +14,13 @@ import { MatrizCurricularComponent } from './matriz-curricular/matriz-curricular
     MatrizFormComponent,
     MatrizCurricularComponent
   ],
-  imports: [
-    MatrizRoutingModule,
-    MaterialModule,
-    CommonModule,
-    ReactiveFormsModule,
-    SharedModule
-  ]
+    imports: [
+        MatrizRoutingModule,
+        MaterialModule,
+        CommonModule,
+        ReactiveFormsModule,
+        SharedModule,
+        DxButtonModule
+    ]
 })
 export class MatrizModule {}

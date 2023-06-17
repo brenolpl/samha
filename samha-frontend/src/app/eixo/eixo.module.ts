@@ -6,6 +6,7 @@ import {CommonModule} from '@angular/common';
 import {ReactiveFormsModule} from '@angular/forms';
 import { EixoComponent } from './eixo/eixo.component';
 import {SharedModule} from '../shared/shared.module';
+import {DxButtonModule} from "devextreme-angular";
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import {SharedModule} from '../shared/shared.module';
         MaterialModule,
         CommonModule,
         ReactiveFormsModule,
-        SharedModule
+        SharedModule,
+        DxButtonModule
     ]
 })
 export class EixoModule {}

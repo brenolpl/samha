@@ -1,6 +1,5 @@
 import {TableColumnModel} from './table-column-model';
 import {FieldEnum} from '../shared/field-enum';
-import {commonLogColumns} from './log';
 import {servidorColumns} from './servidor';
 
 export const professorColumns: TableColumnModel[] = [

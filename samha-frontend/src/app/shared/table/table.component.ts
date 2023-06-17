@@ -5,7 +5,7 @@ import {catchError, first} from 'rxjs/operators';
 import {Filter, Predicate, QueryMirror} from '../query-mirror';
 import {Page, PagedList} from '../paged-list';
 import {TableColumnModel} from '../../meta-model/table-column-model';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {professorColumns} from '../../meta-model/professor';
 import {disciplinaColumns} from '../../meta-model/disciplina';
@@ -41,6 +41,7 @@ export class TableComponent implements OnInit {
   @Input() resource: string;
   @Input() columns: TableColumnModel[];
   @Input() toolbarHeader: string;
+  @Input() hideActions: boolean = false;
   @Output() onSelectedRow: EventEmitter<number> = new EventEmitter<number>();
   @Input() disableNew: boolean;
   @Input() disableEdit: boolean;
@@ -60,19 +61,17 @@ export class TableComponent implements OnInit {
   dataSource$: Observable<PagedList>;
   displayedColumns: string[] = [];
   orderBy: string = '';
-  group: FormGroup;
+  public search: FormControl = new FormControl('');
+  public selectedRowIndex: number = 0;
+  public searchText = '';
   filter: Filter;
 
   constructor(protected dataService: DataService,
-              protected formBuilder: FormBuilder,
               protected router: Router,
               protected route: ActivatedRoute,
               protected dialog: MatDialog,
               protected sanitizer: DomSanitizer,
               protected notification: NotificationService) {
-    this.group = this.formBuilder.group({
-      search: [null]
-    });
   }
 
   ngOnInit(): void {
@@ -131,7 +130,7 @@ export class TableComponent implements OnInit {
         this.displayedColumns.push(column.columnDef);
       }
     });
-    this.displayedColumns.push('actions');
+    if(!this.hideActions) this.displayedColumns.push('actions');
   }
 
   onEditClick(row: any) {
@@ -247,8 +246,6 @@ export class TableComponent implements OnInit {
   }
 
   calculateLastPage = () => Math.ceil(this.pagedList.page.totalItems / this.maxRows);
-  selectedRowIndex: number = 0;
-
   calculateSkip(): number {
     if (this.pagedList !== null && this.pagedList !== undefined) {
       this.onSelectedValueChanged();
@@ -290,12 +287,12 @@ export class TableComponent implements OnInit {
 
   onSearchChange() {
     let filter: Predicate[] = [];
-    if (this.group.value.search !== '') {
+    if (this.search.value !== '') {
       let projections = this.columns.filter(column => column.columnDef);
       projections.forEach(column => {
         filter.push({
           [column.columnDef]: {
-            contains: this.group.value.search
+            contains: this.search.value
           }
         });
       });
@@ -364,5 +361,10 @@ export class TableComponent implements OnInit {
     if(this.disableNew) return false;
 
     return true;
+  }
+
+  valueChange($event: any) {
+    console.log($event);
+
   }
 }

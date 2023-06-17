@@ -1,9 +1,16 @@
 <mat-toolbar class="sub-toolbar">
   <div class="d-flex justify-content-start w-100">
-    <button mat-button (click)="goBack()" class="sub-toolbar-button"><mat-icon>keyboard_arrow_left</mat-icon></button>
+    <dx-button
+      style="border: none"
+      type="success"
+      stylingMode="outlined"
+      (onClick)="goBack()"
+      [icon]="'chevronprev'"
+    ></dx-button>
   </div>
 </mat-toolbar>
-<mat-card class="mat-elevation-z8 m-auto mt-5 col-11">
+<div class="base-padding">
+  <mat-card class="mat-elevation-z8">
   <mat-toolbar class="toolbar-border"><span style="color: #4caf50;">Cadastrar Usuários</span></mat-toolbar>
   <mat-card-content class="mt-5 card-width">
     <form [formGroup]="form">
@@ -32,9 +39,9 @@
       <div class="pesquisar">
         <mat-form-field appearance="standard" class="d-inline-block pesquisar-field">
           <mat-label>Vincular à Servidor</mat-label>
-          <ng-container *ngIf="professor$ | async as professor; else notSet">
-            <mat-select [value]="setProfessorValue(professor.id)" formControlName="servidor_id" (click)="openDialog()">
-              <mat-option [value]="professor.id">{{professor.nome}}</mat-option>
+          <ng-container *ngIf="servidor$ | async as servidor; else notSet">
+            <mat-select [value]="setProfessorValue(servidor.id)" formControlName="servidor_id" (click)="openDialog()">
+              <mat-option [value]="servidor.id">{{servidor.nome}}</mat-option>
             </mat-select>
           </ng-container>
           <ng-template #notSet>
@@ -52,3 +59,4 @@
     </form>
   </mat-card-content>
 </mat-card>
+</div>

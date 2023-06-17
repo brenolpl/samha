@@ -1,56 +1,65 @@
 <mat-toolbar class="sub-toolbar" *ngIf="ativarToolbar">
   <div class="d-flex justify-content-start w-100">
-    <button mat-button (click)="goBack()" class="sub-toolbar-button"><mat-icon>keyboard_arrow_left</mat-icon></button>
+    <dx-button
+      style="border: none"
+      type="success"
+      stylingMode="outlined"
+      (onClick)="goBack()"
+      [icon]="'chevronprev'"
+    ></dx-button>
   </div>
 </mat-toolbar>
 
 <div class="base-padding">
-  <mat-card class="mb-5">
+  <mat-card class="mb-5" style="box-shadow: none; padding: 0">
 
-  <mat-toolbar color="accent" class="toolbar-border">Log de {{resource}}</mat-toolbar>
-  <div class="input-group mt-3 mb-3">
-    <div class="form-outline">
-      <form [formGroup]="group">
-        <input type="search" id="form1" class="form-control border-top-0 border-end-0 border-start-0" placeholder="Pesquisar" (change)="onSearchChange()" formControlName="search">
-      </form>
+    <mat-toolbar class="toolbar-border"><span style="color: #4caf50;">Log de {{toolbarHeader}}</span></mat-toolbar>
+    <div class="d-flex flex-row w-100">
+      <dx-text-box
+        [formControl]="search"
+        (onValueChanged)="onSearchChange()"
+        type="text"
+        width="30%"
+        placeholder="Pesquisar"
+        (onEnterKey)="onSearchChange()"></dx-text-box>
     </div>
-    <button type="button" class="search-button" mat-button>
-      <i class="fas fa-search"></i>
-    </button>
-  </div>
 
-  <div *ngIf="dataSource$ | async as dataSource; else loading">
-    <table mat-table [dataSource]="defineDataSource(dataSource)" class="w-100">
+    <div *ngIf="dataSource$ | async as dataSource; else loading" class="table-overflow">
+      <table mat-table [dataSource]="defineDataSource(dataSource)" class="w-100">
 
-      <ng-container *ngFor="let column of columns" [matColumnDef]="column.columnDef">
+        <ng-container *ngFor="let column of columns" [matColumnDef]="column.columnDef">
 
-        <mat-header-cell *matHeaderCellDef >
-          <button mat-button (click)="sort(column.columnDef)">
-            {{ column.header }}
-            <mat-icon *ngIf="showArrowUp(column.columnDef)">arrow_drop_up</mat-icon>
-            <mat-icon *ngIf="showArrowDown(column.columnDef)">arrow_drop_down</mat-icon>
-          </button>
-        </mat-header-cell>
-        <mat-cell *matCellDef="let row" [innerHTML]="findColumnValue(row, column)"></mat-cell>
-      </ng-container>
+          <mat-header-cell *matHeaderCellDef style="margin-left: 0;">
+            <button mat-button (click)="sort(column.columnDef)" style="text-align: start" class="w-100 h-100">
+              {{ column.header }}
+              <mat-icon *ngIf="showArrowUp(column.columnDef)">arrow_drop_up</mat-icon>
+              <mat-icon *ngIf="showArrowDown(column.columnDef)">arrow_drop_down</mat-icon>
+            </button>
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row" [innerHTML]="findColumnValue(row, column)"></mat-cell>
+        </ng-container>
 
-      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
-    </table>
-    <div class="d-inline">
-      <button mat-button class="mt-3" (click)="setPageSize(10)" [disabled]="tenButtonSelected">10</button>
-      <button mat-button class="mt-3" (click)="setPageSize(50)" [disabled]="fiftyButtonSelected">50</button>
-      <button mat-button class="mt-3" (click)="setPageSize(100)" [disabled]="handredButtonSelected">100</button>
-      <span>Página {{currentPage}} de {{this.lastPage}}</span>
-      <button mat-icon-button class="mt-3" (click)="backwardPage()" [disabled]="backwardButtonDisabled"><mat-icon>keyboard_arrow_left</mat-icon></button>
-      <button mat-icon-button class="mt-3" (click)="fowardPage()" [disabled]="fowardButtonDisabled"><mat-icon>keyboard_arrow_right</mat-icon></button>
-      <span>Total {{pagedList.page.totalItems}}</span>
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+      </table>
+      <div class="d-inline">
+        <button mat-button class="mt-3" (click)="setPageSize(10)" [disabled]="tenButtonSelected">10</button>
+        <button mat-button class="mt-3" (click)="setPageSize(50)" [disabled]="fiftyButtonSelected">50</button>
+        <button mat-button class="mt-3" (click)="setPageSize(100)" [disabled]="handredButtonSelected">100</button>
+        <span>Página {{currentPage}} de {{this.lastPage}}</span>
+        <button mat-icon-button class="mt-3" (click)="backwardPage()" [disabled]="backwardButtonDisabled">
+          <mat-icon>keyboard_arrow_left</mat-icon>
+        </button>
+        <button mat-icon-button class="mt-3" (click)="fowardPage()" [disabled]="fowardButtonDisabled">
+          <mat-icon>keyboard_arrow_right</mat-icon>
+        </button>
+        <span>Total {{pagedList.page.totalItems}}</span>
+      </div>
     </div>
-  </div>
-  <ng-template #loading>
-    <div class="loading-spinner">
-      <mat-spinner></mat-spinner>
-    </div>
-  </ng-template>
-</mat-card>
+    <ng-template #loading>
+      <div class="loading-spinner">
+        <mat-spinner></mat-spinner>
+      </div>
+    </ng-template>
+  </mat-card>
 </div>

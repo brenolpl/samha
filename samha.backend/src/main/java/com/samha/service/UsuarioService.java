@@ -23,7 +23,13 @@ public class UsuarioService implements IUsuarioService{
 
     @Override
     public Usuario saveUsuario(Usuario usuario) {
-        usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
+        Usuario bancoUser = usuarioRepository.findByLogin(usuario.getLogin());
+        if (bancoUser != null) {
+            String novaSenha = passwordEncoder.encode(usuario.getSenha());
+            if(!bancoUser.getSenha().equals(novaSenha)) bancoUser.setSenha(novaSenha);
+        } else {
+            usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
+        }
         return usuarioRepository.save(usuario);
     }
 

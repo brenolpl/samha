@@ -19,7 +19,7 @@ public class Oferta extends BaseLogEntity {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     
     @Column(nullable = false)
     private int ano;
@@ -56,11 +56,11 @@ public class Oferta extends BaseLogEntity {
         this.intervaloMinimo = intervaloMinimo;
     }
     
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

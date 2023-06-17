@@ -39,7 +39,6 @@ export class ProfessorFormComponent implements OnInit, IFormComponent, OnDestroy
   salvar() {
     if(this.form.invalid){
       this.form.markAllAsTouched();
-      this.form.markAsPristine();
       return;
     }
 
@@ -47,6 +46,8 @@ export class ProfessorFormComponent implements OnInit, IFormComponent, OnDestroy
     if(this.professor?.id){
      this.dataService.update('professor', this.professor.id, this.professor).pipe(first()).subscribe(
        next => {
+         this.form.markAsUntouched();
+         this.form.markAsPristine();
          this.router.navigate(['../'], {relativeTo: this.route})
        }
      )
@@ -76,7 +77,7 @@ export class ProfessorFormComponent implements OnInit, IFormComponent, OnDestroy
   canDeactivateRoute(): boolean {
     let exit = true;
 
-    if(this.form.dirty){
+    if(this.form.dirty && this.form.invalid){
       exit = confirm('Descartar alterações?')
     };
 

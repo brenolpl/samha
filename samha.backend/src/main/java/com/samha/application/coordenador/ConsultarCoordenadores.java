@@ -6,6 +6,7 @@ import com.samha.persistence.filter.PagedList;
 import com.samha.persistence.filter.Query;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ConsultarCoordenadores extends QueryEntities<Professor> {

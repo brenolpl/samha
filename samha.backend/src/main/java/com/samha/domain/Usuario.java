@@ -1,5 +1,6 @@
 package com.samha.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
@@ -11,7 +12,7 @@ public class Usuario extends BaseLogEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @Column(nullable = false, unique = true)
     private String login;
@@ -19,8 +20,8 @@ public class Usuario extends BaseLogEntity{
     @Column(nullable = false)
     private String senha;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "papel_id", foreignKey = @ForeignKey(name = "FK_USUARIO_PAPEL"))
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "papel_id", foreignKey = @ForeignKey(name = "FK_USUARIO_PAPEL"), nullable = false)
     private Papel papel;
 
     public String getLogin() {
@@ -39,11 +40,11 @@ public class Usuario extends BaseLogEntity{
         this.senha = senha;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

@@ -1,10 +1,25 @@
 <mat-toolbar class="sub-toolbar">
-  <div class="d-flex justify-content-start w-100">
-    <button mat-button (click)="goBack()" class="sub-toolbar-button"><mat-icon>keyboard_arrow_left</mat-icon></button>
+  <dx-button
+    style="border: none"
+    type="success"
+    stylingMode="outlined"
+    (onClick)="goBack()"
+    [icon]="'chevronprev'"
+  ></dx-button>
+  <div class="d-flex w-100 align-items-end justify-content-end align-content-end">
+    <dx-button
+      style="margin-right: 1em"
+      type="success"
+      stylingMode="outlined"
+      (onClick)="salvar()"
+      icon="save"
+      text="Salvar"
+    ></dx-button>
   </div>
 </mat-toolbar>
 
-<mat-card class="mat-elevation-z8 m-auto mt-5 col-11">
+<div class="base-padding">
+  <mat-card class="mat-elevation-z8">
   <mat-card-title class="fw-lighter">
     <mat-toolbar class="toolbar-border"><span style="color: #4caf50;">Listagem de Professores</span></mat-toolbar>
   </mat-card-title>
@@ -40,12 +55,9 @@
       </mat-form-field>
       <mat-checkbox formControlName="ativo">Ativo</mat-checkbox>
     </form>
-    <mat-card-actions class="d-flex justify-content-end">
-      <button mat-button (click)="salvar()" class="sub-toolbar-button"><mat-icon>save</mat-icon> Salvar</button>
-    </mat-card-actions>
   </mat-card-content>
 </mat-card>
-
+</div>
 <ng-container *ngIf="showRestrictions">
     <samha-restricao-list [professorId]="professor.id"></samha-restricao-list>
 </ng-container>

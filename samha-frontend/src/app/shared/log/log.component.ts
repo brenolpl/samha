@@ -31,13 +31,12 @@ export class LogComponent extends TableComponent implements OnInit {
   @Input() ativarToolbar = true;
 
   constructor(dataService: DataService,
-              formBuilder: FormBuilder,
               router: Router,
               route: ActivatedRoute,
               dialog: MatDialog,
               sanitizer: DomSanitizer,
               notification: NotificationService) {
-    super(dataService, formBuilder, router, route, dialog, sanitizer, notification);
+    super(dataService, router, route, dialog, sanitizer, notification);
   }
 
   ngOnInit(): void {

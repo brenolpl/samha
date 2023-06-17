@@ -19,7 +19,7 @@ public class Disciplina extends BaseLogEntity implements Comparable<Object> {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     
     @Column(nullable = false)
     private String nome;
@@ -67,11 +67,11 @@ public class Disciplina extends BaseLogEntity implements Comparable<Object> {
         this.sigla = sigla;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
