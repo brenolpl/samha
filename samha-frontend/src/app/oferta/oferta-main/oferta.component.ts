@@ -1,17 +1,16 @@
-import {Component, ElementRef, EventEmitter, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {DataService} from "../../shared/service/data.service";
 import {NotificationService} from "../../shared/service/notification.service";
 import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {Observable, of, range, Subscription} from "rxjs";
-import {catchError, finalize, first, map, startWith, tap, toArray} from "rxjs/operators";
+import {catchError, first, map, startWith, tap, toArray} from "rxjs/operators";
 import {QueryMirror} from "../../shared/query-mirror";
 import {alocacaoColumns} from "../../meta-model/alocacao";
 import {MatDialog} from "@angular/material/dialog";
 import {AlteracaoDialogComponent} from "../../shared/alteracao-dialog/alteracao-dialog.component";
 import {PagedList} from "../../shared/paged-list";
 import {animate, state, style, transition, trigger} from "@angular/animations";
-import notify from "devextreme/ui/notify";
 import {HttpEvent, HttpEventType} from "@angular/common/http";
 
 
@@ -514,6 +513,7 @@ export class OfertaComponent implements OnInit, OnDestroy {
   }
 
   onSalvarClicked() {
+    this.ofertaChanged = false;
     let aulas = [...this.aulasMatutinas, ...this.aulasVespertinas, ...this.aulasNoturnas];
     if (aulas.length > 0) {
       this.dataService.post('aula/salvar-aulas', aulas).pipe(first()).subscribe(

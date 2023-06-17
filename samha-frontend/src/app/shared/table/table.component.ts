@@ -362,9 +362,4 @@ export class TableComponent implements OnInit {
 
     return true;
   }
-
-  valueChange($event: any) {
-    console.log($event);
-
-  }
 }

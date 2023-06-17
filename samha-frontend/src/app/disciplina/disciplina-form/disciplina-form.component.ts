@@ -139,8 +139,6 @@ export class DisciplinaFormComponent implements OnInit, OnDestroy {
       cargaHoraria: this.form.get('cargaHoraria').value,
       matriz: this.form.get('matriz').value
     }
-
-    console.log(this.disciplina);
   }
 
   private setCursoData() {
