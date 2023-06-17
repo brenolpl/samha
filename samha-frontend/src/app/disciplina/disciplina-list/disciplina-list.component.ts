@@ -14,6 +14,7 @@ import {MatOptionSelectionChange} from "@angular/material/core";
 })
 export class DisciplinaListComponent implements OnInit {
   @Output() selectedRow = new EventEmitter<number>();
+  public showFiltro: boolean = false;
   disciplinaColumns = disciplinaColumns;
   matriz$: Observable<any>;
   form: FormGroup;

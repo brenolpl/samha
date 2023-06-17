@@ -5,6 +5,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {first} from 'rxjs/operators';
 import {NotificationService} from "../../shared/service/notification.service";
+import notify from "devextreme/ui/notify";
 
 @Component({
   selector: 'samha-coordenadoria',
@@ -47,6 +48,7 @@ export class CoordenadoriaFormComponent implements OnInit {
         next => {
           this.coord = next;
           this.notification.success('Coordenadoria atualizada com sucesso!');
+          this.router.navigate(['../', next.id], {relativeTo: this.route});
         },
         error => {
           this.notification.error('Falha ao atualizar coordenadoria!');
@@ -57,6 +59,7 @@ export class CoordenadoriaFormComponent implements OnInit {
       this.dataService.save('coordenadoria', this.coord).pipe(first()).subscribe(
         next => {
           this.notification.success('Coordenadoria criada com sucesso!');
+          this.router.navigate(['../', next.id], {relativeTo: this.route});
           this.coord = next;
         },
         error => {
@@ -85,5 +88,14 @@ export class CoordenadoriaFormComponent implements OnInit {
       eixo: this.form.get('eixo').value
     }
     this.coord = entity;
+  }
+
+  delete() {
+    this.dataService.delete('coordenadoria', this.coord.id).pipe(first()).subscribe(_ => {
+      notify('Registro excluído com sucesso!', 'success', 2000);
+      this.router.navigate(['../'], {relativeTo: this.route})
+    }, error => {
+      notify(error?.error?.message, 'error', 2000);
+    })
   }
 }

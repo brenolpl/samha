@@ -103,6 +103,7 @@ export class LogComponent extends TableComponent implements OnInit {
         this.columns = disciplinaLogColumns;
         break;
       case 'curso':
+        this.toolbarHeader = 'Cursos';
         this.columns = cursoLogColumns;
         break;
       case 'oferta':

@@ -1,6 +1,34 @@
-<mat-card class="mat-elevation-z8 m-auto mt-5 col-11">
+<mat-toolbar class="sub-toolbar">
+  <dx-button
+    style="border: none"
+    type="success"
+    stylingMode="outlined"
+    (onClick)="goBack()"
+    [icon]="'chevronprev'"
+  ></dx-button>
+  <div class="d-flex justify-content-end w-100">
+    <dx-button
+      icon="save"
+      type="success"
+      text="Salvar"
+      (onClick)="salvar()">
+    </dx-button>
+    <span class="m-1"></span>
+    <dx-button
+      type="danger"
+      stylingMode="outlined"
+      icon="trash"
+      text="Excluir"
+      [visible]="matriz?.id"
+      (onClick)="delete()"
+    ></dx-button>
+  </div>
+</mat-toolbar>
+
+<div class="base-padding">
+  <mat-card class="mat-elevation-z8">
   <mat-card-title>
-    <mat-toolbar color="accent">Cadastrar Matriz</mat-toolbar>
+    <mat-toolbar class="toolbar-border"><span style="color: #4caf50;">Cadastrar Matriz</span></mat-toolbar>
   </mat-card-title>
 
   <mat-card-content>
@@ -26,8 +54,5 @@
         [control]="cursoControl"></samha-autocomplete-field>
     </form>
   </mat-card-content>
-
-  <mat-card-actions class="d-flex justify-content-end">
-    <button mat-button type="submit" (click)="salvar()" class="sub-toolbar-button"><mat-icon>save</mat-icon> Salvar</button>
-  </mat-card-actions>
 </mat-card>
+</div>

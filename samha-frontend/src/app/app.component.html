@@ -1,4 +1,4 @@
-<samha-toolbar (sideBarClicked)="onSideBarClicked()" *ngIf="showMenu | async"></samha-toolbar>
+<samha-toolbar (sideBarClicked)="onSideBarClicked()" *ngIf="showMenu | async" [opened]="opened"></samha-toolbar>
 <div aria-live="polite" toastContainer></div>
 <mat-sidenav-container>
   <ng-template #loading>

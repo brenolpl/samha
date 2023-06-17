@@ -6,7 +6,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MaterialModule} from '../shared/material/material.module';
 import { TurmaListComponent } from './turma-list/turma-list.component';
 import { TurmaFormComponent } from './turma-form/turma-form.component';
-import {DxTextBoxModule} from "devextreme-angular";
+import {DxButtonModule, DxTextBoxModule} from "devextreme-angular";
 
 @NgModule({
   declarations: [
@@ -20,7 +20,8 @@ import {DxTextBoxModule} from "devextreme-angular";
         MaterialModule,
         ReactiveFormsModule,
         SharedModule,
-        DxTextBoxModule
+        DxTextBoxModule,
+        DxButtonModule
     ],
 })
 export class TurmaModule {}

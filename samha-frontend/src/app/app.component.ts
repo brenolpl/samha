@@ -121,7 +121,7 @@ export class AppComponent implements OnInit, OnDestroy{
       case MenuEnum.CURSO:
         return 'school';
       case MenuEnum.OFERTAS:
-        return 'grid_on';
+        return 'dashboard';
       case MenuEnum.RELATORIOS:
         return 'picture_as_pdf';
       case MenuEnum.TURMAS:
@@ -138,6 +138,8 @@ export class AppComponent implements OnInit, OnDestroy{
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
   }
+
+  protected readonly open = open;
 }
 
 export const APIPREFIX = 'api/';

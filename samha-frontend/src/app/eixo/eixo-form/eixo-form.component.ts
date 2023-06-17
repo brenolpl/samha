@@ -3,6 +3,8 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {DataService} from '../../shared/service/data.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {first} from 'rxjs/operators';
+import notify from "devextreme/ui/notify";
+import {error} from "protractor";
 
 @Component({
   selector: 'samha-eixo-form',
@@ -44,13 +46,20 @@ export class EixoFormComponent implements OnInit {
     if(this.eixo?.id){
       this.dataService.update('eixo', this.eixo.id, this.eixo).pipe(first()).subscribe(
         next => {
-          this.goBack();
+          notify('Eixo atualizado com sucesso!', 'success', 2000);
+          this.router.navigate(['../', next.id], {relativeTo: this.route});
+        },
+        error => {
+          notify(error?.error.message, 'error', 2000);
         }
       )
     }else{
       this.dataService.save('eixo', this.eixo).pipe(first()).subscribe(
         next => {
-          this.goBack();
+          notify('Eixo criado com sucesso!', 'success', 2000);
+          this.router.navigate(['../', next.id], {relativeTo: this.route});
+        }, error => {
+          notify(error?.error.message, 'error', 2000);
         }
       )
     }
@@ -63,5 +72,14 @@ export class EixoFormComponent implements OnInit {
       id: this.eixo?.id,
       nome: this.form.get('nome').value
     }
+  }
+
+  delete() {
+    this.dataService.delete('eixo', this.eixo.id).pipe(first()).subscribe(_ => {
+      notify('Registro excluído com sucesso!', 'success', 2000);
+      this.router.navigate(['../'], {relativeTo: this.route})
+    }, error => {
+      notify(error?.error?.message, 'error', 2000);
+    })
   }
 }

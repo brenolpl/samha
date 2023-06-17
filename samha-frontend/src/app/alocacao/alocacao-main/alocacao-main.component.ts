@@ -13,6 +13,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {alocacaoColumns} from "../../meta-model/alocacao";
 import {NotificationService} from "../../shared/service/notification.service";
 import {error} from "protractor";
+import notify from "devextreme/ui/notify";
 
 @Component({
   selector: 'samha-alocacao-main',
@@ -32,7 +33,8 @@ export class AlocacaoMainComponent implements OnInit {
   public showPeriodo: boolean = true;
   public qtPeriodos: number = 1;
   public matrizControl = new FormControl();
-
+  public showPopup = false;
+  public cargaHoraria$: Observable<any>;
   //Bloco 2
   public eixoControl = new FormControl();
   public professorForm: FormGroup;
@@ -48,8 +50,9 @@ export class AlocacaoMainComponent implements OnInit {
   public alocacaoColumns = alocacaoColumns;
   public alocacaoDisplayedColumns = [];
   public selectedAlocacaoRowIndex: number;
-
+  private disciplinaSelecionada: any;
   isVisible: any;
+
 
   constructor(private dataService: DataService,
               private formBuilder: FormBuilder,
@@ -80,7 +83,6 @@ export class AlocacaoMainComponent implements OnInit {
 
   findColumnValue = (row, column): string => <string>column.split('.').reduce((acc, cur) => acc[cur], row);
 
-
   private getAlocacao$(matrizId: number): Observable<any> {
     let query = new QueryMirror('alocacao');
     let projections = alocacaoColumns.map(column => column.columnDef);
@@ -104,6 +106,7 @@ export class AlocacaoMainComponent implements OnInit {
   }
 
   highlightDisciplina(row) {
+    this.disciplinaSelecionada = row;
     this.selectedDisciplinaRowIndex = row.id;
   }
 
@@ -277,6 +280,9 @@ export class AlocacaoMainComponent implements OnInit {
         this.alocacaoDisplayedColumns.push(column.columnDef);
       }
     });
+    this.alocacaoDisplayedColumns.push('encurtadoProfessor1');
+    this.alocacaoDisplayedColumns.push('encurtadoProfessor2');
+    this.alocacaoDisplayedColumns.push('completa');
   }
 
   public onPeriodoChange() {
@@ -286,10 +292,6 @@ export class AlocacaoMainComponent implements OnInit {
 
   onFilterAlocacaoChange() {
     this.alocacao$ = this.getAlocacao$(this.matrizControl.value.id);
-  }
-
-  teste($event) {
-    console.log($event);
   }
 
   public highlightProfessorRow(row): boolean {
@@ -303,11 +305,29 @@ export class AlocacaoMainComponent implements OnInit {
       return false;
     }
 
+    if (!(this.disciplinaSelecionada.tipo == 'ESPECIAL') && this.selectedProfessorRowIndexes.length > 1) {
+      notify('Não é possível alocar mais de um professor para uma disciplina não-especial!', 'error', 2000);
+      return false;
+    }
+
     if (this.selectedProfessorRowIndexes.length > 2) {
       this.notification.error('Selecione no mínimo 1 (Um) e no máximo 2 (Dois) professores!');
       return false;
     }
 
     return true;
+  }
+
+  onCargaHorariaClicked() {
+    if (this.professorForm.get('eixo').value == 2) {
+      notify('Selecione um eixo!', 'error', 2000);
+      return;
+    }
+    this.cargaHoraria$ = this.dataService.post('alocacao/obter-carga-horaria', {
+      ano: this.alocacaoForm.get('ano').value,
+      semestre: this.alocacaoForm.get('semestre').value,
+      eixoId: this.eixoControl.value.id
+    })
+    this.showPopup = true
   }
 }

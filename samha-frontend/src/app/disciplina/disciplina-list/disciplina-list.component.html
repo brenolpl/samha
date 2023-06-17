@@ -1,7 +1,19 @@
 <div class="base-padding">
-  <mat-card class="mb-5">
-  <mat-card-title class="m-2 mb-3">Filtro</mat-card-title>
-  <mat-card-content>
+  <mat-card class="mb-2">
+    <div class="d-inline-block w-100" style="height: 30px">
+      <mat-card-subtitle class="d-inline-block">
+        <span>Filtros</span>
+      </mat-card-subtitle>
+      <div class="float-end d-inline-block">
+        <dx-button
+          style="border: none"
+          (onClick)="showFiltro = !showFiltro"
+          [icon]="showFiltro ? 'chevronup' : 'chevrondown'"
+          height="30px"
+        ></dx-button>
+      </div>
+    </div>
+  <mat-card-content *ngIf="showFiltro">
     <form [formGroup]="form">
       <samha-autocomplete-field
         [resource]="'curso'"
@@ -23,7 +35,15 @@
         <input matInput type="number" formControlName="periodo" min="1" [max]="qtPeriodos" (change)="onFilterChange(false)">
       </mat-form-field>
     </form>
-    <button mat-button class="filter-button" (click)="clearFilters()">Limpar</button>
+    <dx-button
+      type="normal"
+      stylingMode="outlined"
+      class="w-100"
+      icon="clear"
+      (onClick)="clearFilters()"
+      text="Limpar"
+    >
+    </dx-button>
   </mat-card-content>
 </mat-card>
   <samha-table [resource]="'disciplina'" [columns]="disciplinaColumns" [toolbarHeader]="'Disciplinas'" [filterChange]="filterChange" (onSelectedRow)="onSelectedRow($event)"></samha-table>

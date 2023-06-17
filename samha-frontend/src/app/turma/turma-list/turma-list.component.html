@@ -1,51 +1,82 @@
 <mat-toolbar class="sub-toolbar">
   <div class="d-flex justify-content-end w-100 ">
-    <button mat-button (click)="atualizarTurmasAtivas()" class="sub-toolbar-button" style="margin-right: 10px;">
-      <mat-icon>sync</mat-icon>
-      Atualizar Turmas Ativas
-    </button>
-    <button mat-button (click)="goToLog()" class="sub-toolbar-button">
-      <mat-icon>history</mat-icon>
-      Log de Alterações
-    </button>
+    <dx-button
+      (onClick)="atualizarTurmasAtivas()"
+      stylingMode="outlined"
+      type="normal"
+      icon="refresh"
+      text="Atualizar Turmas Ativas">
+    </dx-button>
+    <span class="m-1"></span>
+    <dx-button
+      (onClick)="goToLog()"
+      stylingMode="outlined"
+      type="normal"
+      icon="clock"
+      text="Log de Alterações">
+    </dx-button>
   </div>
 </mat-toolbar>
 
 <div class="base-padding">
-  <mat-card class="mb-5">
 
-    <mat-toolbar class="toolbar-border"><span style="color: #4caf50;">Listagem de Turmas</span></mat-toolbar>
-
-    <mat-card-content class="mt-2 mb-2">
-      <mat-card-title>Filtro</mat-card-title>
-
-
-      <div class="col-11 d-flex flex-row mt-3 mb-3" style="height: 55px">
+  <mat-card class="mb-2">
+    <div class="d-inline-block w-100" style="height: 30px">
+      <mat-card-subtitle class="d-inline-block">
+        <span>Filtros</span>
+      </mat-card-subtitle>
+      <div class="float-end d-inline-block">
+        <dx-button
+          style="border: none"
+          (onClick)="showFiltro = !showFiltro"
+          [icon]="showFiltro ? 'chevronup' : 'chevrondown'"
+          height="30px"
+        ></dx-button>
+      </div>
+    </div>
+    <mat-card-content *ngIf="showFiltro">
+      <div class="d-block">
         <samha-autocomplete-field
-          class="col-4 h-100"
+          style="width: 95%;"
+          class="d-inline-block"
           [resource]="'curso'"
           [control]="cursoControl"
           [label]="'Curso'"
           (onChange)="onCursoChange()"
+          (clearButtonClicked)="clearCursoFiltro()"
         >
         </samha-autocomplete-field>
-        <button mat-button (click)="clearCursoFiltro()">
-          <mat-icon>close</mat-icon>
-        </button>
       </div>
-      <mat-checkbox [formControl]="ativasControl" class="d-inline mt-2" (change)="onAtivasChange()">Ativas
-      </mat-checkbox>
+
+      <mat-checkbox [formControl]="ativasControl" class="mb-2" (change)="onAtivasChange()">Ativas</mat-checkbox>
 
     </mat-card-content>
-    <hr>
+  </mat-card>
+
+  <mat-card class="mb-5">
+
+    <mat-toolbar class="toolbar-border"><span style="color: #4caf50;">Listagem de Turmas</span></mat-toolbar>
 
     <div class="d-flex flex-row">
       <dx-text-box
+        style="margin-right: 1em;"
+        width="30%"
         [formControl]="search"
         (onValueChanged)="onSearchChange()"
         type="text"
         placeholder="Pesquisar"
+        class="no-border-radius"
         (onEnterKey)="onSearchChange()"></dx-text-box>
+      <dx-button
+        type="normal"
+        icon="add"
+        width="5%"
+        class="no-border-radius"
+        (onClick)="goToNew()"
+        stylingMode="outlined"
+      >
+
+      </dx-button>
     </div>
 
     <mat-card-content>
@@ -70,12 +101,20 @@
               <button mat-button [disabled]="true">Ações</button>
             </mat-header-cell>
             <mat-cell *matCellDef="let row">
-              <button mat-icon-button (click)="onEditClick(row)">
-                <mat-icon>border_color</mat-icon>
-              </button>
-              <button mat-icon-button color="warn" (click)="onDeleteClick(row)">
-                <mat-icon>delete</mat-icon>
-              </button>
+              <dx-button
+                style="border: none"
+                type="default"
+                stylingMode="outlined"
+                (onClick)="onEditClick(row)"
+                [icon]="'edit'">
+              </dx-button>
+              <dx-button
+                style="border: none"
+                type="danger"
+                stylingMode="outlined"
+                (onClick)="onDeleteClick(row)"
+                [icon]="'trash'">
+              </dx-button>
             </mat-cell>
           </ng-container>
 

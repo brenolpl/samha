@@ -11,19 +11,6 @@
 </mat-toolbar>
 
 <div class="base-padding">
-<mat-card class="mat-elevation-z8 base-padding">
-  <mat-card-header>
-    <mat-card-subtitle>Logs de Professor e Servidor</mat-card-subtitle>
-  </mat-card-header>
-
-  <mat-card-content>
-    <samha-log [resource]="'servidor'" [columns]="servidorLogColumns" [toolbarHeader]="'Servidor'" [ativarToolbar]="false"></samha-log>
-  </mat-card-content>
-
-  <hr>
-
-  <mat-card-content>
-    <samha-log [resource]="'professor'" [columns]="professorLogColumns" [toolbarHeader]="'Professor'" [ativarToolbar]="false"></samha-log>
-  </mat-card-content>
-</mat-card>
+  <samha-log [resource]="'servidor'" [columns]="servidorLogColumns" [toolbarHeader]="'Servidor'" [ativarToolbar]="false"></samha-log>
+  <samha-log [resource]="'professor'" [columns]="professorLogColumns" [toolbarHeader]="'Professor'" [ativarToolbar]="false"></samha-log>
 </div>

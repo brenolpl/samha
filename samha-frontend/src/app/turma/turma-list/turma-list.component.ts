@@ -24,6 +24,7 @@ export class TurmaListComponent extends TableComponent implements OnInit {
       'ativa': {equals: true}
     }
   };
+  showFiltro: boolean = false;
 
   constructor(protected dataService: DataService,
               protected router: Router,

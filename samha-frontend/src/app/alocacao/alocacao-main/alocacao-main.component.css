@@ -52,3 +52,43 @@
 .fim-tabela {
   opacity: 0;
 }
+
+.carga-horaria-table {
+  width: 100%;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.carga-horaria-table-header {
+  font-size: 13pt;
+  padding: 8px;
+}
+
+.carga-horaria-table-row {
+  border-bottom: 1px solid #d9d9d9;
+}
+
+.carga-horaria-table-cell {
+  font-size: 10pt;
+  padding: 8px;
+}
+
+.mat-header-cell {
+  font-size: 9pt;
+}
+
+.mat-cell {
+  font-size: 10pt;
+}
+
+.mat-cell:first-of-type, mat-header-cell:first-of-type, mat-footer-cell:first-of-type {
+  padding: 0;
+}
+
+.mat-row {
+  min-height: 35px;
+}
+
+
+::ng-deep .dx-checkbox .dx-checkbox-container .dx-checkbox-icon {
+  opacity: 1;
+}

@@ -1,10 +1,32 @@
 <mat-toolbar class="sub-toolbar">
-  <div class="d-flex justify-content-start w-100">
-    <button mat-button (click)="goBack()" class="sub-toolbar-button"><mat-icon>keyboard_arrow_left</mat-icon></button>
+  <dx-button
+    style="border: none"
+    type="success"
+    stylingMode="outlined"
+    (onClick)="goBack()"
+    [icon]="'chevronprev'"
+  ></dx-button>
+  <div class="d-flex justify-content-end w-100">
+    <dx-button
+      icon="save"
+      type="success"
+      text="Salvar"
+      (onClick)="salvar()">
+    </dx-button>
+    <span class="m-1"></span>
+    <dx-button
+      type="danger"
+      stylingMode="outlined"
+      icon="trash"
+      text="Excluir"
+      [visible]="curso?.id"
+      (onClick)="delete()"
+    ></dx-button>
   </div>
 </mat-toolbar>
 
-<mat-card class="mat-elevation-z8 m-auto mt-5 col-11">
+<div class="base-padding">
+  <mat-card class="mat-elevation-z8 m-auto">
   <mat-card-title>
     <mat-toolbar class="toolbar-border"><span style="color: #4caf50;">Cadastrar Curso</span></mat-toolbar>
   </mat-card-title>
@@ -42,7 +64,5 @@
 
     </form>
   </mat-card-content>
-  <mat-card-actions class="d-flex justify-content-end">
-    <button mat-button (click)="salvar(saveButton)" #saveButton class="sub-toolbar-button"><mat-icon>save</mat-icon> Salvar</button>
-  </mat-card-actions>
 </mat-card>
+</div>

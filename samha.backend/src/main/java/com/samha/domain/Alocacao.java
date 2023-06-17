@@ -33,6 +33,12 @@ public class Alocacao extends BaseLogEntity implements Comparable<Object>{
     
     @Transient
     private boolean completa;
+
+    @Transient
+    private String encurtadoProfessor1;
+
+    @Transient
+    private String encurtadoProfessor2;
     
     @Transient
     private Turma turma;
@@ -141,5 +147,21 @@ public class Alocacao extends BaseLogEntity implements Comparable<Object>{
     public int compareTo(Object o) {
         Alocacao other = (Alocacao) o;  
         return this.getDisciplina().getSigla().compareTo(other.getDisciplina().getSigla());
+    }
+
+    public String getEncurtadoProfessor1() {
+        return encurtadoProfessor1;
+    }
+
+    public void setEncurtadoProfessor1(String encurtadoProfessor1) {
+        this.encurtadoProfessor1 = encurtadoProfessor1;
+    }
+
+    public String getEncurtadoProfessor2() {
+        return encurtadoProfessor2;
+    }
+
+    public void setEncurtadoProfessor2(String encurtadoProfessor2) {
+        this.encurtadoProfessor2 = encurtadoProfessor2;
     }
 }

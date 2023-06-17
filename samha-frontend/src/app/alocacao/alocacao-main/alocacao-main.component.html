@@ -1,9 +1,35 @@
 <mat-toolbar class="sub-toolbar">
   <div class="d-flex justify-content-end w-100">
-    <button mat-button (click)="goToLog()" class="sub-toolbar-button">
-      <mat-icon>history</mat-icon>
-      Log de Alterações
-    </button>
+    <dx-button
+      type="success"
+      icon="save"
+      text="Salvar"
+      (onClick)="new()"
+    ></dx-button>
+    <span class="m-1"></span>
+    <dx-button
+      type="danger"
+      stylingMode="outlined"
+      icon="trash"
+      text="Excluir"
+      (onClick)="delete()"
+    ></dx-button>
+    <span class="m-1"></span>
+    <dx-button
+      text="Carga Horária"
+      (onClick)="onCargaHorariaClicked()"
+      type="normal"
+      stylingMode="outlined"
+      icon="toolbox"
+    ></dx-button>
+    <span class="m-1"></span>
+    <dx-button
+      (onClick)="goToLog()"
+      stylingMode="outlined"
+      type="normal"
+      icon="clock"
+      text="Log de Alterações">
+    </dx-button>
   </div>
 </mat-toolbar>
 
@@ -65,12 +91,6 @@
       <mat-card-subtitle>Professor</mat-card-subtitle>
       <div style="height: 217px;">
         <form [formGroup]="professorForm">
-          <mat-radio-group aria-label="Selecione uma opção" formControlName="eixo" (change)="onRadioChange($event)">
-            <mat-radio-button value="1" class="m-2" [checked]="true">Eixo</mat-radio-button>
-            <mat-radio-button value="2">Todos</mat-radio-button>
-          </mat-radio-group>
-
-
           <samha-autocomplete-field
             *ngIf="professorForm.get('eixo').value == 1"
             [resource]="'eixo'"
@@ -84,11 +104,16 @@
             <mat-label>Pesquisar</mat-label>
             <input matInput type="text" placeholder="Pesquisar" (keyup)="onSearchChange()" formControlName="search">
           </mat-form-field>
+
+          <mat-radio-group aria-label="Selecione uma opção" formControlName="eixo" (change)="onRadioChange($event)">
+            <mat-radio-button value="1" class="m-2" [checked]="true">Eixo</mat-radio-button>
+            <mat-radio-button value="2">Todos</mat-radio-button>
+          </mat-radio-group>
         </form>
 
       </div>
       <hr class="separator">
-      <div *ngIf="professor$ | async as profSource; else loading2" class="base-block base-overflow hide-scrollbar">
+      <div *ngIf="professor$ | async as profSource; else loading" class="base-block base-overflow hide-scrollbar">
 
         <table mat-table [dataSource]="defineDataSource(profSource)" class="w-100">
 
@@ -125,28 +150,37 @@
                    (change)="onFilterAlocacaoChange()">
           </mat-form-field>
         </form>
-        <button mat-button type="submit" color="accent" class="new-button-border" (click)="delete()">
-          <mat-icon>query_builder</mat-icon>
-          Carga Horária
-        </button>
-        <span class="m-1"></span>
-        <button mat-button type="submit" color="primary" class="sub-toolbar-button" (click)="new()">
-          <mat-icon>add</mat-icon>
-        </button>
-        <span class="m-1"></span>
-        <button mat-button type="submit" color="warn" class="delete-button-border" (click)="delete()">
-          <mat-icon>delete</mat-icon>
-        </button>
-        <span class="m-1"></span>
       </div>
       <hr class="separator">
-      <div *ngIf="alocacao$ | async as dataSource; else loading3" class="base-block base-overflow hide-scrollbar">
+      <dx-scroll-view>
+        <div *ngIf="alocacao$ | async as dataSource; else loading" class="base-block base-overflow hide-scrollbar">
         <table mat-table [dataSource]="defineDataSource(dataSource)" class="w-100">
 
           <ng-container *ngFor="let column of alocacaoColumns" [matColumnDef]="column.columnDef">
 
             <mat-header-cell *matHeaderCellDef>{{column.header}}</mat-header-cell>
             <mat-cell *matCellDef="let row" [innerHTML]="findColumnValue(row, column.columnDef)"></mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="encurtadoProfessor1">
+            <mat-header-cell *matHeaderCellDef>Professor 1</mat-header-cell>
+            <mat-cell *matCellDef="let row">{{row.encurtadoProfessor1}}</mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="encurtadoProfessor2">
+            <mat-header-cell *matHeaderCellDef>Professor 2</mat-header-cell>
+            <mat-cell *matCellDef="let row">{{row.encurtadoProfessor2}}</mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="completa">
+            <mat-header-cell *matHeaderCellDef>Completa</mat-header-cell>
+            <mat-cell *matCellDef="let row">
+              <dx-check-box
+                class="show-box"
+                [disabled]="true"
+                [value]="row.completa"
+              ></dx-check-box>
+            </mat-cell>
           </ng-container>
 
           <mat-header-row *matHeaderRowDef="alocacaoDisplayedColumns"></mat-header-row>
@@ -156,25 +190,40 @@
         </table>
         <hr class="mt-1 fim-tabela">
       </div>
+      </dx-scroll-view>
     </mat-card-content>
   </mat-card>
+</div>
 
+<dx-popup [(visible)]="showPopup" [title]="'Carga Horária dos Professores'" (closeOnOutsideClickChange)="showPopup = $event">
+  <dx-scroll-view height="95%">
+    <div *ngIf="cargaHoraria$ | async as cargaHoraria; else loading2">
 
-  <ng-template #loading>
-    <div class="loading-spinner">
-      <mat-spinner></mat-spinner>
+      <table class="carga-horaria-table">
+        <thead style="border-bottom: 1px solid #4caf50">
+        <td class="carga-horaria-table-header">Nome</td>
+        <td class="carga-horaria-table-header">Carga Horária em Horas</td>
+        </thead>
+        <tbody>
+        <tr *ngFor="let professor of cargaHoraria" class="carga-horaria-table-row">
+          <td class="carga-horaria-table-cell">{{professor.nome}}</td>
+          <td class="carga-horaria-table-cell">{{professor.cargaHoraria}}</td>
+        </tr>
+        </tbody>
+      </table>
     </div>
-  </ng-template>
+  </dx-scroll-view>
 
   <ng-template #loading2>
-    <div class="loading-spinner">
+    <div class="loading-spinner" style="height: 100% !important;">
       <mat-spinner></mat-spinner>
     </div>
   </ng-template>
+</dx-popup>
 
-  <ng-template #loading3>
-    <div class="loading-spinner">
-      <mat-spinner></mat-spinner>
-    </div>
-  </ng-template>
-</div>
+
+<ng-template #loading>
+  <div class="loading-spinner">
+    <mat-spinner></mat-spinner>
+  </div>
+</ng-template>

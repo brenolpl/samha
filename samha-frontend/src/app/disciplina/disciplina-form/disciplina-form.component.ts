@@ -6,6 +6,7 @@ import {Observable, Subscription} from 'rxjs';
 import {first, map, tap} from 'rxjs/operators';
 import {Filter, QueryMirror} from '../../shared/query-mirror';
 import {matrizColumns} from '../../meta-model/matriz-curricular';
+import notify from "devextreme/ui/notify";
 
 @Component({
   selector: 'samha-disciplina-form',
@@ -102,13 +103,13 @@ export class DisciplinaFormComponent implements OnInit, OnDestroy {
     if(this.disciplina?.id){
       this.dataService.update('disciplina', this.disciplina.id, this.disciplina).pipe(first()).subscribe(
         next => {
-          this.goBack();
+          this.router.navigate(['../', next.id], {relativeTo: this.route});
         }
       )
     }else{
       this.dataService.save('disciplina', this.disciplina).pipe(first()).subscribe(
         next => {
-          this.goBack();
+          this.router.navigate(['../', next.id], {relativeTo: this.route});
         }
       )
     }
@@ -157,5 +158,14 @@ export class DisciplinaFormComponent implements OnInit, OnDestroy {
 
   compareMatrizFunction(o1: any, o2: any){
     return (o1 != null && o2 != null) && o1.id == o2.id;
+  }
+
+  delete() {
+    this.dataService.delete('disciplina', this.disciplina.id).pipe(first()).subscribe(_ => {
+      notify('Registro excluído com sucesso!', 'success', 2000);
+      this.router.navigate(['../'], {relativeTo: this.route})
+    }, error => {
+      notify(error?.error?.message, 'error', 2000);
+    })
   }
 }

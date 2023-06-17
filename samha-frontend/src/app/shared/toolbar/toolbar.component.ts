@@ -13,6 +13,7 @@ export class ToolbarComponent implements OnInit {
    * de abrir e fechar a SideBar
    */
   @Output() sideBarClicked: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Input() opened: boolean;
 
   constructor(private router: Router,
               private localStorage: LocalStorageService) { }

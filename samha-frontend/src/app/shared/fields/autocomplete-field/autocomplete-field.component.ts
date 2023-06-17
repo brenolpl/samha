@@ -16,8 +16,10 @@ export class AutocompleteFieldComponent implements OnInit {
   @Output() onChange = new EventEmitter<any>();
   @Output() loaded = new EventEmitter<any>();
   @Output() onOpened = new EventEmitter<void>();
+  @Output() public clearButtonClicked = new EventEmitter<any>();
   filteredOptions: Observable<any[]>;
   list: any[];
+
 
   constructor(private dataService: DataService) {}
 
@@ -63,5 +65,10 @@ export class AutocompleteFieldComponent implements OnInit {
 
   onSelectionOpened() {
     this.onOpened.emit()
+  }
+
+  onClearButtonClicked() {
+    this.control.setValue('');
+    this.clearButtonClicked.emit();
   }
 }

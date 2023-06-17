@@ -7,6 +7,7 @@ import {matrizColumns} from '../../meta-model/matriz-curricular';
 import {Observable, of} from 'rxjs';
 import {PagedList} from '../../shared/paged-list';
 import {first} from 'rxjs/operators';
+import notify from "devextreme/ui/notify";
 
 @Component({
   selector: 'samha-turma-form',
@@ -112,5 +113,14 @@ export class TurmaFormComponent implements OnInit {
 
   public goBack() {
     this.router.navigate(['../'], {relativeTo: this.route});
+  }
+
+  delete() {
+    this.dataService.delete('turma', this.turma.id).pipe(first()).subscribe(_ => {
+      notify('Registro excluído com sucesso!', 'success', 2000);
+      this.router.navigate(['../'], {relativeTo: this.route})
+    }, error => {
+      notify(error?.error?.message, 'error', 2000);
+    })
   }
 }

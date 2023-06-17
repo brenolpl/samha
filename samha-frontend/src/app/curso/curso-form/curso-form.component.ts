@@ -4,8 +4,9 @@ import {DataService} from '../../shared/service/data.service';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {first} from 'rxjs/operators';
 import {ActivatedRoute, Router} from '@angular/router';
-import {MatButton} from '@angular/material/button';
 import {NotificationService} from "../../shared/service/notification.service";
+import notify from "devextreme/ui/notify";
+
 
 @Component({
   selector: 'samha-curso-form',
@@ -34,7 +35,7 @@ export class CursoFormComponent implements OnInit {
     )
   }
 
-  salvar(saveButton) {
+  salvar() {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
@@ -91,6 +92,15 @@ export class CursoFormComponent implements OnInit {
 
   goBack() {
     this.router.navigate(['../'], {relativeTo: this.route});
+  }
+
+  delete() {
+    this.dataService.delete('curso', this.curso.id).pipe(first()).subscribe(_ => {
+      notify('Registro excluído com sucesso!', 'success', 2000);
+      this.router.navigate(['../'], {relativeTo: this.route})
+    }, error => {
+      notify(error?.error?.message, 'error', 2000);
+    })
   }
 }
 

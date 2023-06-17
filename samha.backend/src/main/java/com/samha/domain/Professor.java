@@ -17,7 +17,7 @@ import org.hibernate.envers.Audited;
 public class Professor extends Servidor implements Comparable<Object>{
 
     @Column(nullable = false)
-    private double cargaHoraria;
+    private Double cargaHoraria;
 
     @Column(nullable = false)
     private boolean ativo;
@@ -50,11 +50,11 @@ public class Professor extends Servidor implements Comparable<Object>{
         return getNome();
     }
 
-    public double getCargaHoraria() {
+    public Double getCargaHoraria() {
         return cargaHoraria;
     }
 
-    public void setCargaHoraria(double cargaHoraria) {
+    public void setCargaHoraria(Double cargaHoraria) {
         this.cargaHoraria = cargaHoraria;
     }
 

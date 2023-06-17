@@ -4,6 +4,7 @@ import {DataService} from "../../shared/service/data.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Subscription} from "rxjs";
 import {first} from "rxjs/operators";
+import notify from "devextreme/ui/notify";
 
 @Component({
   selector: 'samha-matriz-form',
@@ -52,13 +53,13 @@ export class MatrizFormComponent implements OnInit {
     if(this.matriz?.id){
       this.dataService.update('matrizCurricular', this.matriz.id, this.matriz).pipe(first()).subscribe(
         next => {
-          this.goBack();
+          this.router.navigate(['../', next.id], {relativeTo: this.route});
         }
       )
     }else {
       this.dataService.save('matrizCurricular', this.matriz).pipe(first()).subscribe(
         next => {
-          this.goBack();
+          this.router.navigate(['../', next.id], {relativeTo: this.route});
         }
       )
     }
@@ -74,5 +75,14 @@ export class MatrizFormComponent implements OnInit {
       semestre: this.form.get('semestre').value,
       curso: this.form.get('curso').value
     }
+  }
+
+  delete() {
+    this.dataService.delete('matrizCurricular', this.matriz.id).pipe(first()).subscribe(_ => {
+      notify('Registro excluído com sucesso!', 'success', 2000);
+      this.router.navigate(['../'], {relativeTo: this.route})
+    }, error => {
+      notify(error?.error?.message, 'error', 2000);
+    })
   }
 }
