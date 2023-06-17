@@ -39,7 +39,7 @@ input{
 }
 
 .highlight{
-  background: #42A948; /* green */
+  background: #d7ffda; /* green */
 }
 
 .mat-cell {
@@ -56,10 +56,6 @@ input{
 
 .dx-button-has-icon .dx-button-content {
   padding: 4px;
-}
-
-.dx-button {
-  background-color: transparent;
 }
 
 .no-border-radius {

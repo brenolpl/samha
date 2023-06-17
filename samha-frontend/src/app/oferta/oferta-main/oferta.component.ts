@@ -509,7 +509,7 @@ export class OfertaComponent implements OnInit, OnDestroy {
           }
         })
     }else {
-      notify('Ainda não há aulas para esta oferta.', 'error', 2000);
+      this.notification.error('Ainda não há aulas para esta oferta.');
     }
   }
 
@@ -519,15 +519,15 @@ export class OfertaComponent implements OnInit, OnDestroy {
       this.dataService.post('aula/salvar-aulas', aulas).pipe(first()).subscribe(
         next => {
           this.executeOfertaQuery();
-          notify('As aulas foram salvas com sucesso!', 'success', 2000);
+          this.notification.success('As aulas foram salvas com sucesso!');
         },
         catchError( err => {
-          notify(err.message, 'error', 2000);
+          this.notification.handleError(err);
           return of(new Error(err))
         })
       )
     } else {
-      notify('Ainda não há aulas para esta oferta.', 'error', 2000);
+      this.notification.error('Ainda não há aulas para esta oferta.');
     }
   }
 
@@ -542,11 +542,11 @@ export class OfertaComponent implements OnInit, OnDestroy {
     this.notificacoes = [];
     this.progresso = 0;
     if(this.ofertaChanged) {
-      notify('Você possui alterações que precisam ser salvas antes de realizar esta ação!', 'error', 2000);
+      this.notification.error('Você possui alterações que precisam ser salvas antes de realizar esta ação!');
       return;
     }
     this.notificacaoTurma = true;
-    notify('Este processo pode demorar um pouco! Você pode conferir seu progresso na barra de carregamento abaixo!', 'warning', 4000);
+    this.notification.warning('Este processo pode demorar um pouco! Você pode conferir seu progresso na barra de carregamento abaixo!');
     const timer = setInterval(() => {
       this.progresso += 1; // Incrementa o progresso em 5%
 

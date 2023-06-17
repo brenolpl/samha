@@ -5,6 +5,7 @@ import com.samha.persistence.filter.Page;
 import org.hibernate.envers.AuditReader;
 import org.hibernate.envers.AuditReaderFactory;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -33,17 +34,20 @@ public class GenericRepository implements IGenericRepository{
     }
 
     @Override
+    @Transactional
     public <ENTITY> ENTITY save(ENTITY entityClass) {
         entityManager.persist(entityClass);
         return entityClass;
     }
 
     @Override
+    @Transactional
     public <ENTITY> void delete(ENTITY entityClass) {
         entityManager.remove(entityClass);
     }
 
     @Override
+    @Transactional
     public <ENTITY> ENTITY update(ENTITY entity) {
         return entityManager.merge(entity);
     }

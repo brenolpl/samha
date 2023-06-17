@@ -8,6 +8,7 @@ import {Observable, of} from 'rxjs';
 import {PagedList} from '../../shared/paged-list';
 import {first} from 'rxjs/operators';
 import notify from "devextreme/ui/notify";
+import {NotificationService} from "../../shared/service/notification.service";
 
 @Component({
   selector: 'samha-turma-form',
@@ -21,6 +22,7 @@ export class TurmaFormComponent implements OnInit {
   turma: any;
 
   constructor(private formBuilder: FormBuilder,
+              private notificationService: NotificationService,
               private router: Router,
               private route: ActivatedRoute,
               private dataService: DataService) {}
@@ -117,10 +119,10 @@ export class TurmaFormComponent implements OnInit {
 
   delete() {
     this.dataService.delete('turma', this.turma.id).pipe(first()).subscribe(_ => {
-      notify('Registro excluído com sucesso!', 'success', 2000);
+      this.notificationService.success('Registro excluído com sucesso!')
       this.router.navigate(['../'], {relativeTo: this.route})
     }, error => {
-      notify(error?.error?.message, 'error', 2000);
+      this.notificationService.error(error);
     })
   }
 }

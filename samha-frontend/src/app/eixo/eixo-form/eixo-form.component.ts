@@ -5,6 +5,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {first} from 'rxjs/operators';
 import notify from "devextreme/ui/notify";
 import {error} from "protractor";
+import {NotificationService} from "../../shared/service/notification.service";
 
 @Component({
   selector: 'samha-eixo-form',
@@ -16,6 +17,7 @@ export class EixoFormComponent implements OnInit {
   eixo: any = {};
 
   constructor(private formBuilder: FormBuilder,
+              private notification: NotificationService,
               private dataService: DataService,
               private route: ActivatedRoute,
               private router: Router) { }
@@ -46,20 +48,20 @@ export class EixoFormComponent implements OnInit {
     if(this.eixo?.id){
       this.dataService.update('eixo', this.eixo.id, this.eixo).pipe(first()).subscribe(
         next => {
-          notify('Eixo atualizado com sucesso!', 'success', 2000);
+          this.notification.success('Eixo atualizado com sucesso!');
           this.router.navigate(['../', next.id], {relativeTo: this.route});
         },
         error => {
-          notify(error?.error.message, 'error', 2000);
+          this.notification.handleError(error);
         }
       )
     }else{
       this.dataService.save('eixo', this.eixo).pipe(first()).subscribe(
         next => {
-          notify('Eixo criado com sucesso!', 'success', 2000);
+          this.notification.success('Eixo criado com sucesso!');
           this.router.navigate(['../', next.id], {relativeTo: this.route});
         }, error => {
-          notify(error?.error.message, 'error', 2000);
+          this.notification.handleError(error);
         }
       )
     }
@@ -76,10 +78,10 @@ export class EixoFormComponent implements OnInit {
 
   delete() {
     this.dataService.delete('eixo', this.eixo.id).pipe(first()).subscribe(_ => {
-      notify('Registro excluído com sucesso!', 'success', 2000);
+      this.notification.success('Registro excluído com sucesso!');
       this.router.navigate(['../'], {relativeTo: this.route})
     }, error => {
-      notify(error?.error?.message, 'error', 2000);
+      this.notification.handleError(error);
     })
   }
 }

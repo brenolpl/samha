@@ -92,10 +92,10 @@ export class CoordenadoriaFormComponent implements OnInit {
 
   delete() {
     this.dataService.delete('coordenadoria', this.coord.id).pipe(first()).subscribe(_ => {
-      notify('Registro excluído com sucesso!', 'success', 2000);
+      this.notification.success('Registro excluído com sucesso!');
       this.router.navigate(['../'], {relativeTo: this.route})
     }, error => {
-      notify(error?.error?.message, 'error', 2000);
+      this.notification.handleError(error);
     })
   }
 }

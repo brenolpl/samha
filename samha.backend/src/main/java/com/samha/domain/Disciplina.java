@@ -15,7 +15,7 @@ import javax.persistence.Table;
 @Entity
 @Audited
 @Table(name = "disciplina")
-public class Disciplina extends BaseLogEntity implements Comparable<Object> {
+public class Disciplina extends BaseLogEntity {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,28 +45,6 @@ public class Disciplina extends BaseLogEntity implements Comparable<Object> {
 
     public Disciplina() {
     }
-
-    public Disciplina(int id, String nome, String sigla, String tipo, int cargaHoraria, int qtAulas, MatrizCurricular matriz, int periodo) {
-        this.id = id;
-        this.nome = nome;
-        this.tipo = tipo;
-        this.cargaHoraria = cargaHoraria;
-        this.qtAulas = qtAulas;
-        this.matriz = matriz;
-        this.periodo = periodo;
-        this.sigla = sigla;
-    }
-
-    public Disciplina(String nome, String sigla, String tipo, int cargaHoraria, int qtAulas, MatrizCurricular matriz, int periodo) {
-        this.nome = nome;
-        this.tipo = tipo;
-        this.cargaHoraria = cargaHoraria;
-        this.qtAulas = qtAulas;
-        this.matriz = matriz;
-        this.periodo = periodo;
-        this.sigla = sigla;
-    }
-
     public Integer getId() {
         return id;
     }
@@ -99,13 +77,6 @@ public class Disciplina extends BaseLogEntity implements Comparable<Object> {
         this.tipo = tipo;
     }
 
-    public int getCargaHoraria() {
-        return cargaHoraria;
-    }
-
-    public void setCargaHoraria(int cargaHoraria) {
-        this.cargaHoraria = cargaHoraria;
-    }
 
     public int getQtAulas() {
         return qtAulas;
@@ -136,15 +107,12 @@ public class Disciplina extends BaseLogEntity implements Comparable<Object> {
     public String toString() {
         return nome;
     }
-    
-    public Object[] toArray() {
-        return new Object[] { this, getQtAulas(), getTipo() };
+
+    public int getCargaHoraria() {
+        return cargaHoraria;
     }
 
-    @Override
-    public int compareTo(Object o) {
-        Disciplina other = (Disciplina) o; 
-        return this.getNome().compareTo(other.getNome());
+    public void setCargaHoraria(int cargaHoraria) {
+        this.cargaHoraria = cargaHoraria;
     }
-    
 }

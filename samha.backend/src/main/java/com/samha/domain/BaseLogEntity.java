@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.time.temporal.TemporalField;
 
 /**
  * Para a implementação desta classe, foi realizada uma junção de Hibernate Envers com o Spring Entity Listeners.

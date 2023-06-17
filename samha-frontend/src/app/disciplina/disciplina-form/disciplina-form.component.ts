@@ -7,6 +7,8 @@ import {first, map, tap} from 'rxjs/operators';
 import {Filter, QueryMirror} from '../../shared/query-mirror';
 import {matrizColumns} from '../../meta-model/matriz-curricular';
 import notify from "devextreme/ui/notify";
+import {error} from "protractor";
+import {NotificationService} from "../../shared/service/notification.service";
 
 @Component({
   selector: 'samha-disciplina-form',
@@ -23,6 +25,7 @@ export class DisciplinaFormComponent implements OnInit, OnDestroy {
   private subscription2: Subscription;
 
   constructor(private formBuilder: FormBuilder,
+              private notification: NotificationService,
               private dataService: DataService,
               private route: ActivatedRoute,
               private router: Router) { }
@@ -103,13 +106,20 @@ export class DisciplinaFormComponent implements OnInit, OnDestroy {
     if(this.disciplina?.id){
       this.dataService.update('disciplina', this.disciplina.id, this.disciplina).pipe(first()).subscribe(
         next => {
+          this.notification.success('Disciplina salva com sucesso!');
           this.router.navigate(['../', next.id], {relativeTo: this.route});
+        }, error => {
+          this.notification.handleError(error);
         }
       )
     }else{
       this.dataService.save('disciplina', this.disciplina).pipe(first()).subscribe(
         next => {
+          this.notification.success('Disciplina salva com sucesso!');
           this.router.navigate(['../', next.id], {relativeTo: this.route});
+        },
+        error => {
+          this.notification.handleError(error);
         }
       )
     }
@@ -126,10 +136,11 @@ export class DisciplinaFormComponent implements OnInit, OnDestroy {
       periodo: this.form.get('periodo').value,
       sigla: this.form.get('sigla').value,
       tipo: this.form.get('tipo').value,
-      cargaHorara: this.form.get('cargaHoraria').value,
+      cargaHoraria: this.form.get('cargaHoraria').value,
       matriz: this.form.get('matriz').value
     }
 
+    console.log(this.disciplina);
   }
 
   private setCursoData() {
@@ -162,10 +173,10 @@ export class DisciplinaFormComponent implements OnInit, OnDestroy {
 
   delete() {
     this.dataService.delete('disciplina', this.disciplina.id).pipe(first()).subscribe(_ => {
-      notify('Registro excluído com sucesso!', 'success', 2000);
+      this.notification.success('Registro excluído com sucesso!');
       this.router.navigate(['../'], {relativeTo: this.route})
     }, error => {
-      notify(error?.error?.message, 'error', 2000);
+      this.notification.handleError(error);
     })
   }
 }

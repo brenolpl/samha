@@ -178,7 +178,9 @@ export class AlocacaoMainComponent implements OnInit {
     let query = new QueryMirror('professor');
     query.projections = professorColumns.map(column => column.columnDef);
     query.orderBy('nome asc');
-    let and = {};
+    let and = {
+      'ativo': {equals: true}
+    };
     if (this.professorForm.get('eixo').value == 1) {
       Object.assign(and, {'coordenadoria.eixo.id': {equals: $eventElement.id}});
     }
@@ -248,7 +250,7 @@ export class AlocacaoMainComponent implements OnInit {
         this.notification.success('Alocação incluída com sucesso!');
       },
       (err) => {
-        this.notification.error(err.message);
+        this.notification.error(err?.error?.message);
         return of(new Error(err));
       });
   }
@@ -263,7 +265,7 @@ export class AlocacaoMainComponent implements OnInit {
             this.notification.success('Alocação excluída com sucesso!');
           },
           err => {
-            this.notification.error('Falha ao excluir alocação');
+            this.notification.error(err);
           });
     } else {
       this.notification.error('Selecione uma alocação para ser excluída.');
@@ -276,7 +278,7 @@ export class AlocacaoMainComponent implements OnInit {
 
   private setAlocacaoDisplayedColumns() {
     this.alocacaoColumns.forEach(column => {
-      if (column.visible) {
+      if (column.visible && column.columnDef !== 'professor1.nome' && column.columnDef !== 'professor2.nome') {
         this.alocacaoDisplayedColumns.push(column.columnDef);
       }
     });
@@ -306,7 +308,7 @@ export class AlocacaoMainComponent implements OnInit {
     }
 
     if (!(this.disciplinaSelecionada.tipo == 'ESPECIAL') && this.selectedProfessorRowIndexes.length > 1) {
-      notify('Não é possível alocar mais de um professor para uma disciplina não-especial!', 'error', 2000);
+      this.notification.error('Não é possível alocar mais de um professor para uma disciplina não-especial!');
       return false;
     }
 
@@ -320,7 +322,7 @@ export class AlocacaoMainComponent implements OnInit {
 
   onCargaHorariaClicked() {
     if (this.professorForm.get('eixo').value == 2) {
-      notify('Selecione um eixo!', 'error', 2000);
+      this.notification.error('Selecione um eixo!')
       return;
     }
     this.cargaHoraria$ = this.dataService.post('alocacao/obter-carga-horaria', {

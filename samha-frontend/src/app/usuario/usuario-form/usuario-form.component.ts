@@ -11,6 +11,7 @@ import {catchError, first, map} from 'rxjs/operators';
 import DevExpress from "devextreme";
 import notify from "devextreme/ui/notify";
 import {QueryMirror} from "../../shared/query-mirror";
+import {NotificationService} from "../../shared/service/notification.service";
 
 @Component({
   selector: 'samha-usuario-form',
@@ -29,6 +30,7 @@ export class UsuarioFormComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
               public dialog: MatDialog,
               private dataService: DataService,
+              private notification: NotificationService,
               private route: ActivatedRoute,
               private router: Router) {
     this.form = formBuilder.group({
@@ -80,22 +82,13 @@ export class UsuarioFormComponent implements OnInit {
     this.usuario = usuario;
     this.dataService.post('usuario/newUser', usuario).pipe(first()).subscribe(
       next => {
+        this.notification.success('Usuario salvo com sucesso!');
         this.router.navigate(['../', next.id], {relativeTo: this.route})
       },
       error => {
-        notify(error.error.message, 'error', 2000);
+        this.notification.handleError(error);
       }
     );
-  }
-
-  private setUsuarioData() {
-    return {
-      id: null,
-      login: this.form.get('login').value,
-      senha: this.form.get('senha').value,
-      papel_id: this.form.get('papel').value,
-      servidor_id: this.form.get('servidor_id').value
-    }
   }
 
   setProfessorValue(id) {
@@ -122,8 +115,6 @@ export class UsuarioFormComponent implements OnInit {
     }else {
       this.form.get('senha').addValidators([Validators.required]);
     }
-    // if(this.usuario?.coordenador?.servidor?.id) this.servidor$ = this.dataService.get('servidor', this.usuario?.coordenador?.servidor?.id);
-
   }
 
   goBack() {

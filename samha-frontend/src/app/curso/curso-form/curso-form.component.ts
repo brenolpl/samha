@@ -1,11 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {Observable} from 'rxjs';
 import {DataService} from '../../shared/service/data.service';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {first} from 'rxjs/operators';
 import {ActivatedRoute, Router} from '@angular/router';
 import {NotificationService} from "../../shared/service/notification.service";
-import notify from "devextreme/ui/notify";
 
 
 @Component({
@@ -96,10 +94,10 @@ export class CursoFormComponent implements OnInit {
 
   delete() {
     this.dataService.delete('curso', this.curso.id).pipe(first()).subscribe(_ => {
-      notify('Registro excluído com sucesso!', 'success', 2000);
+      this.notification.success('Registro excluído com sucesso!')
       this.router.navigate(['../'], {relativeTo: this.route})
     }, error => {
-      notify(error?.error?.message, 'error', 2000);
+      this.notification.error(error)
     })
   }
 }

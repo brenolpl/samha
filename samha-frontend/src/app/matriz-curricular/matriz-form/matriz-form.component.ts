@@ -5,6 +5,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {Subscription} from "rxjs";
 import {first} from "rxjs/operators";
 import notify from "devextreme/ui/notify";
+import {NotificationService} from "../../shared/service/notification.service";
 
 @Component({
   selector: 'samha-matriz-form',
@@ -18,6 +19,7 @@ export class MatrizFormComponent implements OnInit {
   private subscription: Subscription;
 
   constructor(private formBuilder: FormBuilder,
+              private notification: NotificationService,
               private dataService: DataService,
               private route: ActivatedRoute,
               private router: Router) { }
@@ -79,10 +81,10 @@ export class MatrizFormComponent implements OnInit {
 
   delete() {
     this.dataService.delete('matrizCurricular', this.matriz.id).pipe(first()).subscribe(_ => {
-      notify('Registro excluído com sucesso!', 'success', 2000);
+      this.notification.success('Registro excluído com sucesso!');
       this.router.navigate(['../'], {relativeTo: this.route})
     }, error => {
-      notify(error?.error?.message, 'error', 2000);
+      this.notification.handleError(error);
     })
   }
 }
