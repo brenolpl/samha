@@ -12,7 +12,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @RestController
-public abstract class BaseController<ENTITY, LOG_TARGET extends BaseLogEntity, KEY extends Serializable> {
+public abstract class BaseController<ENTITY extends BaseLogEntity, LOG_TARGET extends BaseLogEntity, KEY extends Serializable> {
 
     private final Class<ENTITY> entityClass;
     private final Class<LOG_TARGET> logTargetClass;

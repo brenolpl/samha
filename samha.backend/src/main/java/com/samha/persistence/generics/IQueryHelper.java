@@ -19,6 +19,8 @@ public interface IQueryHelper<ENTITY, TARGET> {
 
     Predicate equal(Expression<?> var1, Object var2);
 
+    IQueryHelper<ENTITY, TARGET> select(Selection<?>... selections);
+
     Predicate notEqual(Expression<?> var1, Object var2);
 
     Predicate or(Predicate... var1);

@@ -1,21 +1,25 @@
 package com.samha.domain;
 
-import javax.persistence.*;
-
+import com.samha.domain.log.ProfessorAud;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-
-
 import org.hibernate.envers.Audited;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.Table;
 
 @Entity
 @Audited
 @Table(name = "professor")
 @PrimaryKeyJoinColumn(name = "professor_id")
 public class Professor extends Servidor implements Comparable<Object>{
-
     @Column(nullable = false)
     private Double cargaHoraria;
 
@@ -87,5 +91,10 @@ public class Professor extends Servidor implements Comparable<Object>{
 
         Professor other = (Professor) o;
         return this.getNome().compareTo(other.getNome());
+    }
+
+    @Override
+    public Class getLogEntity() {
+        return ProfessorAud.class;
     }
 }

@@ -1,5 +1,6 @@
 package com.samha.domain;
 
+import com.samha.domain.log.EixoAud;
 import org.hibernate.envers.Audited;
 
 import javax.persistence.Column;
@@ -62,5 +63,10 @@ public class Eixo extends BaseLogEntity implements Comparable<Object> {
     public int compareTo(Object o) {
         Eixo other = (Eixo) o;
         return this.getNome().compareTo(other.getNome());
+    }
+
+    @Override
+    public Class getLogEntity() {
+        return EixoAud.class;
     }
 }

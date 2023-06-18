@@ -1,5 +1,6 @@
 package com.samha.domain;
 
+import com.samha.domain.log.OfertaAud;
 import org.hibernate.envers.Audited;
 
 import javax.persistence.Column;
@@ -16,7 +17,7 @@ import javax.persistence.Table;
 @Audited
 @Table(name = "oferta")
 public class Oferta extends BaseLogEntity {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -86,5 +87,10 @@ public class Oferta extends BaseLogEntity {
 
     public void setTurma(Turma turma) {
         this.turma = turma;
-    } 
+    }
+
+    @Override
+    public Class getLogEntity() {
+        return OfertaAud.class;
+    }
 }

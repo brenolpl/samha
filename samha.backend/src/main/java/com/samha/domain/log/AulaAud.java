@@ -9,7 +9,10 @@ import javax.persistence.*;
 @Entity
 @Table(name = "aula_aud")
 public class AulaAud extends BaseLogEntity {
-
+    @Override
+    public Class getLogEntity() {
+        return this.getClass();
+    }
     @EmbeddedId
     private AuditCompositeKey pk;
 

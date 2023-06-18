@@ -11,4 +11,11 @@ public class AuditCompositeKey implements Serializable {
     private static final long serialVersionUID = -8619406593704953837L;
     private Integer id;
     private Integer rev;
+
+    public AuditCompositeKey(Integer id, Integer rev) {
+        this.id = id;
+        this.rev = rev;
+    }
+
+    public AuditCompositeKey() {}
 }

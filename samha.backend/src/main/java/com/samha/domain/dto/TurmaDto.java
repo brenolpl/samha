@@ -1,4 +1,4 @@
-package com.samha.domain;
+package com.samha.domain.dto;
 
 import com.samha.persistence.filter.Query;
 import lombok.Data;

@@ -2,22 +2,15 @@ package com.samha.application.aula;
 
 import com.samha.commons.CorEnum;
 import com.samha.commons.UseCase;
-import com.samha.domain.Alocacao_;
 import com.samha.domain.Aula;
-import com.samha.domain.Aula_;
-import com.samha.domain.Conflito;
+import com.samha.domain.dto.Conflito;
 import com.samha.domain.Disciplina;
-import com.samha.domain.Disciplina_;
-import com.samha.domain.Mensagem;
-import com.samha.domain.Oferta_;
+import com.samha.domain.dto.Mensagem;
 import com.samha.domain.Professor;
 import com.samha.persistence.generics.IGenericRepository;
-import org.springframework.scheduling.annotation.Async;
 
 import javax.inject.Inject;
-import java.awt.*;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;

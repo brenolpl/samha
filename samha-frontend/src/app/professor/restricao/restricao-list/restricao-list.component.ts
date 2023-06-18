@@ -11,6 +11,7 @@ import {TableDialogComponent} from '../../../shared/table-dialog/table-dialog.co
 import {servidorColumns} from '../../../meta-model/servidor';
 import {ConfirmDialogComponent} from '../../../shared/confirm-dialog/confirm-dialog.component';
 import {first} from 'rxjs/operators';
+import {NotificationService} from "../../../shared/service/notification.service";
 
 @Component({
   selector: 'samha-restricao-list',
@@ -27,6 +28,7 @@ export class RestricaoListComponent implements OnInit {
 
   constructor(private dataService: DataService,
               private router: Router,
+              private notification: NotificationService,
               private route: ActivatedRoute,
               public dialog: MatDialog) { }
 
@@ -75,9 +77,10 @@ export class RestricaoListComponent implements OnInit {
     dialogRef.afterClosed().pipe(first()).subscribe(result => {
       if(result){
         this.dataService.delete('restricaoProfessor', row.id).pipe(first()).subscribe(
-          next => {
+          _ => {
+            this.notification.success('Registro excluído com sucesso!');
             this.dataSource$ = this.dataService.query(this.query);
-          }
+          }, error => this.notification.handleError(error)
         );
       }
     });

@@ -1,6 +1,10 @@
 package com.samha.domain;
 
-import java.io.Serializable;
+import com.samha.domain.log.CursoAud;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+import org.hibernate.envers.Audited;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,15 +14,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
-import org.hibernate.envers.Audited;
+import java.io.Serializable;
 
 @Entity
 @Audited
 @Table(name = "curso")
 public class Curso extends BaseLogEntity implements Comparable<Object>, Serializable {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -104,5 +106,10 @@ public class Curso extends BaseLogEntity implements Comparable<Object>, Serializ
 
     public void setProfessor(Professor professor) {
         this.professor = professor;
+    }
+
+    @Override
+    public Class getLogEntity() {
+        return CursoAud.class;
     }
 }

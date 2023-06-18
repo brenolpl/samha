@@ -1,5 +1,8 @@
 package com.samha.domain;
 
+import com.samha.domain.log.AulaAud;
+import org.hibernate.envers.Audited;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -9,13 +12,14 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import org.hibernate.envers.Audited;
 
 @Entity
 @Audited
 @Table(name = "aula")
 public class Aula extends BaseLogEntity implements Comparable<Object> {
-    
+
+    private static Class<AulaAud> logClass = AulaAud.class;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -121,5 +125,10 @@ public class Aula extends BaseLogEntity implements Comparable<Object> {
         if(this.getNumero() > other.getNumero())
             return 1;
         return -1;
+    }
+
+    @Override
+    public Class getLogEntity() {
+        return AulaAud.class;
     }
 }

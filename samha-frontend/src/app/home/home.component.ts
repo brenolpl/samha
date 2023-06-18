@@ -9,6 +9,7 @@ import {catchError} from 'rxjs/operators';
 import {Menu} from '../meta-model/menu';
 import {cursoColumns} from '../meta-model/curso';
 import {turmaColumns} from '../meta-model/turma';
+import {NotificationService} from "../shared/service/notification.service";
 
 @Component({
   selector: 'samha-home',
@@ -28,19 +29,17 @@ export class HomeComponent implements OnInit{
 
   columns: any[] = [];
 
-  constructor(private dataService: DataService) {
+  constructor(private dataService: DataService,
+              private notification: NotificationService) {
   }
 
   ngOnInit(): void {
     this.loading$ = this.dataService.post('menu/list', null).pipe(
-      // tap(
-      //   next => {
-      //     this.menusPermitidos = next;
-      //     this.loadMenus();
-      //   }
-      // ),
       catchError(
-        () => of([])
+        err => {
+          this.notification.handleError(err)
+          return of(new Error(err));
+        }
       )
     );
   }

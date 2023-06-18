@@ -31,7 +31,7 @@ import java.time.ZonedDateTime;
 @MappedSuperclass
 @Audited
 @EntityListeners(AuditingEntityListener.class)
-public class BaseLogEntity implements Serializable {
+public abstract class BaseLogEntity implements Serializable {
 
     @Column(name = "created_date", updatable = false)
     @CreatedDate
@@ -48,6 +48,8 @@ public class BaseLogEntity implements Serializable {
     @Column(name = "modified_by")
     @LastModifiedBy
     private String modifiedBy;
+
+    public abstract Class getLogEntity();
 
     public LocalDateTime getCreatedDate() {
 

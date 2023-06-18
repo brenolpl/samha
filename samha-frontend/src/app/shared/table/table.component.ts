@@ -110,7 +110,7 @@ export class TableComponent implements OnInit {
       query.orderBy(this.orderBy);
     }
     return this.dataService.query(query).pipe(
-      catchError(_ => {
+      catchError(err => {
         let empty = {
           listMap: [],
           page: {
@@ -119,6 +119,7 @@ export class TableComponent implements OnInit {
             totalItems: 0
           }
         };
+        this.notification.handleError(err)
         return of(new PagedList(empty));
       })
     );
@@ -147,14 +148,11 @@ export class TableComponent implements OnInit {
       result => {
       if(result){
         this.dataService.delete(this.resource, row.id).pipe(first()).subscribe(
-          next => {
+          _ => {
             this.notification.success('Registro excluído com sucesso!');
             this.dataSource$ = this.loadTableData();
           },
-          error => {
-            this.notification.error('Erro ao excluir registro');
-            throw error;
-          }
+          error => this.notification.handleError(error)
         );
       }
     });

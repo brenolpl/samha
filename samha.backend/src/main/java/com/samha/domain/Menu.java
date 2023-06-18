@@ -1,14 +1,22 @@
 package com.samha.domain;
 
+import com.samha.domain.log.MenuAud;
 import org.hibernate.envers.Audited;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import java.util.Set;
 
 @Entity
 @Audited
 public class Menu extends BaseLogEntity{
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -42,5 +50,10 @@ public class Menu extends BaseLogEntity{
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    @Override
+    public Class getLogEntity() {
+        return MenuAud.class;
     }
 }

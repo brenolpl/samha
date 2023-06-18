@@ -69,7 +69,7 @@ export class TurmaListComponent extends TableComponent implements OnInit {
       query.orderBy(this.orderBy);
     }
     return this.dataService.query(query).pipe(
-      catchError(_ => {
+      catchError(err => {
         let empty = {
           listMap: [],
           page: {
@@ -78,6 +78,7 @@ export class TurmaListComponent extends TableComponent implements OnInit {
             totalItems: 0
           }
         };
+        this.notification.handleError(err)
         return of(new PagedList(empty));
       })
     );

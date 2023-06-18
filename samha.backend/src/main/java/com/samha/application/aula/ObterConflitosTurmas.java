@@ -3,8 +3,8 @@ package com.samha.application.aula;
 import com.samha.commons.UseCase;
 import com.samha.domain.Aula;
 import com.samha.domain.Aula_;
-import com.samha.domain.Conflito;
-import com.samha.domain.ConflitoTurma;
+import com.samha.domain.dto.Conflito;
+import com.samha.domain.dto.ConflitoTurma;
 import com.samha.domain.Oferta_;
 import com.samha.domain.Turma;
 import com.samha.domain.Turma_;
@@ -12,7 +12,6 @@ import com.samha.persistence.generics.IGenericRepository;
 import org.springframework.scheduling.annotation.Async;
 
 import javax.inject.Inject;
-import javax.persistence.criteria.Order;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;

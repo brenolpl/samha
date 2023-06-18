@@ -249,10 +249,7 @@ export class AlocacaoMainComponent implements OnInit {
         this.alocacao$ = this.getAlocacao$(this.matrizControl.value.id);
         this.notification.success('Alocação incluída com sucesso!');
       },
-      (err) => {
-        this.notification.error(err?.error?.message);
-        return of(new Error(err));
-      });
+      (err) => this.notification.handleError(err));
   }
 
   delete() {
@@ -265,7 +262,7 @@ export class AlocacaoMainComponent implements OnInit {
             this.notification.success('Alocação excluída com sucesso!');
           },
           err => {
-            this.notification.error(err);
+            this.notification.handleError(err);
           });
     } else {
       this.notification.error('Selecione uma alocação para ser excluída.');

@@ -163,4 +163,9 @@ public class RestricaoProfessorAud extends BaseLogEntity {
     public void setProfessor(Professor professor) {
         this.professor = professor;
     }
+
+    @Override
+    public Class getLogEntity() {
+        return RestricaoProfessorAud.class;
+    }
 }

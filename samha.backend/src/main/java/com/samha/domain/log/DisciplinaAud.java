@@ -3,11 +3,21 @@ package com.samha.domain.log;
 import com.samha.domain.BaseLogEntity;
 import com.samha.domain.MatrizCurricular;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "disciplina_aud")
 public class DisciplinaAud extends BaseLogEntity {
+    @Override
+    public Class getLogEntity() {
+        return this.getClass();
+    }
 
     @EmbeddedId
     private AuditCompositeKey pk;

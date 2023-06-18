@@ -10,6 +10,10 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "papel_aud")
 public class PapelAud extends BaseLogEntity {
+    @Override
+    public Class getLogEntity() {
+        return this.getClass();
+    }
     @EmbeddedId
     private AuditCompositeKey pk;
 

@@ -10,6 +10,10 @@ import java.io.Serializable;
 @Entity
 @Table(name = "professor_aud")
 public class ProfessorAud extends BaseLogEntity{
+    @Override
+    public Class getLogEntity() {
+        return this.getClass();
+    }
     @EmbeddedId
     private ProfessorAuditPK pk;
 

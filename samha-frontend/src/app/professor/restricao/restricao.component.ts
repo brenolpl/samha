@@ -94,24 +94,18 @@ export class RestricaoComponent implements OnInit, IFormComponent, OnDestroy {
         first()
       ).subscribe(
         data => {
-          this.restricao = data;
           this.notification.success('A Restrição foi atualizada com sucesso!');
+          this.router.navigate(['../', data.id], {relativeTo: this.route})
         },
-        error => {
-          this.notification.error('Falha ao atualizar restrição!');
-          throw error;
-        }
+        error => this.notification.handleError(error)
       )
     } else {
       this.dataService.save('restricaoProfessor', this.restricao).pipe(first()).subscribe(
         next => {
-          this.restricao = next;
           this.notification.success('A Restrição foi criada com sucesso!');
+          this.router.navigate(['../', next.id], {relativeTo: this.route})
         },
-        error => {
-          this.notification.error('Falha ao criar restrição!');
-          throw error;
-        }
+        error => this.notification.handleError(error)
       );
     }
   }

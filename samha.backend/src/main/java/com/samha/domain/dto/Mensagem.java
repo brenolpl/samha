@@ -1,4 +1,6 @@
-package com.samha.domain;
+package com.samha.domain.dto;
+
+import com.samha.domain.Aula;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -65,6 +65,12 @@ public class QueryHelper<ENTITY, TARGET> implements IQueryHelper<ENTITY, TARGET>
     }
 
     @Override
+    public IQueryHelper<ENTITY, TARGET> select(Selection<?>... selections) {
+        query.select(builder.construct(targetClass, selections));
+        return this;
+    }
+
+    @Override
     public Predicate notEqual(Expression<?> var1, Object var2) {
         if(var2 == null) return builder.and();
         return builder.notEqual(var1, var2);

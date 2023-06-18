@@ -50,22 +50,15 @@ export class CoordenadoriaFormComponent implements OnInit {
           this.notification.success('Coordenadoria atualizada com sucesso!');
           this.router.navigate(['../', next.id], {relativeTo: this.route});
         },
-        error => {
-          this.notification.error('Falha ao atualizar coordenadoria!');
-          throw error;
-        }
+        error => this.notification.handleError(error)
       )
     }else{
       this.dataService.save('coordenadoria', this.coord).pipe(first()).subscribe(
         next => {
           this.notification.success('Coordenadoria criada com sucesso!');
           this.router.navigate(['../', next.id], {relativeTo: this.route});
-          this.coord = next;
         },
-        error => {
-          this.notification.error('Falha ao criar coordenadoria!');
-          throw error;
-        }
+        error => this.notification.handleError(error)
       )
     }
   }

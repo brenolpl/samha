@@ -1,13 +1,20 @@
 package com.samha.domain;
 
+import com.samha.domain.log.PapelAud;
 import org.hibernate.envers.Audited;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
 @Audited
 @Table(name = "papel")
 public class Papel extends BaseLogEntity{
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -29,5 +36,10 @@ public class Papel extends BaseLogEntity{
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    @Override
+    public Class getLogEntity() {
+        return PapelAud.class;
     }
 }

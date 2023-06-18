@@ -44,10 +44,7 @@ export class CursoFormComponent implements OnInit {
         next => {
           this.notification.success('Curso criado com sucesso!');
         },
-        error => {
-          this.notification.error('Não foi possível criar o curso');
-          throw error;
-        }
+        error => this.notification.handleError(error)
       );
     } else {
       this.dataService.update('curso', this.curso.id, this.curso).pipe(first()).subscribe(
@@ -55,10 +52,7 @@ export class CursoFormComponent implements OnInit {
           this.curso = next;
           this.notification.success('Curso atualizado com sucesso!');
         },
-        error => {
-          this.notification.error('Erro ao atualizar curso!');
-          throw error;
-        }
+        error => this.notification.handleError(error)
       );
     }
   }
@@ -97,7 +91,7 @@ export class CursoFormComponent implements OnInit {
       this.notification.success('Registro excluído com sucesso!')
       this.router.navigate(['../'], {relativeTo: this.route})
     }, error => {
-      this.notification.error(error)
+      this.notification.handleError(error)
     })
   }
 }

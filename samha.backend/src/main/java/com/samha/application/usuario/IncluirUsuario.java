@@ -7,7 +7,7 @@ import com.samha.domain.Papel;
 import com.samha.domain.Servidor;
 import com.samha.domain.Servidor_;
 import com.samha.domain.Usuario;
-import com.samha.domain.UsuarioDto;
+import com.samha.domain.dto.UsuarioDto;
 import com.samha.persistence.generics.IGenericRepository;
 import com.samha.service.IUsuarioService;
 

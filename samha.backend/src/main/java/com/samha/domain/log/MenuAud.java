@@ -9,6 +9,10 @@ import java.util.Set;
 @Entity
 @Table(name = "menu_aud")
 public class MenuAud extends BaseLogEntity {
+    @Override
+    public Class getLogEntity() {
+        return this.getClass();
+    }
     @EmbeddedId
     private AuditCompositeKey pk;
 

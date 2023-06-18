@@ -6,6 +6,8 @@ import {restricaoProfessorColumns} from '../../meta-model/restricao-professor';
 import {IFormComponent} from '../../meta-model/iform-component';
 import {ActivatedRoute, Route, Router} from '@angular/router';
 import {first} from 'rxjs/operators';
+import {NotificationService} from "../../shared/service/notification.service";
+import {error} from "protractor";
 
 @Component({
   selector: 'samha-professor-form',
@@ -24,6 +26,7 @@ export class ProfessorFormComponent implements OnInit, IFormComponent, OnDestroy
   constructor(private dataService: DataService,
               private formBuilder: FormBuilder,
               private route: ActivatedRoute,
+              private notification: NotificationService,
               private router: Router) { }
 
   ngOnInit(): void {
@@ -48,14 +51,16 @@ export class ProfessorFormComponent implements OnInit, IFormComponent, OnDestroy
        next => {
          this.form.markAsUntouched();
          this.form.markAsPristine();
-         this.router.navigate(['../'], {relativeTo: this.route})
-       }
+         this.notification.success('Professor atualizado com sucesso!');
+         this.router.navigate(['../', next.id], {relativeTo: this.route})
+       }, error => this.notification.handleError(error)
      )
     }else {
       this.dataService.save('professor', this.professor).pipe(first()).subscribe(
         next => {
+          this.notification.success('Professor salvo com sucesso!');
           this.router.navigate(['../' + next.id], {relativeTo: this.route})
-        }
+        }, error => this.notification.handleError(error)
       );
     }
   }

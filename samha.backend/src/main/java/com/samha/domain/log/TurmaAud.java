@@ -8,6 +8,10 @@ import javax.persistence.*;
 @Entity
 @Table(name = "turma_aud")
 public class TurmaAud extends BaseLogEntity {
+    @Override
+    public Class getLogEntity() {
+        return this.getClass();
+    }
 
     @EmbeddedId
     private AuditCompositeKey pk;

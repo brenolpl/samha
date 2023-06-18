@@ -15,6 +15,11 @@ import java.io.Serializable;
 @Entity
 @Table(name = "coordenador_aud")
 public class CoordenadorAud extends BaseLogEntity {
+    @Override
+    public Class getLogEntity() {
+        return this.getClass();
+    }
+
     @EmbeddedId
     private CoordenadorAuditPk pk;
 

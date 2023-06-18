@@ -1,6 +1,7 @@
 package com.samha.application.commons;
 
 import com.samha.commons.UseCase;
+import com.samha.domain.BaseLogEntity;
 import com.samha.persistence.generics.IGenericRepository;
 import com.samha.persistence.filter.PagedList;
 import com.samha.persistence.filter.Query;
@@ -15,7 +16,7 @@ import java.util.stream.Collectors;
 
 @NoArgsConstructor
 @AllArgsConstructor
-public class QueryEntities<ENTITY> extends UseCase<PagedList> {
+public class QueryEntities<ENTITY extends BaseLogEntity> extends UseCase<PagedList> {
 
     private Class<ENTITY> entityClass;
     protected Query entityQuery;

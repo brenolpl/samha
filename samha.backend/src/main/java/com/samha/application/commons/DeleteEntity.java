@@ -1,12 +1,13 @@
 package com.samha.application.commons;
 
 import com.samha.commons.UseCase;
+import com.samha.domain.BaseLogEntity;
 import com.samha.persistence.generics.IGenericRepository;
 
 import javax.inject.Inject;
 import java.io.Serializable;
 
-public class DeleteEntity<ENTITY, KEY extends Serializable> extends UseCase<Void> {
+public class DeleteEntity<ENTITY extends BaseLogEntity, KEY extends Serializable> extends UseCase<Void> {
 
     private final Class<ENTITY> entityClass;
     private final KEY id;

@@ -5,8 +5,8 @@ import com.samha.commons.UseCase;
 import com.samha.domain.Alocacao_;
 import com.samha.domain.Aula;
 import com.samha.domain.Aula_;
-import com.samha.domain.Conflito;
-import com.samha.domain.Mensagem;
+import com.samha.domain.dto.Conflito;
+import com.samha.domain.dto.Mensagem;
 import com.samha.domain.Oferta_;
 import com.samha.domain.Professor;
 import com.samha.domain.Professor_;
@@ -18,7 +18,6 @@ import com.samha.util.Horarios;
 
 import javax.inject.Inject;
 import javax.persistence.criteria.Predicate;
-import javax.swing.text.html.Option;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.ResolverStyle;

@@ -1,4 +1,6 @@
-package com.samha.domain;
+package com.samha.domain.dto;
+
+import com.samha.domain.Turma;
 
 import java.util.List;
 

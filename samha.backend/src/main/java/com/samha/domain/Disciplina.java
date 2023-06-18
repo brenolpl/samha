@@ -1,5 +1,6 @@
 package com.samha.domain;
 
+import com.samha.domain.log.DisciplinaAud;
 import org.hibernate.envers.Audited;
 
 import javax.persistence.Column;
@@ -114,5 +115,10 @@ public class Disciplina extends BaseLogEntity {
 
     public void setCargaHoraria(int cargaHoraria) {
         this.cargaHoraria = cargaHoraria;
+    }
+
+    @Override
+    public Class getLogEntity() {
+        return DisciplinaAud.class;
     }
 }

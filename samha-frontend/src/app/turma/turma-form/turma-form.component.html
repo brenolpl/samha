@@ -43,7 +43,7 @@
       </mat-form-field>
       <mat-form-field appearance="outline" class="w-100">
         <mat-label>Semestre</mat-label>
-        <input matInput type="number" formControlName="semestre">
+        <input matInput type="number" [max]="2" [min]="1" formControlName="semestre">
       </mat-form-field>
 
       <mat-checkbox class="mb-3" formControlName="ativa">Ativa</mat-checkbox>

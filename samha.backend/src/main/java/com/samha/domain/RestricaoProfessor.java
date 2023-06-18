@@ -1,5 +1,6 @@
 package com.samha.domain;
 
+import com.samha.domain.log.RestricaoProfessorAud;
 import org.hibernate.envers.Audited;
 
 import javax.persistence.Column;
@@ -16,7 +17,6 @@ import javax.persistence.Table;
 @Audited
 @Table(name = "restricao_professor")
 public class RestricaoProfessor extends BaseLogEntity{
-    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -161,5 +161,10 @@ public class RestricaoProfessor extends BaseLogEntity{
 
     public void setProfessor(Professor professor) {
         this.professor = professor;
+    }
+
+    @Override
+    public Class getLogEntity() {
+        return RestricaoProfessorAud.class;
     }
 }

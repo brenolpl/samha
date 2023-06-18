@@ -9,6 +9,7 @@ import {PagedList} from '../../shared/paged-list';
 import {first} from 'rxjs/operators';
 import notify from "devextreme/ui/notify";
 import {NotificationService} from "../../shared/service/notification.service";
+import {error} from "protractor";
 
 @Component({
   selector: 'samha-turma-form',
@@ -89,14 +90,16 @@ export class TurmaFormComponent implements OnInit {
     if(this.turma?.id){
       this.dataService.update('turma', this.turma.id, this.turma).pipe(first()).subscribe(
         next => {
-          this.goBack();
-        }
+          this.notificationService.success('Turma salva com sucesso!');
+          this.router.navigate(['../', next.id], {relativeTo: this.route});
+        }, error => this.notificationService.handleError(error)
       )
     }else{
       this.dataService.save('turma', this.turma).pipe(first()).subscribe(
         next => {
+          this.notificationService.success('Turma salva com sucesso!');
           this.router.navigate(['../' + next.id], {relativeTo: this.route});
-        }
+        }, error => this.notificationService.handleError(error)
       )
     }
 
@@ -109,7 +112,8 @@ export class TurmaFormComponent implements OnInit {
       ano: this.form.get('ano').value,
       turno: this.form.get('turno').value,
       matriz: this.form.get('matriz').value,
-      ativa: this.form.get('ativa').value
+      ativa: this.form.get('ativa').value,
+      semestre: this.form.get('semestre').value
     }
   }
 

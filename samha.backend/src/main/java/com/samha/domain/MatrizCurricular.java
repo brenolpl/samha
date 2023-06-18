@@ -1,5 +1,12 @@
 package com.samha.domain;
 
+import com.samha.domain.log.MatrizCurricularAud;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.envers.Audited;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -9,11 +16,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-import org.hibernate.envers.Audited;
 
 @Entity
 @Audited
@@ -110,5 +112,10 @@ public class MatrizCurricular extends BaseLogEntity implements Comparable<Object
     public int compareTo(Object o) {
         MatrizCurricular other = (MatrizCurricular) o;
         return this.getNome().compareTo(other.getNome());
+    }
+
+    @Override
+    public Class getLogEntity() {
+        return MatrizCurricularAud.class;
     }
 }

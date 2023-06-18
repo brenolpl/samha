@@ -72,7 +72,7 @@ export class LogComponent extends TableComponent implements OnInit {
       query.orderBy(this.orderBy);
     }
     return this.dataService.queryLog(query).pipe(
-      catchError(_ => {
+      catchError(err => {
         let empty = {
           listMap: [],
           page: {
@@ -81,6 +81,7 @@ export class LogComponent extends TableComponent implements OnInit {
             totalItems: 0
           }
         };
+        this.notification.handleError(err)
         return of(new PagedList(empty));
       })
     );

@@ -1,11 +1,12 @@
 package com.samha.application.commons;
 
 import com.samha.commons.UseCase;
+import com.samha.domain.BaseLogEntity;
 import com.samha.persistence.generics.IGenericRepository;
 
 import javax.inject.Inject;
 
-public class InsertEntity<ENTITY> extends UseCase<ENTITY> {
+public class InsertEntity<ENTITY extends BaseLogEntity> extends UseCase<ENTITY> {
 
     private final ENTITY entityClass;
 
