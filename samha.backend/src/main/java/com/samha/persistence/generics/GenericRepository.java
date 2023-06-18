@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class GenericRepository implements IGenericRepository{
+public class GenericRepository implements IGenericRepository {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GenericRepository.class);
 
@@ -111,6 +111,11 @@ public class GenericRepository implements IGenericRepository{
     }
 
     @Override
+    public void flush() {
+        entityManager.flush();
+    }
+
+    @Override
     public AuditReader getReader() {
         return AuditReaderFactory.get(this.entityManager);
     }
@@ -155,6 +160,7 @@ public class GenericRepository implements IGenericRepository{
             revTypeField.set(logInstance, 2);
             entityManager.persist(logInstance);
         } catch (Exception e) {
+            //Não interromper a execução do fluxo se houver erro ao criar o log.
             LOGGER.error(e.getMessage());
         }
     }

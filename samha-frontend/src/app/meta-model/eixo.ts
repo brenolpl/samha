@@ -7,6 +7,6 @@ export const eixoColumns: TableColumnModel[] = [
 ]
 
 export const eixoLogColumns: TableColumnModel[] = [
+  {columnDef: 'nome', header: 'Nome', visible: true},
   ...commonLogColumns,
-  {columnDef: 'nome', header: 'Nome', visible: true}
 ]

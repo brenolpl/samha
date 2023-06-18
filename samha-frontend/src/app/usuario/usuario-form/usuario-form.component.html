@@ -1,14 +1,30 @@
 <mat-toolbar class="sub-toolbar">
-  <div class="d-flex justify-content-start w-100">
+  <dx-button
+    style="border: none"
+    type="success"
+    stylingMode="outlined"
+    (onClick)="goBack()"
+    [icon]="'chevronprev'"
+  ></dx-button>
+  <div class="d-flex justify-content-end w-100">
     <dx-button
-      style="border: none"
+      icon="save"
       type="success"
+      text="Salvar"
+      (onClick)="salvar()">
+    </dx-button>
+    <span class="m-1"></span>
+    <dx-button
+      type="danger"
       stylingMode="outlined"
-      (onClick)="goBack()"
-      [icon]="'chevronprev'"
+      icon="trash"
+      text="Excluir"
+      [visible]="usuario?.id"
+      (onClick)="delete()"
     ></dx-button>
   </div>
 </mat-toolbar>
+
 <div class="base-padding">
   <mat-card class="mat-elevation-z8">
   <mat-toolbar class="toolbar-border"><span style="color: #4caf50;">Cadastrar Usuários</span></mat-toolbar>
@@ -52,10 +68,6 @@
           <i class="fas fa-search"></i>
         </button>
       </div>
-      <mat-card-actions class="d-flex justify-content-end">
-        <button mat-button (click)="salvar()" [disabled]="!form.valid" class="sub-toolbar-button"><mat-icon>save</mat-icon>  Salvar</button>
-        <button mat-button class="cancelar-button" (click)="goBack()"><mat-icon>cancel</mat-icon> Cancelar</button>
-      </mat-card-actions>
     </form>
   </mat-card-content>
 </mat-card>

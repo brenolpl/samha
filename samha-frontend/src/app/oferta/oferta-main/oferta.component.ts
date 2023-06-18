@@ -92,8 +92,12 @@ export class OfertaComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
   }
 
-  goToLog() {
-    this.router.navigate(['log'], {relativeTo: this.route});
+  goToLogOferta() {
+    this.router.navigate(['logOferta'], {relativeTo: this.route});
+  }
+
+  goToLogAulas() {
+    this.router.navigate(['logAulas'], {relativeTo: this.route});
   }
 
   onCursoChange(_) {
@@ -568,5 +572,20 @@ export class OfertaComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.validarTurmasSub?.unsubscribe();
+  }
+
+  onNovaAulaCreated(item: any) {
+    switch (item.turno){
+      case 0:
+        this.aulasMatutinas = this.aulasMatutinas.filter(a => !(a.dia == item.dia && a.numero == item.numero));
+        break;
+      case 6:
+        this.aulasVespertinas = this.aulasVespertinas.filter(a => !(a.dia == item.dia && a.numero == item.numero));
+        break;
+      case 12:
+        this.aulasNoturnas = this.aulasNoturnas.filter(a => !(a.dia == item.dia && a.numero == item.numero));
+        break;
+    }
+    this.onAulaChanged(item)
   }
 }

@@ -36,14 +36,14 @@ public class UseCaseFacade {
     private <T> T executeAndHandleExceptions(UseCase<T> useCase){
         try {
             return useCase.execute();
-        } catch (BusinessException | UnexpectedException | AuthorizationServiceException ex) {
+        } catch (BusinessException | AuthorizationServiceException ex) {
             throw new BusinessException(ex.getMessage(), ex);
         } catch (ConstraintViolationException ex) {
             throw new BusinessException(ex.getMessage(), ex);
         } catch (DataIntegrityViolationException ex) {
             throw new BusinessException(ex.getMessage(), ex);
         } catch (Throwable ex) {
-            throw new UnexpectedException(ex.getMessage(), ex);
+            throw new UnexpectedException("Ocorreu um erro inesperado", ex);
         }
     }
 

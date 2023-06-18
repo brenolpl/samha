@@ -30,5 +30,7 @@ public interface IGenericRepository {
 
     <ENTITY extends BaseLogEntity, TARGET> TARGET findsingle(Class<ENTITY> entityClass, Class<TARGET> targetClass, IQueryBuilder<ENTITY, TARGET> queryBuilder);
 
+    void flush();
+
     AuditReader getReader();
 }

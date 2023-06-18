@@ -15,11 +15,15 @@ import {
 import { OfertaGridComponent } from './oferta-grid/oferta-grid.component';
 import { ProfessorGridComponent } from './professor-grid/professor-grid.component';
 import {CdkAccordionModule} from "@angular/cdk/accordion";
+import { OfertaLogComponent } from './oferta-log/oferta-log.component';
+import { AulaLogComponent } from './aula-log/aula-log.component';
 @NgModule({
   declarations: [
     OfertaComponent,
     OfertaGridComponent,
-    ProfessorGridComponent
+    ProfessorGridComponent,
+    OfertaLogComponent,
+    AulaLogComponent
   ],
     imports: [
         OfertaRoutingModule,

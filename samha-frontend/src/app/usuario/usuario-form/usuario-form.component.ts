@@ -7,9 +7,7 @@ import {Observable, of} from 'rxjs';
 import {DataService} from '../../shared/service/data.service';
 import {servidorColumns} from '../../meta-model/servidor';
 import {ActivatedRoute, Router} from '@angular/router';
-import {catchError, first, map} from 'rxjs/operators';
-import DevExpress from "devextreme";
-import notify from "devextreme/ui/notify";
+import {first, map} from 'rxjs/operators';
 import {QueryMirror} from "../../shared/query-mirror";
 import {NotificationService} from "../../shared/service/notification.service";
 
@@ -72,6 +70,7 @@ export class UsuarioFormComponent implements OnInit {
   }
 
   salvar() {
+    //TODO: acrescentar necessidade de caracteres especiais para melhorar a criptografia (muitas senhas salvas como 123)
     let usuario = {
       id: this.usuario?.id,
       login: this.form.get('login').value,
@@ -119,5 +118,14 @@ export class UsuarioFormComponent implements OnInit {
 
   goBack() {
     this.router.navigate(['../'], {relativeTo: this.route});
+  }
+
+  delete() {
+    this.dataService.delete('usuario', this.usuario.id).pipe(first()).subscribe(_ => {
+      this.notification.success('Registro excluído com sucesso!');
+      this.router.navigate(['../'], {relativeTo: this.route})
+    }, error => {
+      this.notification.handleError(error);
+    })
   }
 }

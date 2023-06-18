@@ -1,12 +1,12 @@
 import {EventEmitter, Injectable} from '@angular/core';
-import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from '@angular/router';
+import {ActivatedRouteSnapshot, CanActivate, CanDeactivate, Router, RouterStateSnapshot} from '@angular/router';
 import {Observable, of, Subscription} from 'rxjs';
 import {LocalStorageService} from '../shared/service/local-storage.service';
 import {catchError, map, tap} from 'rxjs/operators';
 import {AuthService} from '../shared/service/auth.service';
 
 @Injectable()
-export class AuthGuard implements CanActivate{
+export class AuthGuard implements CanActivate, CanDeactivate<any> {
 
   response: EventEmitter<void> = new EventEmitter<void>();
 
@@ -14,6 +14,11 @@ export class AuthGuard implements CanActivate{
               private router: Router,
               private authService: AuthService) {
   }
+
+  canDeactivate(component: any, route: ActivatedRouteSnapshot, currentState: RouterStateSnapshot): Observable<boolean> | boolean {
+    return this.canActivate(route, currentState);
+  }
+
 
 
   canActivate(

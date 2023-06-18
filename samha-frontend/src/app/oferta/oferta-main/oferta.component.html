@@ -1,3 +1,23 @@
+<mat-toolbar class="sub-toolbar">
+  <div class="d-flex justify-content-end w-100">
+    <dx-button
+      (onClick)="goToLogOferta()"
+      stylingMode="outlined"
+      type="normal"
+      icon="clock"
+      text="Log de Alterações (Oferta)">
+    </dx-button>
+    <span class="m-1"></span>
+    <dx-button
+      (onClick)="goToLogAulas()"
+      stylingMode="outlined"
+      type="normal"
+      icon="clock"
+      text="Log de Alterações (Aulas)">
+    </dx-button>
+  </div>
+</mat-toolbar>
+
 <div class="base-padding">
   <mat-card class="col-md-12 mb-2">
     <div class="d-inline-block w-100" style="height: 30px">
@@ -196,7 +216,7 @@
           [novaAula]="novaAula"
           [turmaName]="turmaControl.value?.nome"
           (onAulaIndexChange)="onAulaIndexChanged($event)"
-          (onNovaAulaCreated)="onAulaChanged($event)"
+          (onNovaAulaCreated)="onNovaAulaCreated($event)"
           (onAulaDeleted)="onAulaDeleted($event)"
         ></samha-oferta-grid>
       </div>

@@ -1,5 +1,6 @@
 package com.samha.persistence.filter;
 
+import com.samha.commons.BusinessException;
 import com.samha.persistence.generics.ExpressionHelper;
 import com.samha.persistence.generics.IExpressionBuilder;
 import org.hibernate.query.criteria.internal.path.PluralAttributePath;
@@ -95,10 +96,10 @@ public class EntityQueryParser<ENTITY, TARGET> {
                 forceLeftJoin = entry.forceLeftJoin;
             }
         } catch (Exception e) {
-            throw new RuntimeException("Path not found | key: " + key + " | value: " + value );
+            throw new BusinessException("Path not found | key: " + key + " | value: " + value );
         }
 
-        if(entry == null) throw new RuntimeException("Path invalid");
+        if(entry == null) throw new BusinessException("Path invalid");
         return entry;
     }
 

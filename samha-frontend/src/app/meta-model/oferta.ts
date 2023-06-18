@@ -11,6 +11,6 @@ export const ofertaColumns: TableColumnModel[] = [
 ]
 
 export const ofertaLogColumns: TableColumnModel[] = [
-  ...commonLogColumns,
-  ...ofertaColumns.filter(f => f.columnDef !== 'id')
+  ...ofertaColumns.filter(f => f.columnDef !== 'id'),
+  ...commonLogColumns
 ]
