@@ -10,7 +10,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {CanDeactivateGuard} from './guards/can-deactivate-guard';
 import {FormResolver} from './guards/form-resolver';
 import {MaterialModule} from './shared/material/material.module';
-import {ToastContainerModule, ToastrModule} from "ngx-toastr";
+import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 
 @NgModule({
   declarations: [
@@ -24,16 +24,7 @@ import {ToastContainerModule, ToastrModule} from "ngx-toastr";
     SharedModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    ToastrModule.forRoot({
-      positionClass: 'toast-bottom-right',
-      progressBar: true,
-      tapToDismiss: true,
-      progressAnimation: 'decreasing',
-      newestOnTop: false,
-      easing: 'ease-in',
-      closeButton: true,
-    }),
-    ToastContainerModule
+    FontAwesomeModule
   ],
   providers: [
     AuthGuard,

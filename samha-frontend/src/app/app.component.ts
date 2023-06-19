@@ -1,15 +1,13 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Observable, of, Subscription} from 'rxjs';
 import {MenuEnum} from './shared/menu-enum';
-import {alocacaoColumns} from './meta-model/alocacao';
 import {TableColumnModel} from './meta-model/table-column-model';
 import {DataService} from './shared/service/data.service';
 import {LocalStorageService} from './shared/service/local-storage.service';
 import {Router} from '@angular/router';
 import {AuthService} from './shared/service/auth.service';
 import {catchError, map, tap} from 'rxjs/operators';
-import {ToastContainerDirective, ToastrService} from "ngx-toastr";
-import { locale, loadMessages } from "devextreme/localization";
+import { locale } from "devextreme/localization";
 
 @Component({
   selector: 'samha-root',
@@ -17,7 +15,6 @@ import { locale, loadMessages } from "devextreme/localization";
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit, OnDestroy{
-  @ViewChild(ToastContainerDirective, { static: true }) toastContainer: ToastContainerDirective;
   columns: TableColumnModel[];
   opened = false;
   menus$: Observable<any>;
@@ -26,13 +23,11 @@ export class AppComponent implements OnInit, OnDestroy{
   constructor(private dataService: DataService,
               private localStorage: LocalStorageService,
               private router: Router,
-              private authService: AuthService,
-              private toastrService: ToastrService) {
+              private authService: AuthService) {
     locale(navigator.language);
   }
 
   ngOnInit(): void {
-    this.toastrService.overlayContainer = this.toastContainer;
     this.showMenu = this.authService.isTokenValid().pipe(
       map( _ => {
         this.opened = true;
@@ -89,7 +84,7 @@ export class AppComponent implements OnInit, OnDestroy{
         this.router.navigate(['oferta']);
         break;
       case MenuEnum.RELATORIOS:
-        this.columns = [];
+        this.router.navigate(['relatorio']);
         break;
       case MenuEnum.TURMAS:
         this.router.navigate(['turma']);

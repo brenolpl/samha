@@ -5,19 +5,18 @@ import com.samha.domain.Alocacao;
 import com.samha.domain.Alocacao_;
 import com.samha.domain.Aula;
 import com.samha.domain.Aula_;
-import com.samha.domain.Coordenadoria;
 import com.samha.domain.Coordenadoria_;
 import com.samha.domain.Eixo_;
 import com.samha.domain.Professor;
 import com.samha.domain.Professor_;
-import com.samha.domain.Turma;
+import com.samha.persistence.IProfessorRepository;
 import com.samha.persistence.generics.IGenericRepository;
-import liquibase.pro.packaged.T;
 
 import javax.inject.Inject;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ObterCargaHoraria extends UseCase<List<Professor>> {
@@ -33,8 +32,18 @@ public class ObterCargaHoraria extends UseCase<List<Professor>> {
         this.eixoId = Integer.parseInt(params.get("eixoId"));
     }
 
+    public ObterCargaHoraria(IGenericRepository genericRepository, Map<String, String> params) {
+        this.ano = Integer.parseInt(params.get("ano"));
+        this.semestre = Integer.parseInt(params.get("semestre"));
+        this.eixoId = Integer.parseInt(params.get("eixoId"));
+        this.genericRepository = genericRepository;
+    }
+
     @Inject
     private IGenericRepository genericRepository;
+
+    @Inject
+    private IProfessorRepository professorRepository;
 
     @Override
     protected List<Professor> execute() throws Exception {
@@ -66,8 +75,6 @@ public class ObterCargaHoraria extends UseCase<List<Professor>> {
                 professor.setCargaHoraria(total);
             }
         }
-
-
-        return professores;
+        return professorRepository.saveAllAndFlush(professores);
     }
 }

@@ -34,6 +34,11 @@
   text-align: center;
   width: 80px;
   font-size: 9pt;
+  font-weight: normal;
+}
+
+.relatorio-border {
+  border-bottom: 1px solid black;
 }
 
 .invisible-cell {

@@ -45,7 +45,8 @@ import {DxButtonModule, DxTextAreaModule, DxTextBoxModule} from "devextreme-angu
     ReactiveFormsModule,
     HttpClientModule,
     AutocompleteFieldComponent,
-    LogComponent
+    LogComponent,
+
   ],
   providers: [
     DataService,

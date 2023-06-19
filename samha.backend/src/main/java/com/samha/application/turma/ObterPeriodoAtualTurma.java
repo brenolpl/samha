@@ -23,6 +23,10 @@ public class ObterPeriodoAtualTurma extends UseCase<Integer> {
     @Override
     protected Integer execute() throws Exception {
         Turma turma = this.genericRepository.get(Turma.class, id);
+        return getPeriodoAtual(turma);
+    }
+
+    public static Integer getPeriodoAtual(Turma turma) {
         Integer anoAtual = LocalDateTime.now().getYear();
         if(turma.getMatriz().getCurso().getNivel().equals("ENSINO MÉDIO INTEGRADO")) {
             int qtAnos = anoAtual - turma.getAno() + 1;

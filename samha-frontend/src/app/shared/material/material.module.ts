@@ -40,7 +40,7 @@ import {MatTooltipModule} from "@angular/material/tooltip";
     MatDialogModule,
     MatCheckboxModule,
     MatAutocompleteModule,
-    MatTooltipModule
+    MatTooltipModule,
   ],
   providers: [
 

@@ -1,5 +1,6 @@
 package com.samha.domain;
 
+import com.samha.domain.dto.AulaDto;
 import com.samha.domain.log.ProfessorAud;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
@@ -14,6 +15,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+import java.util.List;
 
 @Entity
 @Audited
@@ -31,6 +34,9 @@ public class Professor extends Servidor implements Comparable<Object>{
     @Cascade(CascadeType.SAVE_UPDATE)
     @JoinColumn(name = "coordenadoria_id", nullable = false)
     private Coordenadoria coordenadoria;
+
+    @Transient
+    private List<AulaDto> aulas;
 
     public String obterNomeAbreviado(){
 
@@ -96,5 +102,13 @@ public class Professor extends Servidor implements Comparable<Object>{
     @Override
     public Class getLogEntity() {
         return ProfessorAud.class;
+    }
+
+    public List<AulaDto> getAulas() {
+        return aulas;
+    }
+
+    public void setAulas(List<AulaDto> aulas) {
+        this.aulas = aulas;
     }
 }

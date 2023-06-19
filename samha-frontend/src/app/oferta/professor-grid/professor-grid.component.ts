@@ -13,7 +13,6 @@ import {FormControl, Validators} from "@angular/forms";
 })
 export class ProfessorGridComponent implements OnChanges, OnDestroy {
   @Input() public alocacao: any;
-  @Input() public ofertaId: string;
   @Input() public ano: string;
   @Input() public semestre: string;
   public aulasConflitantes: any[] = [];

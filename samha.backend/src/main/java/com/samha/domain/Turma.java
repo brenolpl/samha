@@ -1,5 +1,6 @@
 package com.samha.domain;
 
+import com.samha.domain.dto.AulaDto;
 import com.samha.domain.log.TurmaAud;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
@@ -16,6 +17,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+import java.util.List;
 
 @Entity
 @Audited
@@ -45,6 +48,9 @@ public class Turma extends BaseLogEntity implements Comparable<Object> {
     @OnDelete(action = OnDeleteAction.NO_ACTION)
     @Cascade(CascadeType.SAVE_UPDATE)
     private MatrizCurricular matriz;
+
+    @Transient
+    private List<AulaDto> aulas;
     
     public Turma() {
     }
@@ -141,6 +147,14 @@ public class Turma extends BaseLogEntity implements Comparable<Object> {
         Turma other = (Turma) o;
         return this.getNome().compareTo(other.getNome());
         
+    }
+
+    public List<AulaDto> getAulas() {
+        return aulas;
+    }
+
+    public void setAulas(List<AulaDto> aulas) {
+        this.aulas = aulas;
     }
 
     @Override
