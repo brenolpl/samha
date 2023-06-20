@@ -110,4 +110,13 @@ export class ProfessorFormComponent implements OnInit, IFormComponent, OnDestroy
   goBack() {
     this.router.navigate(['../'], {relativeTo: this.route});
   }
+
+  delete() {
+    this.dataService.delete('professor', this.professor.id).pipe(first()).subscribe(_ => {
+      this.notification.success('Registro excluído com sucesso!');
+      this.router.navigate(['../'], {relativeTo: this.route})
+    }, error => {
+      this.notification.handleError(error);
+    })
+  }
 }

@@ -171,11 +171,19 @@ export class TableComponent implements OnInit {
         value = data.toLocaleDateString() + ' às ' + data.toLocaleTimeString();
         return value;
       case FieldEnum.BOOLEAN:
-        let checkedValue = '';
         if(value){
-          checkedValue =  'checked';
+          value = '<div style="width: 20px; height: 20px; background-color: white; border: 1px solid #ccc;">\n' +
+            '  <div style="display: block; width: 100%; height: 100%; background-color: white; text-align: center;">\n' +
+            '    <span style="color: #337ab7; font-weight: bold;">✓</span>\n' +
+            '  </div>\n' +
+            '</div>'
+        } else {
+          value = '<div style="width: 20px; height: 20px; background-color: white; border: 1px solid #ccc;">\n' +
+            '  <div style="display: none; width: 100%; height: 100%; background-color: #337ab7; text-align: center;">\n' +
+            '    <span style="color: white; font-weight: bold;">✓</span>\n' +
+            '  </div>\n' +
+            '</div>'
         }
-        value = '<input type="checkbox" disabled="true" '+ checkedValue +'>';
         return this.sanitizer.bypassSecurityTrustHtml(value);
       case FieldEnum.OPERATION:
         switch(value){

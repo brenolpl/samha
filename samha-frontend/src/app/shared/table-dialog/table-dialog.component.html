@@ -1,9 +1,20 @@
-<h2 mat-dialog-title>Selecione</h2>
 <mat-dialog-content class="p-0">
   <samha-table class="w-100" [columns]="data.columns" [resource]="data.resource" [toolbarHeader]="data.toolbarHeader" (onSelectedRow)="setEntityId($event)"></samha-table>
 </mat-dialog-content>
 <mat-dialog-actions class="justify-content-end">
-  <button mat-button class="sub-toolbar-button" (click)="salvar()" [disabled]="entityId == null"><mat-icon>save</mat-icon> Salvar</button>
-  <button mat-button class="cancelar-button" (click)="onNoClick()"><mat-icon>cancel</mat-icon> Cancelar</button>
+  <dx-button
+    type="success"
+    icon="save"
+    text="Salvar"
+    (onClick)="salvar()"
+  ></dx-button>
+  <span class="m-1"></span>
+  <dx-button
+    type="normal"
+    stylingMode="outlined"
+    icon="clear"
+    text="Cancelar"
+    (onClick)="onNoClick()"
+  ></dx-button>
 </mat-dialog-actions>
 

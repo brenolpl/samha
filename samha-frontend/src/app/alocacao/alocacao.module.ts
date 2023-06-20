@@ -8,7 +8,7 @@ import {CommonModule} from "@angular/common";
 import { AlocacaoMainComponent } from './alocacao-main/alocacao-main.component';
 import {MatDividerModule} from "@angular/material/divider";
 import {MatRadioModule} from "@angular/material/radio";
-import {DxButtonModule, DxCheckBoxModule, DxPopupModule, DxScrollViewModule} from "devextreme-angular";
+import {DxButtonModule, DxPopupModule, DxScrollViewModule} from "devextreme-angular";
 
 
 @NgModule({
@@ -17,6 +17,6 @@ import {DxButtonModule, DxCheckBoxModule, DxPopupModule, DxScrollViewModule} fro
     AlocacaoFormComponent,
     AlocacaoMainComponent,
   ],
-  imports: [AlocacaoRoutingModule, SharedModule, MaterialModule, CommonModule, MatDividerModule, MatRadioModule, DxButtonModule, DxPopupModule, DxScrollViewModule, DxCheckBoxModule]
+  imports: [AlocacaoRoutingModule, SharedModule, MaterialModule, CommonModule, MatDividerModule, MatRadioModule, DxButtonModule, DxPopupModule, DxScrollViewModule]
 })
 export class AlocacaoModule {}

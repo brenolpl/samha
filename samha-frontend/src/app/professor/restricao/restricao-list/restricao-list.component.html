@@ -22,7 +22,7 @@
 
         <ng-container *ngFor="let column of columns" [matColumnDef]="column.columnDef">
           <mat-header-cell *matHeaderCellDef> {{ column.header }}</mat-header-cell>
-          <mat-cell *matCellDef="let row">{{ findColumnValue(row, column.columnDef) }}</mat-cell>
+          <mat-cell *matCellDef="let row" [innerHTML]="findColumnValue(row, column)"></mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="actions">

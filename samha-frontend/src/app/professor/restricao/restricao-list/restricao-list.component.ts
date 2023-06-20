@@ -12,6 +12,9 @@ import {servidorColumns} from '../../../meta-model/servidor';
 import {ConfirmDialogComponent} from '../../../shared/confirm-dialog/confirm-dialog.component';
 import {first} from 'rxjs/operators';
 import {NotificationService} from "../../../shared/service/notification.service";
+import {FieldEnum} from "../../../shared/field-enum";
+import {OperationEnum} from "../../../shared/operation-enum";
+import {DomSanitizer} from "@angular/platform-browser";
 
 @Component({
   selector: 'samha-restricao-list',
@@ -29,6 +32,7 @@ export class RestricaoListComponent implements OnInit {
   constructor(private dataService: DataService,
               private router: Router,
               private notification: NotificationService,
+              private sanitizer: DomSanitizer,
               private route: ActivatedRoute,
               public dialog: MatDialog) { }
 
@@ -61,7 +65,45 @@ export class RestricaoListComponent implements OnInit {
     this.displayedColumns.push('actions');
   }
 
-  findColumnValue = (row, column): string => <string> column.split('.').reduce((acc, cur) => acc[cur], row);
+  findColumnValue(row, column: TableColumnModel) {
+    let value = column.columnDef.split('.').reduce((acc, cur) => acc[cur], row);
+    switch (column.type) {
+      case FieldEnum.DATE:
+        let data = new Date(value);
+        value = data.toLocaleDateString() + ' às ' + data.toLocaleTimeString();
+        return value;
+      case FieldEnum.BOOLEAN:
+        if(value){
+          value = '<div style="width: 20px; height: 20px; background-color: white; border: 1px solid #ccc;">\n' +
+            '  <div style="display: block; width: 100%; height: 100%; background-color: white; text-align: center;">\n' +
+            '    <span style="color: #337ab7; font-weight: bold;">✓</span>\n' +
+            '  </div>\n' +
+            '</div>'
+        } else {
+          value = '<div style="width: 20px; height: 20px; background-color: white; border: 1px solid #ccc;">\n' +
+            '  <div style="display: none; width: 100%; height: 100%; background-color: #337ab7; text-align: center;">\n' +
+            '    <span style="color: white; font-weight: bold;">✓</span>\n' +
+            '  </div>\n' +
+            '</div>'
+        }
+
+        return this.sanitizer.bypassSecurityTrustHtml(value);
+      case FieldEnum.OPERATION:
+        switch(value){
+          case OperationEnum.INSERT:
+            value = 'INSERT';
+            return value;
+          case OperationEnum.UPDATE:
+            value = 'UPDATE';
+            return value;
+          case OperationEnum.DELETE:
+            value = 'DELETE';
+            return value;
+        }
+      default:
+        return value;
+    }
+  }
 
   onEditClick(row) {
     this.router.navigate(['restricaoProfessor/' + row.id], {relativeTo: this.route})

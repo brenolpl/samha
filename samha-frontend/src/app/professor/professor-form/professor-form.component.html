@@ -8,12 +8,19 @@
   ></dx-button>
   <div class="d-flex w-100 align-items-end justify-content-end align-content-end">
     <dx-button
-      style="margin-right: 1em"
       type="success"
-      stylingMode="outlined"
       (onClick)="salvar()"
       icon="save"
       text="Salvar"
+    ></dx-button>
+    <span class="m-1"></span>
+    <dx-button
+      type="danger"
+      stylingMode="outlined"
+      icon="trash"
+      text="Excluir"
+      [visible]="professor?.id"
+      (onClick)="delete()"
     ></dx-button>
   </div>
 </mat-toolbar>
