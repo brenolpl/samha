@@ -124,7 +124,7 @@ public abstract class JWTUtil {
             String access_token = authorizationHeader.substring("Bearer ".length());
             JWTUtil.verifyToken(access_token);
             response.setStatus(OK.value());
-            new ObjectMapper().writeValue(response.getOutputStream(), null);
+            new ObjectMapper().writeValue(response.getOutputStream(), true);
         } catch (JWTVerificationException e) {
             JWTUtil.writeErrorResponse(response, e);
         }

@@ -9,13 +9,11 @@
       (onValueChanged)="onSearchChange()"
       type="text"
       mode="search"
-      width="30%"
       placeholder="Pesquisar"
       (onEnterKey)="onSearchChange()"></dx-text-box>
     <ng-container *ngIf="enableNew()">
       <dx-button
         class="no-border-radius"
-        width="5%"
         icon="add"
         stylingMode="outlined"
         type="normal"
@@ -25,7 +23,6 @@
     <ng-container *ngFor="let action of toolbarActions">
       <dx-button
         class="no-border-radius"
-        width="5%"
         [icon]="action.icon"
         stylingMode="outlined"
         type="normal"
@@ -35,7 +32,7 @@
     </ng-container>
   </div>
   <mat-card-content>
-    <div *ngIf="dataSource$ | async as dataSource; else loading">
+    <div *ngIf="dataSource$ | async as dataSource; else loading" class="table-overflow">
       <table mat-table [dataSource]="defineDataSource(dataSource)" style="overflow-x: auto">
 
         <ng-container *ngFor="let column of columns" [matColumnDef]="column.columnDef">

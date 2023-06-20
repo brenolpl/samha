@@ -1,5 +1,5 @@
-<mat-card class="mt-2" *ngFor="let entity of entityData" [style]="entity.aulas.length <= 0 ? 'display: none' : ''">
-  <table class="w-100" style="border: 1px solid #dadada" #tables>
+<mat-card class="mt-2" *ngFor="let entity of entityData" [style]="entity.aulas.length <= 0 ? 'display: none; overflow: scroll' : 'overflow: scroll'">
+  <table class="w-100" style="border: 1px solid #dadada">
     <thead>
     <tr>
       <th colspan="8" style="border-right: 1px solid #4caf50">
@@ -49,9 +49,10 @@
           class="professor-cell cell-border"
           style="white-space: nowrap;">
         <p style="margin-top: -20px">{{aula.nomeTurma}}</p>
-        <p>{{aula?.nomeDisciplina}}</p>
+        <p>{{aula?.siglaDisciplina}}</p>
       </td>
     </tr>
     </tbody>
   </table>
+  <small style="font-weight: normal" *ngFor="let disciplina of disciplinas">{{disciplina.sigla + ': ' + disciplina.nome + '   |   ' }}</small>
 </mat-card>

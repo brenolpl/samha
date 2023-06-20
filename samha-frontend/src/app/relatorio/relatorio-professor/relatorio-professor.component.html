@@ -11,9 +11,9 @@
         </mat-radio-group>
       </div>
       </div>
-      <div class="row" *ngIf="radioGroupControl.value == 2 || radioGroupControl.value == 3 || radioGroupControl.value == 4">
-        <div class="col-3">
-          <mat-form-field appearance="outline">
+      <div class="row justify-content-center" *ngIf="radioGroupControl.value == 2 || radioGroupControl.value == 3 || radioGroupControl.value == 4">
+        <div class="col-md-3">
+          <mat-form-field appearance="outline" class="d-block">
             <mat-label>Eixo</mat-label>
             <mat-select formControlName="eixo" *ngIf="eixos$ | async as eixos; else loading" [compareWith]="compareFunction" (selectionChange)="onEixoSelected($event)">
               <mat-option *ngFor="let eixo of eixos" [value]="eixo">{{eixo.nome}}</mat-option>
@@ -24,7 +24,7 @@
           </mat-form-field>
         </div>
 
-        <div class="col-3" *ngIf="radioGroupControl.value == 3 || radioGroupControl.value == 4">
+        <div class="col-md-3" *ngIf="radioGroupControl.value == 3 || radioGroupControl.value == 4">
           <mat-form-field appearance="outline" class="d-block">
             <mat-label>Coordenadoria</mat-label>
             <mat-select formControlName="coord" *ngIf="coord$ | async as coordenadorias; else loadingCoord;" (selectionChange)="onCoordSelected($event)" [compareWith]="compareFunction">
@@ -38,7 +38,7 @@
           </mat-form-field>
         </div>
 
-        <div class="col-3" *ngIf="radioGroupControl.value == 4">
+        <div class="col-md-3" *ngIf="radioGroupControl.value == 4">
           <mat-form-field appearance="outline" class="d-block">
             <mat-label>Professor</mat-label>
             <mat-select [formControl]="professorControl" *ngIf="professorSelection$ | async as professores; else loadingProf;" [compareWith]="compareFunction" (selectionChange)="onProfessorSelected($event)">
@@ -52,15 +52,15 @@
           </mat-form-field>
         </div>
       </div>
-      <div class="row mt-2">
-        <div class="col-3">
-          <mat-form-field appearance="outline">
+      <div class="row mt-2 justify-content-center">
+        <div class="col-md-6">
+          <mat-form-field appearance="outline" class="d-block">
             <mat-label>Ano</mat-label>
             <input matInput type="number" [formControl]="anoControl" (change)="onAnoSemestreChange()">
           </mat-form-field>
         </div>
-        <div class="col-3">
-          <mat-form-field appearance="outline">
+        <div class="col-md-6">
+          <mat-form-field appearance="outline" class="d-block">
             <mat-label>Semestre</mat-label>
             <input matInput type="number" [max]="2" [min]="1" [formControl]="semestreControl" (change)="onAnoSemestreChange()">
           </mat-form-field>
@@ -81,7 +81,7 @@
             class="w-100"
             icon="pdffile"
             text="Gerar Relatório"
-            [disabled]="isGenerating"
+            [disabled]="!anoControl.valid || !semestreControl.valid"
             (onClick)="generatePdf($event.component)">
           </dx-button>
         </div>

@@ -18,7 +18,7 @@ export class AppComponent implements OnInit, OnDestroy{
   columns: TableColumnModel[];
   opened = false;
   menus$: Observable<any>;
-  showMenu: Observable<boolean>;
+  showMenu$: Observable<boolean>;
   private subscription: Subscription;
   constructor(private dataService: DataService,
               private localStorage: LocalStorageService,
@@ -28,14 +28,13 @@ export class AppComponent implements OnInit, OnDestroy{
   }
 
   ngOnInit(): void {
-    this.showMenu = this.authService.isTokenValid().pipe(
+    this.showMenu$ = this.authService.isTokenValid().pipe(
       map( _ => {
         this.opened = true;
+        this.authService.isLogado = true;
+        this.menus$ = this.dataService.post('menu/list', null)
         return true;
       }),
-      tap(
-        _ => this.menus$ = this.dataService.post('menu/list', null)
-      ),
       catchError(
         _ => {
           this.opened = false;
@@ -49,7 +48,7 @@ export class AppComponent implements OnInit, OnDestroy{
               throw error;
             }
           )
-          return of(false);
+          return of(true);
         }
       )
     );
@@ -106,7 +105,7 @@ export class AppComponent implements OnInit, OnDestroy{
       case MenuEnum.PROFESSORES:
         return 'person';
       case MenuEnum.COORDENADORES:
-        return 'person_pin';
+        return 'supervised_user_circle';
       case MenuEnum.ALOCACOES:
         return 'link';
       case MenuEnum.DISCIPLINAS:

@@ -95,7 +95,7 @@ export class HomeComponent implements OnInit{
       case MenuEnum.PROFESSORES:
         return 'person';
       case MenuEnum.COORDENADORES:
-        return 'person_pin';
+        return 'supervised_user_circle';
       case MenuEnum.ALOCACOES:
         return 'link';
       case MenuEnum.DISCIPLINAS:

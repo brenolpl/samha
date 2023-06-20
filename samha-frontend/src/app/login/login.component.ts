@@ -7,6 +7,7 @@ import {Subscription} from 'rxjs';
 import {TokenResponseModel} from '../meta-model/token-model';
 import {AuthService} from '../shared/service/auth.service';
 import {NotificationService} from "../shared/service/notification.service";
+import {first} from "rxjs/operators";
 
 @Component({
   selector: 'samha-login',
@@ -14,12 +15,14 @@ import {NotificationService} from "../shared/service/notification.service";
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit, OnDestroy {
+  public trocarSenha: boolean = false;
   private subscription: Subscription;
+  public senhasInvalidas: boolean = false;
 
   constructor(private formBuilder: FormBuilder,
               private localStorage: LocalStorageService,
               private authService: AuthService,
-              private route: Router,
+              private router: Router,
               private notification: NotificationService) {
   }
 
@@ -29,35 +32,88 @@ export class LoginComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.form = this.formBuilder.group({
       login: [null, Validators.required],
-      senha: [null, [Validators.required, Validators.minLength(3), Validators.maxLength(20)]]
+      senha: [null, [Validators.required, Validators.minLength(3)]],
+      novaSenha: [null],
+      confirmarSenha: [null]
     });
   }
 
   login(): void {
     if (this.form.valid){
-      let body = new URLSearchParams();
+        let body = new URLSearchParams();
         body.set('login', this.form.value.login);
         body.set('senha', this.form.value.senha);
-
-      this.subscription = this.authService.login(body.toString()).subscribe(
-          (result: TokenResponseModel)=> {
-            this.localStorage.set("access_token", result.access_token);
-            this.localStorage.set("refresh_token", result.refresh_token);
-            this.authService.loggedIn.emit(true);
-            this.route.navigate(['home']);
-          },
-          (error) => {
-            this.authService.loggedIn.emit(false);
-            this.notification.error("Usuário não encontrado");
-            throw error;
-          }
-        );
+        this.sign(body);
     }else{
       this.form.markAllAsTouched();
     }
   }
 
+  private sign(body: URLSearchParams): void {
+    this.subscription = this.authService.login(body.toString()).subscribe(
+      (result: TokenResponseModel)=> {
+        const regex = new RegExp('^(?=.*[!@#$%^&*(),.?":{}|<>])(?=.*[A-Z])(?=.*[a-z])(?=.*\\d).{8,}$');
+        const isSenhaValida = regex.test(this.form.value.senha);
+        if (isSenhaValida) {
+          this.localStorage.set("access_token", result.access_token);
+          this.localStorage.set("refresh_token", result.refresh_token);
+          this.authService.loggedIn.emit(true);
+          this.authService.isLogado = true;
+          this.router.navigate(['home']);
+        } else {
+          this.localStorage.clear();
+          const novaSenha = this.form.get('novaSenha');
+          const confirmarSenha = this.form.get('confirmarSenha');
+          novaSenha.addValidators([Validators.required, Validators.pattern('^(?=.*[!@#$%^&*(),.?":{}|<>])(?=.*[A-Z])(?=.*[a-z])(?=.*\\d).{8,}$')])
+          confirmarSenha.addValidators([Validators.required, Validators.pattern('^(?=.*[!@#$%^&*(),.?":{}|<>])(?=.*[A-Z])(?=.*[a-z])(?=.*\\d).{8,}$')])
+          novaSenha.markAsUntouched();
+          confirmarSenha.markAsUntouched();
+          novaSenha.markAsPristine();
+          confirmarSenha.markAsPristine();
+          this.trocarSenha = true;
+        }
+      },
+      (error) => {
+        this.authService.loggedIn.emit(false);
+        this.authService.isLogado = false;
+        this.notification.error("Usuário não encontrado");
+        throw error;
+      }
+    );
+  }
+
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.subscription?.unsubscribe();
+  }
+
+  goToRelatorios() {
+    this.router.navigateByUrl('relatorio');
+  }
+
+  onTrocarSenhaClicked() {
+    const novaSenha = this.form.get('novaSenha');
+    const confirmarSenha = this.form.get('confirmarSenha');
+    if (novaSenha.value != confirmarSenha.value || !novaSenha.valid || !confirmarSenha.valid) {
+      this.senhasInvalidas = true;
+      return;
+    } else {
+      this.form.get('senha').setValue(novaSenha.value);
+      let body = {
+        login: this.form.get('login').value,
+        senha: novaSenha.value
+      }
+      this.authService.changePassword(body).pipe(first()).subscribe(
+        _ => {
+          let body = new URLSearchParams();
+          body.set('login', this.form.value.login);
+          body.set('senha', novaSenha.value);
+          this.sign(body);
+        }
+      );
+    }
+  }
+
+  onKeyDown() {
+    this.senhasInvalidas = false
   }
 }

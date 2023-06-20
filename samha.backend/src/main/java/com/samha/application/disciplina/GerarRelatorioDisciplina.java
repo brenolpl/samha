@@ -74,7 +74,13 @@ public class GerarRelatorioDisciplina extends UseCase<Map<String, Object>> {
         }
 
         Map<String, Object> result = new HashMap<>();
-        result.put("bytes", Zipper.createZipFile(reports));
+        if (reports.size() > 1) {
+            result.put("bytes", Zipper.createZipFile(reports));
+            result.put("nomeArquivo", "relatorio_turmas.zip");
+        } else {
+            result.put("bytes", reports.get(0).get("bytes"));
+            result.put("nomeArquivo", reports.get(0).get("nome"));
+        }
         return result;
     }
 

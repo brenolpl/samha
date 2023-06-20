@@ -5,6 +5,7 @@ import {LoginComponent} from './login/login.component';
 import {AuthGuard} from './guards/auth-guard';
 
 const routes: Routes = [
+  { path: 'relatorio', loadChildren: () => import('./relatorio/relatorio.module').then(m => m.ProfessorModule)},
   { path: '', pathMatch: 'full', redirectTo: 'home'},
   { path: 'login', component: LoginComponent},
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard], canDeactivate: [AuthGuard],},
@@ -19,7 +20,6 @@ const routes: Routes = [
   { path: 'matrizCurricular', canActivate: [AuthGuard], canDeactivate: [AuthGuard], loadChildren: () => import('./matriz-curricular/matriz.module').then(m => m.MatrizModule)},
   { path: 'turma', canActivate: [AuthGuard], canDeactivate: [AuthGuard], loadChildren: () => import('./turma/turma.module').then(m => m.TurmaModule)},
   { path: 'oferta', canActivate: [AuthGuard], canDeactivate: [AuthGuard], loadChildren: () => import('./oferta/oferta.module').then(m => m.OfertaModule)},
-  { path: 'relatorio', canActivate: [AuthGuard], canDeactivate: [AuthGuard], loadChildren: () => import('./relatorio/relatorio.module').then(m => m.ProfessorModule)},
   { path: '**', redirectTo: '/home'}
 ];
 

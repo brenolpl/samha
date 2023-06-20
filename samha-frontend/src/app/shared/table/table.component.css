@@ -63,10 +63,6 @@ input{
 }
 
 .table-overflow {
-  overflow-x: hidden;
-}
-
-.table-overflow:hover {
   overflow-x: scroll;
 }
 

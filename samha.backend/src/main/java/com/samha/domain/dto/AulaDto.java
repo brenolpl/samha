@@ -6,13 +6,16 @@ public class AulaDto {
     private int numero;
 
     private String nomeTurma;
+    private String siglaDisciplina;
+
     private String nomeDisciplina;
 
-    public AulaDto(Integer id, int dia, int numero, String nomeTurma, String nomeDisciplina) {
+    public AulaDto(Integer id, int dia, int numero, String nomeTurma, String siglaDisciplina, String nomeDisciplina) {
         this.id = id;
         this.dia = dia;
         this.numero = numero;
         this.nomeTurma = nomeTurma;
+        this.siglaDisciplina = siglaDisciplina;
         this.nomeDisciplina = nomeDisciplina;
     }
 
@@ -46,6 +49,14 @@ public class AulaDto {
 
     public void setNomeTurma(String nomeTurma) {
         this.nomeTurma = nomeTurma;
+    }
+
+    public String getSiglaDisciplina() {
+        return siglaDisciplina;
+    }
+
+    public void setSiglaDisciplina(String siglaDisciplina) {
+        this.siglaDisciplina = siglaDisciplina;
     }
 
     public String getNomeDisciplina() {

@@ -1,9 +1,11 @@
 <mat-toolbar color="primary" style="height: 45px">
-  <button (click)="onClick()" mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
+  <button (click)="onClick()" mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon" *ngIf="isLogado()">
     <mat-icon style="color: white">menu</mat-icon>
   </button>
-  <button routerLink="/home" mat-button style="font-size: 22px;"><mat-icon style="color: white">grid_on</mat-icon><span style="color: white; margin-left: 0.2em; margin-right: 0.2em">SAMHA</span></button>
+  <button routerLink="/home" mat-button style="font-size: 22px;" [disabled]="!isLogado()"><mat-icon style="color: white">grid_on</mat-icon><span style="color: white; margin-left: 0.2em; margin-right: 0.2em">SAMHA</span></button>
   <div class="d-flex justify-content-end w-100">
-    <button mat-icon-button (click)="onExitClick()"><mat-icon>exit_to_app</mat-icon></button>
+    <button mat-icon-button (click)="onExitClick()" *ngIf="isLogado()"><mat-icon>exit_to_app</mat-icon></button>
+    <button mat-icon-button (click)="onSignInClick()" *ngIf="!isLogado()"><mat-icon>person_pin</mat-icon></button>
+
   </div>
 </mat-toolbar>

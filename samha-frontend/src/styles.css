@@ -23,12 +23,12 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   box-shadow: 0 0 5px 0 black;
 }
 
-.base-padding{
-  padding: 15px;
+.mat-toolbar {
+  overflow: hidden;
 }
 
-.mat-card {
-  min-width: 720px;
+.base-padding{
+  padding: 15px;
 }
 
 .hide-scrollbar {

@@ -18,9 +18,10 @@ import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 import { RelatorioTurmaComponent } from './relatorio-turma/relatorio-turma.component';
 import { ConfirmGenerationPopupComponent } from './confirm-generation-popup/confirm-generation-popup.component';
 import { ReportAulaGridComponent } from './report-aula-grid/report-aula-grid.component';
+import { RelatorioDisciplinaComponent } from './relatorio-disciplina/relatorio-disciplina.component';
 
 @NgModule({
-    declarations: [RelatorioComponent, RelatorioProfessorComponent, RelatorioTurmaComponent, ConfirmGenerationPopupComponent, ReportAulaGridComponent],
+    declarations: [RelatorioComponent, RelatorioProfessorComponent, RelatorioTurmaComponent, ConfirmGenerationPopupComponent, ReportAulaGridComponent, RelatorioDisciplinaComponent],
   imports: [
     CommonModule,
     FormsModule,

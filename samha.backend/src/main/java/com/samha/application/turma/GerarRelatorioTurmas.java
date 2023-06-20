@@ -3,6 +3,7 @@ package com.samha.application.turma;
 
 import com.samha.commons.UseCase;
 import com.samha.domain.Aula;
+import com.samha.domain.Disciplina;
 import com.samha.domain.Turma;
 import com.samha.domain.dto.AulaDto;
 import com.samha.domain.dto.RelatorioDto;
@@ -16,9 +17,11 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Async
@@ -55,15 +58,20 @@ public class GerarRelatorioTurmas extends UseCase<Map<String, Object>> {
             arquivo.put("bytes", JasperHelper.generateReport(parametros, relatorioDto));
             reports.add(arquivo);
         }
-
         Map<String, Object> result = new HashMap<>();
-        result.put("bytes", Zipper.createZipFile(reports));
+        if (reports.size() > 1) {
+            result.put("bytes", Zipper.createZipFile(reports));
+            result.put("nomeArquivo", "relatorio_turmas.zip");
+        } else {
+            result.put("bytes", reports.get(0).get("bytes"));
+            result.put("nomeArquivo", reports.get(0).get("nome"));
+        }
         return result;
-
     }
 
 
     private Map<String, String> preencherAulas(Turma turma) {
+        Set<Disciplina> disciplinasAulas = new HashSet<>();
         Map<String, String> hashMapAulas = new HashMap<>();
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 16; j++) {
@@ -74,7 +82,8 @@ public class GerarRelatorioTurmas extends UseCase<Map<String, Object>> {
                     Aula aula = genericRepository.get(Aula.class, aulaMatriz.get().getId());
                     String professor = aula.getAlocacao().getProfessor1().obterNomeAbreviado() + this.getProfessor2String(aula);
                     String key = aula.getDia() + String.valueOf(aula.getNumero());
-                    String sigla = aula.getAlocacao().getDisciplina().getNome();
+                    String sigla = aula.getAlocacao().getDisciplina().getSigla();
+                    disciplinasAulas.add(aula.getAlocacao().getDisciplina());
                     hashMapAulas.put(key, professor + "\n" + sigla);
                 } else {
                     String key = line + String.valueOf(column);
@@ -84,6 +93,11 @@ public class GerarRelatorioTurmas extends UseCase<Map<String, Object>> {
                 }
             }
         }
+        String rodape = "";
+        for (var disciplina : disciplinasAulas) {
+            rodape += "\t" + disciplina.getSigla() + ": " + disciplina.getNome() + " | ";
+        }
+        hashMapAulas.put("rodape", rodape);
         return hashMapAulas;
     }
 

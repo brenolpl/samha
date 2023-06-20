@@ -3,11 +3,13 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {APIPREFIX} from '../../app.component';
 import {Observable, of} from 'rxjs';
 import {LocalStorageService} from './local-storage.service';
+import {tap} from "rxjs/operators";
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class AuthService{
 
-  loggedIn: EventEmitter<boolean> = new EventEmitter<boolean>();
+  public loggedIn: EventEmitter<boolean> = new EventEmitter<boolean>();
+  public isLogado: boolean = false;
 
   constructor(private http: HttpClient,
               private localStorage: LocalStorageService) {
@@ -29,5 +31,9 @@ export class AuthService{
       headers: new HttpHeaders()
         .set('Authorization', 'Bearer ' + this.localStorage.get('access_token'))
     }
+  }
+
+  public changePassword(body: { senha: any; login: any }): Observable<any> {
+    return this.http.post(APIPREFIX + 'auth/change-password', body);
   }
 }

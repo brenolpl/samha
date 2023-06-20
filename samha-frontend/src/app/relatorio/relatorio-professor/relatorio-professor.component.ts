@@ -1,6 +1,6 @@
 import {
   ChangeDetectionStrategy,
-  Component,
+  Component, Input,
   OnDestroy,
   OnInit,
   QueryList,
@@ -24,11 +24,11 @@ import {FunctionHelper} from "../../shared/function-helper";
   styleUrls: ['./relatorio-professor.component.css', '../../oferta/oferta-grid/oferta-grid.component.css']
 })
 export class RelatorioProfessorComponent implements OnInit, OnDestroy {
-  @ViewChildren('tables') elementosRef: QueryList<HTMLTableElement>;
+  @Input() public semestreControl: FormControl
+  @Input() public anoControl: FormControl;
   public compareFunction = (o1: any, o2: any) => (o1 != null && o2 != null && o1.id == o2.id);
   public radioGroupControl = new FormControl();
-  public semestreControl = new FormControl(new Date().getMonth() < 6 ? 1 : 2);
-  public anoControl = new FormControl(new Date().getFullYear());
+
   public professorSelection$: Observable<PagedList>;
   public professores$: Observable<any>;
   public eixos$: Observable<any>;
@@ -52,11 +52,11 @@ export class RelatorioProfessorComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.eixos$ = this.dataService.getAll('eixo');
+    this.eixos$ = this.dataService.publicGetAll('eixo');
   }
 
   onEixoSelected($event: MatSelectChange) {
-    this.coord$ = this.dataService.query(new QueryMirror('coordenadoria').selectList(['id', 'nome']).where({
+    this.coord$ = this.dataService.publicQuery(new QueryMirror('coordenadoria').selectList(['id', 'nome']).where({
       and: {
         'eixo.id': {equals: $event.value.id}
       }
@@ -64,7 +64,7 @@ export class RelatorioProfessorComponent implements OnInit, OnDestroy {
   }
 
   onCoordSelected($event: MatSelectChange) {
-    this.professorSelection$ = this.dataService.query(new QueryMirror('professor').selectList(['id', 'nome']).where({
+    this.professorSelection$ = this.dataService.publicQuery(new QueryMirror('professor').selectList(['id', 'nome']).where({
       and: {
         'ativo': {equals: true},
         'coordenadoria.id': {equals: $event.value.id}
@@ -75,7 +75,7 @@ export class RelatorioProfessorComponent implements OnInit, OnDestroy {
   }
 
   private getProfessores(): void {
-    this.professores$ = this.dataService.post('relatorio/obter-professores-relatorio', this.getRelatorioDto()).pipe(
+    this.professores$ = this.dataService.publicPost('relatorio/obter-professores-relatorio', this.getRelatorioDto()).pipe(
       tap(next => {
           this.isLoading = false;
           this.professores = next;
@@ -110,7 +110,7 @@ export class RelatorioProfessorComponent implements OnInit, OnDestroy {
 
   public gerarRelatorio(): void {
     this.isGenerating = true;
-    this.gerarPdfSub = this.dataService.asyncPost('professor/gerar-relatorio-professor', this.getRelatorioDto())
+    this.gerarPdfSub = this.dataService.publicAsyncPost('relatorio/gerar-relatorio-professor', this.getRelatorioDto())
       .subscribe((event: HttpEvent<any>) => {
         if (event.type === HttpEventType.DownloadProgress) {
         } else if (event.type === HttpEventType.Response) {

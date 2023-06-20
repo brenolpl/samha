@@ -74,7 +74,7 @@ public class ObterAulasTurmaRelatorio extends UseCase<List<Turma>> {
         ));
 
         List<AulaDto> aulasDto = new ArrayList<>();
-        aulas.forEach(a -> aulasDto.add(new AulaDto(a.getId(), a.getDia(), a.getNumero(), getProfessores(a), a.getAlocacao().getDisciplina().getSigla())));
+        aulas.forEach(a -> aulasDto.add(new AulaDto(a.getId(), a.getDia(), a.getNumero(), getProfessores(a), a.getAlocacao().getDisciplina().getSigla(), a.getAlocacao().getDisciplina().getNome())));
         turma.setAulas(aulasDto);
     }
 

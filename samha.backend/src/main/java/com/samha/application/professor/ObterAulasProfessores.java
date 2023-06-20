@@ -79,7 +79,7 @@ public class ObterAulasProfessores extends UseCase<List<Professor>> {
 
             List<AulaDto> aulasDto = new ArrayList<>();
             for (var a : aulas) {
-                AulaDto aulaDto = new AulaDto(a.getId(), a.getDia(), a.getNumero(), a.getOferta().getTurma().getNome(), a.getAlocacao().getDisciplina().getSigla());
+                AulaDto aulaDto = new AulaDto(a.getId(), a.getDia(), a.getNumero(), a.getOferta().getTurma().getNome(), a.getAlocacao().getDisciplina().getSigla(), a.getAlocacao().getDisciplina().getNome());
                 aulasDto.add(aulaDto);
             }
             prof.setAulas(aulasDto);

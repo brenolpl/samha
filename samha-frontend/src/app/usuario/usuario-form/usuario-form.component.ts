@@ -31,12 +31,6 @@ export class UsuarioFormComponent implements OnInit {
               private notification: NotificationService,
               private route: ActivatedRoute,
               private router: Router) {
-    this.form = formBuilder.group({
-      login: [null, Validators.required],
-      senha: [null, [Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
-      papel: [null, Validators.required],
-      servidor_id: ['']
-    })
   }
 
   ngOnInit(): void {
@@ -71,23 +65,28 @@ export class UsuarioFormComponent implements OnInit {
 
   salvar() {
     //TODO: acrescentar necessidade de caracteres especiais para melhorar a criptografia (muitas senhas salvas como 123)
-    let usuario = {
-      id: this.usuario?.id,
-      login: this.form.get('login').value,
-      senha: this.form.get('senha').value,
-      papel_id: this.form.get('papel').value,
-      servidor_id: this.form.get('servidor_id').value
-    }
-    this.usuario = usuario;
-    this.dataService.post('usuario/newUser', usuario).pipe(first()).subscribe(
-      next => {
-        this.notification.success('Usuario salvo com sucesso!');
-        this.router.navigate(['../', next.id], {relativeTo: this.route})
-      },
-      error => {
-        this.notification.handleError(error);
+
+    if (this.form.valid) {
+      let usuario = {
+        id: this.usuario?.id,
+        login: this.form.get('login').value,
+        senha: this.form.get('senha').value,
+        papel_id: this.form.get('papel').value,
+        servidor_id: this.form.get('servidor_id').value
       }
-    );
+      this.usuario = usuario;
+      this.dataService.post('usuario/newUser', usuario).pipe(first()).subscribe(
+        next => {
+          this.notification.success('Usuario salvo com sucesso!');
+          this.router.navigate(['../', next.id], {relativeTo: this.route})
+        },
+        error => {
+          this.notification.handleError(error);
+        }
+      );
+    }else {
+      this.form.markAllAsTouched()
+    }
   }
 
   setProfessorValue(id) {
@@ -99,7 +98,7 @@ export class UsuarioFormComponent implements OnInit {
   private loadForm() {
     this.form = this.formBuilder.group({
       login: [this.usuario?.login, Validators.required],
-      senha: [null, [Validators.minLength(3), Validators.maxLength(20)]],
+      senha: [null, [Validators.required, Validators.minLength(3)]],
       papel: [this.usuario?.papel.id, Validators.required],
       servidor_id: []
     });

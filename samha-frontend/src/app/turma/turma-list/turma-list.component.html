@@ -60,7 +60,6 @@
     <div class="d-flex flex-row">
       <dx-text-box
         style="margin-right: 1em;"
-        width="30%"
         [formControl]="search"
         (onValueChanged)="onSearchChange()"
         type="text"
@@ -70,7 +69,6 @@
       <dx-button
         type="normal"
         icon="add"
-        width="5%"
         class="no-border-radius"
         (onClick)="goToNew()"
         stylingMode="outlined"
@@ -81,7 +79,7 @@
 
     <mat-card-content>
 
-      <div *ngIf="dataSource$ | async as dataSource; else loading">
+      <div *ngIf="dataSource$ | async as dataSource; else loading" class="table-overflow">
         <table mat-table [dataSource]="defineDataSource(dataSource)">
 
           <ng-container *ngFor="let column of columns" [matColumnDef]="column.columnDef">

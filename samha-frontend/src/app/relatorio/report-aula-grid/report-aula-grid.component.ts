@@ -11,15 +11,25 @@ export class ReportAulaGridComponent {
   @Input() entityData: any[];
   @Input() ano: number;
   @Input() semestre: number;
+  public disciplinas: any[] = [];
 
   getMatrizAulasProfessor(aulasProfessor: any[]) {
+    this.disciplinas = [];
     let matriz: any[][];
     const matriz$: Observable<any[][]> = range(0, 5).pipe(
       map(() => Array.from({ length: 16 }, () => '')),
       toArray()
     );
     matriz$.subscribe(m => matriz = m);
-    aulasProfessor.forEach(a => matriz[a.dia][a.numero] = a);
+    aulasProfessor.forEach(a => {
+      matriz[a.dia][a.numero] = a;
+      let disciplina = {
+        nome: a.nomeDisciplina,
+        sigla: a.siglaDisciplina
+      }
+      let jaInseriu = this.disciplinas.find(d => d.nome == disciplina.nome);
+      if (!jaInseriu) this.disciplinas.push(disciplina);
+    });
     return matriz;
   }
 

@@ -11,6 +11,7 @@ import {CanDeactivateGuard} from './guards/can-deactivate-guard';
 import {FormResolver} from './guards/form-resolver';
 import {MaterialModule} from './shared/material/material.module';
 import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
+import {DxButtonModule} from "devextreme-angular";
 
 @NgModule({
   declarations: [
@@ -18,14 +19,15 @@ import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
     LoginComponent,
     HomeComponent
   ],
-  imports: [
-    MaterialModule,
-    BrowserModule,
-    SharedModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    FontAwesomeModule
-  ],
+    imports: [
+        MaterialModule,
+        BrowserModule,
+        SharedModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        FontAwesomeModule,
+        DxButtonModule
+    ],
   providers: [
     AuthGuard,
     CanDeactivateGuard,
