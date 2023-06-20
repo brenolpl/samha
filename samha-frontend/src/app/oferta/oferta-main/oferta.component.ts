@@ -497,12 +497,13 @@ export class OfertaComponent implements OnInit, OnDestroy {
   onValidarAulasClick = () => {
     this.notificacaoTurma = false;
     this.notificacoes = [];
+    this.aulasConflitantes = [];
     this.executeAulasRestricaoQuery([...this.aulasVespertinas, ...this.aulasMatutinas, ...this.aulasNoturnas]);
   }
 
   onControleQuantidadeDisciplinasClick() {
     this.notificacaoTurma = false;
-    this.notificacoes = [];
+    this.aulasConflitantes = [];
     let aulas = [...this.aulasMatutinas, ...this.aulasVespertinas, ...this.aulasNoturnas];
     if (aulas.length > 0) {
       this.dataService.post('aula/controle-qtd-disciplina', [...this.aulasMatutinas, ...this.aulasVespertinas, ...this.aulasNoturnas]).pipe(first())

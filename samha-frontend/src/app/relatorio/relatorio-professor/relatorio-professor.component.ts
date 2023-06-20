@@ -75,7 +75,7 @@ export class RelatorioProfessorComponent implements OnInit, OnDestroy {
   }
 
   private getProfessores(): void {
-    this.professores$ = this.dataService.post('professor/obter-professores-relatorio', this.getRelatorioDto()).pipe(
+    this.professores$ = this.dataService.post('relatorio/obter-professores-relatorio', this.getRelatorioDto()).pipe(
       tap(next => {
           this.isLoading = false;
           this.professores = next;
@@ -110,7 +110,7 @@ export class RelatorioProfessorComponent implements OnInit, OnDestroy {
 
   public gerarRelatorio(): void {
     this.isGenerating = true;
-    this.gerarPdfSub = this.dataService.asyncPost('professor/gerar-relatorio', this.getRelatorioDto())
+    this.gerarPdfSub = this.dataService.asyncPost('professor/gerar-relatorio-professor', this.getRelatorioDto())
       .subscribe((event: HttpEvent<any>) => {
         if (event.type === HttpEventType.DownloadProgress) {
         } else if (event.type === HttpEventType.Response) {

@@ -46,7 +46,7 @@ export class RelatorioComponent implements OnInit, OnDestroy {
   onGerarClick() {
     this.isGenerating = true;
     this.showPopup = false;
-    this.gerarPdfSub = this.dataService.asyncPost('disciplina/gerar-relatorio', this.getRelatorioDto())
+    this.gerarPdfSub = this.dataService.asyncPost('relatorio/gerar-relatorio-disciplina', this.getRelatorioDto())
       .subscribe((event: HttpEvent<any>) => {
         if (event.type === HttpEventType.DownloadProgress) {
         } else if (event.type === HttpEventType.Response) {

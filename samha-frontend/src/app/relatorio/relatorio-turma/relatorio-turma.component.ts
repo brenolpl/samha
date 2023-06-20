@@ -80,7 +80,7 @@ export class RelatorioTurmaComponent implements OnInit, OnDestroy {
   }
 
   onAnoSemestreChange() {
-    if (this.cursoControl.value?.id) this.aulasTurma$ = this.dataService.post('turma/obter-aulas-turma', this.getRelatorioDto())
+    if (this.cursoControl.value?.id) this.aulasTurma$ = this.dataService.post('relatorio/obter-aulas-turma', this.getRelatorioDto())
   }
 
   private getRelatorioDto(): RelatorioDto {
@@ -105,7 +105,7 @@ export class RelatorioTurmaComponent implements OnInit, OnDestroy {
 
   private gerarRelatorio() {
     this.isGenerating = true;
-    this.gerarPdfSub = this.dataService.asyncPost('turma/gerar-relatorio', this.getRelatorioDto())
+    this.gerarPdfSub = this.dataService.asyncPost('turma/gerar-relatorio-turma', this.getRelatorioDto())
       .subscribe((event: HttpEvent<any>) => {
         if (event.type === HttpEventType.DownloadProgress) {
         } else if (event.type === HttpEventType.Response) {

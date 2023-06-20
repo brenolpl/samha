@@ -50,20 +50,121 @@ public class ObterRestricoesAulas extends UseCase<List<Conflito>> {
 
     @Override
     protected List<Conflito> execute() throws Exception {
+        aulas = aulas.stream().sorted((a,b) -> {
+            if (a.getNumero() > b.getNumero()) return 1;
+            else if (a.getNumero() < b.getNumero()) return -1;
+            else return 0;
+        }).collect(Collectors.toList());
         for (Aula aula : aulas) {
             setConflitoProfessorTurma(aula, aula.getAlocacao().getProfessor1());
             setConflitoIntervaloMinimoTempoMaximoProfessor(aula, aula.getAlocacao().getProfessor1());
             setConflitoRestricaoProfessor(aula, aula.getAlocacao().getProfessor1());
+            setConflitoTurnosProfessor(aula, aula.getAlocacao().getProfessor1());
             if (aula.getAlocacao().getDisciplina().getTipo().equalsIgnoreCase("especial") && aula.getAlocacao().getProfessor2() != null) {
                 setConflitoProfessorTurma(aula, aula.getAlocacao().getProfessor2());
                 setConflitoIntervaloMinimoTempoMaximoProfessor(aula, aula.getAlocacao().getProfessor2());
                 setConflitoRestricaoProfessor(aula, aula.getAlocacao().getProfessor2());
+                setConflitoTurnosProfessor(aula, aula.getAlocacao().getProfessor2());
             }
 
         }
 
 
         return conflitos.stream().filter(Objects::nonNull).collect(Collectors.toList());
+    }
+
+    private void setConflitoTurnosProfessor(Aula aula, Professor professor) {
+        switch (aula.getTurno()) {
+            case 0:
+                if (aula.getNumero() == 4 || aula.getNumero() == 5) {
+                    Optional<Aula> ultimaAulaMatutino = aulas.stream().filter(a -> a.getDia() == aula.getDia() && a.getNumero() == 5).findFirst();
+                    Optional<Aula> primeiraAulaVespertino = aulas.stream().filter(a -> a.getDia() == aula.getDia() && a.getNumero() == 6).findFirst();
+                    if (aula.getNumero() == 4) {
+                        if (ultimaAulaMatutino.isPresent()) {
+                            if (primeiraAulaVespertino.isPresent()) {
+                                this.montarMensagemConflitoIntervaloTurno(aula, primeiraAulaVespertino.get(), professor);
+                            }
+                        }
+                    } else {
+                        if (primeiraAulaVespertino.isPresent()) {
+                            this.montarMensagemConflitoIntervaloTurno(aula, primeiraAulaVespertino.get(), professor);
+                        }
+                    }
+                }
+                Optional<Aula> aulaPulouTurno = aulas.stream().filter(a -> a.getDia() == aula.getDia() && a.getTurno() == 12).findFirst();
+                if(aulaPulouTurno.isPresent()) {
+                    this.montarMensagemAulaPulouTurno(aula, aulaPulouTurno.get(), professor);
+                }
+                break;
+            case 6:
+                if (aula.getNumero() == 10 || aula.getNumero() == 11) {
+                    Optional<Aula> ultimaAulaVespertino = aulas.stream().filter(a -> a.getDia() == aula.getDia() && a.getNumero() == 11).findFirst();
+                    Optional<Aula> ultimaAulaNoturno = aulas.stream().filter(a -> a.getDia() == aula.getDia() && a.getNumero() == 12).findFirst();
+                    if (aula.getNumero() == 10) {
+                        if (ultimaAulaVespertino.isPresent()) {
+                            if (ultimaAulaNoturno.isPresent()) {
+                                this.montarMensagemConflitoIntervaloTurno(aula, ultimaAulaNoturno.get(), professor);
+                            }
+                        }
+                    } else {
+                        if (ultimaAulaNoturno.isPresent()) {
+                            this.montarMensagemConflitoIntervaloTurno(aula, ultimaAulaNoturno.get(), professor);
+                        }
+                    }
+                }
+                break;
+        }
+    }
+
+    private void montarMensagemAulaPulouTurno(Aula primeira, Aula ultima, Professor professor) {
+        Mensagem mensagem = new Mensagem();
+        mensagem.setTipo(1);
+        mensagem.setCor(CorEnum.VERMELHO.getId());
+        mensagem.setTitulo("Restricao de Turno");
+        List<String> restricoes = new ArrayList<>();
+        restricoes.add("Este professor foi alocado no turno MATUTINO e NOTURNO no mesmo dia");
+        String dia = Horarios.obterStringDia(primeira.getDia());
+        restricoes.add("Dia: " + dia);
+        restricoes.add("Aula matutina: " + (primeira.getNumero() + 1));
+        restricoes.add("Aula noturna: "+ (ultima.getNumero() + 1));
+        mensagem.setRestricoes(restricoes);
+        adicionarConflitoProfessor(professor, mensagem);
+    }
+
+    private void adicionarConflitoProfessor(Professor professor, Mensagem mensagem) {
+        Optional<Conflito> conflitoOptional = conflitos.stream().filter(c -> c.getProfessor().getId().equals(professor.getId())).findFirst();
+        Conflito conflito;
+        if (conflitoOptional.isPresent()) {
+            conflito = conflitoOptional.get();
+        } else {
+            conflito = new Conflito();
+            conflitos.add(conflito);
+        }
+        conflito.setProfessor(professor);
+        conflito.getMensagens().add(mensagem);
+    }
+
+    private void adicionarConflitoProfessor(Professor professor, List<Mensagem> mensagems) {
+        mensagems.forEach(m -> adicionarConflitoProfessor(professor, m));
+    }
+
+    private void montarMensagemConflitoIntervaloTurno(Aula ultima, Aula primeira, Professor professor) {
+        String turnoUltimaAula = this.getTurnoPorAula(ultima.getTurno());
+        String turnoPrimeiraAula = this.getTurnoPorAula(primeira.getTurno());
+        String dia = Horarios.obterStringDia(ultima.getDia());
+        Mensagem mensagem = new Mensagem();
+        mensagem.setTitulo("Restrição de turno");
+        mensagem.setTipo(1);
+        mensagem.setCor(CorEnum.VERMELHO.getId());
+        List<String> restricoes = new ArrayList<>();
+        restricoes.add("Este professor não possui um intervalo entre o turno " + turnoUltimaAula + " e " + turnoPrimeiraAula);
+        restricoes.add("Dia: " + dia);
+        restricoes.add("Aula anterior: " + (ultima.getNumero() + 1));
+        restricoes.add("Próxima aula: " + (primeira.getNumero() + 1));
+        mensagem.getAulas().add(ultima);
+        mensagem.getAulas().add(primeira);
+        mensagem.setRestricoes(restricoes);
+        adicionarConflitoProfessor(professor, mensagem);
     }
 
     private void setConflitoRestricaoProfessor(Aula aula, Professor professor) {
@@ -94,17 +195,8 @@ public class ObterRestricoesAulas extends UseCase<List<Conflito>> {
         }
 
         if(mensagensRestricao.size() > 0) {
-            Optional<Conflito> conflitoOptional = conflitos.stream().filter(c -> c.getProfessor().getId().equals(professor.getId())).findFirst();
             mensagensRestricao.get(0).getAulas().add(aula);
-            Conflito conflito;
-            if (conflitoOptional.isPresent()) {
-                conflito = conflitoOptional.get();
-            } else {
-                conflito = new Conflito();
-                conflitos.add(conflito);
-            }
-            conflito.setProfessor(professor);
-            conflito.getMensagens().addAll(mensagensRestricao);
+            adicionarConflitoProfessor(professor, mensagensRestricao);
         }
     }
 
@@ -212,8 +304,6 @@ public class ObterRestricoesAulas extends UseCase<List<Conflito>> {
             novoConflito.setProfessor(professor);
             conflitos.add(novoConflito);
         }
-
-
         String diaAnterior = obterStringDia(ultima.getDia());
         String diaAtual = obterStringDia(primeira.getDia());
 
@@ -330,16 +420,6 @@ public class ObterRestricoesAulas extends UseCase<List<Conflito>> {
         ));
 
         if (!aulasProfessor.isEmpty()) {
-            Optional<Conflito> conflitoRegistrado = conflitos.stream().filter(c -> c.getProfessor().getId().equals(professor.getId())).findFirst();
-            Conflito novoConflito;
-            if (conflitoRegistrado.isPresent()) {
-                novoConflito = conflitoRegistrado.get();
-            } else {
-                novoConflito = new Conflito();
-                this.conflitos.add(novoConflito);
-            }
-            novoConflito.setProfessor(professor);
-
             Mensagem mensagem = new Mensagem();
             mensagem.setTitulo("Está em outra(s) turma(s) neste horário: ");
             mensagem.setCor(CorEnum.VERMELHO.getId());
@@ -348,7 +428,7 @@ public class ObterRestricoesAulas extends UseCase<List<Conflito>> {
                 mensagem.getRestricoes().add(restricao.getOferta().getTurma().getNome() + " - " + restricao.getAlocacao().getDisciplina().getNome() + ". ");
                 mensagem.getAulas().add(aula);
             }
-            novoConflito.getMensagens().add(mensagem);
+            adicionarConflitoProfessor(professor, mensagem);
         }
     }
 

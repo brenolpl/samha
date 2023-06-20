@@ -147,8 +147,16 @@ export class OfertaGridComponent {
       if (aula !== undefined) {
         switch (aula.tipo as number) {
           case 1: return 'background-red';
-          case 2: return 'background-yellow';
-          case 3: return 'background-blue';
+          case 2:
+            const aulaVermelha = this.aulasConflitantes.find(a => a.dia == aula.dia && a.numero == aula.numero && a.tipo == 1);
+            if (aulaVermelha != undefined) return 'background-red';
+            return 'background-yellow';
+          case 3:
+            const aulaVermelha2 = this.aulasConflitantes.find(a => a.dia == aula.dia && a.numero == aula.numero && a.tipo == 1);
+            const aulaLaranja = this.aulasConflitantes.find(a => a.dia == aula.dia && a.numero == aula.numero && a.tipo == 2);
+            if (aulaVermelha2 != undefined) return 'background-red';
+            else if (aulaLaranja != undefined) return 'background-yellow';
+            else return 'background-blue';
         }
       }
     }
