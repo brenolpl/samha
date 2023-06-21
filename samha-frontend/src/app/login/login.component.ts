@@ -8,6 +8,7 @@ import {TokenResponseModel} from '../meta-model/token-model';
 import {AuthService} from '../shared/service/auth.service';
 import {NotificationService} from "../shared/service/notification.service";
 import {first} from "rxjs/operators";
+import {SecurityService} from "../shared/service/security.service";
 
 @Component({
   selector: 'samha-login',
@@ -21,6 +22,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   constructor(private formBuilder: FormBuilder,
               private localStorage: LocalStorageService,
+              private securityService: SecurityService,
               private authService: AuthService,
               private router: Router,
               private notification: NotificationService) {
@@ -57,6 +59,8 @@ export class LoginComponent implements OnInit, OnDestroy {
         if (isSenhaValida) {
           this.localStorage.set("access_token", result.access_token);
           this.localStorage.set("refresh_token", result.refresh_token);
+          //todo: verificar se irá utilizar
+          // this.securityService.setTokens(result.access_token, result.access_token);
           this.authService.loggedIn.emit(true);
           this.authService.isLogado = true;
           this.router.navigate(['home']);

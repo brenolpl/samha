@@ -4,13 +4,11 @@ import {DataService} from "../../shared/service/data.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Subscription} from "rxjs";
 import {first} from "rxjs/operators";
-import notify from "devextreme/ui/notify";
 import {NotificationService} from "../../shared/service/notification.service";
 
 @Component({
   selector: 'samha-matriz-form',
-  templateUrl: './matriz-form.component.html',
-  styleUrls: ['./matriz-form.component.css']
+  templateUrl: './matriz-form.component.html'
 })
 export class MatrizFormComponent implements OnInit {
   form: FormGroup;

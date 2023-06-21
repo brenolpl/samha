@@ -5,8 +5,7 @@ import {AuthService} from "../service/auth.service";
 
 @Component({
   selector: 'samha-toolbar',
-  templateUrl: './toolbar.component.html',
-  styleUrls: ['./toolbar.component.css']
+  templateUrl: './toolbar.component.html'
 })
 export class ToolbarComponent implements OnInit {
   @Output() sideBarClicked: EventEmitter<boolean> = new EventEmitter<boolean>();

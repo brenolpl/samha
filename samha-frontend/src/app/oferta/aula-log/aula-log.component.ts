@@ -4,8 +4,7 @@ import {aulaLogColumns} from "../../meta-model/aula";
 
 @Component({
   selector: 'samha-aula-log',
-  templateUrl: './aula-log.component.html',
-  styleUrls: ['./aula-log.component.css']
+  templateUrl: './aula-log.component.html'
 })
 export class AulaLogComponent{
   public readonly aulaLogColumns = aulaLogColumns;

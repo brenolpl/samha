@@ -3,7 +3,6 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {APIPREFIX} from '../../app.component';
 import {Observable, of} from 'rxjs';
 import {LocalStorageService} from './local-storage.service';
-import {tap} from "rxjs/operators";
 
 @Injectable({providedIn: 'root'})
 export class AuthService{
@@ -35,5 +34,9 @@ export class AuthService{
 
   public changePassword(body: { senha: any; login: any }): Observable<any> {
     return this.http.post(APIPREFIX + 'auth/change-password', body);
+  }
+
+  public refreshToken(): Observable<any> {
+    return this.http.get(APIPREFIX + 'auth/refreshToken', this.getOptions());
   }
 }

@@ -1,10 +1,10 @@
 import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
 import {DataService} from "../../shared/service/data.service";
 import {Observable, range, Subscription} from "rxjs";
-import {Page, PagedList} from "../../shared/paged-list";
+import {PagedList} from "../../shared/paged-list";
 import {Filter, QueryMirror} from "../../shared/query-mirror";
 import {first, map, tap, toArray} from "rxjs/operators";
-import {FormControl, Validators} from "@angular/forms";
+import {FormControl} from "@angular/forms";
 
 @Component({
   selector: 'samha-professor-grid',

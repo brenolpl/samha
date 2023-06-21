@@ -1,16 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import {Observable} from 'rxjs';
 import {DataService} from '../../shared/service/data.service';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {first} from 'rxjs/operators';
 import {NotificationService} from "../../shared/service/notification.service";
-import notify from "devextreme/ui/notify";
 
 @Component({
   selector: 'samha-coordenadoria',
-  templateUrl: './coordenadoria-form.component.html',
-  styleUrls: ['./coordenadoria-form.component.css']
+  templateUrl: './coordenadoria-form.component.html'
 })
 export class CoordenadoriaFormComponent implements OnInit {
   eixos$: Observable<any>;

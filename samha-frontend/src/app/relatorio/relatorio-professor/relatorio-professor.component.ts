@@ -18,7 +18,7 @@ import {FunctionHelper} from "../../shared/function-helper";
 @Component({
   selector: 'samha-relatorio-professor',
   templateUrl: './relatorio-professor.component.html',
-  styleUrls: ['./relatorio-professor.component.css', '../../oferta/oferta-grid/oferta-grid.component.css']
+  styleUrls: ['../../oferta/oferta-grid/oferta-grid.component.css']
 })
 export class RelatorioProfessorComponent implements OnInit, OnDestroy {
   @Input() public semestreControl: FormControl

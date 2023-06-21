@@ -15,27 +15,3 @@ export const turmaLogColumns: TableColumnModel[] = [
   ...turmaColumns.filter(column => column.columnDef !== 'id'),
   ...commonLogColumns
 ]
-
-/*
- @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-
-    @Column(nullable = false, unique = true)
-    private String nome;
-
-    @Column(nullable = false)
-    private String turno;
-
-    @Column(nullable = false)
-    private int ano;
-
-    @Column(nullable = false)
-    private int semestre;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "matriz_curricular_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.NO_ACTION)
-    @Cascade(CascadeType.SAVE_UPDATE)
-    private MatrizCurricular matriz;
- */

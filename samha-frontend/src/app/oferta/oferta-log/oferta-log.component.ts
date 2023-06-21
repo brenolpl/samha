@@ -1,11 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {ofertaLogColumns} from "../../meta-model/oferta";
 
 @Component({
   selector: 'samha-oferta-log',
-  templateUrl: './oferta-log.component.html',
-  styleUrls: ['./oferta-log.component.css']
+  templateUrl: './oferta-log.component.html'
 })
 export class OfertaLogComponent {
   public readonly ofertaLogColumns = ofertaLogColumns;

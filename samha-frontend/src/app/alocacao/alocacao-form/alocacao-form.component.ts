@@ -11,8 +11,7 @@ import {DisciplinaDialogComponent} from "../../disciplina/disciplina-dialog/disc
 
 @Component({
   selector: 'samha-alocacao-new',
-  templateUrl: './alocacao-form.component.html',
-  styleUrls: ['./alocacao-form.component.css']
+  templateUrl: './alocacao-form.component.html'
 })
 export class AlocacaoFormComponent implements OnInit {
   form: FormGroup;

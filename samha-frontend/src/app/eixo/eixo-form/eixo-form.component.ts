@@ -3,14 +3,11 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {DataService} from '../../shared/service/data.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {first} from 'rxjs/operators';
-import notify from "devextreme/ui/notify";
-import {error} from "protractor";
 import {NotificationService} from "../../shared/service/notification.service";
 
 @Component({
   selector: 'samha-eixo-form',
-  templateUrl: './eixo-form.component.html',
-  styleUrls: ['./eixo-form.component.css']
+  templateUrl: './eixo-form.component.html'
 })
 export class EixoFormComponent implements OnInit {
   form: FormGroup;

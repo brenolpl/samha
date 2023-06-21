@@ -1,6 +1,7 @@
 package com.samha.application.token;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.samha.commons.BusinessException;
 import com.samha.commons.UseCase;
 import com.samha.domain.Usuario;
 import com.samha.service.IUsuarioService;
@@ -19,6 +20,7 @@ public class RefreshToken extends UseCase<Void> {
     private final HttpServletResponse response;
     private final HttpServletRequest request;
 
+    @Inject
     public RefreshToken(HttpServletResponse response, HttpServletRequest request){
         this.request = request;
         this.response = response;
@@ -44,7 +46,7 @@ public class RefreshToken extends UseCase<Void> {
                 JWTUtil.writeErrorResponse(response, ex);
             }
         } else {
-            throw new RuntimeException("Não foi possível encontrar o refresh token");
+            throw new BusinessException("Não foi possível encontrar o refresh token");
         }
         return null;
     }

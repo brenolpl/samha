@@ -6,6 +6,7 @@ import {Filter, QueryMirror} from "../../shared/query-mirror";
 import {matrizColumns} from "../../meta-model/matriz-curricular";
 import {DataService} from "../../shared/service/data.service";
 import {MatOptionSelectionChange} from "@angular/material/core";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'samha-disciplina-list',
@@ -29,7 +30,9 @@ export class DisciplinaListComponent implements OnInit {
 
 
   constructor(private formBuilder: FormBuilder,
-              private dataService: DataService) {
+              private dataService: DataService,
+              private router: Router,
+              private route: ActivatedRoute) {
     this.form = this.formBuilder.group({
       matriz: [null],
       periodo: ['1', [Validators.maxLength(1)]]
@@ -95,5 +98,9 @@ export class DisciplinaListComponent implements OnInit {
 
   onSelectedRow($event: number) {
     this.selectedRow.emit($event);
+  }
+
+  goToLog() {
+    this.router.navigate(['log'], {relativeTo: this.route});
   }
 }

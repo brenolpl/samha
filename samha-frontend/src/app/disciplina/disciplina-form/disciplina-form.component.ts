@@ -3,17 +3,14 @@ import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {DataService} from '../../shared/service/data.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Observable, Subscription} from 'rxjs';
-import {first, map, tap} from 'rxjs/operators';
+import {first} from 'rxjs/operators';
 import {Filter, QueryMirror} from '../../shared/query-mirror';
 import {matrizColumns} from '../../meta-model/matriz-curricular';
-import notify from "devextreme/ui/notify";
-import {error} from "protractor";
 import {NotificationService} from "../../shared/service/notification.service";
 
 @Component({
   selector: 'samha-disciplina-form',
-  templateUrl: './disciplina-form.component.html',
-  styleUrls: ['./disciplina-form.component.css']
+  templateUrl: './disciplina-form.component.html'
 })
 export class DisciplinaFormComponent implements OnInit, OnDestroy {
   form: FormGroup;

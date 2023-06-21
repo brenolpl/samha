@@ -19,12 +19,6 @@ import {NotificationService} from "../shared/service/notification.service";
 export class HomeComponent implements OnInit{
   loading$: Observable<any>;
   opened = true;
-  menusPermitidos: Menu[];
-  coordenadores: boolean = false;
-  professores: boolean = false;
-  alocacoes: boolean = false;
-  disciplinas: boolean = false;
-  cadastrarUsuario: boolean = false;
   selectedMenu: MenuEnum;
 
   columns: any[] = [];
@@ -42,74 +36,5 @@ export class HomeComponent implements OnInit{
         }
       )
     );
-  }
-
-
-  onSideBarClicked() {
-    this.opened = !this.opened;
-  }
-
-  onMenuClick(menu: number) {
-    switch (menu) {
-      case MenuEnum.PROFESSORES:
-        this.columns = professorColumns;
-        this.selectedMenu = MenuEnum.PROFESSORES;
-        break;
-      case MenuEnum.COORDENADORES:
-        this.columns = professorColumns;
-        this.selectedMenu = MenuEnum.COORDENADORES;
-        break;
-      case MenuEnum.ALOCACOES:
-        this.columns = alocacaoColumns;
-        this.selectedMenu = MenuEnum.ALOCACOES;
-        break;
-      case MenuEnum.DISCIPLINAS:
-        this.columns = disciplinaColumns;
-        this.selectedMenu = MenuEnum.DISCIPLINAS;
-        break;
-      case MenuEnum.CADASTRARUSUARIOS:
-        this.columns = [];
-        this.selectedMenu = MenuEnum.CADASTRARUSUARIOS;
-        break;
-      case MenuEnum.CURSO:
-        this.columns = cursoColumns;
-        this.selectedMenu = MenuEnum.CURSO;
-        break;
-      case MenuEnum.OFERTAS:
-        this.columns = [];
-        this.selectedMenu = 0;
-        break;
-      case MenuEnum.RELATORIOS:
-        this.columns = [];
-        this.selectedMenu = 0;
-        break;
-      case MenuEnum.TURMAS:
-        this.columns = turmaColumns;
-        this.selectedMenu = MenuEnum.TURMAS;
-        break;
-    }
-  }
-
-  loadMatIcon(menu: number) {
-    switch (menu) {
-      case MenuEnum.PROFESSORES:
-        return 'person';
-      case MenuEnum.COORDENADORES:
-        return 'supervised_user_circle';
-      case MenuEnum.ALOCACOES:
-        return 'link';
-      case MenuEnum.DISCIPLINAS:
-        return 'library_books';
-      case MenuEnum.CADASTRARUSUARIOS:
-        return 'group_add';
-      case MenuEnum.CURSO:
-        return 'school';
-      case MenuEnum.OFERTAS:
-        return 'grid_on';
-      case MenuEnum.RELATORIOS:
-        return 'picture_as_pdf';
-      case MenuEnum.TURMAS:
-        return 'group_work'
-    }
   }
 }

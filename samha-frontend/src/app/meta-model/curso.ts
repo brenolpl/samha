@@ -16,28 +16,3 @@ export const cursoLogColumns: TableColumnModel[] = [
   ...cursoColumns.filter(column => column.columnDef !== 'id'),
   ...commonLogColumns
 ]
-
-/*
-   @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-
-    @Column(nullable = false, unique = true)
-    private String nome;
-
-    @Column(nullable = false)
-    private int qtPeriodos;
-
-    @Column(nullable = false)
-    private String nivel;
-
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "coordenadoria_id", nullable = true)
-    @Cascade(CascadeType.SAVE_UPDATE)
-    private Coordenadoria coordenadoria;
-
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "professor_id")
-    @Cascade(CascadeType.SAVE_UPDATE)
-    private Professor professor;
- */

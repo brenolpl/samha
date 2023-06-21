@@ -1,6 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {TableColumnModel} from '../../meta-model/table-column-model';
 import {DialogData} from "../../meta-model/dialog-data";
 
 @Component({

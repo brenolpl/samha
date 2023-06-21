@@ -20,8 +20,6 @@ public class AtualizarTurmasAtivas extends UseCase<Boolean> {
                 q.equal(q.get(Turma_.ativa), true)
         ));
 
-        //TODO: Jogar exceção caso a lista venha vazia.
-
         boolean isAtiva;
 
         for(var turma : turmasAtivas){

@@ -13,7 +13,7 @@ import {NotificationService} from "../../shared/service/notification.service";
 @Component({
   selector: 'samha-turma-list',
   templateUrl: './turma-list.component.html',
-  styleUrls: ['./turma-list.component.css', '../../shared/table/table.component.css']
+  styleUrls: ['../../shared/table/table.component.css']
 })
 export class TurmaListComponent extends TableComponent implements OnInit {
   cursoControl = new FormControl();

@@ -3,8 +3,7 @@ import {MatDialogRef} from "@angular/material/dialog";
 
 @Component({
   selector: 'samha-alteracao-dialog',
-  templateUrl: './alteracao-dialog.component.html',
-  styleUrls: ['./alteracao-dialog.component.css']
+  templateUrl: './alteracao-dialog.component.html'
 })
 export class AlteracaoDialogComponent implements OnInit {
 

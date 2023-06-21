@@ -15,11 +15,3 @@ export const restricaoProfessorColumns: TableColumnModel[] = [
   {columnDef: 'aula6', header: 'Aula 6', visible: true, type: FieldEnum.BOOLEAN},
   {columnDef: 'prioridade', header: 'Prioridade', visible: true},
 ]
-
-export enum DiaSemanaEnum {
-  SEGUNDA ,
-  TERCA,
-  QUARTA,
-  QUINTA,
-  SEXTA
-}

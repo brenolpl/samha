@@ -5,8 +5,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'samha-professor-log',
-  templateUrl: './professor-log.component.html',
-  styleUrls: ['./professor-log.component.css']
+  templateUrl: './professor-log.component.html'
 })
 export class ProfessorLogComponent implements OnInit {
   professorLogColumns = professorLogColumns;

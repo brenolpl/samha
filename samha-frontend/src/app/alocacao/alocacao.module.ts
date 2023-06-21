@@ -1,6 +1,5 @@
 import {NgModule} from '@angular/core';
 import {AlocacaoRoutingModule} from './alocacao-routing.module';
-import {AlocacaoComponent} from "./alocacao-edit/alocacao.component";
 import {SharedModule} from "../shared/shared.module";
 import { AlocacaoFormComponent } from './alocacao-form/alocacao-form.component';
 import {MaterialModule} from "../shared/material/material.module";
@@ -13,7 +12,6 @@ import {DxButtonModule, DxPopupModule, DxScrollViewModule} from "devextreme-angu
 
 @NgModule({
   declarations: [
-    AlocacaoComponent,
     AlocacaoFormComponent,
     AlocacaoMainComponent,
   ],

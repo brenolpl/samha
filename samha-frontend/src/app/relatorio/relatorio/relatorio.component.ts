@@ -5,8 +5,7 @@ import {AuthService} from "../../shared/service/auth.service";
 
 @Component({
   selector: 'samha-relatorio',
-  templateUrl: './relatorio.component.html',
-  styleUrls: ['./relatorio.component.css']
+  templateUrl: './relatorio.component.html'
 })
 export class RelatorioComponent implements OnInit, OnDestroy {
   public semestreControl: FormControl;

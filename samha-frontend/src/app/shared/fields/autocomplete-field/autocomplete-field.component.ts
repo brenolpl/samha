@@ -6,8 +6,7 @@ import {DataService} from '../../service/data.service';
 
 @Component({
   selector: 'samha-autocomplete-field',
-  templateUrl: './autocomplete-field.component.html',
-  styleUrls: ['./autocomplete-field.component.css']
+  templateUrl: './autocomplete-field.component.html'
 })
 export class AutocompleteFieldComponent implements OnInit {
   @Input() resource: string;

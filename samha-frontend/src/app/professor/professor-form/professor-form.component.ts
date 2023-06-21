@@ -4,15 +4,13 @@ import {Observable, Subscription} from 'rxjs';
 import {DataService} from '../../shared/service/data.service';
 import {restricaoProfessorColumns} from '../../meta-model/restricao-professor';
 import {IFormComponent} from '../../meta-model/iform-component';
-import {ActivatedRoute, Route, Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {first} from 'rxjs/operators';
 import {NotificationService} from "../../shared/service/notification.service";
-import {error} from "protractor";
 
 @Component({
   selector: 'samha-professor-form',
-  templateUrl: './professor-form.component.html',
-  styleUrls: ['./professor-form.component.css']
+  templateUrl: './professor-form.component.html'
 })
 export class ProfessorFormComponent implements OnInit, IFormComponent, OnDestroy {
   form: FormGroup;

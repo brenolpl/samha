@@ -1,8 +1,8 @@
 import {EventEmitter, Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, CanActivate, CanDeactivate, Router, RouterStateSnapshot} from '@angular/router';
-import {Observable, of, Subscription} from 'rxjs';
+import {Observable, of} from 'rxjs';
 import {LocalStorageService} from '../shared/service/local-storage.service';
-import {catchError, map, tap} from 'rxjs/operators';
+import {catchError, map} from 'rxjs/operators';
 import {AuthService} from '../shared/service/auth.service';
 
 @Injectable()

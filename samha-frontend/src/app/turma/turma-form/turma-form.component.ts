@@ -7,14 +7,11 @@ import {matrizColumns} from '../../meta-model/matriz-curricular';
 import {Observable, of} from 'rxjs';
 import {PagedList} from '../../shared/paged-list';
 import {first} from 'rxjs/operators';
-import notify from "devextreme/ui/notify";
 import {NotificationService} from "../../shared/service/notification.service";
-import {error} from "protractor";
 
 @Component({
   selector: 'samha-turma-form',
-  templateUrl: './turma-form.component.html',
-  styleUrls: ['./turma-form.component.css']
+  templateUrl: './turma-form.component.html'
 })
 export class TurmaFormComponent implements OnInit {
   form: FormGroup;

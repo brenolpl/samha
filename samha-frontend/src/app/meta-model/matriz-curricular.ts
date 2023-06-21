@@ -15,24 +15,3 @@ export const matrizLogColumns: TableColumnModel[] = [
   ...matrizColumns.filter(column => column.columnDef !== 'id'),
   ...commonLogColumns
 ]
-
-/*
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-
-    @Column(nullable = false)
-    private String nome;
-
-    @Column(nullable = false)
-    private int ano;
-
-    @Column(nullable = false)
-    private int semestre;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "curso_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.NO_ACTION)
-    @Cascade(CascadeType.SAVE_UPDATE)
-    private Curso curso;
- */

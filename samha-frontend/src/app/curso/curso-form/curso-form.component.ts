@@ -8,8 +8,7 @@ import {NotificationService} from "../../shared/service/notification.service";
 
 @Component({
   selector: 'samha-curso-form',
-  templateUrl: './curso-form.component.html',
-  styleUrls: ['./curso-form.component.css']
+  templateUrl: './curso-form.component.html'
 })
 export class CursoFormComponent implements OnInit {
   form: FormGroup;

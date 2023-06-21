@@ -5,10 +5,3 @@ export const usuarioColumns: TableColumnModel[] = [
   {columnDef: 'login', header: 'Login', visible: true},
   {columnDef: 'papel.nome', header: 'Papel', visible: true},
 ]
-
-export interface Usuario {
-  id: number;
-  nome: string;
-  email: string;
-  matricula: string;
-}

@@ -64,8 +64,6 @@ export class UsuarioFormComponent implements OnInit {
   }
 
   salvar() {
-    //TODO: acrescentar necessidade de caracteres especiais para melhorar a criptografia (muitas senhas salvas como 123)
-
     if (this.form.valid) {
       let usuario = {
         id: this.usuario?.id,

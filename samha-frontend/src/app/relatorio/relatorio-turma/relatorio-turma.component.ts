@@ -14,8 +14,7 @@ import {tap} from "rxjs/operators";
 
 @Component({
   selector: 'samha-relatorio-turma',
-  templateUrl: './relatorio-turma.component.html',
-  styleUrls: ['./relatorio-turma.component.css']
+  templateUrl: './relatorio-turma.component.html'
 })
 export class RelatorioTurmaComponent implements OnInit, OnDestroy {
   @Input() public semestreControl: FormControl;

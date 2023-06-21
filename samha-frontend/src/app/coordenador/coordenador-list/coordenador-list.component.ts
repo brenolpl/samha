@@ -3,8 +3,7 @@ import {coordenadorColumns} from "../../meta-model/servidor";
 
 @Component({
   selector: 'samha-coordenador-list',
-  templateUrl: './coordenador-list.component.html',
-  styleUrls: ['./coordenador-list.component.css']
+  templateUrl: './coordenador-list.component.html'
 })
 export class CoordenadorListComponent implements OnInit {
   public readonly coordenadorColumns = coordenadorColumns;
