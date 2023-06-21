@@ -32,7 +32,7 @@ public class TurmaAud extends BaseLogEntity {
     private int semestre;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "matriz_curricular_id", updatable = false)
+    @JoinColumn(name = "matriz_curricular_id", updatable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private MatrizCurricular matriz;
 
     public Integer getRevtype() {

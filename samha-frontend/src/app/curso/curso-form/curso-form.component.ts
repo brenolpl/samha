@@ -43,14 +43,15 @@ export class CursoFormComponent implements OnInit {
       this.dataService.save('curso', this.curso).pipe(first()).subscribe(
         next => {
           this.notification.success('Curso criado com sucesso!');
+          this.router.navigate(['../', next.id], {relativeTo: this.route});
         },
         error => this.notification.handleError(error)
       );
     } else {
       this.dataService.update('curso', this.curso.id, this.curso).pipe(first()).subscribe(
         next => {
-          this.curso = next;
           this.notification.success('Curso atualizado com sucesso!');
+          this.router.navigate(['../', next.id], {relativeTo: this.route});
         },
         error => this.notification.handleError(error)
       );
@@ -63,7 +64,8 @@ export class CursoFormComponent implements OnInit {
       nome: this.form.get('nome').value,
       nivel: this.form.get('nivel').value,
       qtPeriodos: this.form.get('qtPeriodo').value,
-      coordenadoria: this.form.get('coord').value
+      coordenadoria: this.form.get('coord').value,
+      semestral: this.form.get('semestral').value
     }
   }
 
@@ -71,7 +73,8 @@ export class CursoFormComponent implements OnInit {
     this.form = this.formBuilder.group({
       nome: [this.curso?.nome, [Validators.required]],
       nivel: [this.curso?.nivel, Validators.required],
-      qtPeriodo: [this.curso?.qtPeriodos, Validators.required]
+      qtPeriodo: [this.curso?.qtPeriodos, Validators.required],
+      semestral: [this.curso?.semestral, Validators.required]
     });
     this.coordControl.setValue(this.curso?.coordenadoria);
     this.form.addControl('coord', this.coordControl);

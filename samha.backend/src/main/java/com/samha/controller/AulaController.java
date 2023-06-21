@@ -9,6 +9,7 @@ import com.samha.controller.common.BaseController;
 import com.samha.domain.Aula;
 import com.samha.domain.dto.Conflito;
 import com.samha.domain.dto.ConflitoTurma;
+import com.samha.domain.dto.OfertaDto;
 import com.samha.domain.log.AulaAud;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,8 +37,8 @@ public class AulaController extends BaseController<Aula, AulaAud, Integer> {
     }
 
     @PostMapping("salvar-aulas")
-    public List<Aula> salvarAulas(@RequestBody List<Aula> aulas) {
-        return facade.execute(new SalvarAulas(aulas));
+    public List<Aula> salvarAulas(@RequestBody OfertaDto ofertaDto) {
+        return facade.execute(new SalvarAulas(ofertaDto));
     }
 
     @PostMapping("validar-turmas/{ano}/{semestre}")

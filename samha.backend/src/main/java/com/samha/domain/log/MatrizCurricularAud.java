@@ -28,7 +28,7 @@ public class MatrizCurricularAud extends BaseLogEntity {
     private int semestre;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "curso_id", updatable = false)
+    @JoinColumn(name = "curso_id", updatable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Curso curso;
 
     public Integer getRevtype() {

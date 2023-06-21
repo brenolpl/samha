@@ -26,7 +26,7 @@ public class UsuarioAud extends BaseLogEntity {
     private String senha;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "papel_id", updatable = false)
+    @JoinColumn(name = "papel_id", updatable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Papel papel;
 
     public Integer getRevtype() {

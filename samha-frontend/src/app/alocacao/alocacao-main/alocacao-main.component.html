@@ -58,13 +58,14 @@
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="d-block" *ngIf="showPeriodo">
-          <mat-label>Período</mat-label>
+          <mat-label *ngIf="cursoControl.value?.semestral">Período</mat-label>
+          <mat-label *ngIf="!cursoControl.value?.semestral">Ano</mat-label>
           <input matInput type="number" formControlName="periodo" min="1" [max]="qtPeriodos"
                  (change)="onPeriodoChange()">
         </mat-form-field>
       </form>
       <hr class="separator">
-      <div *ngIf="disciplinaDataSource$ | async as dataSource; else loading"
+      <div *ngIf="disciplinaDataSource$ | async as dataSource; else loading" id="div1"
            class="base-block base-overflow hide-scrollbar">
         <table mat-table [dataSource]="defineDataSource(dataSource)" class="w-100">
 
@@ -113,7 +114,7 @@
 
       </div>
       <hr class="separator">
-      <div *ngIf="professor$ | async as profSource; else loading" class="base-block base-overflow hide-scrollbar">
+      <div *ngIf="professor$ | async as profSource; else loading" class="base-block base-overflow hide-scrollbar" id="div2">
 
         <table mat-table [dataSource]="defineDataSource(profSource)" class="w-100">
 
@@ -154,7 +155,7 @@
       <hr class="separator">
       <dx-scroll-view>
         <div *ngIf="alocacao$ | async as dataSource; else loading" class="base-block base-overflow hide-scrollbar">
-        <table mat-table [dataSource]="defineDataSource(dataSource)" class="w-100">
+        <table mat-table [dataSource]="defineDataSource(dataSource)" class="w-100" id="div3">
 
           <ng-container *ngFor="let column of alocacaoColumns" [matColumnDef]="column.columnDef">
 

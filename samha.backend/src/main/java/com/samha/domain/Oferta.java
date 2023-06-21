@@ -33,6 +33,9 @@ public class Oferta extends BaseLogEntity {
     
     @Column(nullable = false)
     private int intervaloMinimo;
+
+    @Column(nullable = false)
+    private Boolean publica;
     
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "turma_id", nullable = false)
@@ -87,6 +90,14 @@ public class Oferta extends BaseLogEntity {
 
     public void setTurma(Turma turma) {
         this.turma = turma;
+    }
+
+    public Boolean getPublica() {
+        return publica;
+    }
+
+    public void setPublica(Boolean publica) {
+        this.publica = publica;
     }
 
     @Override

@@ -33,12 +33,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         authenticationFilter.setFilterProcessesUrl("/api/login");
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(STATELESS);
-        http.authorizeRequests().antMatchers("/api/login/**", "/api/auth/**", "/api/relatorio/**", "/api/public/**").permitAll();
-        http.authorizeRequests().antMatchers(HttpMethod.GET,"/api/**").hasAuthority("COORDENADOR_ACADEMICO");
-        http.authorizeRequests().antMatchers(HttpMethod.POST,"/api/**").hasAuthority("COORDENADOR_ACADEMICO");
-        http.authorizeRequests().antMatchers(HttpMethod.PATCH,"/api/**").hasAuthority("COORDENADOR_ACADEMICO");
-        http.authorizeRequests().antMatchers(HttpMethod.DELETE,"/api/**").hasAuthority("COORDENADOR_ACADEMICO");
-        http.authorizeRequests().antMatchers(HttpMethod.PUT,"/api/**").hasAuthority("COORDENADOR_ACADEMICO");
+        http.authorizeRequests().antMatchers("/api/login/**", "/api/auth/**", "/api/public/**").permitAll();
+        http.authorizeRequests().antMatchers(HttpMethod.GET,"/api/**").hasAnyAuthority("COORDENADOR_ACADEMICO", "COORDENADOR_CURSO");
+        http.authorizeRequests().antMatchers(HttpMethod.POST,"/api/**").hasAnyAuthority("COORDENADOR_ACADEMICO", "COORDENADOR_CURSO");
+        http.authorizeRequests().antMatchers(HttpMethod.PATCH,"/api/**").hasAnyAuthority("COORDENADOR_ACADEMICO", "COORDENADOR_CURSO");
+        http.authorizeRequests().antMatchers(HttpMethod.DELETE,"/api/**").hasAnyAuthority("COORDENADOR_ACADEMICO", "COORDENADOR_CURSO");
+        http.authorizeRequests().antMatchers(HttpMethod.PUT,"/api/**").hasAnyAuthority("COORDENADOR_ACADEMICO", "COORDENADOR_CURSO");
         http.authorizeRequests().anyRequest().authenticated();
         http.addFilter(authenticationFilter);
         http.addFilterBefore(new SamhaAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);

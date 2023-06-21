@@ -34,6 +34,9 @@ public class Curso extends BaseLogEntity implements Comparable<Object>, Serializ
     @Column(nullable = false)
     private String nivel;
 
+    @Column(nullable = false)
+    private Boolean semestral;
+
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "coordenadoria_id")
     @Cascade(CascadeType.SAVE_UPDATE)
@@ -111,5 +114,17 @@ public class Curso extends BaseLogEntity implements Comparable<Object>, Serializ
     @Override
     public Class getLogEntity() {
         return CursoAud.class;
+    }
+
+    public void setQtPeriodos(Integer qtPeriodos) {
+        this.qtPeriodos = qtPeriodos;
+    }
+
+    public Boolean getSemestral() {
+        return semestral;
+    }
+
+    public void setSemestral(Boolean semestral) {
+        this.semestral = semestral;
     }
 }

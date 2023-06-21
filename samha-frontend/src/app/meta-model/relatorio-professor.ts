@@ -6,5 +6,7 @@ export interface RelatorioDto {
   semestre: number,
   nomeRelatorio?: string,
   turmaId?: string,
-  cursoId?: string
+  cursoId?: string,
+  enviarEmail: boolean,
+  senha?: string
 }

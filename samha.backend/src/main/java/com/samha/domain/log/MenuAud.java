@@ -23,7 +23,7 @@ public class MenuAud extends BaseLogEntity {
     private Integer revtype;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "papel_id", updatable = false)
+    @JoinColumn(name = "papel_id", updatable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Set<Papel> papeis;
 
     public Integer getRevtype() {

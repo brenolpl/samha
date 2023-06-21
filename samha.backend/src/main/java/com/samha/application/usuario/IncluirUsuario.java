@@ -65,6 +65,10 @@ public class IncluirUsuario extends UseCase<Usuario> {
                     genericRepository.save(servidor);
                     genericRepository.save(novoServidor);
                 }
+            } else if (usuarioDto.getServidor_id() != null) {
+                Servidor associarServidor = genericRepository.get(Servidor.class, usuarioDto.getServidor_id());
+                associarServidor.setUsuario(usuarioBanco);
+                genericRepository.save(associarServidor);
             }
 
             usuarioBanco.setLogin(usuarioDto.getLogin());

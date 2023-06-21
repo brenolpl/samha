@@ -10,6 +10,7 @@ import {RelatorioDto} from "../../meta-model/relatorio-professor";
 import {HttpEvent, HttpEventType} from "@angular/common/http";
 import {FunctionHelper} from "../../shared/function-helper";
 import {AuthService} from "../../shared/service/auth.service";
+import {tap} from "rxjs/operators";
 
 @Component({
   selector: 'samha-relatorio-turma',
@@ -19,6 +20,10 @@ import {AuthService} from "../../shared/service/auth.service";
 export class RelatorioTurmaComponent implements OnInit, OnDestroy {
   @Input() public semestreControl: FormControl;
   @Input() public anoControl: FormControl;
+  @Input() public authenticated: boolean;
+  @Input() public enviarEmailControl: FormControl;
+  @Input() public senhaControl: FormControl;
+
   public compareFunction = (o1: any, o2: any) => (o1 != null && o2 != null && o1.id == o2.id);
   public radioGroupControl = new FormControl(1);
   public eixos$: Observable<any>;
@@ -31,7 +36,10 @@ export class RelatorioTurmaComponent implements OnInit, OnDestroy {
   public aulasTurma$: Observable<any>;
   public isGenerating: boolean = false;
   public showPopup: boolean = false;
+  public aulasTurma: any[] = [];
   private gerarPdfSub: Subscription;
+  public hide: boolean = true;
+
 
 
   constructor(private dataService: DataService,
@@ -49,10 +57,12 @@ export class RelatorioTurmaComponent implements OnInit, OnDestroy {
         this.eixoControl.setValue({});
         this.cursoControl.setValue({});
         this.turmaControl.setValue({});
+        this.aulasTurma = [];
         break;
       case '2':
         this.cursoControl.setValue({});
         this.turmaControl.setValue({});
+        this.aulasTurma = [];
         break;
       case '3':
         this.turmaControl.setValue({});
@@ -83,8 +93,12 @@ export class RelatorioTurmaComponent implements OnInit, OnDestroy {
   }
 
   onAnoSemestreChange() {
-    if (this.anoControl.valid && this.semestreControl.valid) {
-      if (this.cursoControl.value?.id) this.aulasTurma$ = this.dataService.publicPost('relatorio/obter-aulas-turma', this.getRelatorioDto())
+    if (this.anoControl.valid && this.semestreControl.valid && this.cursoControl.value?.id) {
+      if (!this.authenticated) {
+        this.aulasTurma$ = this.dataService.publicPost('obter-aulas-turma', this.getRelatorioDto()).pipe(tap(next => this.aulasTurma = next))
+      } else {
+        this.aulasTurma$ = this.dataService.post('relatorio/obter-aulas-turma', this.getRelatorioDto()).pipe(tap(next => this.aulasTurma = next))
+      }
     }
   }
 
@@ -95,7 +109,9 @@ export class RelatorioTurmaComponent implements OnInit, OnDestroy {
       eixoId: this.eixoControl.value?.id,
       cursoId: this.cursoControl.value?.id,
       turmaId: this.turmaControl.value?.id,
-      nomeRelatorio: 'relatorioGenerico'
+      nomeRelatorio: 'relatorioGenerico',
+      enviarEmail: this.enviarEmailControl.value,
+      senha: this.senhaControl.value
     }
   }
 
@@ -109,20 +125,41 @@ export class RelatorioTurmaComponent implements OnInit, OnDestroy {
   }
 
   private gerarRelatorio() {
+    if (this.enviarEmailControl.value && !this.senhaControl.valid){
+      this.senhaControl.markAsTouched();
+      this.notification.error('A senha é obrigatória para o envio de e-mail.');
+      return;
+    }
     this.isGenerating = true;
-    this.gerarPdfSub = this.dataService.publicAsyncPost('relatorio/gerar-relatorio-turma', this.getRelatorioDto())
-      .subscribe((event: HttpEvent<any>) => {
-        if (event.type === HttpEventType.DownloadProgress) {
-        } else if (event.type === HttpEventType.Response) {
-          console.log(event.body);
-          FunctionHelper.downloadFile(event.body.nomeArquivo, event.body.bytes);
-          this.notification.success('Relatório gerado com sucesso!');
+    if (!this.authenticated) {
+      this.gerarPdfSub = this.dataService.publicAsyncPost('gerar-relatorio-turma', this.getRelatorioDto())
+        .subscribe((event: HttpEvent<any>) => {
+          if (event.type === HttpEventType.DownloadProgress) {
+          } else if (event.type === HttpEventType.Response) {
+            console.log(event.body);
+            FunctionHelper.downloadFile(event.body.nomeArquivo, event.body.bytes);
+            this.notification.success('Relatório gerado com sucesso!');
+            this.isGenerating = false;
+          }
+        }, error => {
           this.isGenerating = false;
-        }
-      }, error => {
-        this.isGenerating = false;
-        this.notification.handleError(error)
-      });
+          this.notification.handleError(error)
+        });
+    } else {
+      this.gerarPdfSub = this.dataService.asyncPost('relatorio/gerar-relatorio-turma', this.getRelatorioDto())
+        .subscribe((event: HttpEvent<any>) => {
+          if (event.type === HttpEventType.DownloadProgress) {
+          } else if (event.type === HttpEventType.Response) {
+            console.log(event.body);
+            FunctionHelper.downloadFile(event.body.nomeArquivo, event.body.bytes);
+            this.notification.success('Relatório gerado com sucesso!');
+            this.isGenerating = false;
+          }
+        }, error => {
+          this.isGenerating = false;
+          this.notification.handleError(error)
+        });
+    }
   }
 
   onOptionChoosen($event: boolean) {

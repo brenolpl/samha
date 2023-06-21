@@ -1,10 +1,7 @@
 import {
-  ChangeDetectionStrategy,
   Component, Input,
   OnDestroy,
-  OnInit,
-  QueryList,
-  ViewChildren
+  OnInit
 } from '@angular/core';
 import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {Observable, of, range, Subscription} from "rxjs";
@@ -13,7 +10,7 @@ import {DataService} from "../../shared/service/data.service";
 import {NotificationService} from "../../shared/service/notification.service";
 import {MatSelectChange} from "@angular/material/select";
 import {QueryMirror} from "../../shared/query-mirror";
-import {catchError, map, tap, toArray} from "rxjs/operators";
+import {catchError, tap} from "rxjs/operators";
 import {HttpEvent, HttpEventType} from "@angular/common/http";
 import {RelatorioDto} from "../../meta-model/relatorio-professor";
 import {FunctionHelper} from "../../shared/function-helper";
@@ -26,6 +23,9 @@ import {FunctionHelper} from "../../shared/function-helper";
 export class RelatorioProfessorComponent implements OnInit, OnDestroy {
   @Input() public semestreControl: FormControl
   @Input() public anoControl: FormControl;
+  @Input() public authenticated: boolean;
+  @Input() public enviarEmailControl: FormControl;
+  @Input() public senhaControl: FormControl;
   public compareFunction = (o1: any, o2: any) => (o1 != null && o2 != null && o1.id == o2.id);
   public radioGroupControl = new FormControl();
 
@@ -40,6 +40,8 @@ export class RelatorioProfessorComponent implements OnInit, OnDestroy {
   private gerarPdfSub: Subscription;
   public showPopup: boolean = false;
   public isGenerating: boolean = false;
+  public hide: boolean = true;
+
 
   constructor(private dataService: DataService,
               private formBuilder: FormBuilder,
@@ -75,17 +77,31 @@ export class RelatorioProfessorComponent implements OnInit, OnDestroy {
   }
 
   private getProfessores(): void {
-    this.professores$ = this.dataService.publicPost('relatorio/obter-professores-relatorio', this.getRelatorioDto()).pipe(
-      tap(next => {
-          this.isLoading = false;
-          this.professores = next;
-        }
-      ),
-      catchError(err => {
-        this.notification.handleError(err);
-        return of(new Error(err));
-      })
-    )
+    if (!this.authenticated) {
+      this.professores$ = this.dataService.publicPost('obter-professores-relatorio', this.getRelatorioDto()).pipe(
+        tap(next => {
+            this.isLoading = false;
+            this.professores = next;
+          }
+        ),
+        catchError(err => {
+          this.notification.handleError(err);
+          return of(new Error(err));
+        })
+      )
+    } else {
+      this.professores$ = this.dataService.post('relatorio/obter-professores-relatorio', this.getRelatorioDto()).pipe(
+        tap(next => {
+            this.isLoading = false;
+            this.professores = next;
+          }
+        ),
+        catchError(err => {
+          this.notification.handleError(err);
+          return of(new Error(err));
+        })
+      )
+    }
   }
 
   onProfessorSelected($event: MatSelectChange) {
@@ -95,7 +111,7 @@ export class RelatorioProfessorComponent implements OnInit, OnDestroy {
 
   onAnoSemestreChange() {
     this.isLoading = true;
-    this.getProfessores();
+    if (this.formGroup.get('coord').value?.id) this.getProfessores();
   }
 
   generatePdf(button: any) {
@@ -109,19 +125,39 @@ export class RelatorioProfessorComponent implements OnInit, OnDestroy {
   }
 
   public gerarRelatorio(): void {
+    if (this.enviarEmailControl.value && !this.senhaControl.valid){
+      this.senhaControl.markAsTouched();
+      this.notification.error('A senha é obrigatória para o envio de e-mail.');
+      return;
+    }
     this.isGenerating = true;
-    this.gerarPdfSub = this.dataService.publicAsyncPost('relatorio/gerar-relatorio-professor', this.getRelatorioDto())
-      .subscribe((event: HttpEvent<any>) => {
-        if (event.type === HttpEventType.DownloadProgress) {
-        } else if (event.type === HttpEventType.Response) {
-          FunctionHelper.downloadFile("relatorios.zip", event.body.bytes);
-          this.notification.success('Relatório gerado com sucesso!');
+    if (!this.authenticated) {
+      this.gerarPdfSub = this.dataService.publicAsyncPost('gerar-relatorio-professor', this.getRelatorioDto())
+        .subscribe((event: HttpEvent<any>) => {
+          if (event.type === HttpEventType.DownloadProgress) {
+          } else if (event.type === HttpEventType.Response) {
+            FunctionHelper.downloadFile(event.body.nomeArquivo, event.body.bytes);
+            this.notification.success('Relatório gerado com sucesso!');
+            this.isGenerating = false;
+          }
+        }, error => {
           this.isGenerating = false;
-        }
-      }, error => {
-        this.isGenerating = false;
-        this.notification.handleError(error)
-      });
+          this.notification.handleError(error)
+        });
+    } else {
+      this.gerarPdfSub = this.dataService.asyncPost('relatorio/gerar-relatorio-professor', this.getRelatorioDto())
+        .subscribe((event: HttpEvent<any>) => {
+          if (event.type === HttpEventType.DownloadProgress) {
+          } else if (event.type === HttpEventType.Response) {
+            FunctionHelper.downloadFile(event.body.nomeArquivo, event.body.bytes);
+            this.notification.success('Relatório gerado com sucesso!');
+            this.isGenerating = false;
+          }
+        }, error => {
+          this.isGenerating = false;
+          this.notification.handleError(error)
+        });
+    }
   }
 
   getRelatorioDto(): RelatorioDto {
@@ -131,7 +167,9 @@ export class RelatorioProfessorComponent implements OnInit, OnDestroy {
       professorId: this.professorControl.value?.id,
       coordenadoriaId: this.formGroup.get('coord').value?.id,
       eixoId: this.formGroup.get('eixo').value?.id,
-      nomeRelatorio: 'relatorioGenerico'
+      nomeRelatorio: 'relatorioGenerico',
+      enviarEmail: this.enviarEmailControl.value,
+      senha: this.senhaControl.value
     }
   }
 
@@ -146,10 +184,12 @@ export class RelatorioProfessorComponent implements OnInit, OnDestroy {
         this.formGroup.get('eixo').setValue({});
         this.formGroup.get('coord').setValue({});
         this.professorControl.setValue({});
+        this.professores = [];
         break;
       case '2':
         this.formGroup.get('coord').setValue({});
         this.professorControl.setValue({});
+        this.professores = [];
         break;
       case '3':
         this.professorControl.setValue({});
@@ -163,7 +203,6 @@ export class RelatorioProfessorComponent implements OnInit, OnDestroy {
 
   onOptionChoosen(generate: boolean) {
     if(generate) this.gerarRelatorio();
-
     this.showPopup = false;
   }
 }

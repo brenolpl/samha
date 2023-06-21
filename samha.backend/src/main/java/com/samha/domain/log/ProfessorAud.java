@@ -27,7 +27,7 @@ public class ProfessorAud extends BaseLogEntity{
     private Boolean ativo;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "coordenadoria_id", updatable = false)
+    @JoinColumn(name = "coordenadoria_id", updatable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Coordenadoria coordenadoria;
 
     @Embeddable

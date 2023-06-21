@@ -1,10 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, Validators} from "@angular/forms";
+import {Subscription} from "rxjs";
 import {AuthService} from "../../shared/service/auth.service";
-import {error} from "protractor";
-import {logger} from "codelyzer/util/logger";
-import {of, Subscription} from "rxjs";
-import {catchError} from "rxjs/operators";
 
 @Component({
   selector: 'samha-relatorio',
@@ -14,6 +11,9 @@ import {catchError} from "rxjs/operators";
 export class RelatorioComponent implements OnInit, OnDestroy {
   public semestreControl: FormControl;
   public anoControl: FormControl;
+  public enviarEmailControl = new FormControl(false);
+  public senhaControl = new FormControl(null, Validators.required);
+  public authenticated: boolean = false;
   private loggedSub: Subscription
   public tabs = [
     {
@@ -38,12 +38,8 @@ export class RelatorioComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loggedSub = this.authService.isTokenValid().subscribe(
-      () => {},
-      error => {
-        this.anoControl.addValidators([Validators.max(new Date().getFullYear())])
-        this.semestreControl.addValidators([Validators.max(new Date().getMonth() < 6 ? 1 : 2)]);
-        return of(false);
-      }
+      () => this.authenticated = true,
+      _ => this.authenticated = false
     )
   }
 

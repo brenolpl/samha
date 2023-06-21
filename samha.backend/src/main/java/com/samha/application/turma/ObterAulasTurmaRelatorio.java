@@ -13,8 +13,12 @@ import com.samha.domain.Turma_;
 import com.samha.domain.dto.AulaDto;
 import com.samha.domain.dto.RelatorioDto;
 import com.samha.persistence.generics.IGenericRepository;
+import com.samha.persistence.generics.IQueryHelper;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.inject.Inject;
+import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,7 +74,8 @@ public class ObterAulasTurmaRelatorio extends UseCase<List<Turma>> {
         List<Aula> aulas = genericRepository.find(Aula.class, q -> q.where(
                 q.equal(q.get(Aula_.oferta).get(Oferta_.turma).get(Turma_.id), turma.getId()),
                 q.equal(q.get(Aula_.oferta).get(Oferta_.semestre), relatorioDto.getSemestre()),
-                q.equal(q.get(Aula_.oferta).get(Oferta_.ano), relatorioDto.getAno())
+                q.equal(q.get(Aula_.oferta).get(Oferta_.ano), relatorioDto.getAno()),
+                getFiltroOfertaPublicaPredicate(q)
         ));
 
         List<AulaDto> aulasDto = new ArrayList<>();
@@ -82,5 +87,17 @@ public class ObterAulasTurmaRelatorio extends UseCase<List<Turma>> {
         String nomeProfessor = a.getAlocacao().getProfessor1().obterNomeAbreviado();
         if (a.getAlocacao().getProfessor2() != null) nomeProfessor += " " + a.getAlocacao().getProfessor2().obterNomeAbreviado();
         return nomeProfessor;
+    }
+
+    private Predicate getFiltroOfertaPublicaPredicate(IQueryHelper<Aula, Aula> q) {
+        boolean isAuthenticated = SecurityContextHolder.getContext().getAuthentication() instanceof UsernamePasswordAuthenticationToken;
+        if (isAuthenticated) {
+            return q.or(
+                    q.equal(q.get(Aula_.oferta).get(Oferta_.publica), true),
+                    q.equal(q.get(Aula_.oferta).get(Oferta_.publica), false)
+            );
+        } else {
+            return q.equal(q.get(Aula_.oferta).get(Oferta_.publica), true);
+        }
     }
 }

@@ -7,7 +7,7 @@ import {OfertaComponent} from "./oferta-main/oferta.component";
 import {DragDropModule} from "@angular/cdk/drag-drop";
 import {
     DxButtonModule,
-    DxDraggableModule,
+    DxDraggableModule, DxPopupModule,
     DxProgressBarModule,
     DxSchedulerModule,
     DxScrollViewModule
@@ -36,7 +36,8 @@ import { AulaLogComponent } from './aula-log/aula-log.component';
         DxDraggableModule,
         DxButtonModule,
         CdkAccordionModule,
-        DxProgressBarModule
+        DxProgressBarModule,
+        DxPopupModule
     ]
 })
 export class OfertaModule {}

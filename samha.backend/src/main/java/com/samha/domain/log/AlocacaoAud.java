@@ -27,15 +27,15 @@ public class AlocacaoAud extends BaseLogEntity {
     private int semestre;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "disciplina_id", updatable = false)
+    @JoinColumn(name = "disciplina_id", updatable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Disciplina disciplina;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "professor1_id", updatable = false)
+    @JoinColumn(name = "professor1_id", updatable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Professor professor1;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "professor2_id", updatable = false)
+    @JoinColumn(name = "professor2_id", updatable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Professor professor2;
 
     public AuditCompositeKey getPk() {

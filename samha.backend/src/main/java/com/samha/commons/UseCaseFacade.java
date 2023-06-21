@@ -41,7 +41,7 @@ public class UseCaseFacade {
         } catch (ConstraintViolationException ex) {
             throw new BusinessException(ex.getMessage(), ex);
         } catch (DataIntegrityViolationException ex) {
-            throw new BusinessException(ex.getMessage(), ex);
+            throw new BusinessException("Dados inconsistentes ou inválidos! Cheque o seu formulário.", ex);
         } catch (Throwable ex) {
             throw new UnexpectedException("Ocorreu um erro inesperado", ex);
         }

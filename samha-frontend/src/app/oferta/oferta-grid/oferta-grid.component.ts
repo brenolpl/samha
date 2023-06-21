@@ -44,6 +44,7 @@ export class OfertaGridComponent {
 
   onItemDrop(event: DragEvent, rowIndex: number, colIndex: number) {
     if(this.novaAula !== undefined) {
+      if(!this.checkDraggableArea(this.novaAula, colIndex)) return;
       let aula = {
         alocacao: this.novaAula.alocacao,
         id: null,
@@ -64,10 +65,12 @@ export class OfertaGridComponent {
       const prevItem = this.matriz[prevRowIndex][prevColIndex];
       const currItem = this.matriz[rowIndex][colIndex];
       if(currItem !== undefined && !(typeof currItem === 'string')) {
+        if(!this.checkDraggableArea(currItem, colIndex)) return;
         currItem.dia = prevRowIndex;
         currItem.numero = prevColIndex + currItem.turno;
       }
       if(prevItem !== undefined && !(typeof prevItem === 'string')) {
+        if(!this.checkDraggableArea(prevItem, colIndex)) return;
         prevItem.dia = rowIndex;
         prevItem.numero = colIndex + prevItem.turno;
       }
@@ -161,5 +164,13 @@ export class OfertaGridComponent {
       }
     }
     return 'background-white';
+  }
+
+  private checkDraggableArea(item: any, colIndex: number) {
+    if(item.turno == 12 && colIndex > 3) {
+      return false;
+    }
+
+    return true;
   }
 }

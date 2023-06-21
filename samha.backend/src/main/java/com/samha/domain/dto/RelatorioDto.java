@@ -9,6 +9,10 @@ public class RelatorioDto implements Serializable {
     private Integer professorId;
     private Integer coordenadoriaId;
 
+    private Boolean enviarEmail;
+
+    private String senha;
+
     private Integer turmaId;
 
     private Integer cursoId;
@@ -77,5 +81,21 @@ public class RelatorioDto implements Serializable {
 
     public void setCursoId(Integer cursoId) {
         this.cursoId = cursoId;
+    }
+
+    public Boolean getEnviarEmail() {
+        return enviarEmail;
+    }
+
+    public void setEnviarEmail(Boolean enviarEmail) {
+        this.enviarEmail = enviarEmail;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
     }
 }

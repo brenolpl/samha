@@ -29,11 +29,11 @@ public class AulaAud extends BaseLogEntity {
     private int turno;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "alocacao_id", updatable = false)
+    @JoinColumn(name = "alocacao_id", updatable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Alocacao alocacao;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "oferta_id", updatable = false)
+    @JoinColumn(name = "oferta_id", updatable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Oferta oferta;
 
     public AuditCompositeKey getPk() {

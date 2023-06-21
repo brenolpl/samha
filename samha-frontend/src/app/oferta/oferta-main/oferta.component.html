@@ -1,6 +1,18 @@
 <mat-toolbar class="sub-toolbar">
   <div class="d-flex justify-content-end w-100">
     <dx-button
+      (onClick)="showPopupMudarVisiblidade = true"
+      stylingMode="outlined"
+      class="d-flex"
+      [visible]="oferta?.id"
+      type="normal">
+      <div style="height: 18px" class="d-flex">
+        <mat-icon style="font-size: 20px; margin-left: .3em" *ngIf="oferta?.publica">visibility</mat-icon>
+        <mat-icon style="font-size: 20px; margin-left: .3em" *ngIf="!oferta?.publica">visibility_off</mat-icon>
+        <span style="margin-left: .3em">Mudar visiblidade do horário</span></div>
+    </dx-button>
+    <span class="m-1"></span>
+    <dx-button
       (onClick)="goToLogOferta()"
       stylingMode="outlined"
       type="normal"
@@ -82,7 +94,8 @@
         </div>
 
         <mat-form-field appearance="outline" class="d-block">
-          <mat-label>Período</mat-label>
+          <mat-label *ngIf="turmaControl.value?.matriz.curso.semestral">Período</mat-label>
+          <mat-label *ngIf="!turmaControl.value?.matriz.curso.semestral">Ano da Turma</mat-label>
           <input matInput type="number" [min]="1" [max]="qtPeriodos" formControlName="periodo"
                  (change)="onPeriodoChange($event.target.value)" #periodoInput>
         </mat-form-field>
@@ -148,7 +161,7 @@
                 type="success"
                 text="Salvar"
                 (onClick)="onSalvarClicked()"
-                [disabled]="!ofertaChanged"
+                [disabled]="!ofertaChanged || !oferta?.id"
               >
               </dx-button>
             </div>
@@ -207,7 +220,14 @@
     <div class="divider d-inline-block"></div>
 
     <mat-card-content class="d-block" style="min-width: 700px;" [ngClass]="notificacoesOpened ? 'partial-grid' : 'complete-grid'">
-      <mat-card-subtitle>Grade de Horários</mat-card-subtitle>
+      <mat-card-subtitle class="d-flex">
+        <span style="margin-right: .5em; margin-top: .175em">Grade de Horários</span>
+        <div *ngIf="oferta?.id">
+          <mat-icon *ngIf="oferta?.publica">visibility</mat-icon>
+          <mat-icon *ngIf="!oferta?.publica">visibility_off</mat-icon>
+        </div>
+      </mat-card-subtitle>
+
       <div class="mt-4">
         <samha-oferta-grid
           [matriz]="matriz"
@@ -275,7 +295,7 @@
           </cdk-accordion>
 
           <!-- notificações agrupadas por turma-->
-          <cdk-accordion class="example-accordion" *ngIf="notificacaoTurma; else loading">
+          <cdk-accordion class="example-accordion" *ngIf="notificacaoTurma">
             <cdk-accordion-item
               *ngFor="let itemTurma of notificacoes; let index = index;"
               #accordionItemTurma="cdkAccordionItem"
@@ -344,14 +364,33 @@
         (onClick)="notificacoesOpened = true"
       ></dx-button>
     </ng-template>
-
-
   </mat-card>
-
-
-  <ng-template #loading>
-    <div class="loading-spinner" *ngIf="isNotificacaoTurmaLoading">
-      <mat-spinner></mat-spinner>
-    </div>
-  </ng-template>
 </div>
+
+<dx-popup [(visible)]="showPopupMudarVisiblidade" height="200" width="400" title="Mudar visiblidade do horário">
+  <div class="container-fluid container">
+    <div class="row">
+      <div class="col-12">
+        Você está prestes a modificar a visiblidade do horário para {{this.oferta?.publica ? 'privado' : 'público'}}, deseja continuar?
+      </div>
+    </div>
+    <div class="row mt-4">
+      <div class="col-12 d-flex justify-content-center">
+        <dx-button
+          text="Confirmar"
+          type="success"
+          icon="save"
+          (onClick)="mudarVisiblidadeOferta()">
+        </dx-button>
+        <span class="m-1"></span>
+        <dx-button
+          text="Cancelar"
+          type="normal"
+          stylingMode="outlined"
+          icon="clear"
+          (onClick)="showPopupMudarVisiblidade = false">
+        </dx-button>
+      </div>
+    </div>
+  </div>
+</dx-popup>

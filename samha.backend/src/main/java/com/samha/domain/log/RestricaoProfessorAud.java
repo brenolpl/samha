@@ -49,7 +49,7 @@ public class RestricaoProfessorAud extends BaseLogEntity {
     private String prioridade;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "professor_id", updatable = false)
+    @JoinColumn(name = "professor_id", updatable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Professor professor;
 
     public Integer getRevtype() {

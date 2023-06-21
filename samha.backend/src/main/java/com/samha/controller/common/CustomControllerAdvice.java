@@ -3,7 +3,6 @@ package com.samha.controller.common;
 import com.samha.commons.BusinessException;
 import com.samha.commons.ErrorResponse;
 import com.samha.commons.UnexpectedException;
-import org.apache.coyote.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;

@@ -16,8 +16,12 @@ import {AuthService} from "../../shared/service/auth.service";
 export class RelatorioDisciplinaComponent implements OnInit, OnDestroy {
   @Input() public semestreControl: FormControl;
   @Input() public anoControl: FormControl;
+  @Input() public authenticated: boolean;
+  @Input() public enviarEmailControl: FormControl;
+  @Input() public senhaControl: FormControl;
   public isGenerating: boolean = false;
   private gerarPdfSub: Subscription;
+  public hide: boolean = true;
   constructor(private dataService: DataService,
               private notification: NotificationService,
               private authService: AuthService) { }
@@ -26,19 +30,39 @@ export class RelatorioDisciplinaComponent implements OnInit, OnDestroy {
   }
 
   onGerarClick() {
+    if (this.enviarEmailControl.value && !this.senhaControl.valid){
+      this.senhaControl.markAsTouched();
+      this.notification.error('A senha é obrigatória para o envio de e-mail.');
+      return;
+    }
     this.isGenerating = true;
-    this.gerarPdfSub = this.dataService.publicAsyncPost('relatorio/gerar-relatorio-disciplina', this.getRelatorioDto())
-      .subscribe((event: HttpEvent<any>) => {
-        if (event.type === HttpEventType.DownloadProgress) {
-        } else if (event.type === HttpEventType.Response) {
-          FunctionHelper.downloadFile(event.body.nomeArquivo, event.body.bytes);
-          this.notification.success('Relatório gerado com sucesso!');
+    if (!this.authenticated) {
+      this.gerarPdfSub = this.dataService.publicAsyncPost('gerar-relatorio-disciplina', this.getRelatorioDto())
+        .subscribe((event: HttpEvent<any>) => {
+          if (event.type === HttpEventType.DownloadProgress) {
+          } else if (event.type === HttpEventType.Response) {
+            FunctionHelper.downloadFile(event.body.nomeArquivo, event.body.bytes);
+            this.notification.success('Relatório gerado com sucesso!');
+            this.isGenerating = false;
+          }
+        }, error => {
           this.isGenerating = false;
-        }
-      }, error => {
-        this.isGenerating = false;
-        this.notification.handleError(error)
-      });
+          this.notification.handleError(error)
+        });
+    } else {
+      this.gerarPdfSub = this.dataService.asyncPost('relatorio/gerar-relatorio-disciplina', this.getRelatorioDto())
+        .subscribe((event: HttpEvent<any>) => {
+          if (event.type === HttpEventType.DownloadProgress) {
+          } else if (event.type === HttpEventType.Response) {
+            FunctionHelper.downloadFile(event.body.nomeArquivo, event.body.bytes);
+            this.notification.success('Relatório gerado com sucesso!');
+            this.isGenerating = false;
+          }
+        }, error => {
+          this.isGenerating = false;
+          this.notification.handleError(error)
+        });
+    }
   }
 
   ngOnDestroy() {
@@ -48,7 +72,9 @@ export class RelatorioDisciplinaComponent implements OnInit, OnDestroy {
   private getRelatorioDto(): RelatorioDto {
     return {
       ano: this.anoControl.value,
-      semestre: this.semestreControl.value
+      semestre: this.semestreControl.value,
+      enviarEmail: this.enviarEmailControl.value,
+      senha: this.senhaControl.value
     }
   }
 

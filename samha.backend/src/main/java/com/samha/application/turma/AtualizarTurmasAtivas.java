@@ -48,7 +48,7 @@ public class AtualizarTurmasAtivas extends UseCase<Boolean> {
 
         int periodo;
 
-        if(turma.getMatriz().getCurso().getNivel().equals("ENSINO MÉDIO INTEGRADO")){
+        if(!turma.getMatriz().getCurso().getSemestral()){
             periodo = calcularAnoAtual(anoAtual, turma.getAno());
         }else{
             periodo = calcularPeriodoAtual(anoAtual, semestreAtual, turma.getAno(), turma.getSemestre());

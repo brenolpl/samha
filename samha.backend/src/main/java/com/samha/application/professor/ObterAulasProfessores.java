@@ -12,8 +12,12 @@ import com.samha.domain.Professor_;
 import com.samha.domain.dto.AulaDto;
 import com.samha.domain.dto.RelatorioDto;
 import com.samha.persistence.generics.IGenericRepository;
+import com.samha.persistence.generics.IQueryHelper;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.inject.Inject;
+import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -67,6 +71,7 @@ public class ObterAulasProfessores extends UseCase<List<Professor>> {
     }
 
     private void setAulasProfessores(List<Professor> professores) {
+
         for (var prof : professores) {
             List<Aula> aulas = genericRepository.find(Aula.class, q -> q.where(
                     q.or(
@@ -74,7 +79,8 @@ public class ObterAulasProfessores extends UseCase<List<Professor>> {
                             q.equal(q.get(Aula_.alocacao).get(Alocacao_.professor2), prof)
                     ),
                     q.equal(q.get(Aula_.oferta).get(Oferta_.ano), relatorioDto.getAno()),
-                    q.equal(q.get(Aula_.oferta).get(Oferta_.semestre), relatorioDto.getSemestre())
+                    q.equal(q.get(Aula_.oferta).get(Oferta_.semestre), relatorioDto.getSemestre()),
+                    getFiltroOfertaPublicaPredicate(q)
             ));
 
             List<AulaDto> aulasDto = new ArrayList<>();
@@ -83,6 +89,18 @@ public class ObterAulasProfessores extends UseCase<List<Professor>> {
                 aulasDto.add(aulaDto);
             }
             prof.setAulas(aulasDto);
+        }
+    }
+
+    private Predicate getFiltroOfertaPublicaPredicate(IQueryHelper<Aula, Aula> q) {
+        boolean isAuthenticated = SecurityContextHolder.getContext().getAuthentication() instanceof UsernamePasswordAuthenticationToken;
+        if (isAuthenticated) {
+            return q.or(
+                    q.equal(q.get(Aula_.oferta).get(Oferta_.publica), true),
+                    q.equal(q.get(Aula_.oferta).get(Oferta_.publica), false)
+            );
+        } else {
+            return q.equal(q.get(Aula_.oferta).get(Oferta_.publica), true);
         }
     }
 

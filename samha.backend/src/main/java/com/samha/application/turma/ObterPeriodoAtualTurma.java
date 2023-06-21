@@ -28,8 +28,9 @@ public class ObterPeriodoAtualTurma extends UseCase<Integer> {
 
     public static Integer getPeriodoAtual(Turma turma) {
         Integer anoAtual = LocalDateTime.now().getYear();
-        if(turma.getMatriz().getCurso().getNivel().equals("ENSINO MÉDIO INTEGRADO")) {
+        if(!turma.getMatriz().getCurso().getSemestral()) {
             int qtAnos = anoAtual - turma.getAno() + 1;
+            if (qtAnos > turma.getMatriz().getCurso().getQtPeriodos()) return turma.getMatriz().getCurso().getQtPeriodos();
             return qtAnos;
         } else {
             int qtAnos = (anoAtual - turma.getAno()) * 2;
@@ -42,7 +43,7 @@ public class ObterPeriodoAtualTurma extends UseCase<Integer> {
 
             if(semestreAtual == turma.getSemestre()) qtAnos += 1;
             if(semestreAtual == 2 && turma.getSemestre() == 1) qtAnos += 2;
-
+            if (qtAnos > turma.getMatriz().getCurso().getQtPeriodos()) return turma.getMatriz().getCurso().getQtPeriodos();
             return qtAnos;
         }
     }

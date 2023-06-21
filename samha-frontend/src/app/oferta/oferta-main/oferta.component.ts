@@ -40,6 +40,7 @@ export class OfertaComponent implements OnInit, OnDestroy {
   private validarTurmasSub: Subscription;
   public cursoControl = new FormControl();
   public turmaControl = new FormControl();
+  public showPopupMudarVisiblidade: boolean = false;
   public formGroup: FormGroup;
   public filteredOptions: Observable<any[]>;
   public alocacao$: Observable<any>;
@@ -149,7 +150,7 @@ export class OfertaComponent implements OnInit, OnDestroy {
     this.ofertaChanged = false;
     this.dataService.query(
       new QueryMirror('turma')
-        .selectList(['id', 'nome', 'matriz.id', 'matriz.curso.id'])
+        .selectList(['id', 'nome', 'matriz.id', 'matriz.curso.id', 'matriz.curso.semestral'])
         .where({
             and: {
               'matriz.curso.id': {equals: this.cursoControl.value.id},
@@ -171,10 +172,7 @@ export class OfertaComponent implements OnInit, OnDestroy {
       ).subscribe(
       data => {
         this.list = data.listMap;
-        if(this.list.length > 0 && !this.turmaControl.value) {
-          this.turmaControl.setValue(this.list[0]);
-          this.onTurmaChange();
-        } else if(this.turmaControl.value.matriz.curso.id !== this.cursoControl.value.id) {
+        if((this.list.length > 0 && !this.turmaControl.value) || (this.turmaControl.value.matriz.curso.id !== this.cursoControl.value.id)) {
           this.turmaControl.setValue(this.list[0]);
           this.onTurmaChange();
         } else {
@@ -233,8 +231,10 @@ export class OfertaComponent implements OnInit, OnDestroy {
 
 
   private executeOfertaQuery() {
+    this.notificacoes = [];
+    this.notificacaoTurma = false;
     this.dataService.query(new QueryMirror('oferta')
-      .selectList(['id', 'ano', 'semestre', 'tempoMaximoTrabalho', 'intervaloMinimo', 'turma.id', 'turma.nome'])
+      .selectList(['id', 'ano', 'semestre', 'tempoMaximoTrabalho', 'intervaloMinimo', 'turma.id', 'turma.nome', 'publica'])
       .where({
         and: {
           'ano': {equals: this.formGroup.get('ano').value},
@@ -503,7 +503,6 @@ export class OfertaComponent implements OnInit, OnDestroy {
 
   onControleQuantidadeDisciplinasClick() {
     this.notificacaoTurma = false;
-    this.aulasConflitantes = [];
     let aulas = [...this.aulasMatutinas, ...this.aulasVespertinas, ...this.aulasNoturnas];
     if (aulas.length > 0) {
       this.dataService.post('aula/controle-qtd-disciplina', [...this.aulasMatutinas, ...this.aulasVespertinas, ...this.aulasNoturnas]).pipe(first())
@@ -519,21 +518,21 @@ export class OfertaComponent implements OnInit, OnDestroy {
 
   onSalvarClicked() {
     this.ofertaChanged = false;
-    let aulas = [...this.aulasMatutinas, ...this.aulasVespertinas, ...this.aulasNoturnas];
-    if (aulas.length > 0) {
-      this.dataService.post('aula/salvar-aulas', aulas).pipe(first()).subscribe(
-        next => {
-          this.executeOfertaQuery();
-          this.notification.success('As aulas foram salvas com sucesso!');
-        },
-        catchError( err => {
-          this.notification.handleError(err);
-          return of(new Error(err))
-        })
-      )
-    } else {
-      this.notification.error('Ainda não há aulas para esta oferta.');
+    const aulas = [...this.aulasMatutinas, ...this.aulasVespertinas, ...this.aulasNoturnas];
+    const ofertaDto = {
+      ofertaId: this.oferta.id,
+      aulas: aulas
     }
+    this.dataService.post('aula/salvar-aulas', ofertaDto).pipe(first()).subscribe(
+      next => {
+        this.executeOfertaQuery();
+        this.notification.success('As aulas foram salvas com sucesso!');
+      },
+      catchError( err => {
+        this.notification.handleError(err);
+        return of(new Error(err))
+      })
+    )
   }
 
   private createOferta = () => this.oferta = this.dataService.save('oferta', this.oferta).pipe(first()).subscribe();
@@ -588,5 +587,20 @@ export class OfertaComponent implements OnInit, OnDestroy {
         break;
     }
     this.onAulaChanged(item)
+  }
+
+  mudarVisiblidadeOferta() {
+    this.showPopupMudarVisiblidade = false;
+    if (this.oferta?.id)
+      this.dataService.post('oferta/mudar-visiblidade', this.oferta?.id).pipe(first()).subscribe(
+        next => {
+          this.oferta = next;
+        }, error => this.notification.handleError(error)
+      );
+    else this.notification.error('A oferta ainda não foi criada.');
+  }
+
+  onConfirmarClick() {
+
   }
 }

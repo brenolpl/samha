@@ -29,7 +29,7 @@ public class ServidorAud extends BaseLogEntity {
     private String email;
 
     @OneToOne
-    @JoinColumn(name = "usuario_id", updatable = false)
+    @JoinColumn(name = "usuario_id", updatable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Usuario usuario;
 
     public AuditCompositeKey getPk() {

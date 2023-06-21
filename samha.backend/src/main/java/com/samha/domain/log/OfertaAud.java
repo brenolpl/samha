@@ -31,7 +31,7 @@ public class OfertaAud extends BaseLogEntity {
     private int intervaloMinimo;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "turma_id", updatable = false)
+    @JoinColumn(name = "turma_id", updatable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Turma turma;
 
     public Integer getRevtype() {

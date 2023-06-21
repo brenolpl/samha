@@ -22,7 +22,7 @@ public class CoordenadoriaAud extends BaseLogEntity {
     private String nome;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "eixo_id", updatable = false)
+    @JoinColumn(name = "eixo_id", updatable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Eixo eixo;
 
     public AuditCompositeKey getPk() {

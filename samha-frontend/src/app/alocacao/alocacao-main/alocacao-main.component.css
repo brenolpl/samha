@@ -16,7 +16,8 @@
 }
 
 .base-overflow {
-  overflow: scroll;
+  overflow-x: scroll;
+  max-height: 450px;
 }
 
 .separator {

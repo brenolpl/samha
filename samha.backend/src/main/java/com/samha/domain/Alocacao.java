@@ -33,18 +33,6 @@ public class Alocacao extends BaseLogEntity implements Comparable<Object>{
     @Column(nullable = false)
     private int semestre;
     
-    @Transient
-    private boolean completa;
-
-    @Transient
-    private String encurtadoProfessor1;
-
-    @Transient
-    private String encurtadoProfessor2;
-    
-    @Transient
-    private Turma turma;
-    
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "disciplina_id")
     @OnDelete(action = OnDeleteAction.NO_ACTION)
@@ -60,6 +48,18 @@ public class Alocacao extends BaseLogEntity implements Comparable<Object>{
     @JoinColumn(name = "professor2_id")
     @OnDelete(action = OnDeleteAction.NO_ACTION)
     private Professor professor2;
+
+    @Transient
+    private boolean completa;
+
+    @Transient
+    private String encurtadoProfessor1;
+
+    @Transient
+    private String encurtadoProfessor2;
+
+    @Transient
+    private Turma turma;
 
     public Integer getId() {
         return id;

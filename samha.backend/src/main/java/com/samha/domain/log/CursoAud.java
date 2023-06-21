@@ -4,7 +4,15 @@ import com.samha.domain.BaseLogEntity;
 import com.samha.domain.Coordenadoria;
 import com.samha.domain.Professor;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.ConstraintMode;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "curso_aud")
@@ -29,12 +37,15 @@ public class CursoAud extends BaseLogEntity {
     @Column(name = "nivel", updatable = false)
     private String nivel;
 
+    @Column(name = "semestral", updatable = false)
+    private Boolean semestral;
+
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "coordenadoria_id", updatable = false)
+    @JoinColumn(name = "coordenadoria_id", updatable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Coordenadoria coordenadoria;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "professor_id", updatable = false)
+    @JoinColumn(name = "professor_id", updatable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Professor professor;
 
     public AuditCompositeKey getPk() {
@@ -91,5 +102,13 @@ public class CursoAud extends BaseLogEntity {
 
     public void setRevtype(Integer revtype) {
         this.revtype = revtype;
+    }
+
+    public Boolean getSemestral() {
+        return semestral;
+    }
+
+    public void setSemestral(Boolean semestral) {
+        this.semestral = semestral;
     }
 }

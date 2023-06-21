@@ -66,6 +66,27 @@
           </mat-form-field>
         </div>
     </div>
+      <div class="row" *ngIf="authenticated">
+        <div class="col-12">
+          <mat-checkbox [formControl]="enviarEmailControl">Enviar E-mail</mat-checkbox>
+        </div>
+      </div>
+      <div class="row mt-3 mb-4" *ngIf="enviarEmailControl.value && authenticated">
+        <div class="col-12 col-md-6">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>
+              <mat-icon>lock</mat-icon>
+              Senha
+            </mat-label>
+            <input matInput [type]="hide ? 'password' : 'text'" [formControl]="senhaControl">
+            <button mat-icon-button matSuffix (mousedown)="hide = !hide" [attr.aria-label]="'Esconder/Mostrar'"
+                    [attr.aria-pressed]="hide">
+              <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+            <mat-hint>Esta senha não será armazenada. O sistema utilizará seu e-mail cadastrado e a senha informada acima para fazer o envio do e-mail.</mat-hint>
+          </mat-form-field>
+        </div>
+      </div>
       <div class="row mt-3">
         <div class="col-12 d-grid justify-content-center" *ngIf="isGenerating">
           <div class="row d-grid justify-content-center">
@@ -91,7 +112,7 @@
 </mat-card>
 
 
-<div *ngIf="professores$ | async as professores">
+<div *ngIf="professores$ | async">
   <samha-report-aula-grid
     [entityData]="professores"
     [ano]="anoControl.value"

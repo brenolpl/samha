@@ -1,15 +1,21 @@
 package com.samha.application.professor;
 
 import com.samha.application.turma.AtualizarTurmasAtivas;
+import com.samha.commons.BusinessException;
 import com.samha.commons.UseCase;
 import com.samha.domain.Disciplina;
 import com.samha.domain.Professor;
+import com.samha.domain.Servidor;
+import com.samha.domain.Servidor_;
+import com.samha.domain.Usuario_;
 import com.samha.domain.dto.AulaDto;
 import com.samha.domain.dto.RelatorioDto;
 import com.samha.persistence.generics.IGenericRepository;
+import com.samha.service.EmailService;
 import com.samha.util.JasperHelper;
 import com.samha.util.Zipper;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -36,6 +42,9 @@ public class GerarRelatorioProfessor extends UseCase<Map<String, Object>> {
     @Inject
     private IGenericRepository genericRepository;
 
+    @Inject
+    private EmailService emailService;
+
     @Override
     protected Map<String, Object> execute() throws Exception {
         ObterAulasProfessores obterAulasProfessores = new ObterAulasProfessores(relatorioDto);
@@ -54,11 +63,29 @@ public class GerarRelatorioProfessor extends UseCase<Map<String, Object>> {
         Map<String, Object> result = new HashMap<>();
         if (reports.size() > 1) {
             result.put("bytes", Zipper.createZipFile(reports));
-            result.put("nomeArquivo", "relatorio_turmas.zip");
+            result.put("nomeArquivo", "relatorio_professor.zip");
         } else {
             result.put("bytes", reports.get(0).get("bytes"));
-            result.put("nomeArquivo", reports.get(0).get("nome"));
+            result.put("nomeArquivo", reports.get(0).get("nome") + ".pdf");
         }
+        if (relatorioDto.getEnviarEmail()) {
+            Servidor servidor = genericRepository.findSingle(Servidor.class, q -> q.where(
+                    q.equal(q.get(Servidor_.usuario).get(Usuario_.login), SecurityContextHolder.getContext().getAuthentication().getName())
+            ));
+            if(servidor != null && servidor.getEmail() != null) {
+                emailService.enviarEmail(
+                        servidor.getEmail(),
+                        relatorioDto.getSenha(),
+                        emailService.montarMensagem(servidor, relatorioDto.getAno(), relatorioDto.getSemestre()),
+                        "Horários de aula " + relatorioDto.getAno() + "/" + relatorioDto.getSemestre(),
+                        (byte[]) result.get("bytes"),
+                        (String) result.get("nomeArquivo"));
+            }
+            else if(servidor == null) throw new BusinessException("Falha no envio de Email: Não foi possível encontrar o servidor associado a este usuário");
+            else if (servidor.getEmail() == null) throw new BusinessException("Não é possível enviar e-mail para usuários sem e-mail cadastrado.");
+
+        }
+
         return result;
     }
 

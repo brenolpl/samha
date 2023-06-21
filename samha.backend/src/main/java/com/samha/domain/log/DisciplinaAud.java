@@ -4,9 +4,11 @@ import com.samha.domain.BaseLogEntity;
 import com.samha.domain.MatrizCurricular;
 
 import javax.persistence.Column;
+import javax.persistence.ConstraintMode;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -44,7 +46,7 @@ public class DisciplinaAud extends BaseLogEntity {
     private int periodo;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "matriz_id", updatable = false)
+    @JoinColumn(name = "matriz_id", updatable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private MatrizCurricular matriz;
 
     public AuditCompositeKey getPk() {
