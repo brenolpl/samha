@@ -434,8 +434,8 @@ public class ObterRestricoesAulas extends UseCase<List<Conflito>> {
                         q.equal(q.get(Aula_.alocacao).get(Alocacao_.professor2).get(Professor_.id), professor.getId())
                 ),
                 q.notEqual(q.get(Aula_.oferta).get(Oferta_.id), aula.getOferta().getId()),
-                q.equal(q.get(Aula_.oferta).get(Oferta_.ano), aula.getAlocacao().getAno()),
-                q.equal(q.get(Aula_.oferta).get(Oferta_.semestre), aula.getAlocacao().getSemestre())
+                q.equal(q.get(Aula_.oferta).get(Oferta_.ano), aula.getOferta().getAno()),
+                q.equal(q.get(Aula_.oferta).get(Oferta_.semestre), aula.getOferta().getAno())
         ));
 
         if (!aulasProfessor.isEmpty()) {

@@ -66,7 +66,7 @@ export class AlocacaoMainComponent implements OnInit {
     });
 
     this.professorForm = this.formBuilder.group({
-      eixo: [1],
+      eixo: [2],
       search: ['']
     });
 
@@ -79,6 +79,7 @@ export class AlocacaoMainComponent implements OnInit {
   ngOnInit(): void {
     this.disciplinaDisplayedColumns.push('nome');
     this.setAlocacaoDisplayedColumns();
+    this.loadProfessores(null);
   }
 
   findColumnValue = (row, column): string => <string>column.split('.').reduce((acc, cur) => acc[cur], row);
@@ -181,7 +182,7 @@ export class AlocacaoMainComponent implements OnInit {
     let and = {
       'ativo': {equals: true}
     };
-    if (this.professorForm.get('eixo').value == 1) {
+    if (this.professorForm.get('eixo').value == 1 && $eventElement?.id) {
       Object.assign(and, {'coordenadoria.eixo.id': {equals: $eventElement.id}});
     }
 
@@ -248,6 +249,8 @@ export class AlocacaoMainComponent implements OnInit {
       _ => {
         this.alocacao$ = this.getAlocacao$(this.matrizControl.value.id);
         this.notification.success('Alocação incluída com sucesso!');
+        this.professorForm.get('search').setValue('');
+        this.onSearchChange();
         this.selectedProfessorRowIndexes = [];
         this.selectedDisciplinaRowIndex = undefined;
       },

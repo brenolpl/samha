@@ -272,6 +272,7 @@ export class OfertaComponent implements OnInit, OnDestroy {
             turma: this.turmaControl.value,
             tempoMaximoTrabalho: this.tempoMaximo,
             intervaloMinimo: this.intervaloMinimo,
+            publica: false
           }
           this.aulasVespertinas = [];
           this.aulasMatutinas = [];
@@ -470,6 +471,7 @@ export class OfertaComponent implements OnInit, OnDestroy {
   private executeAulasRestricaoQuery(aulas: any[]) {
     this.dataService.post('aula/obter-restricoes', aulas).pipe(first()).subscribe(
       next => {
+        console.log(next);
           this.notificacoes = next;
           next.forEach(conflito => {
             conflito.mensagens.forEach(mensagem => {

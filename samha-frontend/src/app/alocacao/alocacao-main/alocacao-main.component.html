@@ -98,7 +98,7 @@
             [label]="'Eixo'"
             [control]="eixoControl"
             (onChange)="onEixoChange($event)"
-            (loaded)="onEixoLoaded($event)">
+            (clearButtonClicked)="onSearchChange()">
           </samha-autocomplete-field>
 
           <mat-form-field appearance="outline" class="d-block">
@@ -107,8 +107,8 @@
           </mat-form-field>
 
           <mat-radio-group aria-label="Selecione uma opção" formControlName="eixo" (change)="onRadioChange($event)">
-            <mat-radio-button value="1" class="m-2" [checked]="true">Eixo</mat-radio-button>
-            <mat-radio-button value="2">Todos</mat-radio-button>
+            <mat-radio-button value="1" class="m-2">Eixo</mat-radio-button>
+            <mat-radio-button value="2" [checked]="true">Todos</mat-radio-button>
           </mat-radio-group>
         </form>
 
