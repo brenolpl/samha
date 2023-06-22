@@ -1,5 +1,11 @@
 package com.samha.util;
 
+import com.samha.domain.Aula;
+
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.ResolverStyle;
+
 public abstract class Horarios {
 
     public static final int TEMPO_MAXIMO = 1;
@@ -115,5 +121,58 @@ public abstract class Horarios {
             default:
                 return SEXTA;
         }
+    }
+
+    public static double obterQuantidadeHoras(Aula primeira, Aula ultima, int flag) {
+
+        String horarioInicial = Horarios.horarioInicial(primeira.getNumero());
+        String horarioFinal = Horarios.horarioFinal(ultima.getNumero());
+
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("HH:mm").withResolverStyle(ResolverStyle.STRICT);
+
+        LocalTime inicio = LocalTime.parse(horarioInicial, formato);
+        LocalTime fim = LocalTime.parse(horarioFinal, formato);
+
+        double qtHoras = calcularDiferencaHoras(inicio, fim, formato);
+
+        if (flag == Horarios.INTERVALO_MINIMO)
+            return modificarQuantidadeHorasIntervaloMinimo(fim, inicio, qtHoras);
+        else
+            return qtHoras;
+    }
+
+    public static double calcularDiferencaHoras(LocalTime inicio, LocalTime fim, DateTimeFormatter formato) {
+
+        LocalTime diferenca = fim.minusHours(inicio.getHour()).minusMinutes(inicio.getMinute());
+        String dif = diferenca.format(formato);
+        String[] parts = dif.split(":");
+        Integer hour = Integer.parseInt(parts[0]);
+        Integer minutes = Integer.parseInt(parts[1]);
+        //porcentagem de uma hora
+
+        return hour + (minutes / 60D);
+    }
+
+    public static double modificarQuantidadeHorasIntervaloMinimo(LocalTime fim, LocalTime inicio, double qtHoras) {
+
+        if (fim.getHour() == inicio.getHour()) {
+
+            if (fim.getMinute() < inicio.getMinute()) {
+                return qtHoras;
+            }
+
+        } else if (fim.getHour() < inicio.getHour()) {
+            return qtHoras;
+        }
+
+        return 24 - qtHoras;
+    }
+
+    public static LocalTime getTimeFromDouble(double tempo) {
+        Double tempoClass = tempo;
+        Long hour = tempoClass.longValue();
+        Long minutes =  Math.round((tempo - hour) * 60);
+        return LocalTime.of(hour.intValue(), minutes.intValue());
+
     }
 }

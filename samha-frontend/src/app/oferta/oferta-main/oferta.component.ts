@@ -20,14 +20,14 @@ import {HttpEvent, HttpEventType} from "@angular/common/http";
   styleUrls: ['./oferta.component.css', '../oferta-grid/oferta-grid.component.css'],
   animations: [
     trigger('pushInOut', [
-      state('void', style({ transform: 'translateX(100%)' })),
-      state('*', style({ transform: 'translateX(0)' })),
+      state('void', style({transform: 'translateX(100%)'})),
+      state('*', style({transform: 'translateX(0)'})),
       transition(':enter', animate('200ms linear')),
       transition(':leave', animate('200ms linear'))
     ]),
     trigger('verticalInOut', [
-      state('void', style({ transform: 'translateY(-100%)' })),
-      state('*', style({ transform: 'translateY(0)' })),
+      state('void', style({transform: 'translateY(-100%)'})),
+      state('*', style({transform: 'translateY(0)'})),
       transition(':leave', animate('200ms ease-out')),
       transition(':enter', animate('200ms ease-in'))
     ])
@@ -70,6 +70,8 @@ export class OfertaComponent implements OnInit, OnDestroy {
   private semestreCurrentValue: any;
   private periodoCurrentValue: any;
   private progresso: number = 0;
+  private length: number;
+  private disciplinasWarns: any[] = [];
 
 
   constructor(
@@ -81,9 +83,9 @@ export class OfertaComponent implements OnInit, OnDestroy {
     private dialog: MatDialog
   ) {
     this.formGroup = formBuilder.group({
-      turno: ['Matutino'],
+      turno: ['MATUTINO'],
       ano: [new Date().getUTCFullYear()],
-      semestre: [1],
+      semestre: [new Date().getMonth() < 6 ? 1 : 2],
       periodo: [1]
     });
     this.anoCurrentValue = this.formGroup.get('ano').value;
@@ -107,9 +109,13 @@ export class OfertaComponent implements OnInit, OnDestroy {
   }
 
   onCursoLoaded($event: any[]) {
-    this.cursoControl.setValue($event[0]);
-    this.qtPeriodos = this.cursoControl.value.qtPeriodos;
-    this.loadTurmas();
+    if ($event.length > 0) {
+      this.cursoControl.setValue($event[0]);
+      this.qtPeriodos = this.cursoControl.value.qtPeriodos;
+      this.loadTurmas();
+    } else {
+      this.notification.error('Não há cursos cadastrados!');
+    }
   }
 
   compareFunction = (o1: string, o2: string) => (o1 != null && o2 != null && o1.toUpperCase() == o2.toUpperCase());
@@ -122,17 +128,18 @@ export class OfertaComponent implements OnInit, OnDestroy {
 
 
   private loadTurmas() {
-    if (this.ofertaChanged){
+    if (this.ofertaChanged) {
       const dialogRef = this.openDialog();
       dialogRef.afterClosed().pipe(first()).subscribe(
         (result: string) => {
-          if(result === 'salvar') {
+          if (result === 'salvar') {
             this.onSalvarClicked();
-          } else if (result === 'descartar'){
+          } else if (result === 'descartar') {
             this.executeTurmaQuery();
           } else {
             this.cursoControl.setValue(this.cursoCurrentValue);
             this.turmaControl.setValue(this.turmaCurrentValue);
+            this.formGroup.get('turno').setValue(this.turmaCurrentValue?.turno)
           }
         }
       )
@@ -147,10 +154,11 @@ export class OfertaComponent implements OnInit, OnDestroy {
   }
 
   executeTurmaQuery() {
+    this.alocacoes = [];
     this.ofertaChanged = false;
     this.dataService.query(
       new QueryMirror('turma')
-        .selectList(['id', 'nome', 'matriz.id', 'matriz.curso.id', 'matriz.curso.semestral'])
+        .selectList(['id', 'nome', 'matriz.id', 'matriz.curso.id', 'matriz.curso.semestral', 'turno'])
         .where({
             and: {
               'matriz.curso.id': {equals: this.cursoControl.value.id},
@@ -164,18 +172,21 @@ export class OfertaComponent implements OnInit, OnDestroy {
         (next: PagedList) => {
           next.listMap.sort((a, b) => {
             if (a.nome > b.nome) return 1;
-            else if(a.nome < b.nome) return -1;
+            else if (a.nome < b.nome) return -1;
             else return 0;
           })
         }
       )
-      ).subscribe(
+    ).subscribe(
       data => {
         this.list = data.listMap;
-        if((this.list.length > 0 && !this.turmaControl.value) || (this.turmaControl.value.matriz.curso.id !== this.cursoControl.value.id)) {
+        if (this.list.length > 0 && (!this.turmaControl.value?.id || (this.turmaControl.value?.matriz.curso.id !== this.cursoControl.value?.id))) {
           this.turmaControl.setValue(this.list[0]);
+          this.formGroup.get('turno').setValue(this.turmaControl.value?.turno)
           this.onTurmaChange();
         } else {
+          this.turmaControl.setValue(undefined);
+          this.notification.error('Não há turmas para este curso.');
           this.buildMatriz();
         }
         this.filteredOptions = this.turmaControl.valueChanges.pipe(
@@ -188,13 +199,13 @@ export class OfertaComponent implements OnInit, OnDestroy {
   }
 
   onAnoChange(value: any) {
-    if(this.ofertaChanged) {
+    if (this.ofertaChanged) {
       const dialogRef = this.openDialog();
       dialogRef.afterClosed().pipe(first()).subscribe(
         (result: string) => {
-          if(result === 'salvar') {
+          if (result === 'salvar') {
             this.onSalvarClicked()
-          } else if(result === 'descartar') {
+          } else if (result === 'descartar') {
             this.anoCurrentValue = value;
             this.executeAnoQuery();
           } else {
@@ -269,7 +280,9 @@ export class OfertaComponent implements OnInit, OnDestroy {
             id: null,
             ano: this.formGroup.get('ano').value,
             semestre: this.formGroup.get('semestre').value,
-            turma: this.turmaControl.value,
+            turma: {
+              id: this.turmaControl.value.id,
+            },
             tempoMaximoTrabalho: this.tempoMaximo,
             intervaloMinimo: this.intervaloMinimo,
             publica: false
@@ -288,12 +301,13 @@ export class OfertaComponent implements OnInit, OnDestroy {
       const dialogRef = this.openDialog();
       dialogRef.afterClosed().pipe(first()).subscribe(
         (result: string) => {
-          if(result === 'salvar') {
+          if (result === 'salvar') {
             this.onSalvarClicked()
-          } else if(result === 'descartar') {
+          } else if (result === 'descartar') {
             this.executePeriodoAtualQuery();
           } else {
             this.turmaControl.setValue(this.turmaCurrentValue);
+            this.formGroup.get('turno').setValue(this.turmaCurrentValue?.turno)
           }
         }
       )
@@ -304,7 +318,7 @@ export class OfertaComponent implements OnInit, OnDestroy {
 
   private executePeriodoAtualQuery() {
     this.ofertaChanged = false;
-    this.dataService.get('turma/getPeriodoAtual', this.turmaControl.value.id)
+    this.dataService.get('turma/getPeriodoAtual', this.turmaControl.value?.id)
       .pipe(first())
       .subscribe(data => {
         this.formGroup.get('periodo').setValue(data);
@@ -314,7 +328,7 @@ export class OfertaComponent implements OnInit, OnDestroy {
   }
 
   getNomeEncurtadoProfessor(nome: string) {
-    if(nome != null) {
+    if (nome != null) {
       let nomes = nome.split(' ');
       let siglas = nomes.map(n => n.substring(0, 1)).splice(1).join('');
       let nomeEncutado = nomes[0] + ' ' + siglas;
@@ -346,9 +360,10 @@ export class OfertaComponent implements OnInit, OnDestroy {
   private buildMatriz() {
     this.matriz = [[]];
     const turno = (this.formGroup.get('turno').value as string).toUpperCase();
+    this.length = this.getValorTurno() == 12 ? 4 : 6;
 
     const matriz$: Observable<any[][]> = range(0, 5).pipe(
-      map(() => Array.from({ length: 6 }, () => '')),
+      map(() => Array.from({length: this.length}, () => '')),
       toArray()
     );
 
@@ -373,7 +388,7 @@ export class OfertaComponent implements OnInit, OnDestroy {
 
   onAulaChanged(event: any) {
     this.ofertaChanged = true;
-    switch (event.turno){
+    switch (event.turno) {
       case 0:
         this.aulasMatutinas.push(event);
         break;
@@ -388,7 +403,7 @@ export class OfertaComponent implements OnInit, OnDestroy {
   }
 
   private getValorTurno() {
-    switch (this.formGroup.get('turno').value.toUpperCase()){
+    switch (this.formGroup.get('turno').value.toUpperCase()) {
       case 'MATUTINO':
         return 0;
       case 'VESPERTINO':
@@ -399,17 +414,17 @@ export class OfertaComponent implements OnInit, OnDestroy {
   }
 
   onAulaIndexChanged(event: any) {
-    if(event.prevItem.item !== undefined && !(event.prevItem.item instanceof String)) this.onAulaChanged(event.prevItem)
+    if (event.prevItem.item !== undefined && !(event.prevItem.item instanceof String)) this.onAulaChanged(event.prevItem)
     else this.matriz[event.prevItem.prevRowIndex][event.prevItem.prevColIndex] = event.item;
-    if(event.currItem.item !== undefined && !(event.currItem.item instanceof String)) this.onAulaChanged(event.currItem)
+    if (event.currItem.item !== undefined && !(event.currItem.item instanceof String)) this.onAulaChanged(event.currItem)
     else this.matriz[event.currItem.rowIndex][event.currItem.colIndex] = event.item;
   }
 
   onAulaDeleted(event: any) {
     this.ofertaChanged = true;
-    if(event.numero < 6) {
+    if (event.numero < 6) {
       this.aulasMatutinas = this.aulasMatutinas.filter(a => !(a.dia == event.dia && a.numero == event.numero));
-    } else if (event.numero < 12 && event.numero >= 6){
+    } else if (event.numero < 12 && event.numero >= 6) {
       this.aulasVespertinas = this.aulasVespertinas.filter(a => !(a.dia == event.dia && a.numero == event.numero));
     } else if (event.numero < 16 && event.numero >= 12) {
       this.aulasNoturnas = this.aulasNoturnas.filter(a => !(a.dia == event.dia && a.numero == event.numero));
@@ -418,13 +433,13 @@ export class OfertaComponent implements OnInit, OnDestroy {
   }
 
   onSemestreChange(value: any) {
-    if(this.ofertaChanged) {
+    if (this.ofertaChanged) {
       const dialogRef = this.openDialog();
       dialogRef.afterClosed().pipe(first()).subscribe(
         (result: string) => {
-          if(result === 'salvar') {
+          if (result === 'salvar') {
             this.onSalvarClicked();
-          } else if(result === 'descartar') {
+          } else if (result === 'descartar') {
             this.semestreCurrentValue = value;
             this.executeAnoQuery();
           } else {
@@ -460,7 +475,7 @@ export class OfertaComponent implements OnInit, OnDestroy {
   }
 
   selectAlocacao = (alocacao: any) => {
-    if(alocacao.id === this.alocacaoSelecionada?.id) this.alocacaoSelecionada = undefined;
+    if (alocacao.id === this.alocacaoSelecionada?.id) this.alocacaoSelecionada = undefined;
     else this.alocacaoSelecionada = alocacao;
   }
   getAulas = () => [...this.aulasMatutinas, ...this.aulasVespertinas, ...this.aulasNoturnas];
@@ -469,16 +484,19 @@ export class OfertaComponent implements OnInit, OnDestroy {
   onCursoSelectionOpened = () => this.cursoCurrentValue = this.cursoControl.value;
 
   private executeAulasRestricaoQuery(aulas: any[]) {
-    this.dataService.post('aula/obter-restricoes', aulas).pipe(first()).subscribe(
+    let request = {
+      aulas: aulas,
+      oferta: this.oferta
+    }
+    this.dataService.post('aula/obter-restricoes', request).pipe(first()).subscribe(
       next => {
-        console.log(next);
-          this.notificacoes = next;
-          next.forEach(conflito => {
-            conflito.mensagens.forEach(mensagem => {
-              let aulas = mensagem.aulas.map(a => Object.assign(a, {tipo: mensagem.tipo}));
-              this.aulasConflitantes.push(...aulas);
-            })
-          });
+        this.notificacoes = next;
+        next.forEach(conflito => {
+          conflito.mensagens.forEach(mensagem => {
+            let aulas = mensagem.aulas.map(a => Object.assign(a, {tipo: mensagem.tipo}));
+            this.aulasConflitantes.push(...aulas);
+          })
+        });
       }
     )
   }
@@ -500,22 +518,34 @@ export class OfertaComponent implements OnInit, OnDestroy {
     this.notificacaoTurma = false;
     this.notificacoes = [];
     this.aulasConflitantes = [];
+    this.disciplinasWarns = [];
     this.executeAulasRestricaoQuery([...this.aulasVespertinas, ...this.aulasMatutinas, ...this.aulasNoturnas]);
   }
 
   onControleQuantidadeDisciplinasClick() {
     this.notificacaoTurma = false;
-    let aulas = [...this.aulasMatutinas, ...this.aulasVespertinas, ...this.aulasNoturnas];
-    if (aulas.length > 0) {
-      this.dataService.post('aula/controle-qtd-disciplina', [...this.aulasMatutinas, ...this.aulasVespertinas, ...this.aulasNoturnas]).pipe(first())
-        .subscribe(next => {
-          if (next.length > 0) {
-            this.notificacoes = next;
-          }
-        })
-    }else {
-      this.notification.error('Ainda não há aulas para esta oferta.');
+    this.disciplinasWarns = [];
+    let aulas = [
+      ...this.aulasMatutinas,
+      ...this.aulasVespertinas,
+      ...this.aulasNoturnas
+    ];
+    let request = {
+      ano: this.formGroup.get('ano').value,
+      semestre: this.formGroup.get('semestre').value,
+      periodo: this.formGroup.get('periodo').value,
+      cursoId: this.cursoControl.value.id,
+      aulasCriadas: aulas
     }
+    this.dataService.post('aula/controle-qtd-disciplina', request).pipe(first())
+      .subscribe(next => {
+        if (next.length > 0) {
+          this.notificacoes = next;
+          next.forEach(c => {
+            c.mensagens.forEach(m => this.disciplinasWarns.push(m.disciplina));
+          });
+        }
+      }, error => this.notification.handleError(error))
   }
 
   onSalvarClicked() {
@@ -530,7 +560,7 @@ export class OfertaComponent implements OnInit, OnDestroy {
         this.executeOfertaQuery();
         this.notification.success('As aulas foram salvas com sucesso!');
       },
-      catchError( err => {
+      catchError(err => {
         this.notification.handleError(err);
         return of(new Error(err))
       })
@@ -546,8 +576,9 @@ export class OfertaComponent implements OnInit, OnDestroy {
 
   onValidarTurmasClick() {
     this.notificacoes = [];
+    this.disciplinasWarns = [];
     this.progresso = 0;
-    if(this.ofertaChanged) {
+    if (this.ofertaChanged) {
       this.notification.error('Você possui alterações que precisam ser salvas antes de realizar esta ação!');
       return;
     }
@@ -570,6 +601,7 @@ export class OfertaComponent implements OnInit, OnDestroy {
         }
       });
   }
+
   format = (ratio) => `Progresso: ${parseInt((ratio * 100).toString())}%`;
 
   ngOnDestroy() {
@@ -577,7 +609,7 @@ export class OfertaComponent implements OnInit, OnDestroy {
   }
 
   onNovaAulaCreated(item: any) {
-    switch (item.turno){
+    switch (item.turno) {
       case 0:
         this.aulasMatutinas = this.aulasMatutinas.filter(a => !(a.dia == item.dia && a.numero == item.numero));
         break;
@@ -597,12 +629,28 @@ export class OfertaComponent implements OnInit, OnDestroy {
       this.dataService.post('oferta/mudar-visiblidade', this.oferta?.id).pipe(first()).subscribe(
         next => {
           this.oferta = next;
+          this.notification.success('Visibilidade do horário alterada com sucesso!');
         }, error => this.notification.handleError(error)
       );
-    else this.notification.error('A oferta ainda não foi criada.');
+    else this.notification.error('A turma selecionada não possui uma oferta, por favor selecione outra turma.');
   }
 
   onConfirmarClick() {
 
+  }
+
+  isDisciplinaAlocacaoInvalida(alocacao: any) {
+    let disciplina = this.disciplinasWarns.find(d => d.id === alocacao.disciplina.id);
+    if (disciplina) return true;
+    return false;
+  }
+
+  getCorTexto(cor: any) {
+    switch (cor) {
+      case '#C7312C': return '#fff';
+      case '#FF9966':
+      case '#00A4CA': return '#000';
+      default: return '#000';
+    }
   }
 }

@@ -8,8 +8,10 @@ import com.samha.commons.UseCaseFacade;
 import com.samha.controller.common.BaseController;
 import com.samha.domain.Aula;
 import com.samha.domain.dto.Conflito;
+import com.samha.domain.dto.ConflitoDisciplinaRequestDto;
 import com.samha.domain.dto.ConflitoTurma;
 import com.samha.domain.dto.OfertaDto;
+import com.samha.domain.dto.RestricaoRequest;
 import com.samha.domain.log.AulaAud;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,13 +29,13 @@ public class AulaController extends BaseController<Aula, AulaAud, Integer> {
     }
 
     @PostMapping("obter-restricoes")
-    public List<Conflito> obterRestricoes(@RequestBody List<Aula> aulas) {
-        return facade.execute(new ObterRestricoesAulas(aulas));
+    public List<Conflito> obterRestricoes(@RequestBody RestricaoRequest restricaoRequest) {
+        return facade.execute(new ObterRestricoesAulas(restricaoRequest));
     }
 
     @PostMapping("controle-qtd-disciplina")
-    public List<Conflito> obterConflitosQtdDisciplina(@RequestBody List<Aula> aulas) {
-        return facade.execute(new ObterConflitosQtdDisciplina(aulas));
+    public List<Conflito> obterConflitosQtdDisciplina(@RequestBody ConflitoDisciplinaRequestDto request) {
+        return facade.execute(new ObterConflitosQtdDisciplina(request));
     }
 
     @PostMapping("salvar-aulas")

@@ -2,10 +2,6 @@ package com.samha.domain;
 
 import com.samha.domain.dto.AulaDto;
 import com.samha.domain.log.TurmaAud;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.envers.Audited;
 
 import javax.persistence.Column;
@@ -45,8 +41,6 @@ public class Turma extends BaseLogEntity implements Comparable<Object> {
     
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "matriz_curricular_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.NO_ACTION)
-    @Cascade(CascadeType.SAVE_UPDATE)
     private MatrizCurricular matriz;
 
     @Transient

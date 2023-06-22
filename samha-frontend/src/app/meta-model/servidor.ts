@@ -14,7 +14,7 @@ export const servidorLogColumns: TableColumnModel[] = [
 ]
 
 export const coordenadorColumns: TableColumnModel[] = [
+  ...servidorColumns,
   {columnDef: 'usuario.papel.nome', header: 'Papel', visible: true},
-  {columnDef: 'usuario.login', header: 'Login', visible: true},
-  ...servidorColumns
+  {columnDef: 'usuario.login', header: 'Login', visible: true}
 ]

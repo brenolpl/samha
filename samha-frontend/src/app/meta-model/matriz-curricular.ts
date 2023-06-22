@@ -12,6 +12,6 @@ export const matrizColumns: TableColumnModel[] = [
 ]
 
 export const matrizLogColumns: TableColumnModel[] = [
-  ...matrizColumns.filter(column => column.columnDef !== 'id'),
-  ...commonLogColumns
+  ...commonLogColumns,
+  ...matrizColumns.filter(column => column.columnDef !== 'id')
 ]

@@ -24,6 +24,9 @@ public class OfertaAud extends BaseLogEntity {
     @Column(name = "semestre", updatable = false)
     private int semestre;
 
+    @Column(name = "publica", updatable = false)
+    private Boolean publica;
+
     @Column(name = "tempo_maximo_trabalho", updatable = false)
     private int tempoMaximoTrabalho;
 
@@ -88,5 +91,13 @@ public class OfertaAud extends BaseLogEntity {
 
     public void setTurma(Turma turma) {
         this.turma = turma;
+    }
+
+    public Boolean getPublica() {
+        return publica;
+    }
+
+    public void setPublica(Boolean publica) {
+        this.publica = publica;
     }
 }

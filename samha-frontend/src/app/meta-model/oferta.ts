@@ -1,8 +1,10 @@
 import {TableColumnModel} from "./table-column-model";
 import {commonLogColumns} from "./log";
+import {FieldEnum} from "../shared/field-enum";
 
 export const ofertaColumns: TableColumnModel[] = [
   {columnDef: 'id', header: 'id', visible: false},
+  {columnDef: 'publica', header: 'Pública', visible: true, type: FieldEnum.BOOLEAN},
   {columnDef: 'ano', header: 'Ano', visible: true},
   {columnDef: 'semestre', header: 'Semestre', visible: true},
   {columnDef: 'tempoMaximoTrabalho', header: 'Tempo Máximo Trabalho', visible: true},
@@ -11,6 +13,6 @@ export const ofertaColumns: TableColumnModel[] = [
 ]
 
 export const ofertaLogColumns: TableColumnModel[] = [
-  ...ofertaColumns.filter(f => f.columnDef !== 'id'),
-  ...commonLogColumns
+  ...commonLogColumns,
+  ...ofertaColumns.filter(f => f.columnDef !== 'id')
 ]

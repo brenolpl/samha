@@ -3,11 +3,13 @@ package com.samha.application.aula;
 import com.samha.commons.UseCase;
 import com.samha.domain.Aula;
 import com.samha.domain.Aula_;
-import com.samha.domain.dto.Conflito;
-import com.samha.domain.dto.ConflitoTurma;
+import com.samha.domain.Oferta;
 import com.samha.domain.Oferta_;
 import com.samha.domain.Turma;
 import com.samha.domain.Turma_;
+import com.samha.domain.dto.Conflito;
+import com.samha.domain.dto.ConflitoTurma;
+import com.samha.domain.dto.RestricaoRequest;
 import com.samha.persistence.generics.IGenericRepository;
 import org.springframework.scheduling.annotation.Async;
 
@@ -41,20 +43,29 @@ public class ObterConflitosTurmas extends UseCase<List<ConflitoTurma>> {
         )).stream().sorted(Comparator.comparing(Turma::getNome)).collect(Collectors.toList());
 
         for(var turma : turmas) {
-            List<Aula> aulasTurma = genericRepository.find(Aula.class, q -> q.where(
-                    q.equal(q.get(Aula_.oferta).get(Oferta_.ano), ano),
-                    q.equal(q.get(Aula_.oferta).get(Oferta_.semestre), semestre),
-                    q.equal(q.get(Aula_.oferta).get(Oferta_.turma), turma)
+            Oferta oferta = genericRepository.findSingle(Oferta.class, q -> q.where(
+                    q.equal(q.get(Oferta_.ano), ano),
+                    q.equal(q.get(Oferta_.semestre), semestre),
+                    q.equal(q.get(Oferta_.turma), turma)
             ));
 
-            if (!aulasTurma.isEmpty()) {
-                ObterRestricoesAulas restricoesUseCase = new ObterRestricoesAulas(aulasTurma, genericRepository);
-                List<Conflito> conflitos = restricoesUseCase.execute();
-                if (!conflitos.isEmpty()) {
-                    ConflitoTurma novoConflito = new ConflitoTurma();
-                    novoConflito.setConflitos(conflitos);
-                    novoConflito.setTurma(turma);
-                    conflitoTurmas.add(novoConflito);
+            if (oferta != null) {
+                List<Aula> aulasTurma = genericRepository.find(Aula.class, q -> q.where(
+                        q.equal(q.get(Aula_.oferta), oferta)
+                ));
+
+                if (!aulasTurma.isEmpty()) {
+                    RestricaoRequest restricaoRequest = new RestricaoRequest();
+                    restricaoRequest.setAulas(aulasTurma);
+                    restricaoRequest.setOferta(oferta);
+                    ObterRestricoesAulas restricoesUseCase = new ObterRestricoesAulas(restricaoRequest, genericRepository);
+                    List<Conflito> conflitos = restricoesUseCase.execute();
+                    if (!conflitos.isEmpty()) {
+                        ConflitoTurma novoConflito = new ConflitoTurma();
+                        novoConflito.setConflitos(conflitos);
+                        novoConflito.setTurma(turma);
+                        conflitoTurmas.add(novoConflito);
+                    }
                 }
             }
         }

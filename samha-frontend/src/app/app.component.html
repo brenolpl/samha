@@ -6,7 +6,7 @@
     </div>
   </ng-template>
   <mat-sidenav mode="side" [(opened)]="opened" *ngIf="menus$ | async as menusSource; else loading">
-    <ng-container *ngFor="let menu of menusSource">
+    <ng-container *ngFor="let menu of getMenuOrdenado(menusSource)">
       <div class="botao-menu">
         <button (click)="onMenuClick(menu.id)" mat-button class="menu-height">
           <mat-icon>{{loadMatIcon(menu.id)}}</mat-icon>

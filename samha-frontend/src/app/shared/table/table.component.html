@@ -10,6 +10,7 @@
       type="text"
       mode="search"
       placeholder="Pesquisar"
+      [showClearButton]="true"
       (onEnterKey)="onSearchChange()"></dx-text-box>
     <ng-container *ngIf="enableNew()">
       <dx-button

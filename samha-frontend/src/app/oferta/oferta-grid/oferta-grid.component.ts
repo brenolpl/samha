@@ -173,4 +173,8 @@ export class OfertaGridComponent {
 
     return true;
   }
+
+  getColspan() {
+    return this.turno?.toUpperCase() === 'NOTURNO' ? 4 : 6
+  }
 }

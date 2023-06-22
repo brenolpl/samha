@@ -114,18 +114,30 @@
 }
 
 .notification #red, #red-turma {
-  color: #F44336;
-  border: 1px solid #F44336;
+  color: #C7312C;
+  border: 1px solid #C7312C;
 }
 
 .notification #yellow, #yellow-turma {
+  color: #FF9966;
+  border: 1px solid #FF9966;
+}
+
+.disciplinaHighlight {
   color: #ff9966;
-  border: 1px solid #ff9966;
 }
 
 .notification #blue, #blue-turma {
   color: #00A4CA;
   border: 1px solid #00A4CA;
+}
+
+.accordion-card-header {
+  margin-bottom: .5em;
+  padding: 5px;
+  border-radius: 5px;
+  font-size: 10pt;
+  font-weight: 400;
 }
 
 .notification-warning {

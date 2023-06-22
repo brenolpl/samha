@@ -13,6 +13,6 @@ export const disciplinaColumns: TableColumnModel[] = [
 ]
 
 export const disciplinaLogColumns: TableColumnModel[] = [
-  ...disciplinaColumns.filter(column => column.columnDef !== 'id'),
-  ...commonLogColumns
+  ...commonLogColumns,
+  ...disciplinaColumns.filter(column => column.columnDef !== 'id')
 ]

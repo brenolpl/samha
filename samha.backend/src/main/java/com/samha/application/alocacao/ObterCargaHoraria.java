@@ -11,6 +11,7 @@ import com.samha.domain.Professor;
 import com.samha.domain.Professor_;
 import com.samha.persistence.IProfessorRepository;
 import com.samha.persistence.generics.IGenericRepository;
+import com.samha.util.Horarios;
 
 import javax.inject.Inject;
 import java.util.Comparator;
@@ -61,20 +62,20 @@ public class ObterCargaHoraria extends UseCase<List<Professor>> {
                     q.equal(q.get(Alocacao_.ano), ano),
                     q.equal(q.get(Alocacao_.semestre), semestre)
             ));
-            professor.setCargaHoraria(0D);
+            Double tempoAula = 0D;
             for (var alocacao : alocacoesProfessor) {
                 List<Aula> aulasAlocacao = genericRepository.find(Aula.class, q -> q.where(
                         q.equal(q.get(Aula_.alocacao), alocacao)
                 ));
-                Integer qtdTurmas = aulasAlocacao.stream().map(a -> alocacao.getTurma()).collect(Collectors.toSet()).size();
-
-                Double cargaHoraria = professor.getCargaHoraria();
-                Double qtdAulas = alocacao.getDisciplina().getCargaHoraria() / 15D;
-                Double total = cargaHoraria + (qtdAulas * qtdTurmas);
-
-                professor.setCargaHoraria(total);
+                for (var aula : aulasAlocacao) tempoAula += Horarios.obterQuantidadeHoras(aula, aula, Horarios.TEMPO_MAXIMO);
             }
+            professor.setCargaHoraria(tempoAula);
+            Double minutos = tempoAula - Math.floor(tempoAula);
+            Long minutosArredondados = Math.round(minutos * 60);
+            String cargaHoraria = (tempoAula.intValue() < 10 ? "0" + tempoAula.intValue() : tempoAula.intValue() )+ ":" + (minutosArredondados < 10 ? "0" + minutosArredondados : minutosArredondados);
+            professor.setCargaHorariaCalculada(cargaHoraria);
         }
-        return professorRepository.saveAllAndFlush(professores);
+        professorRepository.saveAllAndFlush(professores);
+        return professores;
     }
 }

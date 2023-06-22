@@ -110,17 +110,18 @@
 }
 
 .background-red {
-  background-color: #F44336;
-  color: white;
+  background-color: #C7312C;
+  color: #FFFFFF;
 }
 
 .background-yellow {
-  background-color: #ff9966;
+  background-color: #FF9966;
+  color: #000;
 }
 
 .background-blue {
-  background-color: #00A4CA;
-  color: white;
+  background-color: #5DD4FD;
+  color: #040404;
 }
 
 .background-white {

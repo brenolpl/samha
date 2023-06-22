@@ -14,6 +14,14 @@
       icon="save"
       text="Salvar"
     ></dx-button>
+    <dx-button
+      type="danger"
+      stylingMode="outlined"
+      icon="trash"
+      text="Excluir"
+      [visible]="restricao?.id"
+      (onClick)="delete()"
+    ></dx-button>
   </div>
 </mat-toolbar>
 

@@ -1,6 +1,7 @@
 package com.samha.domain.dto;
 
 import com.samha.domain.Aula;
+import com.samha.domain.Disciplina;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,10 +10,14 @@ public class Mensagem {
     private List<String> restricoes = new ArrayList<>();
     private String cor;
     private String titulo;
+
+    private String verificarMensagem;
     //1 vermelho, 2 amarelo, 3 azul.
     private int tipo;
 
     private List<Aula> aulas = new ArrayList<>();
+
+    private Disciplina disciplina;
 
 
     public List<String> getRestricoes() {
@@ -21,6 +26,8 @@ public class Mensagem {
 
     public void setRestricoes(List<String> restricoes) {
         this.restricoes = restricoes;
+        this.verificarMensagem = "";
+        for (var r : restricoes) verificarMensagem += r;
     }
 
     public String getCor() {
@@ -53,5 +60,17 @@ public class Mensagem {
 
     public void setAulas(List<Aula> aulas) {
         this.aulas = aulas;
+    }
+
+    public String getVerificarMensagem() {
+        return verificarMensagem;
+    }
+
+    public Disciplina getDisciplina() {
+        return disciplina;
+    }
+
+    public void setDisciplina(Disciplina disciplina) {
+        this.disciplina = disciplina;
     }
 }

@@ -12,6 +12,6 @@ export const turmaColumns: TableColumnModel[] = [
 ];
 
 export const turmaLogColumns: TableColumnModel[] = [
-  ...turmaColumns.filter(column => column.columnDef !== 'id'),
-  ...commonLogColumns
+  ...commonLogColumns,
+  ...turmaColumns.filter(column => column.columnDef !== 'id')
 ]

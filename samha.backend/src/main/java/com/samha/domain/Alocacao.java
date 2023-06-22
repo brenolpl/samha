@@ -1,5 +1,6 @@
 package com.samha.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.samha.domain.log.AlocacaoAud;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
@@ -15,8 +16,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Audited
@@ -48,6 +52,10 @@ public class Alocacao extends BaseLogEntity implements Comparable<Object>{
     @JoinColumn(name = "professor2_id")
     @OnDelete(action = OnDeleteAction.NO_ACTION)
     private Professor professor2;
+
+    @OneToMany(mappedBy = "alocacao")
+    @JsonIgnore
+    private List<Aula> aulas = new ArrayList<>();
 
     @Transient
     private boolean completa;
@@ -124,17 +132,15 @@ public class Alocacao extends BaseLogEntity implements Comparable<Object>{
     public void setTurma(Turma turma) {
         this.turma = turma;
     }
-    
-//    @Override
-//    public String toString() {
-//
-//        String retorno = disciplina.getSigla()+ " - " + professor1.obterNomeAbreviado();
-//        if(disciplina.getTipo().toUpperCase().equals("ESPECIAL")){
-//            retorno = retorno + "/" + professor2.obterNomeAbreviado();
-//        }
-//        return retorno;
-//    }
-    
+
+    public List<Aula> getAulas() {
+        return aulas;
+    }
+
+    public void setAulas(List<Aula> aulas) {
+        this.aulas = aulas;
+    }
+
     public Object[] toArray() {
         return new Object[] { this, disciplina.getPeriodo(), isCompleta() };
     }

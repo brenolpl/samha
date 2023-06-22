@@ -5,6 +5,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {Subscription} from "rxjs";
 import {first} from "rxjs/operators";
 import {NotificationService} from "../../shared/service/notification.service";
+import {error} from "protractor";
 
 @Component({
   selector: 'samha-matriz-form',
@@ -53,14 +54,16 @@ export class MatrizFormComponent implements OnInit {
     if(this.matriz?.id){
       this.dataService.update('matrizCurricular', this.matriz.id, this.matriz).pipe(first()).subscribe(
         next => {
+          this.notification.success('Matriz salva com sucesso!');
           this.router.navigate(['../', next.id], {relativeTo: this.route});
-        }
+        }, error => this.notification.handleError(error)
       )
     }else {
       this.dataService.save('matrizCurricular', this.matriz).pipe(first()).subscribe(
         next => {
+          this.notification.success('Matriz salva com sucesso!');
           this.router.navigate(['../', next.id], {relativeTo: this.route});
-        }
+        }, error => this.notification.handleError(error)
       )
     }
   }

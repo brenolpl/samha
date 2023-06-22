@@ -95,10 +95,9 @@ export class ProfessorFormComponent implements OnInit, IFormComponent, OnDestroy
       matricula: [this.professor?.matricula, [Validators.required, Validators.maxLength(255)]],
       carga_horaria: [this.professor?.cargaHoraria, [Validators.required, Validators.maxLength(2), Validators.minLength(1), Validators.max(99), Validators.min(1)]],
       coordenadoria: [this.professor?.coordenadoria?.id, Validators.required],
-      ativo: [null, Validators.required]
+      ativo: [this.professor?.ativo !== undefined ? this.professor.ativo : true, Validators.required]
     });
     this.coordenadoria$ = this.dataService.getAll('coordenadoria');
-    this.form.get('ativo').setValue(this.professor && this.professor.ativo ? this.professor.ativo : false);
   }
 
   ngOnDestroy() {

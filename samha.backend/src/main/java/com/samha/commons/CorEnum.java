@@ -1,8 +1,8 @@
 package com.samha.commons;
 
 public enum CorEnum {
-    VERMELHO("#F44336"),
-    AMARELO("#ff9966"),
+    VERMELHO("#C7312C"),
+    LARANJA("#FF9966"),
     AZUL("#00A4CA"),
     ;
 

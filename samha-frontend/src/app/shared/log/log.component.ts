@@ -13,7 +13,7 @@ import {DomSanitizer} from '@angular/platform-browser';
 import {professorColumns, professorLogColumns} from '../../meta-model/professor';
 import {disciplinaLogColumns} from '../../meta-model/disciplina';
 import {turmaLogColumns} from '../../meta-model/turma';
-import {usuarioColumns} from '../../meta-model/usuario';
+import {usuarioColumns, usuarioLogColumns} from '../../meta-model/usuario';
 import {coordenadoriaLogColumns} from '../../meta-model/coordenadoria';
 import {eixoLogColumns} from '../../meta-model/eixo';
 import {matrizLogColumns} from '../../meta-model/matriz-curricular';
@@ -101,6 +101,7 @@ export class LogComponent extends TableComponent implements OnInit {
         this.columns = professorColumns;
         break;
       case 'disciplina':
+        this.toolbarHeader = 'Disciplinas';
         this.columns = disciplinaLogColumns;
         break;
       case 'curso':
@@ -110,25 +111,28 @@ export class LogComponent extends TableComponent implements OnInit {
       case 'oferta':
         this.columns = ofertaLogColumns;
         break;
-      case 'MenuEnum.RELATORIOS':
-        this.columns = [];
-        break;
       case 'turma':
+        this.toolbarHeader = 'Turmas';
         this.columns = turmaLogColumns;
         break;
       case 'usuario':
-        this.columns = usuarioColumns;
+        this.toolbarHeader = 'Usuários';
+        this.columns = usuarioLogColumns;
         break;
       case 'coordenadoria':
+        this.toolbarHeader = 'Coordenadorias';
         this.columns = coordenadoriaLogColumns;
         break;
       case 'eixo':
+        this.toolbarHeader = 'Eixos';
         this.columns = eixoLogColumns;
         break;
       case 'matrizCurricular':
+        this.toolbarHeader = 'Matrizes Curriculares';
         this.columns = matrizLogColumns;
         break;
       case 'alocacao':
+        this.toolbarHeader = 'Alocações';
         this.columns = alocacaoLogColumns;
         break;
     }

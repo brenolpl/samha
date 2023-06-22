@@ -12,6 +12,6 @@ export const alocacaoColumns: TableColumnModel[] = [
 ]
 
 export const alocacaoLogColumns: TableColumnModel[] = [
-  ...alocacaoColumns.filter(column => column.columnDef !== 'id'),
-  ...commonLogColumns
+  ...commonLogColumns,
+  ...alocacaoColumns.filter(column => column.columnDef !== 'id')
 ]

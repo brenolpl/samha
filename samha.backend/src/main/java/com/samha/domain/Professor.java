@@ -38,6 +38,9 @@ public class Professor extends Servidor implements Comparable<Object>{
     @Transient
     private List<AulaDto> aulas;
 
+    @Transient
+    private String cargaHorariaCalculada;
+
     public String obterNomeAbreviado(){
 
         int espaco = this.getNome().indexOf(" ");
@@ -110,5 +113,13 @@ public class Professor extends Servidor implements Comparable<Object>{
 
     public void setAulas(List<AulaDto> aulas) {
         this.aulas = aulas;
+    }
+
+    public String getCargaHorariaCalculada() {
+        return cargaHorariaCalculada;
+    }
+
+    public void setCargaHorariaCalculada(String cargaHorariaCalculada) {
+        this.cargaHorariaCalculada = cargaHorariaCalculada;
     }
 }

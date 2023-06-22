@@ -152,7 +152,8 @@ export class AlocacaoMainComponent implements OnInit {
       }
     }
     query.selectList(projections);
-    query.where(filter)
+    query.where(filter);
+    query.orderBy('ano desc');
 
     this.matriz$ = this.dataService.query(query).pipe(
       tap((matrizes: PagedList) => {

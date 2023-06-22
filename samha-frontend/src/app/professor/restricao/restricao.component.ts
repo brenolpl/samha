@@ -115,7 +115,7 @@ export class RestricaoComponent implements OnInit, IFormComponent, OnDestroy {
       nome: [this.restricao?.nome, [Validators.required, Validators.maxLength(255)]],
       turno: [this.restricao?.turno, Validators.required],
       dia: [this.restricao?.dia, Validators.required],
-      aula: [null, Validators.required],
+      aula: [null],
       prioridade: [this.restricao?.prioridade, Validators.required],
       descricao: [this.restricao?.descricao, Validators.required],
     });
@@ -197,6 +197,15 @@ export class RestricaoComponent implements OnInit, IFormComponent, OnDestroy {
 
   goBack() {
     this.router.navigate(['../../'], {relativeTo: this.route});
+  }
+
+  delete() {
+    this.dataService.delete('restricaoProfessor', this.restricao.id).pipe(first()).subscribe(_ => {
+      this.notification.success('Registro excluído com sucesso!');
+      this.router.navigate(['../../'], {relativeTo: this.route})
+    }, error => {
+      this.notification.handleError(error);
+    })
   }
 }
 

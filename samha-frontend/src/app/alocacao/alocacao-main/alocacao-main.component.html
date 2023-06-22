@@ -64,7 +64,7 @@
                  (change)="onPeriodoChange()">
         </mat-form-field>
       </form>
-      <hr class="separator">
+      <hr class="separator" style="margin-top: 11px!important;">
       <div *ngIf="disciplinaDataSource$ | async as dataSource; else loading" id="div1"
            class="base-block base-overflow hide-scrollbar">
         <table mat-table [dataSource]="defineDataSource(dataSource)" class="w-100">
@@ -80,7 +80,7 @@
                    [ngClass]="{'highlight': selectedDisciplinaRowIndex == row.id}"
                    (click)="highlightDisciplina(row)"></mat-row>
         </table>
-        <hr class="mt-1 fim-tabela">
+        <hr class="fim-tabela">
       </div>
     </mat-card-content>
     <!--Fim do bloco 1-->
@@ -214,7 +214,7 @@
         <tbody>
         <tr *ngFor="let professor of cargaHoraria" class="carga-horaria-table-row">
           <td class="carga-horaria-table-cell">{{professor.nome}}</td>
-          <td class="carga-horaria-table-cell">{{professor.cargaHoraria}}</td>
+          <td class="carga-horaria-table-cell">{{professor.cargaHorariaCalculada}}</td>
         </tr>
         </tbody>
       </table>

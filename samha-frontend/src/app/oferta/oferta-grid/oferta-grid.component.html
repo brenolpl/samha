@@ -3,7 +3,7 @@
     <tr style="line-height: 20px;">
       <td class="turma-cell-header">Turma</td>
       <td style="width: 7px"></td>
-      <td colspan="6" class="turma-cell-content">{{turmaName}}</td>
+      <td [colSpan]="getColspan()" class="turma-cell-content">{{turmaName}}</td>
     </tr>
     <tr style="height: 7px"></tr>
     <tr style="line-height: 20px;">
@@ -30,8 +30,6 @@
         <td class="cell-title"><span>19:35 a 20:20</span></td>
         <td class="cell-title"><span>20:30 a 21:15</span></td>
         <td class="cell-title"><span>21:15 a 22:00</span></td>
-        <td class="cell-title"><span>-</span></td>
-        <td class="cell-title"><span>-</span></td>
       </ng-container>
     </tr>
   </thead>

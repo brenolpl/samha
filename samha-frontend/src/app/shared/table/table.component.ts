@@ -210,21 +210,19 @@ export class TableComponent implements OnInit {
         this.tenButtonSelected = true;
         this.fiftyButtonSelected = false;
         this.handredButtonSelected = false;
-        this.dataSource$ = this.loadTableData();
         break;
       case 50:
         this.tenButtonSelected = false;
         this.fiftyButtonSelected = true;
         this.handredButtonSelected = false;
-        this.dataSource$ = this.loadTableData();
         break;
       case 100:
         this.tenButtonSelected = false;
         this.fiftyButtonSelected = false;
         this.handredButtonSelected = true;
-        this.dataSource$ = this.loadTableData();
         break;
     }
+    this.onSearchChange();
   }
 
   defineDataSource(dataSource: PagedList) {
@@ -237,13 +235,13 @@ export class TableComponent implements OnInit {
   fowardPage() {
     this.currentPage++;
     this.checkButtons();
-    this.dataSource$ = this.loadTableData();
+    this.onSearchChange();
   }
 
   backwardPage() {
     this.currentPage--;
     this.checkButtons();
-    this.dataSource$ = this.loadTableData();
+    this.onSearchChange();
   }
 
   checkButtons() {

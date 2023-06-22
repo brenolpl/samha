@@ -134,6 +134,25 @@ export class AppComponent implements OnInit, OnDestroy{
   }
 
   protected readonly open = open;
+
+  getMenuOrdenado(menusSource: any[]) {
+    const menuOferta = menusSource.find(m => m.id === MenuEnum.OFERTAS);
+    const menuAlocacoes = menusSource.find(m => m.id === MenuEnum.ALOCACOES);
+    const menuRelatorios = menusSource.find(m => m.id === MenuEnum.RELATORIOS);
+    let menus: any[] = [];
+    if (menusSource.length > 0) {
+      menus.push(...[menuOferta, menuAlocacoes, menuRelatorios]);
+      let menusRestantes = menusSource.filter(m => m.id !== MenuEnum.OFERTAS && m.id !== MenuEnum.RELATORIOS && m.id !== MenuEnum.ALOCACOES).sort(
+        (a, b) => {
+          if (a.nome > b.nome) return 1;
+          else if (a.nome < b.nome) return -1;
+          else return 0;
+        }
+      );
+      menus.push(...menusRestantes);
+    }
+    return menus;
+  }
 }
 
 export const APIPREFIX = 'api/';

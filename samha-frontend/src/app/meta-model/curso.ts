@@ -13,6 +13,6 @@ export const cursoColumns: TableColumnModel[] = [
 ]
 
 export const cursoLogColumns: TableColumnModel[] = [
-  ...cursoColumns.filter(column => column.columnDef !== 'id'),
-  ...commonLogColumns
+  ...commonLogColumns,
+  ...cursoColumns.filter(column => column.columnDef !== 'id')
 ]

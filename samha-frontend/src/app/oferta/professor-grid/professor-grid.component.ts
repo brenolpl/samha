@@ -15,6 +15,7 @@ export class ProfessorGridComponent implements OnChanges, OnDestroy {
   @Input() public alocacao: any;
   @Input() public ano: string;
   @Input() public semestre: string;
+  @Input() public oferta: any;
   public aulasConflitantes: any[] = [];
   public aulas$: Observable<PagedList>;
   public selectionControl: FormControl = new FormControl(1);
@@ -31,19 +32,13 @@ export class ProfessorGridComponent implements OnChanges, OnDestroy {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    let professor2Predicate: Filter;
     let orProfessor2Predicate: Filter;
     if(changes?.alocacao?.currentValue) {
       if (changes?.alocacao?.currentValue.disciplina.tipo === 'ESPECIAL' && changes.alocacao.currentValue.professor2?.id) {
-        professor2Predicate = {
-          and: {
-            'alocacao.professor2.id': {equals: this.alocacao?.professor2?.id}
-          }
-        };
         orProfessor2Predicate = {
           or: {
             'alocacao.professor1.id': {equals: this.alocacao?.professor2?.id},
-            'alocacao.professor2.id': {equals: this.alocacao?.professor1?.id}
+            'alocacao.professor2.id': {equals: this.alocacao?.professor2?.id}
           }
         }
         this.selectionControl.enable();
@@ -59,7 +54,7 @@ export class ProfessorGridComponent implements OnChanges, OnDestroy {
         .where({
           or: {
             'alocacao.professor1.id': {equals: this.alocacao?.professor1?.id},
-            ...professor2Predicate,
+            'alocacao.professor2.id': {equals: this.alocacao?.professor1?.id},
             ...orProfessor2Predicate
           },
           and: {
@@ -70,7 +65,11 @@ export class ProfessorGridComponent implements OnChanges, OnDestroy {
         .pipe(
           tap((next: PagedList) => {
             if (next.listMap.length > 0) {
-              this.dataService.post('aula/obter-restricoes', next.listMap).pipe(first()).subscribe(
+              let request = {
+                aulas: next.listMap,
+                oferta: this.oferta
+              }
+              this.dataService.post('aula/obter-restricoes', request).pipe().subscribe(
                 next => {
                   next.forEach(conflito => {
                     conflito.mensagens.forEach(mensagem => {
@@ -125,17 +124,10 @@ export class ProfessorGridComponent implements OnChanges, OnDestroy {
       let aula;
 
       if(item.alocacao.disciplina.tipo === 'ESPECIAL' && item.alocacao.professor2?.id) {
-        if (this.selectionControl.value == 1) {
-          aula = this.aulasConflitantes.find(a => a.numero === item.numero &&
-            a.dia === item.dia &&
-            a.turno === item.turno &&
-            a.professorConflito.id === item.alocacao.professor1?.id);
-        } else {
-          aula = this.aulasConflitantes.find(a => a.numero === item.numero &&
-            a.dia === item.dia &&
-            a.turno === item.turno &&
-            a.professorConflito.id === item.alocacao.professor2?.id);
-        }
+        aula = this.aulasConflitantes.find(a => a.numero === item.numero &&
+          a.dia === item.dia &&
+          a.turno === item.turno &&
+          (a.professorConflito.id === item.alocacao.professor1?.id || a.professorConflito.id === item.alocacao.professor2?.id));
       } else {
         aula = this.aulasConflitantes.find(a => a.numero === item.numero &&
           a.dia === item.dia &&

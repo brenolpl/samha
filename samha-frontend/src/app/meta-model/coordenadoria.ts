@@ -8,6 +8,6 @@ export const coordenadoriaColumns: TableColumnModel[] = [
 ]
 
 export const coordenadoriaLogColumns: TableColumnModel[] = [
-  ...coordenadoriaColumns.filter(column => column.columnDef !== 'id'),
-  ...commonLogColumns
+  ...commonLogColumns,
+  ...coordenadoriaColumns.filter(column => column.columnDef !== 'id')
 ]
