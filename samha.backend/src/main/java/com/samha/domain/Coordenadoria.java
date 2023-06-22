@@ -19,11 +19,11 @@ import javax.persistence.Table;
 @Entity
 @Audited
 @Table(name = "coordenadoria")
-public class Coordenadoria extends BaseLogEntity implements Comparable<Object> {
+public class Coordenadoria extends BaseLogEntity {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
     
     @Column(nullable = false, unique = true)
     private String nome;
@@ -32,26 +32,12 @@ public class Coordenadoria extends BaseLogEntity implements Comparable<Object> {
     @JoinColumn(name = "eixo_id", nullable = false)
     @Cascade(CascadeType.SAVE_UPDATE)
     private Eixo eixo;
-    
-    public Coordenadoria() {
-    }
 
-    public Coordenadoria(int id, String nome, Eixo eixo) {
-        this.id = id;
-        this.nome = nome;
-        this.eixo = eixo;
-    }
-
-    public Coordenadoria(String nome, Eixo eixo) {
-        this.nome = nome;
-        this.eixo = eixo;
-    }
-
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -69,21 +55,6 @@ public class Coordenadoria extends BaseLogEntity implements Comparable<Object> {
 
     public void setEixo(Eixo eixo) {
         this.eixo = eixo;
-    }
-    
-    @Override
-    public String toString() {
-        return nome;
-    }
-    
-    public Object[] toArray() {
-        return new Object[] { this };
-    }
-
-    @Override
-    public int compareTo(Object o) {
-        Coordenadoria other = (Coordenadoria) o;
-        return this.getNome().compareTo(other.getNome());
     }
 
     @Override

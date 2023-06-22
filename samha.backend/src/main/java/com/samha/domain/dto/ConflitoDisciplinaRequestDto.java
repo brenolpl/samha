@@ -8,7 +8,7 @@ import java.util.List;
 public class ConflitoDisciplinaRequestDto implements Serializable {
     private Integer ano;
     private Integer semestre;
-    private Integer cursoId;
+    private Long cursoId;
     private Integer periodo;
 
     private List<Aula> aulasCriadas;
@@ -29,11 +29,11 @@ public class ConflitoDisciplinaRequestDto implements Serializable {
         this.semestre = semestre;
     }
 
-    public Integer getCursoId() {
+    public Long getCursoId() {
         return cursoId;
     }
 
-    public void setCursoId(Integer cursoId) {
+    public void setCursoId(Long cursoId) {
         this.cursoId = cursoId;
     }
 

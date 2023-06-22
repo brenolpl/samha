@@ -1,7 +1,7 @@
 package com.samha.domain.dto;
 
 public class AulaDto {
-    private Integer id;
+    private Long id;
     private int dia;
     private int numero;
 
@@ -10,7 +10,7 @@ public class AulaDto {
 
     private String nomeDisciplina;
 
-    public AulaDto(Integer id, int dia, int numero, String nomeTurma, String siglaDisciplina, String nomeDisciplina) {
+    public AulaDto(Long id, int dia, int numero, String nomeTurma, String siglaDisciplina, String nomeDisciplina) {
         this.id = id;
         this.dia = dia;
         this.numero = numero;
@@ -19,11 +19,11 @@ public class AulaDto {
         this.nomeDisciplina = nomeDisciplina;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

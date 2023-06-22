@@ -24,19 +24,19 @@ public class ObterCargaHoraria extends UseCase<List<Professor>> {
 
     private Integer ano;
     private Integer semestre;
-    private Integer eixoId;
+    private Long eixoId;
 
     @Inject
     public ObterCargaHoraria(HashMap<String, String> params) {
         this.ano = Integer.parseInt(params.get("ano"));
         this.semestre = Integer.parseInt(params.get("semestre"));
-        this.eixoId = Integer.parseInt(params.get("eixoId"));
+        this.eixoId = Long.parseLong(params.get("eixoId"));
     }
 
     public ObterCargaHoraria(IGenericRepository genericRepository, Map<String, String> params) {
         this.ano = Integer.parseInt(params.get("ano"));
         this.semestre = Integer.parseInt(params.get("semestre"));
-        this.eixoId = Integer.parseInt(params.get("eixoId"));
+        this.eixoId = Long.parseLong(params.get("eixoId"));
         this.genericRepository = genericRepository;
     }
 

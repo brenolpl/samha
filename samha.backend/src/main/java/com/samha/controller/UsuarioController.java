@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/usuario")
-public class UsuarioController extends BaseController<Usuario, UsuarioAud, Integer> {
+public class UsuarioController extends BaseController<Usuario, UsuarioAud, Long> {
 
 
     public UsuarioController(UseCaseFacade facade) {

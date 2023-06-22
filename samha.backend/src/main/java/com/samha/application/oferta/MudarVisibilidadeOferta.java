@@ -10,10 +10,10 @@ import java.util.stream.Collectors;
 
 public class MudarVisibilidadeOferta extends UseCase<Oferta> {
 
-    private Integer ofertaId;
+    private Long ofertaId;
 
     @Inject
-    public MudarVisibilidadeOferta(Integer ofertaId) {
+    public MudarVisibilidadeOferta(Long ofertaId) {
         this.ofertaId = ofertaId;
     }
 

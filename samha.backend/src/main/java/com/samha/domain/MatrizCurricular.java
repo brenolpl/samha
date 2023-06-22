@@ -16,11 +16,11 @@ import javax.persistence.Table;
 @Entity
 @Audited
 @Table(name = "matriz_curricular")
-public class MatrizCurricular extends BaseLogEntity implements Comparable<Object> {
+public class MatrizCurricular extends BaseLogEntity {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
     
     @Column(nullable = false)
     private String nome;
@@ -35,29 +35,11 @@ public class MatrizCurricular extends BaseLogEntity implements Comparable<Object
     @JoinColumn(name = "curso_id", nullable = false)
     private Curso curso;
 
-    public MatrizCurricular() {
-    }
-
-    public MatrizCurricular(int id, String nome, int ano, int semestre, Curso curso) {
-        this.id = id;
-        this.nome = nome;
-        this.ano = ano;
-        this.semestre = semestre;
-        this.curso = curso;
-    }
-
-    public MatrizCurricular(String nome, int ano, int semestre, Curso curso) {
-        this.nome = nome;
-        this.ano = ano;
-        this.semestre = semestre;
-        this.curso = curso;
-    }
-
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -91,21 +73,6 @@ public class MatrizCurricular extends BaseLogEntity implements Comparable<Object
 
     public void setCurso(Curso curso) {
         this.curso = curso;
-    }
-    
-    @Override
-    public String toString() {
-        return nome;
-    }
-   
-    public Object[] toArray() {
-        return new Object[] { this };
-    }
-
-    @Override
-    public int compareTo(Object o) {
-        MatrizCurricular other = (MatrizCurricular) o;
-        return this.getNome().compareTo(other.getNome());
     }
 
     @Override

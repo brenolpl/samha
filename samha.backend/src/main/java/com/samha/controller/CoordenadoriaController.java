@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("api/coordenadoria")
-public class CoordenadoriaController extends BaseController<Coordenadoria, CoordenadoriaAud, Integer> {
+public class CoordenadoriaController extends BaseController<Coordenadoria, CoordenadoriaAud, Long> {
     public CoordenadoriaController(UseCaseFacade facade) {
         super(Coordenadoria.class, CoordenadoriaAud.class, facade);
     }

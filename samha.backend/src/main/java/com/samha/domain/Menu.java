@@ -19,7 +19,7 @@ import java.util.Set;
 public class Menu extends BaseLogEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column(nullable = false, unique = true)
     private String nome;
@@ -28,11 +28,11 @@ public class Menu extends BaseLogEntity{
     @JoinColumn(name = "papel_id", foreignKey = @ForeignKey(name = "FK_MENU_PAPEL"))
     private Set<Papel> papeis;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

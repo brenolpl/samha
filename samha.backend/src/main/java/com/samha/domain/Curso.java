@@ -14,16 +14,15 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import java.io.Serializable;
 
 @Entity
 @Audited
 @Table(name = "curso")
-public class Curso extends BaseLogEntity implements Comparable<Object>, Serializable {
+public class Curso extends BaseLogEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
     
     @Column(nullable = false, unique = true)
     private String nome;
@@ -47,12 +46,11 @@ public class Curso extends BaseLogEntity implements Comparable<Object>, Serializ
     @Cascade(CascadeType.SAVE_UPDATE)
     private Professor professor;
 
-
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -86,21 +84,6 @@ public class Curso extends BaseLogEntity implements Comparable<Object>, Serializ
 
     public void setCoordenadoria(Coordenadoria coordenadoria) {
         this.coordenadoria = coordenadoria;
-    }
-    
-    @Override
-    public String toString() {
-        return nome;
-    }
-   
-    public Object[] toArray() {
-        return new Object[] { this, getNivel()};
-    }
-
-    @Override
-    public int compareTo(Object o) {
-        Curso other = (Curso) o;
-        return this.getNome().compareTo(other.getNome());
     }
 
     public Professor getProfessor() {

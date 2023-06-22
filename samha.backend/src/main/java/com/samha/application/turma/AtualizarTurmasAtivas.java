@@ -34,7 +34,6 @@ public class AtualizarTurmasAtivas extends UseCase<Boolean> {
     }
 
     private boolean verificarTurmaContinuaAtiva(Turma turma) {
-        int qtPeriodosCurso = turma.getMatriz().getCurso().getQtPeriodos();
         int semestreAtual = -1;
         if(Calendar.getInstance().get(Calendar.MONTH) >= Calendar.getInstance().get(Calendar.JULY)){
             semestreAtual = 2;
@@ -57,30 +56,6 @@ public class AtualizarTurmasAtivas extends UseCase<Boolean> {
 
         return true;
     }
-
-//    public boolean verificarTurmaAtiva(Turma turma){
-//
-//        int anoAtual = Calendar.getInstance().get(Calendar.YEAR);
-//
-//        int anoInicial = turma.getAno();
-//        int semestreInicial = turma.getSemestre();
-//        String p = null;
-//
-//        if(turma.getMatriz().getCurso().getNivel().equalsIgnoreCase("ENSINO MÉDIO INTEGRADO")){
-//
-//            p = calcularAnoAtual(anoAtual, anoInicial);
-//        }else{
-//
-//            p = calcularPeriodoAtual(anoAtual, semestreAtual, anoInicial, semestreInicial);
-//        }
-//
-//        int anoPeriodo = Integer.valueOf(p);
-//
-//        if(anoPeriodo > turma.getMatriz().getCurso().getQtPeriodos() || anoPeriodo < 1)
-//            return false;
-//
-//        return true;
-//    }
 
     public int calcularAnoAtual(int anoAtual, int anoInicial){
 

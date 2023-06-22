@@ -20,7 +20,7 @@ public class Oferta extends BaseLogEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
     
     @Column(nullable = false)
     private int ano;
@@ -41,9 +41,6 @@ public class Oferta extends BaseLogEntity {
     @JoinColumn(name = "turma_id", nullable = false)
     private Turma turma;
 
-    public Oferta() {
-    }
-
     public double getTempoMaximoTrabalho() {
         return tempoMaximoTrabalho;
     }
@@ -59,12 +56,12 @@ public class Oferta extends BaseLogEntity {
     public void setIntervaloMinimo(int intervaloMinimo) {
         this.intervaloMinimo = intervaloMinimo;
     }
-    
-    public Integer getId() {
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

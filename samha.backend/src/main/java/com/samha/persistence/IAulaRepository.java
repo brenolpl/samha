@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface IAulaRepository extends JpaRepository<Aula, Integer> {
-    List<Aula> getAulasByOferta_Id(Integer ofertaId);
+public interface IAulaRepository extends JpaRepository<Aula, Long> {
+    List<Aula> getAulasByOferta_Id(Long ofertaId);
 }

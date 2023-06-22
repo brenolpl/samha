@@ -16,13 +16,11 @@ import javax.persistence.Table;
 @Entity
 @Audited
 @Table(name = "aula")
-public class Aula extends BaseLogEntity implements Comparable<Object> {
-
-    private static Class<AulaAud> logClass = AulaAud.class;
+public class Aula extends BaseLogEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
     
     @Column(nullable = false)
     private int numero;
@@ -40,32 +38,13 @@ public class Aula extends BaseLogEntity implements Comparable<Object> {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "oferta_id", nullable = false)
     private Oferta oferta;
-    
-    public Aula() {
-    }
 
-    public Aula(int id, int numero, int dia, int turno, Alocacao alocacao, Oferta oferta) {
-        this.id = id;
-        this.numero = numero;
-        this.dia = dia;
-        this.turno = turno;
-        this.alocacao = alocacao;
-        this.oferta = oferta;
-    }
 
-    public Aula(int numero, int dia, int turno, Alocacao alocacao, Oferta oferta) {
-        this.numero = numero;
-        this.dia = dia;
-        this.turno = turno;
-        this.alocacao = alocacao;
-        this.oferta = oferta;
-    }
-    
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -107,24 +86,6 @@ public class Aula extends BaseLogEntity implements Comparable<Object> {
 
     public void setOferta(Oferta oferta) {
         this.oferta = oferta;
-    }
-    
-//    @Override
-//    public String toString() {
-//        String retorno = getAlocacao().getDisciplina().getSigla() + " - " + getAlocacao().getProfessor1().obterNomeAbreviado();
-//        if(getAlocacao().getDisciplina().getTipo().toUpperCase().equals("ESPECIAL")){
-//            retorno = retorno + "/" + getAlocacao().getProfessor2().obterNomeAbreviado();
-//        }
-//        return retorno;
-//    }
-
-    @Override
-    public int compareTo(Object o) {
-       
-        Aula other = (Aula) o;
-        if(this.getNumero() > other.getNumero())
-            return 1;
-        return -1;
     }
 
     @Override

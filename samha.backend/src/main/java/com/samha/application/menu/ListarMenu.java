@@ -22,6 +22,7 @@ public class ListarMenu extends UseCase<List<Menu>> {
 
     private final HttpServletRequest request;
 
+    @Inject
     public ListarMenu(HttpServletRequest request) {
         this.request = request;
     }

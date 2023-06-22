@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("api/oferta")
-public class OfertaController extends BaseController<Oferta, OfertaAud, Integer> {
+public class OfertaController extends BaseController<Oferta, OfertaAud, Long> {
     public OfertaController(UseCaseFacade facade) {
         super(Oferta.class, OfertaAud.class, facade);
     }
 
     @PostMapping("mudar-visiblidade")
-    public Oferta tornarOfertaPublica(@RequestBody Integer ofertaId) {
+    public Oferta tornarOfertaPublica(@RequestBody Long ofertaId) {
      return facade.execute(new MudarVisibilidadeOferta(ofertaId));
     }
 }

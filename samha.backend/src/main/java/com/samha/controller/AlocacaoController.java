@@ -9,8 +9,6 @@ import com.samha.domain.Professor;
 import com.samha.domain.log.AlocacaoAud;
 import com.samha.persistence.filter.PagedList;
 import com.samha.persistence.filter.Query;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/alocacao")
-public class AlocacaoController extends BaseController<Alocacao, AlocacaoAud, Integer> {
+public class AlocacaoController extends BaseController<Alocacao, AlocacaoAud, Long> {
     public AlocacaoController(UseCaseFacade facade) {
         super(Alocacao.class, AlocacaoAud.class, facade);
     }

@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface IOfertaRepository extends JpaRepository<Oferta, Integer> {
+public interface IOfertaRepository extends JpaRepository<Oferta, Long> {
     List<Oferta> findOfertasByAnoAndSemestre(Integer ano, Integer semestre);
 }

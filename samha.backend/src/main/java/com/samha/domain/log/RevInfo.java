@@ -10,16 +10,17 @@ import javax.persistence.Table;
 public class RevInfo {
 
     @Id
-    private Integer rev;
+    @Column(columnDefinition = "bigint")
+    private Long rev;
 
     @Column
     private Long revtstmp;
 
-    public Integer getRev() {
+    public Long getRev() {
         return rev;
     }
 
-    public void setRev(Integer rev) {
+    public void setRev(Long rev) {
         this.rev = rev;
     }
 

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("api/restricaoProfessor")
-public class RestricaoProfessorController extends BaseController<RestricaoProfessor, RestricaoProfessorAud, Integer> {
+public class RestricaoProfessorController extends BaseController<RestricaoProfessor, RestricaoProfessorAud, Long> {
     public RestricaoProfessorController(UseCaseFacade facade) {
         super(RestricaoProfessor.class, RestricaoProfessorAud.class, facade);
     }

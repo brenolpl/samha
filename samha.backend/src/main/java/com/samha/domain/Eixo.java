@@ -13,11 +13,11 @@ import javax.persistence.Table;
 @Entity
 @Audited
 @Table(name = "eixo")
-public class Eixo extends BaseLogEntity implements Comparable<Object> {
+public class Eixo extends BaseLogEntity {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
     
     @Column(nullable = false, unique = true)
     private String nome;
@@ -25,20 +25,11 @@ public class Eixo extends BaseLogEntity implements Comparable<Object> {
     public Eixo() {
     }
 
-    public Eixo(int id, String nome) {
-        this.id = id;
-        this.nome = nome;
-    }
-
-    public Eixo(String nome) {
-        this.nome = nome;
-    }
-
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -53,16 +44,6 @@ public class Eixo extends BaseLogEntity implements Comparable<Object> {
     @Override
     public String toString() {
         return nome;
-    }
-    
-    public Object[] toArray() {
-        return new Object[] { this };
-    }   
-
-    @Override
-    public int compareTo(Object o) {
-        Eixo other = (Eixo) o;
-        return this.getNome().compareTo(other.getNome());
     }
 
     @Override

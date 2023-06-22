@@ -151,7 +151,7 @@ public class GenericRepository implements IGenericRepository {
             revTypeField.setAccessible(true);
             pkField.setAccessible(true);
             AuditCompositeKey pk = new AuditCompositeKey();
-            Integer entityId = (Integer) entityIdField.get(entityClass);
+            Long entityId = (Long) entityIdField.get(entityClass);
             pk.setId(entityId);
             //HibernateEnvers utiliza a tabela RevInfo para gravas os últimos revs, sem isso, não é possível persistir na tabela de log.
             RevInfo lastRev = createRev();
@@ -188,10 +188,10 @@ public class GenericRepository implements IGenericRepository {
         CriteriaQuery query = builder.createQuery(RevInfo.class);
         Root<RevInfo> revInfoRoot = query.from(RevInfo.class);
         query.select(builder.greatest(revInfoRoot.get(RevInfo_.rev)));
-        Integer lastRev = (Integer) entityManager.createQuery(query).getSingleResult();
+        Long lastRev = (Long) entityManager.createQuery(query).getSingleResult();
 
         RevInfo newRev = new RevInfo();
-        newRev.setRev(lastRev + 2);
+        newRev.setRev(lastRev + 1);
         newRev.setRevtstmp(LocalDateTime.now().atZone(ZoneOffset.UTC).toInstant().toEpochMilli());
         entityManager.persist(newRev);
         return newRev;

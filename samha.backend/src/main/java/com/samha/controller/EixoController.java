@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("api/eixo")
-public class EixoController extends BaseController<Eixo, EixoAud, Integer> {
+public class EixoController extends BaseController<Eixo, EixoAud, Long> {
 
     public EixoController(UseCaseFacade facade) {
         super(Eixo.class, EixoAud.class, facade);

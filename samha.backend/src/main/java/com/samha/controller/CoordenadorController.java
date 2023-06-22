@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("api/coordenador")
-public class CoordenadorController extends BaseController<Professor, ProfessorAud, Integer> {
+public class CoordenadorController extends BaseController<Professor, ProfessorAud, Long> {
     public CoordenadorController(UseCaseFacade facade) {
         super(Professor.class, ProfessorAud.class, facade);
     }

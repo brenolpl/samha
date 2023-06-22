@@ -1,28 +1,17 @@
 package com.samha.domain.dto;
 
 import com.samha.domain.Aula;
+import lombok.Data;
 
 import java.io.Serializable;
 import java.util.List;
 
+@Data
 public class OfertaDto implements Serializable {
     private List<Aula> aulas;
-
-    private Integer ofertaId;
-
+    private Long ofertaId;
     public List<Aula> getAulas() {
         return aulas;
     }
 
-    public void setAulas(List<Aula> aulas) {
-        this.aulas = aulas;
-    }
-
-    public Integer getOfertaId() {
-        return ofertaId;
-    }
-
-    public void setOfertaId(Integer ofertaId) {
-        this.ofertaId = ofertaId;
-    }
 }

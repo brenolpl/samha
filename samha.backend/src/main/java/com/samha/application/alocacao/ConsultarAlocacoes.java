@@ -4,7 +4,6 @@ import com.samha.application.commons.QueryEntities;
 import com.samha.domain.Alocacao;
 import com.samha.domain.Aula;
 import com.samha.domain.Aula_;
-import com.samha.persistence.filter.EntityQueryParser;
 import com.samha.persistence.filter.PagedList;
 import com.samha.persistence.filter.Query;
 import com.samha.persistence.generics.IGenericRepository;
@@ -29,7 +28,7 @@ public class ConsultarAlocacoes extends QueryEntities<Alocacao> {
         PagedList pagedList = super.execute();
         List<Map<String, Object>> map = pagedList.getListMap();
         map.forEach(m -> {
-            Alocacao alocacao = genericRepository.get(Alocacao.class, (Integer) m.get("id"));
+            Alocacao alocacao = genericRepository.get(Alocacao.class, (Long) m.get("id"));
             List<Aula> aulasAlocacao = genericRepository.find(Aula.class, q -> q.where(
                     q.equal(q.get(Aula_.alocacao), alocacao)
             ));

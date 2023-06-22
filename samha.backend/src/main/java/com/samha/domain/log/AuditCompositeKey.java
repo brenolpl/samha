@@ -9,10 +9,10 @@ import java.io.Serializable;
 @Data
 public class AuditCompositeKey implements Serializable {
     private static final long serialVersionUID = -8619406593704953837L;
-    private Integer id;
-    private Integer rev;
+    private Long id;
+    private Long rev;
 
-    public AuditCompositeKey(Integer id, Integer rev) {
+    public AuditCompositeKey(Long id, Long rev) {
         this.id = id;
         this.rev = rev;
     }

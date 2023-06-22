@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("api/matrizCurricular")
-public class MatrizCurricularController extends BaseController<MatrizCurricular, MatrizCurricularAud, Integer> {
+public class MatrizCurricularController extends BaseController<MatrizCurricular, MatrizCurricularAud, Long> {
     public MatrizCurricularController(UseCaseFacade facade) {
         super(MatrizCurricular.class, MatrizCurricularAud.class, facade);
     }

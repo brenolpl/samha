@@ -19,10 +19,10 @@ import java.util.List;
 @Entity
 @Audited
 @Table(name = "turma")
-public class Turma extends BaseLogEntity implements Comparable<Object> {
+public class Turma extends BaseLogEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
     
     @Column(nullable = false, unique = true)
     private String nome;
@@ -45,18 +45,6 @@ public class Turma extends BaseLogEntity implements Comparable<Object> {
 
     @Transient
     private List<AulaDto> aulas;
-    
-    public Turma() {
-    }
-
-    public Turma(int id, String nome, int ano, int semestre, String turno, MatrizCurricular matriz) {
-        this.id = id;
-        this.nome = nome;
-        this.ano = ano;
-        this.semestre = semestre;
-        this.matriz = matriz;
-        this.turno = turno;
-    }
 
     public Boolean getAtiva() {
         return ativa;
@@ -66,22 +54,13 @@ public class Turma extends BaseLogEntity implements Comparable<Object> {
         this.ativa = ativa;
     }
 
-    public Turma(String nome, int ano, int semestre, String turno, MatrizCurricular matriz) {
-        this.nome = nome;
-        this.ano = ano;
-        this.semestre = semestre;
-        this.matriz = matriz;
-        this.turno = turno;
-    }
-
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
-
     public String getNome() {
         return nome;
     }
@@ -120,27 +99,6 @@ public class Turma extends BaseLogEntity implements Comparable<Object> {
 
     public void setTurno(String turno) {
         this.turno = turno;
-    }
-   
-    @Override
-    public String toString() {
-        return nome;
-    }
-    
-    public Object[] toArray() {
-        return new Object[] { this, getAnoSemestre(), getMatriz().getNome(), getMatriz().getCurso().getNome(), getTurno() };
-    }
-    
-    public String getAnoSemestre(){
-        return String.valueOf(getAno()) + "/" + String.valueOf(getSemestre());
-    }
-
-    @Override
-    public int compareTo(Object o) {
-        
-        Turma other = (Turma) o;
-        return this.getNome().compareTo(other.getNome());
-        
     }
 
     public List<AulaDto> getAulas() {

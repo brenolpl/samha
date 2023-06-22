@@ -7,22 +7,22 @@
 
     <changeSet id="1" author="breno.leal">
         <createTable tableName="papel">
-            <column name="id" type="serial"><constraints nullable="false" primaryKey="true"></constraints></column>
+            <column name="id" autoIncrement="true" type="bigint"><constraints nullable="false" primaryKey="true"></constraints></column>
             <column name="nome" type="varchar(255)"><constraints nullable="false" unique="true" uniqueConstraintName="PAPEL_NOME"></constraints></column>
         </createTable>
     </changeSet>
 
     <changeSet id="2" author="breno.leal">
         <createTable tableName="menu">
-            <column name="id" type="serial"><constraints primaryKey="true" nullable="false"></constraints></column>
+            <column name="id" autoIncrement="true" type="bigint"><constraints nullable="false" primaryKey="true"></constraints></column>
             <column name="nome" type="varchar(255)"><constraints nullable="false" uniqueConstraintName="MENU_NOME_UNIQUE"></constraints> </column>
         </createTable>
     </changeSet>
 
     <changeSet id="3" author="breno.leal">
         <createTable tableName="menu_papeis">
-            <column name="menu_id" type="int"><constraints nullable="false"></constraints></column>
-            <column name="papeis_id" type="int"><constraints nullable="false"></constraints></column>
+            <column name="menu_id" type="bigint"><constraints nullable="false"></constraints></column>
+            <column name="papeis_id" type="bigint"><constraints nullable="false"></constraints></column>
         </createTable>
 
         <addForeignKeyConstraint baseTableName="menu_papeis" baseColumnNames="menu_id"
@@ -41,7 +41,7 @@
     <changeSet id="4" author="breno.leal">
         <comment>Acrescenta coluna papel na tabela de usuário</comment>
         <addColumn tableName="usuario">
-            <column name="papel_id" type="int"><constraints nullable="false"></constraints></column>
+            <column name="papel_id" type="bigint"><constraints nullable="false"></constraints></column>
         </addColumn>
     </changeSet>
 

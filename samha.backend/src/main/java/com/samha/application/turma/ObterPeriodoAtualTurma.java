@@ -10,10 +10,10 @@ import java.util.Calendar;
 
 public class ObterPeriodoAtualTurma extends UseCase<Integer> {
 
-    private Integer id;
+    private Long id;
 
     @Inject
-    public ObterPeriodoAtualTurma(Integer id) {
+    public ObterPeriodoAtualTurma(Long id) {
         this.id = id;
     }
 

@@ -23,7 +23,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/aula")
-public class AulaController extends BaseController<Aula, AulaAud, Integer> {
+public class AulaController extends BaseController<Aula, AulaAud, Long> {
     public AulaController(UseCaseFacade facade) {
         super(Aula.class, AulaAud.class, facade);
     }

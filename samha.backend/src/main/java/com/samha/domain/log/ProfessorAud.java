@@ -33,8 +33,8 @@ public class ProfessorAud extends BaseLogEntity{
     @Embeddable
     @Data
     class ProfessorAuditPK implements Serializable{
-        private Integer rev;
-        private Integer professor_id;
+        private Long rev;
+        private Long professor_id;
     }
 
     public Integer getRevtype() {

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/curso")
-public class CursoController extends BaseController<Curso, CursoAud, Integer> {
+public class CursoController extends BaseController<Curso, CursoAud, Long> {
     public CursoController(UseCaseFacade facade) {
         super(Curso.class, CursoAud.class, facade);
     }

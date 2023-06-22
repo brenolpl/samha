@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("api/turma")
-public class TurmaController extends BaseController<Turma, TurmaAud, Integer> {
+public class TurmaController extends BaseController<Turma, TurmaAud, Long> {
     public TurmaController(UseCaseFacade facade) {
         super(Turma.class, TurmaAud.class, facade);
     }
@@ -26,7 +26,7 @@ public class TurmaController extends BaseController<Turma, TurmaAud, Integer> {
     }
 
     @GetMapping("getPeriodoAtual/{id}")
-    public Integer getPeriodoAtual(@PathVariable Integer id) {
+    public Integer getPeriodoAtual(@PathVariable Long id) {
         return facade.execute(new ObterPeriodoAtualTurma(id));
     }
 }

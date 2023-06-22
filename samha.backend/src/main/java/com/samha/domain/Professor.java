@@ -22,7 +22,7 @@ import java.util.List;
 @Audited
 @Table(name = "professor")
 @PrimaryKeyJoinColumn(name = "professor_id")
-public class Professor extends Servidor implements Comparable<Object>{
+public class Professor extends Servidor {
     @Column(nullable = false)
     private Double cargaHoraria;
 
@@ -85,21 +85,6 @@ public class Professor extends Servidor implements Comparable<Object>{
 
     public void setAtivo(boolean ativo) {
         this.ativo = ativo;
-    }
-
-//    public Object[] toArray() {
-//        return new Object[] { this, getMatricula(), getCoordenadoria().getNome()};
-//    }
-
-    public Object[] toArrayCargaHoraria() {
-        return new Object[] { this, getCargaHoraria()};
-    }
-
-    @Override
-    public int compareTo(Object o) {
-
-        Professor other = (Professor) o;
-        return this.getNome().compareTo(other.getNome());
     }
 
     @Override

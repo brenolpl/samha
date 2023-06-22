@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("api/papel")
-public class PapelController extends BaseController<Papel, PapelAud, Integer> {
+public class PapelController extends BaseController<Papel, PapelAud, Long> {
     public PapelController(UseCaseFacade facade) {
         super(Papel.class, PapelAud.class, facade);
     }

@@ -25,11 +25,11 @@ import java.util.List;
 @Entity
 @Audited
 @Table(name = "alocacao")
-public class Alocacao extends BaseLogEntity implements Comparable<Object>{
+public class Alocacao extends BaseLogEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
     
     @Column(nullable = false)
     private int ano;
@@ -69,11 +69,11 @@ public class Alocacao extends BaseLogEntity implements Comparable<Object>{
     @Transient
     private Turma turma;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -139,22 +139,6 @@ public class Alocacao extends BaseLogEntity implements Comparable<Object>{
 
     public void setAulas(List<Aula> aulas) {
         this.aulas = aulas;
-    }
-
-    public Object[] toArray() {
-        return new Object[] { this, disciplina.getPeriodo(), isCompleta() };
-    }
-    
-    public Object[] toArrayAlocacao() {
-        return new Object[] { getDisciplina().getNome(), getTurma().getNome(), getDisciplina().getSigla(), 
-            getDisciplina().getPeriodo(), getDisciplina().getMatriz().getCurso().getNome(), getDisciplina().getQtAulas(), 
-            getDisciplina().getCargaHoraria(), isCompleta() };
-    }
-
-    @Override
-    public int compareTo(Object o) {
-        Alocacao other = (Alocacao) o;  
-        return this.getDisciplina().getSigla().compareTo(other.getDisciplina().getSigla());
     }
 
     public String getEncurtadoProfessor1() {
