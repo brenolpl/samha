@@ -75,7 +75,7 @@ public class ObterCargaHoraria extends UseCase<List<Professor>> {
             String cargaHoraria = (tempoAula.intValue() < 10 ? "0" + tempoAula.intValue() : tempoAula.intValue() )+ ":" + (minutosArredondados < 10 ? "0" + minutosArredondados : minutosArredondados);
             professor.setCargaHorariaCalculada(cargaHoraria);
         }
-        professorRepository.saveAllAndFlush(professores);
+//        professorRepository.saveAllAndFlush(professores);
         return professores;
     }
 }

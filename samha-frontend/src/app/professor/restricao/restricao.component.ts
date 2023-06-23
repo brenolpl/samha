@@ -15,7 +15,7 @@ import {NotificationService} from "../../shared/service/notification.service";
 })
 export class RestricaoComponent implements OnInit, IFormComponent, OnDestroy {
   private subscription: Subscription;
-  restricao: any;
+  public restricao: any = {};
   professorId: string;
   form: FormGroup;
   aula: Aula = {

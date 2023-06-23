@@ -133,7 +133,9 @@ export class AlocacaoMainComponent implements OnInit {
       }
     });
 
-    this.disciplinaDataSource$ = this.dataService.query(query);
+    this.disciplinaDataSource$ = this.dataService.query(query).pipe(
+      tap(next => next.listMap.sort((a, b) => a.nome > b.nome ? 1 : -1))
+    );
   }
 
   onLoaded($event: any[]) {

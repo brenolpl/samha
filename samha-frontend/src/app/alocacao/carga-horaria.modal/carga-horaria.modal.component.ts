@@ -1,9 +1,11 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Observable} from "rxjs";
+import {Observable, of} from "rxjs";
 import {DataService} from "../../shared/service/data.service";
 import {QueryMirror} from "../../shared/query-mirror";
 import {alocacaoColumns} from "../../meta-model/alocacao";
 import {PagedList} from "../../shared/paged-list";
+import {catchError, map, tap} from "rxjs/operators";
+import {NotificationService} from "../../shared/service/notification.service";
 
 @Component({
   selector: 'samha-carga-horaria-modal',
@@ -21,7 +23,8 @@ export class CargaHorariaModalComponent implements OnInit {
   public selectedrow: any;
   public alocacoesProfessor$: Observable<any>;
 
-  constructor(private dataService: DataService) { }
+  constructor(private dataService: DataService,
+              private notification: NotificationService) { }
 
   ngOnInit(): void {
   }
@@ -34,7 +37,17 @@ export class CargaHorariaModalComponent implements OnInit {
       ano: this.ano,
       semestre: this.semestre
     }
-    this.alocacoesProfessor$ = this.dataService.post('alocacao/obter-alocacoes-professor', request);
+    this.alocacoesProfessor$ = this.dataService.post('alocacao/obter-alocacoes-professor', request).pipe(
+      tap(next => next.sort((a, b) => {
+          if (a.disciplina.nome < b.disciplina.nome) return 1;
+          else if (a.disciplina.nome > b.disciplina.nome) return -1;
+          else return 0;
+        })),
+      catchError(err => {
+        this.notification.handleError(err)
+        return of(new Error(err))
+      })
+    );
     this.showAlocacaoPopup = true;
   }
 }

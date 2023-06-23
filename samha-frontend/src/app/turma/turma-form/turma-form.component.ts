@@ -68,7 +68,7 @@ export class TurmaFormComponent implements OnInit {
       semestre: [this.turma?.semestre, [Validators.required, Validators.max(2)]],
       turno: [this.turma?.turno, Validators.required],
       matriz: [this.turma?.matriz, Validators.required],
-      ativa: [this.turma?.ativa]
+      ativa: [this.turma?.ativa !== undefined ? this.turma?.ativa : true]
     });
     this.cursoControl.setValue(this.turma?.matriz.curso);
     this.matriz$ = of(new PagedList({listMap: [this.turma?.matriz]}));

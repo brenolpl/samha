@@ -86,7 +86,7 @@
           <ng-container *ngFor="let column of columns" [matColumnDef]="column.columnDef">
 
             <mat-header-cell *matHeaderCellDef>
-              <button mat-button (click)="sort(column.columnDef)">
+              <button mat-button (click)="sort(column.columnDef)" class="w-100 p-0" style="text-align: start">
                 {{ column.header }}
                 <mat-icon *ngIf="showArrowUp(column.columnDef)">arrow_drop_up</mat-icon>
                 <mat-icon *ngIf="showArrowDown(column.columnDef)">arrow_drop_down</mat-icon>

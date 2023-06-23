@@ -1,6 +1,5 @@
 package com.samha.application.aula;
 
-import com.samha.application.alocacao.ObterCargaHoraria;
 import com.samha.commons.UseCase;
 import com.samha.domain.Alocacao;
 import com.samha.domain.Alocacao_;
@@ -180,8 +179,8 @@ public class SalvarAulas extends UseCase<List<Aula>> {
             parameters.put("ano", new Integer(oferta.getAno()).toString());
             parameters.put("semestre", new Integer(oferta.getSemestre()).toString());
             parameters.put("eixoId", eixo.getId().toString());
-            //atualiza a carga horária de cada professor do eixo informado.
-            this.addAfter(new ObterCargaHoraria(genericRepository, parameters));
+//            //atualiza a carga horária de cada professor do eixo informado.
+//            this.addAfter(new ObterCargaHoraria(genericRepository, parameters));
         }
     }
 

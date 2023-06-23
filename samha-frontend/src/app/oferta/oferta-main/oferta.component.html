@@ -108,26 +108,37 @@
       <mat-card-subtitle>Alocações</mat-card-subtitle>
 
       <div class="drag-list hide-scrollbar">
-        <div class="drag-border horizontal-box" style="min-height: 40px !important; ;display: flex;align-items: center;"
-             *ngFor="let alocacao of alocacoes"
-             draggable="true"
-             [ngClass]="alocacaoSelecionada?.id === alocacao?.id ? 'highlight-professor' : ''"
-             (click)="selectAlocacao(alocacao)"
-             (dragstart)="onListDraggerStart(alocacao)"
-             (dragend)="onDragEnd($event)">
-          <div style="width: 100%;height: 100%;display: inherit;align-items: center;">
-            <mat-icon style="scale: 0.6; width: 20px; height: 20px; font-size: 20px">drag_indicator</mat-icon>
-            <span
-              [class.disciplina-highlight]="isDisciplinaAlocacaoInvalida(alocacao)">{{alocacao.disciplina.sigla}}</span>&nbsp;<span>{{getNomeEncurtadoProfessor(alocacao.professor1.nome) + ' ' + getNomeEncurtadoProfessor(alocacao.professor2?.nome)}}</span>
+        <div *ngIf="oferta?.id">
+          <div class="drag-border horizontal-box" style="min-height: 40px !important; ;display: flex;align-items: center;"
+               *ngFor="let alocacao of alocacoes"
+               draggable="true"
+               [ngClass]="alocacaoSelecionada?.id === alocacao?.id ? 'highlight-professor' : ''"
+               (click)="selectAlocacao(alocacao)"
+               (dragstart)="onListDraggerStart(alocacao)"
+               (dragend)="onDragEnd($event)">
+            <div style="width: 100%;height: 100%;display: inherit;align-items: center;">
+              <mat-icon style="scale: 0.6; width: 20px; height: 20px; font-size: 20px">drag_indicator</mat-icon>
+              <span
+                [class.disciplina-highlight]="isDisciplinaAlocacaoInvalida(alocacao)">{{alocacao.disciplina.sigla}}</span>&nbsp;<span>{{getNomeEncurtadoProfessor(alocacao.professor1.nome) + ' ' + getNomeEncurtadoProfessor(alocacao.professor2?.nome)}}</span>
+            </div>
           </div>
-        </div>
-        <ng-container *ngIf="!turmaControl.value">
-          <span>Nenhuma turma encontrada!</span>
-        </ng-container>
+          <ng-container *ngIf="!turmaControl.value">
+            <span>Nenhuma turma encontrada!</span>
+          </ng-container>
 
-        <ng-container *ngIf="!(alocacoes.length > 0) && this.turmaControl.value">
-          <span>Nenhuma alocação encontrada!</span>
-        </ng-container>
+          <ng-container *ngIf="!(alocacoes.length > 0) && this.turmaControl.value">
+            <span>Nenhuma alocação encontrada!</span>
+          </ng-container>
+        </div>
+        <dx-button
+          width="100%"
+          height="100%"
+          icon="add"
+          hint="Criar oferta"
+          *ngIf="!oferta?.id"
+          (onClick)="createOferta()"
+        >
+        </dx-button>
       </div>
 
       <mat-card-footer class="d-block p-3">
@@ -140,12 +151,14 @@
                 icon="check"
                 text="Validar"
                 hint="Validar Aulas"
+                [disabled]="!oferta?.id"
                 (onClick)="onValidarAulasClick()"
               >
               </dx-button>
             </div>
             <div class="col-sm-4">
               <dx-button
+                [disabled]="!oferta?.id"
                 (onClick)="onControleQuantidadeDisciplinasClick()"
                 class="w-100 footer-button"
                 hint="Controle de quantidade de disciplinas">
@@ -199,6 +212,7 @@
                 icon="checklist"
                 text="Validar Turmas"
                 hint="Validar Aulas"
+                [disabled]="!oferta?.id"
                 (onClick)="onValidarTurmasClick()"
                 class="w-100 footer-button">
               </dx-button>

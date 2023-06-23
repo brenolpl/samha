@@ -121,19 +121,11 @@ export class ProfessorGridComponent implements OnChanges, OnDestroy {
 
   verificarAula(item: any): string {
     if (!(typeof item === 'string')) {
-      let aula;
-
-      if(item.alocacao.disciplina.tipo === 'ESPECIAL' && item.alocacao.professor2?.id) {
-        aula = this.aulasConflitantes.find(a => a.numero === item.numero &&
+      let aula = this.aulasConflitantes.find(a => a.numero === item.numero &&
           a.dia === item.dia &&
           a.turno === item.turno &&
           (a.professorConflito.id === item.alocacao.professor1?.id || a.professorConflito.id === item.alocacao.professor2?.id));
-      } else {
-        aula = this.aulasConflitantes.find(a => a.numero === item.numero &&
-          a.dia === item.dia &&
-          a.turno === item.turno &&
-          a.professorConflito.id === item.alocacao.professor1?.id);
-      }
+
       if (aula !== undefined) {
         switch (aula.tipo as number) {
           case 1: return 'background-red';

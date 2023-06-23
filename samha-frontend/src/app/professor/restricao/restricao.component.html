@@ -19,7 +19,7 @@
       stylingMode="outlined"
       icon="trash"
       text="Excluir"
-      [visible]="restricao?.id"
+      [visible]="restricao?.id != undefined"
       (onClick)="delete()"
     ></dx-button>
   </div>

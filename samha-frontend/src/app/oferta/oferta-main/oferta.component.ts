@@ -251,8 +251,8 @@ export class OfertaComponent implements OnInit, OnDestroy {
           'ano': {equals: this.formGroup.get('ano').value},
           'semestre': {equals: this.formGroup.get('semestre').value},
           'turma.id': {equals: this.turmaControl.value.id},
-          'tempoMaximoTrabalho': {equals: 11},
-          'intervaloMinimo': {equals: 11}
+          'tempoMaximoTrabalho': {equals: this.tempoMaximo},
+          'intervaloMinimo': {equals: this.intervaloMinimo}
         }
       })
     ).pipe(first()).subscribe(
@@ -321,8 +321,9 @@ export class OfertaComponent implements OnInit, OnDestroy {
     this.dataService.get('turma/getPeriodoAtual', this.turmaControl.value?.id)
       .pipe(first())
       .subscribe(data => {
-        this.formGroup.get('periodo').setValue(data);
-        this.periodoCurrentValue = data;
+        let periodo = data > 0 ? data : 1;
+        this.formGroup.get('periodo').setValue(periodo);
+        this.periodoCurrentValue = periodo;
         this.onAnoChange(this.anoCurrentValue);
       });
   }
@@ -346,7 +347,6 @@ export class OfertaComponent implements OnInit, OnDestroy {
   }
 
   onListDraggerStart(alocacao: any) {
-    if (this.oferta.id === null) this.createOferta();
     let novaAula = {
       alocacao: alocacao,
       dia: null,
@@ -567,7 +567,16 @@ export class OfertaComponent implements OnInit, OnDestroy {
     )
   }
 
-  private createOferta = () => this.oferta = this.dataService.save('oferta', this.oferta).pipe(first()).subscribe();
+  private createOferta () {
+    this.dataService.save('oferta', this.oferta).pipe(first()).subscribe(
+      next => {
+        this.oferta = next;
+        this.notification.success('Oferta criada com sucesso!');
+      }, error => this.notification.handleError(error)
+    );
+  }
+
+
 
   onDesfazerAlteracoesClicked() {
     this.ofertaChanged = false;
@@ -632,7 +641,7 @@ export class OfertaComponent implements OnInit, OnDestroy {
           this.notification.success('Visibilidade do horário alterada com sucesso!');
         }, error => this.notification.handleError(error)
       );
-    else this.notification.error('A turma selecionada não possui uma oferta, por favor selecione outra turma.');
+    else this.notification.error('A turma selecionada não possui uma oferta, por favor selecione outra turma ou aloque aulas para criar a oferta.');
   }
 
   onConfirmarClick() {
