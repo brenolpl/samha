@@ -93,11 +93,11 @@
       <div style="height: 217px;">
         <form [formGroup]="professorForm">
           <samha-autocomplete-field
-            *ngIf="professorForm.get('eixo').value == 1"
             [resource]="'eixo'"
             [label]="'Eixo'"
             [control]="eixoControl"
             (onChange)="onEixoChange($event)"
+            (loaded)="onEixoLoaded($event)"
             (clearButtonClicked)="onSearchChange()">
           </samha-autocomplete-field>
 
@@ -202,31 +202,10 @@
   </mat-card>
 </div>
 
-<dx-popup [(visible)]="showPopup" [title]="'Carga Horária dos Professores'" (closeOnOutsideClickChange)="showPopup = $event">
-  <dx-scroll-view height="95%">
-    <div *ngIf="cargaHoraria$ | async as cargaHoraria; else loading2">
-
-      <table class="carga-horaria-table">
-        <thead style="border-bottom: 1px solid #4caf50">
-        <td class="carga-horaria-table-header">Nome</td>
-        <td class="carga-horaria-table-header">Carga Horária em Horas</td>
-        </thead>
-        <tbody>
-        <tr *ngFor="let professor of cargaHoraria" class="carga-horaria-table-row">
-          <td class="carga-horaria-table-cell">{{professor.nome}}</td>
-          <td class="carga-horaria-table-cell">{{professor.cargaHorariaCalculada}}</td>
-        </tr>
-        </tbody>
-      </table>
-    </div>
-  </dx-scroll-view>
-
-  <ng-template #loading2>
-    <div class="loading-spinner" style="height: 100% !important;">
-      <mat-spinner></mat-spinner>
-    </div>
-  </ng-template>
-</dx-popup>
+<samha-carga-horaria-modal [(showPopup)]="showPopup"
+                           [ano]="alocacaoForm.get('ano').value"
+                           [semestre]="alocacaoForm.get('semestre').value"
+                           [cargaHoraria$]="cargaHoraria$"></samha-carga-horaria-modal>
 
 
 <ng-template #loading>

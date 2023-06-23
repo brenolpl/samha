@@ -32,7 +32,7 @@ public class ConsultarAlocacoes extends QueryEntities<Alocacao> {
             List<Aula> aulasAlocacao = genericRepository.find(Aula.class, q -> q.where(
                     q.equal(q.get(Aula_.alocacao), alocacao)
             ));
-            Integer qtdTurmas = aulasAlocacao.stream().map(a -> alocacao.getTurma()).collect(Collectors.toSet()).size();
+            Integer qtdTurmas = aulasAlocacao.stream().map(a -> a.getOferta().getTurma()).collect(Collectors.toSet()).size();
             if (qtdTurmas < 1) qtdTurmas = 1;
             if(aulasAlocacao.size() == (alocacao.getDisciplina().getQtAulas() * qtdTurmas)){
                 m.put("completa", true);

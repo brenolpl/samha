@@ -330,7 +330,7 @@ export class OfertaComponent implements OnInit, OnDestroy {
   getNomeEncurtadoProfessor(nome: string) {
     if (nome != null) {
       let nomes = nome.split(' ');
-      let siglas = nomes.map(n => n.substring(0, 1)).splice(1).join('');
+      let siglas = nomes.map(n => n.substring(0, 1)).splice(1).filter(l => l !== 'd').join('');
       let nomeEncutado = nomes[0] + ' ' + siglas;
       return nomeEncutado;
     }

@@ -325,7 +325,7 @@ export class AlocacaoMainComponent implements OnInit {
   }
 
   onCargaHorariaClicked() {
-    if (this.professorForm.get('eixo').value == 2) {
+    if (!this.eixoControl.value?.id) {
       this.notification.error('Selecione um eixo!')
       return;
     }

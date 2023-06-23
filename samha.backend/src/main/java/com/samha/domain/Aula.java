@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Audited
@@ -38,6 +39,9 @@ public class Aula extends BaseLogEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "oferta_id", nullable = false)
     private Oferta oferta;
+
+    @Transient
+    private Boolean completa;
 
 
     public Long getId() {
@@ -86,6 +90,14 @@ public class Aula extends BaseLogEntity {
 
     public void setOferta(Oferta oferta) {
         this.oferta = oferta;
+    }
+
+    public Boolean getCompleta() {
+        return completa;
+    }
+
+    public void setCompleta(Boolean completa) {
+        this.completa = completa;
     }
 
     @Override

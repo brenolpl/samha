@@ -11,7 +11,8 @@
 }
 
 .drag-list {
-  max-height: 360px;
+  height: 240px;
+  max-height: 240px;
   overflow: scroll;
   border: 1px solid rgb(133, 133, 133, 0.3);
 }
@@ -69,6 +70,11 @@
   background-color: #3b3b3b;
 }
 
+.accordion-selected {
+  color: white!important;
+  background-color: #3b3b3b!important;
+}
+
 .accordion-item-turma {
   cursor: unset;
 }
@@ -123,8 +129,18 @@
   border: 1px solid #FF9966;
 }
 
-.disciplinaHighlight {
-  color: #ff9966;
+.disciplina-highlight {
+  color: #ff9966!important;
+  font-weight: 800!important;
+}
+
+.disciplina-header {
+  font-size: 12px;
+  font-weight: normal;
+  display: inherit;
+  margin: 0;
+  font-family: 'DM Sans', sans-serif;
+  letter-spacing: .035em;
 }
 
 .notification #blue, #blue-turma {

@@ -8,12 +8,14 @@ import { AlocacaoMainComponent } from './alocacao-main/alocacao-main.component';
 import {MatDividerModule} from "@angular/material/divider";
 import {MatRadioModule} from "@angular/material/radio";
 import {DxButtonModule, DxPopupModule, DxScrollViewModule} from "devextreme-angular";
+import {CargaHorariaModalComponent} from "./carga-horaria.modal/carga-horaria.modal.component";
 
 
 @NgModule({
   declarations: [
     AlocacaoFormComponent,
     AlocacaoMainComponent,
+    CargaHorariaModalComponent
   ],
   imports: [AlocacaoRoutingModule, SharedModule, MaterialModule, CommonModule, MatDividerModule, MatRadioModule, DxButtonModule, DxPopupModule, DxScrollViewModule]
 })

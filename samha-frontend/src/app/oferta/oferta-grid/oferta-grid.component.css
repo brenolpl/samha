@@ -8,6 +8,8 @@
   transition: 0.3s;
   text-overflow: ellipsis;
   overflow: hidden;
+  font-family: 'DM Sans', sans-serif;
+  letter-spacing: .035em;
 }
 
 .cell-header {
@@ -76,6 +78,7 @@
 .horizontal-box.dragging {
   box-shadow: rgb(26,125,233);
   opacity: 1;
+  height: 40px!important;
   border: 1px solid #ddd;
 }
 

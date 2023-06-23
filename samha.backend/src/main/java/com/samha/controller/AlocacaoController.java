@@ -1,11 +1,13 @@
 package com.samha.controller;
 
 import com.samha.application.alocacao.ConsultarAlocacoes;
+import com.samha.application.alocacao.ObterAlocacoesProfessor;
 import com.samha.application.alocacao.ObterCargaHoraria;
 import com.samha.commons.UseCaseFacade;
 import com.samha.controller.common.BaseController;
 import com.samha.domain.Alocacao;
 import com.samha.domain.Professor;
+import com.samha.domain.dto.ObterAlocacoesProfessorDto;
 import com.samha.domain.log.AlocacaoAud;
 import com.samha.persistence.filter.PagedList;
 import com.samha.persistence.filter.Query;
@@ -27,6 +29,11 @@ public class AlocacaoController extends BaseController<Alocacao, AlocacaoAud, Lo
     @PostMapping("obter-carga-horaria")
     public List<Professor> obterCargaHoraria(@RequestBody HashMap<String, String> params) {
         return facade.execute(new ObterCargaHoraria(params));
+    }
+
+    @PostMapping("obter-alocacoes-professor")
+    public List<Alocacao> obterAlocacoesProfessor(@RequestBody ObterAlocacoesProfessorDto obterAlocacoesProfessorDto) {
+        return facade.execute(new ObterAlocacoesProfessor(obterAlocacoesProfessorDto));
     }
 
     @Override

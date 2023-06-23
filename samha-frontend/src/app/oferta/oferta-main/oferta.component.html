@@ -108,15 +108,18 @@
       <mat-card-subtitle>Alocações</mat-card-subtitle>
 
       <div class="drag-list hide-scrollbar">
-        <div class="drag-border horizontal-box" style="height: 40px !important;"
+        <div class="drag-border horizontal-box" style="min-height: 40px !important; ;display: flex;align-items: center;"
              *ngFor="let alocacao of alocacoes"
              draggable="true"
              [ngClass]="alocacaoSelecionada?.id === alocacao?.id ? 'highlight-professor' : ''"
              (click)="selectAlocacao(alocacao)"
              (dragstart)="onListDraggerStart(alocacao)"
              (dragend)="onDragEnd($event)">
-          <span
-            [class.disciplinaHighlight]="isDisciplinaAlocacaoInvalida(alocacao)">{{alocacao.disciplina.sigla}}</span><span>{{' - ' + getNomeEncurtadoProfessor(alocacao.professor1.nome) + ' ' + getNomeEncurtadoProfessor(alocacao.professor2?.nome)}}</span>
+          <div style="width: 100%;height: 100%;display: inherit;align-items: center;">
+            <mat-icon style="scale: 0.6; width: 20px; height: 20px; font-size: 20px">drag_indicator</mat-icon>
+            <span
+              [class.disciplina-highlight]="isDisciplinaAlocacaoInvalida(alocacao)">{{alocacao.disciplina.sigla}}</span>&nbsp;<span>{{getNomeEncurtadoProfessor(alocacao.professor1.nome) + ' ' + getNomeEncurtadoProfessor(alocacao.professor2?.nome)}}</span>
+          </div>
         </div>
         <ng-container *ngIf="!turmaControl.value">
           <span>Nenhuma turma encontrada!</span>
@@ -145,8 +148,8 @@
               <dx-button
                 (onClick)="onControleQuantidadeDisciplinasClick()"
                 class="w-100 footer-button"
-                icon="dragvertical"
                 hint="Controle de quantidade de disciplinas">
+                <mat-icon style="font-size: 18px; width: 18px; height: 18px">library_books</mat-icon>
               </dx-button>
             </div>
           </div>
@@ -251,7 +254,7 @@
     </mat-card-content>
     <div class="divider d-inline-block" *ngIf="notificacoesOpened"></div>
 
-    <mat-card-content class="d-block" style="width: 20%; height: inherit"
+    <mat-card-content class="d-block" style="width: 20%; max-height: 900px"
                       *ngIf="notificacoesOpened; else notificacaoButton">
       <dx-button
         style="position: absolute; right: 0; border: none; z-index: 15"
@@ -274,7 +277,7 @@
             [attr.id]="'accordion-header-' + index"
             [attr.aria-expanded]="accordionItem.expanded"
             [attr.aria-controls]="'accordion-body-' + index">
-            <div class="example-accordion-item-header notification w-100" (click)="accordionItem.toggle()">
+            <div [class.accordion-selected]="accordionItem.expanded" class="example-accordion-item-header notification w-100" (click)="accordionItem.toggle()">
               <p style="font-size: 10pt">{{ item.professor?.nome }}</p>
               <span class="example-accordion-item-description">
                   <span id="red"
