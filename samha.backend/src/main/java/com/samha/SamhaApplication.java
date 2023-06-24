@@ -17,14 +17,6 @@ public class SamhaApplication {
 		SpringApplication.run(SamhaApplication.class, args);
 	}
 
-//	@Bean
-//	CommandLineRunner run(IUsuarioService usuarioService){
-//		return args -> {
-//			Usuario user = usuarioService.findByLogin("admin");
-//			usuarioService.saveUsuario(user);
-//		};
-//	}
-
 	@Bean
 	public Executor asyncExecutor() {
 		ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();

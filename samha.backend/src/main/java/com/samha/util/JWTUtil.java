@@ -15,8 +15,19 @@ import org.springframework.security.core.userdetails.User;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
@@ -102,8 +113,12 @@ public abstract class JWTUtil {
     }
 
     public static String getSecret(){
+        String userHome = System.getProperty("user.home");
+        String filePath = userHome + File.separator + "secret.json";
+
         try {
-            Reader reader = new FileReader("secret.json");
+            Path path = Paths.get(filePath);
+            Reader reader = new FileReader(path.toFile());
             var gson = new Gson();
             var secret = gson.fromJson(reader, JWTSecret.class);
             reader.close();

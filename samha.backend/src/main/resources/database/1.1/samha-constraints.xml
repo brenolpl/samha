@@ -27,7 +27,7 @@
     <changeSet id="16" author="breno.leal">
         <comment>Set Chaves estrangeiras de aula</comment>
         <addForeignKeyConstraint baseTableName="aula" baseColumnNames="oferta_id" constraintName="FK_AULA_OFERTA"
-                                 referencedTableName="OFERTA"
+                                 referencedTableName="oferta"
                                  referencedColumnNames="id"></addForeignKeyConstraint>
 
         <addForeignKeyConstraint baseTableName="aula" baseColumnNames="alocacao_id" constraintName="FK_AULA_ALOCACAO"
@@ -79,7 +79,7 @@
     <changeSet id="22" author="breno.leal">
         <comment>Set Chave estrangeira oferta</comment>
         <addForeignKeyConstraint baseTableName="oferta" baseColumnNames="turma_id" constraintName="FK_OFERTA_TURMA"
-                                 referencedTableName="TURMA"
+                                 referencedTableName="turma"
                                  referencedColumnNames="id"></addForeignKeyConstraint>
     </changeSet>
 
