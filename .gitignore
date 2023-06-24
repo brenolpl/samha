@@ -34,3 +34,4 @@ build/
 
 ### JWT Secret Key ###
 secret.json
+/samha.backend/src/main/resources/static/
