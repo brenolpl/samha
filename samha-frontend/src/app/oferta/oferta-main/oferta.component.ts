@@ -642,7 +642,6 @@ export class OfertaComponent implements OnInit, OnDestroy {
           this.notification.success('Visibilidade do horário alterada com sucesso!');
         }, error => this.notification.handleError(error)
       );
-    else this.notification.error('A turma selecionada não possui uma oferta, por favor selecione outra turma ou aloque aulas para criar a oferta.');
   }
 
   onConfirmarClick() {

@@ -4,6 +4,7 @@
       (onClick)="showPopupMudarVisiblidade = true"
       stylingMode="outlined"
       class="d-flex"
+      [visible]="oferta?.id != undefined"
       type="normal">
       <div style="height: 18px" class="d-flex">
         <mat-icon style="font-size: 20px; margin-left: .3em" *ngIf="oferta?.publica">visibility</mat-icon>
@@ -56,7 +57,11 @@
           (onOpened)="onCursoSelectionOpened()"></samha-autocomplete-field>
 
 
-        <mat-form-field class="d-block" appearance="outline" *ngIf="turmaControl.value?.id">
+        <mat-form-field
+          class="d-block"
+          appearance="outline"
+          [ngClass]="oferta?.id ? '' : 'mb-3'"
+          *ngIf="turmaControl.value?.id">
           <mat-label>Turma</mat-label>
           <input type="text" matInput [formControl]="turmaControl" [matAutocomplete]="auto">
           <mat-autocomplete
@@ -68,7 +73,11 @@
               {{option.nome}}
             </mat-option>
           </mat-autocomplete>
+          <mat-hint class="text-danger" *ngIf="!oferta?.id" >
+            Esta turma não possui uma oferta para o ano/semestre selecionado. Você precisará clicar no botão + na listagem de alocações para criar uma nova oferta!
+          </mat-hint>
         </mat-form-field>
+
 
         <mat-form-field appearance="outline" class="d-block" *ngIf="turmaControl.value?.id">
           <mat-label>Turno</mat-label>
