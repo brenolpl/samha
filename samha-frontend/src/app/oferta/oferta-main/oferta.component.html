@@ -122,14 +122,19 @@
                 [class.disciplina-highlight]="isDisciplinaAlocacaoInvalida(alocacao)">{{alocacao.disciplina.sigla}}</span>&nbsp;<span>{{getNomeEncurtadoProfessor(alocacao.professor1.nome) + ' ' + getNomeEncurtadoProfessor(alocacao.professor2?.nome)}}</span>
             </div>
           </div>
-          <ng-container *ngIf="!turmaControl.value">
-            <span>Nenhuma turma encontrada!</span>
-          </ng-container>
 
-          <ng-container *ngIf="!(alocacoes.length > 0) && this.turmaControl.value">
-            <span>Nenhuma alocação encontrada!</span>
-          </ng-container>
         </div>
+
+        <div class="w-100 h-100 d-flex align-items-center flex-column justify-content-center align-content-center" *ngIf="!turmaControl.value">
+          <mat-icon>error</mat-icon>
+          <small style="font-weight: 400; font-size: 9pt; text-align: center">Não há turmas para o curso informado.</small>
+        </div>
+
+        <div class="w-100 h-100 d-flex align-items-center flex-column justify-content-center align-content-center" *ngIf="!(alocacoes.length > 0) && this.turmaControl.value && oferta?.id">
+          <mat-icon>link_off</mat-icon>
+          <small style="font-weight: 400; font-size: 9pt; text-align: center">Nenhuma alocação encontrada</small>
+        </div>
+
         <dx-button
           width="100%"
           height="100%"

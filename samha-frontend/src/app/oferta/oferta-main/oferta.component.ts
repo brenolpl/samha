@@ -155,6 +155,7 @@ export class OfertaComponent implements OnInit, OnDestroy {
 
   executeTurmaQuery() {
     this.alocacoes = [];
+    this.oferta = undefined;
     this.ofertaChanged = false;
     this.dataService.query(
       new QueryMirror('turma')
@@ -186,7 +187,7 @@ export class OfertaComponent implements OnInit, OnDestroy {
           this.onTurmaChange();
         } else {
           this.turmaControl.setValue(undefined);
-          this.notification.error('Não há turmas para este curso.');
+          this.notification.warning('Não há turmas para este curso.');
           this.buildMatriz();
         }
         this.filteredOptions = this.turmaControl.valueChanges.pipe(
@@ -277,7 +278,7 @@ export class OfertaComponent implements OnInit, OnDestroy {
           )
         } else {
           this.oferta = {
-            id: null,
+            id: undefined,
             ano: this.formGroup.get('ano').value,
             semestre: this.formGroup.get('semestre').value,
             turma: {

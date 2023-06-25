@@ -338,4 +338,9 @@ export class AlocacaoMainComponent implements OnInit {
     })
     this.showPopup = true
   }
+
+  onClearButtonClicked() {
+    this.professorForm.get('search').setValue('');
+    this.onSearchChange();
+  }
 }

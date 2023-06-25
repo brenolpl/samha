@@ -104,6 +104,9 @@
           <mat-form-field appearance="outline" class="d-block">
             <mat-label>Pesquisar</mat-label>
             <input matInput type="text" placeholder="Pesquisar" (keyup)="onSearchChange()" formControlName="search">
+            <button *ngIf="professorForm.get('search').value" matSuffix mat-icon-button aria-label="Clear" (click)="onClearButtonClicked()">
+              <mat-icon>close</mat-icon>
+            </button>
           </mat-form-field>
 
           <mat-radio-group aria-label="Selecione uma opção" formControlName="eixo" (change)="onRadioChange($event)">

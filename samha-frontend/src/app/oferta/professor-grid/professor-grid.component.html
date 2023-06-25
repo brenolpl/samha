@@ -1,4 +1,4 @@
-<table class="w-100" *ngIf="alocacao; else notLoaded">
+<table class="w-100" *ngIf="alocacao;">
   <thead>
   <tr style="line-height: 25px;">
     <td class="turma-cell-header">
@@ -47,6 +47,3 @@
     </ng-container>
   </tbody>
 </table>
-<ng-template #notLoaded>
-  <span>Selecione um professor.</span>
-</ng-template>
