@@ -1,5 +1,6 @@
 package com.samha.application.token;
 
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.samha.commons.BusinessException;
 import com.samha.commons.UseCase;
 import com.samha.util.JWTUtil;
@@ -32,6 +33,8 @@ public class RefreshSession extends UseCase<Void> {
                 String user = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
                 Collection<? extends GrantedAuthority> authorities = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
                 JWTUtil.refreshSession(user, authorities, request, response);
+            } catch (TokenExpiredException ex) {
+                throw new BusinessException("Sua sessão expirou! Faça login novamente.");
             } catch (Exception ex) {
                 JWTUtil.writeErrorResponse(response, ex);
             }

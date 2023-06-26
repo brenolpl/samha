@@ -2,6 +2,8 @@ import {HostListener, Injectable} from "@angular/core";
 import {AuthService} from "./auth.service";
 import {first} from "rxjs/operators";
 import {Router} from "@angular/router";
+import {error} from "protractor";
+import {NotificationService} from "./notification.service";
 
 
 /**
@@ -22,7 +24,8 @@ export class SecurityService {
   private refreshTokenWarnTimer;
 
   constructor(private authService: AuthService,
-              private router: Router) {
+              private router: Router,
+              private notification: NotificationService) {
   }
 
   private getExpirationTime(token: string): number {
@@ -61,7 +64,7 @@ export class SecurityService {
         localStorage.setItem('access_token', access_token);
         localStorage.setItem('refresh_token', refresh_token);
         this.initialize();
-      })
+      }, error => this.notification.handleError(error))
     }
   }
 
