@@ -1,14 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {DataService} from '../shared/service/data.service';
-import {MenuEnum} from '../shared/menu-enum';
-import {alocacaoColumns} from '../meta-model/alocacao';
-import {disciplinaColumns} from '../meta-model/disciplina';
 import {Observable, of} from 'rxjs';
-import {professorColumns} from '../meta-model/professor';
 import {catchError} from 'rxjs/operators';
-import {Menu} from '../meta-model/menu';
-import {cursoColumns} from '../meta-model/curso';
-import {turmaColumns} from '../meta-model/turma';
 import {NotificationService} from "../shared/service/notification.service";
 
 @Component({
@@ -18,8 +11,6 @@ import {NotificationService} from "../shared/service/notification.service";
 })
 export class HomeComponent implements OnInit{
   loading$: Observable<any>;
-  opened = true;
-  selectedMenu: MenuEnum;
 
   columns: any[] = [];
 

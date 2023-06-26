@@ -37,6 +37,9 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 public abstract class JWTUtil {
 
+    public static Integer ACCESS_TOKEN_EXPIRATION = 300;
+    public static Integer REFRESH_TOKEN_EXPIRATION = 600;
+
     public static String generateAccessToken(String username, List<String> claims, String issuer, int expiresAt){
         String secret = JWTUtil.getSecret();
         Algorithm algorithm = Algorithm.HMAC256(secret.getBytes());
@@ -60,8 +63,23 @@ public abstract class JWTUtil {
 
     public static void getNewToken(User user, HttpServletRequest request, HttpServletResponse response){
         List<String> claims = user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
-        String access_token = JWTUtil.generateAccessToken(user.getUsername(), claims, request.getRequestURL().toString(), 300);
-        String refresh_token = JWTUtil.generateRefreshToken(user.getUsername(), request.getRequestURL().toString(), 500);
+        String access_token = JWTUtil.generateAccessToken(user.getUsername(), claims, request.getRequestURL().toString(), ACCESS_TOKEN_EXPIRATION);
+        String refresh_token = JWTUtil.generateRefreshToken(user.getUsername(), request.getRequestURL().toString(), REFRESH_TOKEN_EXPIRATION);
+        Map<String, String> tokens = new HashMap<>();
+        tokens.put("access_token", access_token);
+        tokens.put("refresh_token", refresh_token);
+        response.setContentType(APPLICATION_JSON_VALUE);
+        try {
+            new ObjectMapper().writeValue(response.getOutputStream(), tokens);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void refreshSession(String username, Collection<? extends GrantedAuthority> authorities, HttpServletRequest request, HttpServletResponse response) {
+        List<String> claims = authorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
+        String access_token = JWTUtil.generateAccessToken(username, claims, request.getRequestURL().toString(), ACCESS_TOKEN_EXPIRATION);
+        String refresh_token = JWTUtil.generateRefreshToken(username, request.getRequestURL().toString(), REFRESH_TOKEN_EXPIRATION);
         Map<String, String> tokens = new HashMap<>();
         tokens.put("access_token", access_token);
         tokens.put("refresh_token", refresh_token);

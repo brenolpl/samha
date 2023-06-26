@@ -2,6 +2,7 @@ package com.samha.controller;
 
 import com.samha.application.token.ChangePassword;
 import com.samha.application.token.IsTokenValid;
+import com.samha.application.token.RefreshSession;
 import com.samha.application.token.RefreshToken;
 import com.samha.commons.UseCaseFacade;
 import lombok.RequiredArgsConstructor;
@@ -38,5 +39,10 @@ public class AuthenticationController {
     @PostMapping("change-password")
     public void changePassword(@RequestBody Map<String, String> params) {
         facade.execute(new ChangePassword(params));
+    }
+
+    @PostMapping("refreshSession")
+    public void refreshSession(HttpServletResponse response, HttpServletRequest request) {
+        this.facade.execute(new RefreshSession(response, request));
     }
 }

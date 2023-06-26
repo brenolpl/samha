@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, HostListener, OnDestroy, OnInit} from '@angular/core';
 import {Observable, of, Subscription} from 'rxjs';
 import {MenuEnum} from './shared/menu-enum';
 import {TableColumnModel} from './meta-model/table-column-model';
@@ -6,8 +6,9 @@ import {DataService} from './shared/service/data.service';
 import {LocalStorageService} from './shared/service/local-storage.service';
 import {Router} from '@angular/router';
 import {AuthService} from './shared/service/auth.service';
-import {catchError, map, tap} from 'rxjs/operators';
+import {catchError, map} from 'rxjs/operators';
 import { locale } from "devextreme/localization";
+import {SecurityService} from "./shared/service/security.service";
 
 @Component({
   selector: 'samha-root',
@@ -19,15 +20,18 @@ export class AppComponent implements OnInit, OnDestroy{
   opened = false;
   menus$: Observable<any>;
   showMenu$: Observable<boolean>;
+  private userActiveTimer;
   private subscription: Subscription;
   constructor(private dataService: DataService,
               private localStorage: LocalStorageService,
               private router: Router,
-              private authService: AuthService) {
+              private authService: AuthService,
+              private securityService: SecurityService) {
     locale(navigator.language);
   }
 
   ngOnInit(): void {
+    this.securityService.initialize();
     this.showMenu$ = this.authService.isTokenValid().pipe(
       map( _ => {
         this.opened = true;
@@ -152,6 +156,15 @@ export class AppComponent implements OnInit, OnDestroy{
       menus.push(...menusRestantes);
     }
     return menus;
+  }
+
+  @HostListener('document:mousemove', ['$event'])
+  onDocumentMouseMove(event: MouseEvent) {
+    this.securityService.isUserActive = true;
+    if (this.userActiveTimer) clearTimeout(this.userActiveTimer);
+    this.userActiveTimer = setTimeout(() => {
+      this.securityService.isUserActive = false;
+    }, 30 * 60 * 1000)
   }
 }
 

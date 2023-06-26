@@ -4,11 +4,11 @@ import {Observable, of} from 'rxjs';
 import {LocalStorageService} from '../shared/service/local-storage.service';
 import {catchError, map} from 'rxjs/operators';
 import {AuthService} from '../shared/service/auth.service';
+import {Location} from "@angular/common";
 
 @Injectable()
 export class AuthGuard implements CanActivate, CanDeactivate<any> {
 
-  response: EventEmitter<void> = new EventEmitter<void>();
 
   constructor(private localStorage: LocalStorageService,
               private router: Router,
@@ -24,18 +24,18 @@ export class AuthGuard implements CanActivate, CanDeactivate<any> {
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | boolean{
-    return this.authService.isTokenValid().pipe(
-      map(
-        data => {
-          this.response.emit();
-          return true;
-        }
-      ),
-      catchError( _ => {
-        this.response.emit();
-        this.router.navigate(['/login']).then(_ => location.reload());
-        return of(false);
-      })
-    )
+    if (route.routeConfig.path !== 'login') {
+      return this.authService.isTokenValid().pipe(
+        map(
+          data => {
+            return true;
+          }
+        ),
+        catchError(_ => {
+          this.router.navigateByUrl('login').then(location.reload);
+          return of(false);
+        })
+      )
+    }
   }
 }

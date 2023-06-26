@@ -37,6 +37,13 @@ export class AuthService{
   }
 
   public refreshToken(): Observable<any> {
-    return this.http.get(APIPREFIX + 'auth/refreshToken', this.getOptions());
+    return this.http.get(APIPREFIX + 'auth/refreshToken', {
+      headers: new HttpHeaders()
+        .set('Authorization', 'Refresh ' + this.localStorage.get('refresh_token'))
+    });
+  }
+
+  public refreshSession(): Observable<any> {
+    return this.http.post(APIPREFIX + 'auth/refreshSession', null, this.getOptions());
   }
 }

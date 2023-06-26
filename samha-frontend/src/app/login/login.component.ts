@@ -60,7 +60,6 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.localStorage.set("access_token", result.access_token);
           this.localStorage.set("refresh_token", result.refresh_token);
           //todo: verificar se irá utilizar
-          // this.securityService.setTokens(result.access_token, result.access_token);
           this.authService.loggedIn.emit(true);
           this.authService.isLogado = true;
           this.router.navigate(['home']);

@@ -1,5 +1,5 @@
 <mat-toolbar color="primary" style="height: 45px">
-  <button (click)="onClick()" mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon" *ngIf="isLogado()">
+  <button (click)="onClick()" mat-icon-button *ngIf="isLogado()">
     <mat-icon style="color: white">menu</mat-icon>
   </button>
   <button routerLink="/home" mat-button style="font-size: 22px;" [disabled]="!isLogado()"><mat-icon style="color: white">grid_on</mat-icon><span style="color: white; margin-left: 0.2em; margin-right: 0.2em">SAMHA</span></button>
