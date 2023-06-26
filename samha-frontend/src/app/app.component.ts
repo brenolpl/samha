@@ -134,7 +134,8 @@ export class AppComponent implements OnInit, OnDestroy{
   }
 
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+    this.subscription?.unsubscribe();
+    this.securityService.subs?.unsubscribe()
   }
 
   protected readonly open = open;

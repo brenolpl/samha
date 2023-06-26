@@ -1,9 +1,10 @@
-import {HostListener, Injectable} from "@angular/core";
+import {HostListener, Injectable, OnDestroy} from "@angular/core";
 import {AuthService} from "./auth.service";
 import {first} from "rxjs/operators";
 import {Router} from "@angular/router";
 import {error} from "protractor";
 import {NotificationService} from "./notification.service";
+import {Subscription} from "rxjs";
 
 
 /**
@@ -22,6 +23,7 @@ export class SecurityService {
   private accessTokenTimer;
   private refreshTokenTimer;
   private refreshTokenWarnTimer;
+  public subs: Subscription;
 
   constructor(private authService: AuthService,
               private router: Router,
@@ -71,34 +73,38 @@ export class SecurityService {
   public initialize() {
     const access_token = localStorage.getItem('access_token');
     const refresh_token = localStorage.getItem('refresh_token');
-    if (access_token && refresh_token) {
-      this.isUserActive = true;
-      const currentMillis = new Date().getTime();
-      const accessTokenExpiration = this.getExpirationTime(access_token);
-      const refreshTokenExpiration = this.getExpirationTime(refresh_token);
+    this.subs = this.authService.isTokenValid().subscribe(
+      valid => {
+        if (access_token && refresh_token && valid) {
+          this.isUserActive = true;
+          const currentMillis = new Date().getTime();
+          const accessTokenExpiration = this.getExpirationTime(access_token);
+          const refreshTokenExpiration = this.getExpirationTime(refresh_token);
 
-      if (currentMillis > refreshTokenExpiration) localStorage.clear();
+          if (currentMillis > refreshTokenExpiration) localStorage.clear();
 
-      if (currentMillis > accessTokenExpiration && currentMillis < refreshTokenExpiration) {
-        if (this.isUserActive) this.handleAccessTokenExpiration();
-        else this.logout();
-      }else {
-        const accessTokenExpirationTime = accessTokenExpiration - currentMillis;
-        const refreshTokenExpirationTime = refreshTokenExpiration - currentMillis;
-        const refreshTokenWarningTime = refreshTokenExpirationTime - (590 * 60 * 1000); //a mensagem aparece 10 minutos antes de vencer o refresh_token.
-        this.clearTimers();
-        this.accessTokenTimer = setTimeout(() => {
-          if (this.isUserActive) this.handleAccessTokenExpiration();
-          else this.logout();
-        }, accessTokenExpirationTime)
-        this.refreshTokenWarnTimer = setTimeout(() => {
-          this.handleRefreshTokenExpiration();
-        }, refreshTokenWarningTime)
-        this.refreshTokenTimer = setTimeout(() => {
-          this.logout();
-        }, refreshTokenExpirationTime)
+          if (currentMillis > accessTokenExpiration && currentMillis < refreshTokenExpiration) {
+            if (this.isUserActive) this.handleAccessTokenExpiration();
+            else this.logout();
+          }else {
+            const accessTokenExpirationTime = accessTokenExpiration - currentMillis;
+            const refreshTokenExpirationTime = refreshTokenExpiration - currentMillis;
+            const refreshTokenWarningTime = refreshTokenExpirationTime - (590 * 60 * 1000); //a mensagem aparece 10 minutos antes de vencer o refresh_token.
+            this.clearTimers();
+            this.accessTokenTimer = setTimeout(() => {
+              if (this.isUserActive) this.handleAccessTokenExpiration();
+              else this.logout();
+            }, accessTokenExpirationTime)
+            this.refreshTokenWarnTimer = setTimeout(() => {
+              this.handleRefreshTokenExpiration();
+            }, refreshTokenWarningTime)
+            this.refreshTokenTimer = setTimeout(() => {
+              this.logout();
+            }, refreshTokenExpirationTime)
+          }
+        }
       }
-    }
+    )
   }
 
   private logout() {

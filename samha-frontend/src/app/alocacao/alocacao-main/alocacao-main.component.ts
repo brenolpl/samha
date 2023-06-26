@@ -79,7 +79,6 @@ export class AlocacaoMainComponent implements OnInit {
   ngOnInit(): void {
     this.disciplinaDisplayedColumns.push('nome');
     this.setAlocacaoDisplayedColumns();
-    this.loadProfessores(null);
   }
 
   findColumnValue = (row, column): string => <string>column.split('.').reduce((acc, cur) => acc[cur], row);
@@ -170,7 +169,7 @@ export class AlocacaoMainComponent implements OnInit {
   }
 
   onEixoChange($event: any) {
-    this.loadProfessores(this.eixoControl.value);
+    this.loadProfessores(this.eixoControl?.value);
   }
 
   onEixoLoaded($event: any) {
@@ -223,7 +222,7 @@ export class AlocacaoMainComponent implements OnInit {
 
   onSearchChange() {
     this.searchText = this.professorForm.get('search').value;
-    this.loadProfessores(this.eixoControl.value,);
+    this.loadProfessores(this.eixoControl?.value,);
   }
 
   new() {
