@@ -11,6 +11,8 @@ public abstract class Horarios {
     public static final int TEMPO_MAXIMO = 1;
     public static final int INTERVALO_MINIMO = 2;
 
+    public static final int INTERVALO_MINIMO_ALMOCO = 1;
+
     public static final String SEGUNDA = "SEGUNDA-FEIRA";
     public static final String TERCA = "TERÇA-FEIRA";
     public static final String QUARTA = "QUARTA-FEIRA";
