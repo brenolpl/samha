@@ -498,6 +498,8 @@ export class OfertaComponent implements OnInit, OnDestroy {
             this.aulasConflitantes.push(...aulas);
           })
         });
+      }, error => {
+        this.notification.handleError(error);
       }
     )
   }

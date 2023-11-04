@@ -177,4 +177,10 @@ export class OfertaGridComponent {
   getColspan() {
     return this.turno?.toUpperCase() === 'NOTURNO' ? 4 : 6
   }
+
+  deleteAula(item: any) {
+    this.onAulaDeleted.emit(item);
+    this.highlightedRowIndex = -1;
+    this.highlightedColIndex = -1;
+  }
 }

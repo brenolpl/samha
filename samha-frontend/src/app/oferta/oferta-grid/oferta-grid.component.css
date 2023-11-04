@@ -130,3 +130,20 @@
 .background-white {
   background-color: white;
 }
+
+.clear-item {
+  display: flex;
+  width: 10%;
+  border-radius: 2px;
+  font-size: 10px;
+  cursor: pointer;
+  z-index: 15;
+  color: #C7312C;
+  justify-content: center;
+  align-content: center;
+}
+
+.clear-item:hover {
+  background-color: #C7312C;
+  color: #FFF;
+}

@@ -458,7 +458,7 @@ public class ObterRestricoesAulas extends UseCase<List<Conflito>> {
                 ),
                 q.notEqual(q.get(Aula_.oferta).get(Oferta_.id), aula.getOferta().getId()),
                 q.equal(q.get(Aula_.oferta).get(Oferta_.ano), aula.getOferta().getAno()),
-                q.equal(q.get(Aula_.oferta).get(Oferta_.semestre), aula.getOferta().getAno())
+                q.equal(q.get(Aula_.oferta).get(Oferta_.semestre), aula.getOferta().getSemestre())
         ));
 
         if (!aulasProfessor.isEmpty()) {
@@ -466,10 +466,13 @@ public class ObterRestricoesAulas extends UseCase<List<Conflito>> {
             mensagem.setTitulo("Está em outra(s) turma(s) neste horário: ");
             mensagem.setCor(CorEnum.VERMELHO.getId());
             mensagem.setTipo(1);
+            List<String> restricoes = new ArrayList<>();
             for (Aula restricao : aulasProfessor) {
-                mensagem.getRestricoes().add(restricao.getOferta().getTurma().getNome() + " - " + restricao.getAlocacao().getDisciplina().getNome() + ". ");
+                restricoes.add(restricao.getOferta().getTurma().getNome() + " - " + restricao.getAlocacao().getDisciplina().getNome() + ". ");
+                restricoes.add(Horarios.horarioInicial(aula.getNumero()) + " a " + Horarios.horarioFinal(aula.getNumero()));
                 mensagem.getAulas().add(aula);
             }
+            mensagem.setRestricoes(restricoes);
             adicionarConflitoProfessor(professor, mensagem);
         }
     }

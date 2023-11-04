@@ -53,6 +53,7 @@
           <mat-cell *matCellDef="let row" class="align-items-center align-content-center justify-content-center"
                     style="z-index: 1">
             <dx-button
+              *ngIf="!disableEdit"
               style="border: none"
               type="default"
               stylingMode="outlined"
@@ -60,6 +61,7 @@
               [icon]="'edit'">
             </dx-button>
             <dx-button
+              *ngIf="!disableDelete"
               style="border: none"
               type="danger"
               stylingMode="outlined"

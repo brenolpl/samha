@@ -41,13 +41,19 @@
         (dragover)="onDragOver($event, i, j)"
         (dragleave)="onDragLeave($event, i, j)"
         (drop)="onItemDrop($event, i, j)"
-        (click)="onClick($event, i, j)"
-        (keydown)="onKeyDown($event, item)">
-      <div class="horizontal-box" draggable="true" style="height: inherit"
+        (click)="onClick($event, i, j)">
+      <div class="horizontal-box" draggable="true" style="height: inherit; display: flex; flex-direction: row; align-content: center; justify-content: center"
            [ngClass]="verificarAula(item)"
            (dragstart)="onDragStart($event, i, j)"
            (dragend)="onDragEnd($event)">
-        <span style="text-overflow: ellipsis; white-space: nowrap" *ngIf="item?.alocacao">{{(item?.alocacao?.disciplina?.sigla || '') + ' - ' + getNomeEncurtadoProfessor(item?.alocacao?.professor1?.nome) + ' ' + getNomeEncurtadoProfessor(item?.alocacao?.professor2?.nome)}}</span>
+        <div
+          *ngIf="item"
+          (click)="deleteAula(item)"
+          class="clear-item">X</div>
+        <span style="text-overflow: ellipsis; white-space: nowrap; width: 90%"
+              *ngIf="item?.alocacao">
+          {{(item?.alocacao?.disciplina?.sigla || '') + ' - ' + getNomeEncurtadoProfessor(item?.alocacao?.professor1?.nome) + ' ' + getNomeEncurtadoProfessor(item?.alocacao?.professor2?.nome)}}
+        </span>
       </div>
     </td>
   </tr>

@@ -5,6 +5,8 @@ import {PagedList} from "../../shared/paged-list";
 import {Filter, QueryMirror} from "../../shared/query-mirror";
 import {first, map, tap, toArray} from "rxjs/operators";
 import {FormControl} from "@angular/forms";
+import {error} from "protractor";
+import {NotificationService} from "../../shared/service/notification.service";
 
 @Component({
   selector: 'samha-professor-grid',
@@ -23,7 +25,8 @@ export class ProfessorGridComponent implements OnChanges, OnDestroy {
   private selectionSub: Subscription;
 
 
-  constructor(private dataService: DataService) {
+  constructor(private dataService: DataService,
+              private notificationService: NotificationService) {
     this.selectionSub = this.selectionControl.valueChanges.subscribe(next => {
       if(next == 1) {
 
@@ -80,7 +83,10 @@ export class ProfessorGridComponent implements OnChanges, OnDestroy {
                       });
                       this.aulasConflitantes.push(...aulas);
                     })
-                  });
+                  }, error => {
+                    this.notificationService.handleError(error);
+                    }
+                    );
                 }
               )
             }
