@@ -143,7 +143,7 @@ public class GerarRelatorioProfessor extends UseCase<Map<String, Object>> {
         String anoSemestre = relatorioDto.getAno() + "/" + relatorioDto.getSemestre();
         hash.put("nome", professor.getNome());
         hash.put("setor", professor.getCoordenadoria().getNome());
-        hash.put("aulas", professor.getCargaHoraria().intValue() + " aulas semanais" + "\t" + anoSemestre);
+        hash.put("aulas", professor.getAulas().size() + " aulas semanais" + "\t" + anoSemestre);
 
         return hash;
     }
