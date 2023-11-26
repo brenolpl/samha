@@ -12,6 +12,7 @@ import {AlteracaoDialogComponent} from "../../shared/alteracao-dialog/alteracao-
 import {PagedList} from "../../shared/paged-list";
 import {animate, state, style, transition, trigger} from "@angular/animations";
 import {HttpEvent, HttpEventType} from "@angular/common/http";
+import {error} from "protractor";
 
 
 @Component({
@@ -562,11 +563,10 @@ export class OfertaComponent implements OnInit, OnDestroy {
       next => {
         this.executeOfertaQuery();
         this.notification.success('As aulas foram salvas com sucesso!');
-      },
-      catchError(err => {
-        this.notification.handleError(err);
-        return of(new Error(err))
-      })
+      }, error => {
+        this.notification.handleError(error);
+        this.ofertaChanged = false;
+      }
     )
   }
 

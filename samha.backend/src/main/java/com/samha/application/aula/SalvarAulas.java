@@ -167,6 +167,7 @@ public class SalvarAulas extends UseCase<List<Aula>> {
             novaOferta.setSemestre(2);
             novaOferta.setIntervaloMinimo((int) aula.getOferta().getIntervaloMinimo());
             novaOferta.setTempoMaximoTrabalho(((int)aula.getOferta().getTempoMaximoTrabalho()));
+            novaOferta.setPublica(false);
             return ofertaRepository.saveAndFlush(novaOferta);
         }
     }
