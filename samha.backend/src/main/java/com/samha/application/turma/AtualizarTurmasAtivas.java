@@ -34,14 +34,16 @@ public class AtualizarTurmasAtivas extends UseCase<Boolean> {
     }
 
     private boolean verificarTurmaContinuaAtiva(Turma turma) {
-        int semestreAtual = -1;
+        int anoAtual = Calendar.getInstance().get(Calendar.YEAR);
+        int semestreAtual;
+
+        if (anoAtual < turma.getAno()) return true;
+
         if(Calendar.getInstance().get(Calendar.MONTH) >= Calendar.getInstance().get(Calendar.JULY)){
             semestreAtual = 2;
         }else{
             semestreAtual = 1;
         }
-
-        int anoAtual = Calendar.getInstance().get(Calendar.YEAR);
 
         int periodo;
 

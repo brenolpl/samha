@@ -31,6 +31,9 @@ public class TurmaAud extends BaseLogEntity {
     @Column(name = "semestre", updatable = false)
     private int semestre;
 
+    @Column(name = "ativa", updatable = false)
+    private Boolean ativa;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "matriz_curricular_id", updatable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private MatrizCurricular matriz;
@@ -89,5 +92,13 @@ public class TurmaAud extends BaseLogEntity {
 
     public void setMatriz(MatrizCurricular matriz) {
         this.matriz = matriz;
+    }
+
+    public Boolean getAtiva() {
+        return ativa;
+    }
+
+    public void setAtiva(Boolean ativa) {
+        this.ativa = ativa;
     }
 }
