@@ -397,7 +397,7 @@ public class ObterRestricoesAulas extends UseCase<List<Conflito>> {
                 for (int i = 0; i < anteriores.size(); i++) {
                     Aula primeira = anteriores.get(i);
 
-                    double tempo = Horarios.obterQuantidadeHoras(primeira, aula, Horarios.TEMPO_MAXIMO) + Horarios.INTERVALO_MINIMO_ALMOCO;
+                    double tempo = Horarios.obterQuantidadeHoras(primeira, aula, Horarios.TEMPO_MAXIMO);
 
                     if (tempo> aula.getOferta().getTempoMaximoTrabalho())
                         montarMensagemTempoMaximo(aula, primeira, tempo, professor);
