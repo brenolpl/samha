@@ -11,6 +11,7 @@ import com.samha.commons.UseCaseFacade;
 import com.samha.domain.Coordenadoria;
 import com.samha.domain.Curso;
 import com.samha.domain.Eixo;
+import com.samha.domain.Label;
 import com.samha.domain.Professor;
 import com.samha.domain.Turma;
 import com.samha.domain.dto.RelatorioDto;
@@ -43,6 +44,9 @@ public class PublicController {
     public List<Eixo> getEixo() {
         return genericRepository.findAll(Eixo.class);
     }
+
+    @GetMapping("label/all")
+    public List<Label> getLabel() {return genericRepository.findAll(Label.class);}
 
     @PostMapping("coordenadoria/query")
     public PagedList getCoordenadorias(@RequestBody Query query) {

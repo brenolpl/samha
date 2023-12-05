@@ -1,17 +1,35 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Observable, range} from "rxjs";
-import {map, toArray} from "rxjs/operators";
+import {first, map, toArray} from "rxjs/operators";
+import {ILabel} from "../../label/label.component";
+import {DataService} from "../../shared/service/data.service";
+import {NotificationService} from "../../shared/service/notification.service";
 
 @Component({
   selector: 'samha-report-aula-grid',
   templateUrl: './report-aula-grid.component.html',
   styleUrls: ['./report-aula-grid.component.css', '../../oferta/oferta-grid/oferta-grid.component.css']
 })
-export class ReportAulaGridComponent {
+export class ReportAulaGridComponent implements OnInit {
   @Input() entityData: any[];
   @Input() ano: number;
   @Input() semestre: number;
   public disciplinas: any[] = [];
+  public labels: ILabel[] = [];
+
+  constructor(private dataService: DataService,
+              private notification: NotificationService) {
+  }
+
+  ngOnInit() {
+    this.dataService.publicGetAll('label').pipe(first()).subscribe(next => {
+      this.labels = next.sort((a,b) => a.numero > b.numero ? 1 : -1);
+    }, error => this.notification.handleError(error))
+  }
+
+  getLabel(label: ILabel) {
+    return label?.inicio.toString().substring(0, 5);
+  }
 
   getMatrizAulasProfessor(aulasProfessor: any[]) {
     this.disciplinas = [];

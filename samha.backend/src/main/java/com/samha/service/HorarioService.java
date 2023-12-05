@@ -10,6 +10,11 @@ import javax.inject.Inject;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.ResolverStyle;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class HorarioService {
@@ -124,5 +129,34 @@ public class HorarioService {
             default:
                 return SEXTA;
         }
+    }
+
+    public Map<String, String> getGenericReportLabels(String turno, int type) {
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("HH:mm").withResolverStyle(ResolverStyle.STRICT);
+
+        List<Label> labels = genericRepository.findAll(Label.class).stream().sorted(Comparator.comparing(Label::getNumero)).collect(Collectors.toList());;
+        Label labelNoturno = labels.stream().filter(l -> l.getNumero().equals(11) && l.getTurno().equals(2)).findFirst().get();
+
+        Map<String, String> labelMap = new HashMap<>();
+
+        for (var label : labels) {
+            if (label.getTurno().equals(2) && label.getNumero().equals(11)) continue;
+            if (label.getNumero().equals(11) && turno.equalsIgnoreCase("NOTURNO") && type == 1) {
+                String horaInicioConcatenada = label.getInicio().format(formato) + "\n" + label.getFim().format(formato);
+                String horaFimConcatenada = labelNoturno.getInicio().format(formato) + "\n" + labelNoturno.getFim().format(formato);
+                labelMap.put("A" + label.getNumero(), horaInicioConcatenada + "\n --- \n" + horaFimConcatenada);
+                labelMap.put("A" + label.getNumero() + "2", " ");
+            } else if (label.getNumero().equals(11) && turno.equalsIgnoreCase("NOTURNO") && type == 2) {
+                labelMap.put("A" + label.getNumero() + "2", labelNoturno.getInicio().format(formato) + " " + labelNoturno.getFim().format(formato));
+                labelMap.put("A" + label.getNumero(), " ");
+            } else if (label.getNumero().equals(11) && !turno.equalsIgnoreCase("NOTURNO")) {
+                labelMap.put("A" + label.getNumero() + "2", label.getInicio().format(formato) + " " + label.getFim().format(formato));
+                labelMap.put("A" + label.getNumero(), " ");
+            }else {
+                labelMap.put("A" + label.getNumero(), label.getInicio().format(formato) + " " + label.getFim().format(formato));
+            }
+        }
+
+        return labelMap;
     }
 }

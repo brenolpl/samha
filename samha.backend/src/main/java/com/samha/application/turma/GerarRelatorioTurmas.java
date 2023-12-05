@@ -13,6 +13,7 @@ import com.samha.domain.dto.AulaDto;
 import com.samha.domain.dto.RelatorioDto;
 import com.samha.persistence.generics.IGenericRepository;
 import com.samha.service.EmailService;
+import com.samha.service.HorarioService;
 import com.samha.util.JasperHelper;
 import com.samha.util.Zipper;
 import org.springframework.scheduling.annotation.Async;
@@ -45,6 +46,9 @@ public class GerarRelatorioTurmas extends UseCase<Map<String, Object>> {
     private IGenericRepository genericRepository;
 
     @Inject
+    private HorarioService horarioService;
+
+    @Inject
     private EmailService emailService;
 
     @Override
@@ -61,6 +65,7 @@ public class GerarRelatorioTurmas extends UseCase<Map<String, Object>> {
             }
             Map<String, String> parametros = gerarHashTurma(turma);
             parametros.putAll(this.preencherAulas(turma));
+            parametros.putAll(horarioService.getGenericReportLabels(turma.getTurno(), 2));
             Map<String, Object> arquivo = new HashMap<>();
             String nomeExport = nomeTurma + "-" + relatorioDto.getAno() + "-" + relatorioDto.getSemestre() + ".pdf";
             arquivo.put("nome", nomeExport);
