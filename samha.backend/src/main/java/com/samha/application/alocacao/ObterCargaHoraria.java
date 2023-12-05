@@ -3,21 +3,21 @@ package com.samha.application.alocacao;
 import com.samha.commons.UseCase;
 import com.samha.domain.Alocacao;
 import com.samha.domain.Alocacao_;
-import com.samha.domain.Aula;
-import com.samha.domain.Aula_;
 import com.samha.domain.Coordenadoria_;
+import com.samha.domain.Disciplina;
 import com.samha.domain.Eixo_;
 import com.samha.domain.Professor;
 import com.samha.domain.Professor_;
 import com.samha.persistence.IProfessorRepository;
 import com.samha.persistence.generics.IGenericRepository;
-import com.samha.util.Horarios;
+import com.samha.service.HorarioService;
 
 import javax.inject.Inject;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class ObterCargaHoraria extends UseCase<List<Professor>> {
@@ -46,6 +46,9 @@ public class ObterCargaHoraria extends UseCase<List<Professor>> {
     @Inject
     private IProfessorRepository professorRepository;
 
+    @Inject
+    private HorarioService horarioService;
+
     @Override
     protected List<Professor> execute() throws Exception {
         List<Professor> professores = genericRepository.find(Professor.class, q -> q.where(
@@ -63,11 +66,9 @@ public class ObterCargaHoraria extends UseCase<List<Professor>> {
                     q.equal(q.get(Alocacao_.semestre), semestre)
             ));
             Double tempoAula = 0D;
-            for (var alocacao : alocacoesProfessor) {
-                List<Aula> aulasAlocacao = genericRepository.find(Aula.class, q -> q.where(
-                        q.equal(q.get(Aula_.alocacao), alocacao)
-                ));
-                for (var aula : aulasAlocacao) tempoAula += Horarios.obterQuantidadeHoras(aula, aula, Horarios.TEMPO_MAXIMO);
+            Set<Disciplina> disciplinas = alocacoesProfessor.stream().map(a -> a.getDisciplina()).collect(Collectors.toSet());
+            for (var disc : disciplinas) {
+                tempoAula += horarioService.getTotalHorasDisciplina(disc.getCargaHoraria());
             }
             professor.setCargaHoraria(tempoAula);
             Double minutos = tempoAula - Math.floor(tempoAula);
@@ -75,7 +76,7 @@ public class ObterCargaHoraria extends UseCase<List<Professor>> {
             String cargaHoraria = (tempoAula.intValue() < 10 ? "0" + tempoAula.intValue() : tempoAula.intValue() )+ ":" + (minutosArredondados < 10 ? "0" + minutosArredondados : minutosArredondados);
             professor.setCargaHorariaCalculada(cargaHoraria);
         }
-//        professorRepository.saveAllAndFlush(professores);
+        professorRepository.saveAll(professores);
         return professores;
     }
 }

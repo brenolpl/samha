@@ -9,6 +9,7 @@ const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'home'},
   { path: 'login', component: LoginComponent},
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard], canDeactivate: [AuthGuard]},
+  { path: 'label', canActivate: [AuthGuard], canDeactivate: [AuthGuard], loadChildren: () => import('./label/label.module').then(m => m.LabelModule) },
   { path: 'professor', canActivate: [AuthGuard], canDeactivate: [AuthGuard], loadChildren: () => import('./professor/professor.module').then(m => m.ProfessorModule) },
   { path: 'coordenador', canActivate: [AuthGuard], canDeactivate: [AuthGuard], loadChildren: () => import('./coordenador/coordenador.module').then(m => m.CoordenadorModule)},
   { path: 'alocacao', canActivate: [AuthGuard], canDeactivate: [AuthGuard], loadChildren: () => import('./alocacao/alocacao.module').then(m => m.AlocacaoModule)},

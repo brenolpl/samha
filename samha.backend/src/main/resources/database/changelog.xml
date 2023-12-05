@@ -10,4 +10,6 @@
     <includeAll path="1.2" relativeToChangelogFile="true"></includeAll>
     <changeSet id="1.2" author="breno.leal"><tagDatabase tag="1.2"></tagDatabase></changeSet>
 
+    <includeAll path="1.3" relativeToChangelogFile="true"></includeAll>
+    <changeSet id="1.3" author="breno.leal"><tagDatabase tag="1.3"></tagDatabase></changeSet>
 </databaseChangeLog>

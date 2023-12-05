@@ -307,7 +307,6 @@ export class AlocacaoMainComponent implements OnInit {
   private verificarDados() {
     if (this.selectedDisciplinaRowIndex == null || this.selectedDisciplinaRowIndex == undefined
       || this.selectedProfessorRowIndexes.length == 0) {
-      console.log(this);
       this.notification.error('Selecione uma disciplina e pelo menos 1 (Um) professor!');
       return false;
     }

@@ -11,6 +11,7 @@ export enum MenuEnum{
   EIXO,
   COORDENADORIA,
   MATRIZ,
+  LABEL
 }
 
 /*

@@ -15,7 +15,7 @@ export class LocalStorageService {
   }
 
   get(key: string) {
-    if (this.storage) {
+    if (this.storage.getItem(key)) {
       return JSON.parse(this.storage.getItem(key));
     }
   }
@@ -28,9 +28,10 @@ export class LocalStorageService {
     return false;
   }
 
-  clear(): boolean {
+  clearTokens(): boolean {
     if (this.storage) {
-      this.storage.clear();
+      this.storage.removeItem('access_token');
+      this.storage.removeItem('refresh_token');
       return true;
     }
     return false;

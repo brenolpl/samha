@@ -5,6 +5,8 @@ import {Router} from "@angular/router";
 import {error} from "protractor";
 import {NotificationService} from "./notification.service";
 import {Subscription} from "rxjs";
+import {LocalStorageService} from "./local-storage.service";
+import {time} from "html2canvas/dist/types/css/types/time";
 
 
 /**
@@ -19,7 +21,6 @@ import {Subscription} from "rxjs";
  */
 @Injectable({providedIn: 'root'})
 export class SecurityService {
-  public isUserActive: boolean = false;
   private accessTokenTimer;
   private refreshTokenTimer;
   private refreshTokenWarnTimer;
@@ -27,15 +28,16 @@ export class SecurityService {
 
   constructor(private authService: AuthService,
               private router: Router,
-              private notification: NotificationService) {
+              private notification: NotificationService,
+              private localStorageService: LocalStorageService) {
   }
 
-  private getExpirationTime(token: string): number {
+  private getExpirationTime(token: string): Date {
     const tokenParts = token.split('.');
 
     if (tokenParts.length !== 3) {
       // Invalid token format
-      return 0;
+      return new Date();
     }
 
     const [, payloadBase64] = tokenParts;
@@ -44,63 +46,61 @@ export class SecurityService {
 
     if (!payload.exp) {
       // Expiration time not found in the payload
-      return 0;
+      return new Date();
     }
 
-    return payload.exp * 1000; // Convert expiration time to milliseconds
+    return new Date(payload.exp * 1000); // Convert expiration time to milliseconds
   }
 
   private handleAccessTokenExpiration(): void {
     this.authService.refreshToken().pipe(first()).subscribe(response => {
-      localStorage.setItem("access_token", JSON.stringify(response.access_token));
+      this.localStorageService.set("access_token", response.access_token);
     })
   }
 
   private handleRefreshTokenExpiration() {
     let stay = confirm('Sua sessão expira em 10 minutos! Clique em OK para renovar sua sessão.');
+    const timeout = setTimeout(() => {
+      this.logout();
+    }, 9 * 60 * 1000)
     if (stay) {
+      clearInterval(timeout);
       this.authService.refreshSession().pipe(first()).subscribe(response => {
-        localStorage.clear();
-        const access_token = JSON.stringify(response.access_token);
-        const refresh_token = JSON.stringify(response.refresh_token);
-        localStorage.setItem('access_token', access_token);
-        localStorage.setItem('refresh_token', refresh_token);
+        this.localStorageService.clearTokens();
+        this.localStorageService.set('access_token', response.access_token);
+        this.localStorageService.set('refresh_token', response.refresh_token);
         this.initialize();
       }, error => this.notification.handleError(error))
     }
   }
 
   public initialize() {
-    const access_token = localStorage.getItem('access_token');
-    const refresh_token = localStorage.getItem('refresh_token');
+    const access_token = this.localStorageService.get('access_token');
+    const refresh_token = this.localStorageService.get('refresh_token');
     this.subs = this.authService.isTokenValid().subscribe(
       valid => {
         if (access_token && refresh_token && valid) {
-          this.isUserActive = true;
-          const currentMillis = new Date().getTime();
+          const currentDate = new Date();
           const accessTokenExpiration = this.getExpirationTime(access_token);
           const refreshTokenExpiration = this.getExpirationTime(refresh_token);
+          const differenceBetweenAccess = this.getDifferenceBetweenHours(accessTokenExpiration, currentDate);
+          const differenceBetweenRefresh = this.getDifferenceBetweenHours(refreshTokenExpiration, currentDate);
 
-          if (currentMillis > refreshTokenExpiration) localStorage.clear();
-
-          if (currentMillis > accessTokenExpiration && currentMillis < refreshTokenExpiration) {
-            if (this.isUserActive) this.handleAccessTokenExpiration();
-            else this.logout();
+          if (differenceBetweenAccess <= 0) this.localStorageService.clearTokens();
+          if (differenceBetweenAccess <= 0 && differenceBetweenRefresh > 0) {
+            this.handleAccessTokenExpiration();
           }else {
-            const accessTokenExpirationTime = accessTokenExpiration - currentMillis;
-            const refreshTokenExpirationTime = refreshTokenExpiration - currentMillis;
-            const refreshTokenWarningTime = refreshTokenExpirationTime - (590 * 60 * 1000); //a mensagem aparece 10 minutos antes de vencer o refresh_token.
+            const refreshTokenWarningTime = differenceBetweenRefresh * 60 * 60 * 1000;
             this.clearTimers();
             this.accessTokenTimer = setTimeout(() => {
-              if (this.isUserActive) this.handleAccessTokenExpiration();
-              else this.logout();
-            }, accessTokenExpirationTime)
+              this.handleAccessTokenExpiration();
+            }, differenceBetweenAccess * 60 * 60 * 1000)
             this.refreshTokenWarnTimer = setTimeout(() => {
               this.handleRefreshTokenExpiration();
             }, refreshTokenWarningTime)
             this.refreshTokenTimer = setTimeout(() => {
               this.logout();
-            }, refreshTokenExpirationTime)
+            }, differenceBetweenRefresh * 60 * 60 * 1000)
           }
         }
       }
@@ -108,7 +108,7 @@ export class SecurityService {
   }
 
   private logout() {
-    localStorage.clear();
+    this.localStorageService.clearTokens();
     this.router.navigate(['login']).then(_ => window.location.reload());
   }
 
@@ -116,5 +116,11 @@ export class SecurityService {
     if (this.accessTokenTimer) clearTimeout(this.accessTokenTimer);
     if (this.refreshTokenTimer) clearTimeout(this.refreshTokenTimer);
     if (this.refreshTokenWarnTimer) clearTimeout(this.refreshTokenWarnTimer);
+  }
+
+  private getDifferenceBetweenHours(tokenDate: Date, currentDate: Date): number {
+    if (tokenDate.getDay() > currentDate.getDay()) return tokenDate.getHours() + 24 - currentDate.getHours();
+    else if (tokenDate.getDay() === currentDate.getDay()) return tokenDate.getHours() - currentDate.getHours();
+    else return -1;
   }
 }

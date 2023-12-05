@@ -64,7 +64,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.authService.isLogado = true;
           this.router.navigate(['home']);
         } else {
-          this.localStorage.clear();
+          this.localStorage.clearTokens();
           const novaSenha = this.form.get('novaSenha');
           const confirmarSenha = this.form.get('confirmarSenha');
           novaSenha.addValidators([Validators.required, Validators.pattern('^(?=.*[!@#$%^&*(),.?":{}|<>])(?=.*[A-Z])(?=.*[a-z])(?=.*\\d).{8,}$')])

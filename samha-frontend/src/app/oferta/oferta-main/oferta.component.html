@@ -266,7 +266,7 @@
           [aulasConflitantes]="aulasConflitantes"
           [turno]="formGroup.get('turno').value"
           [novaAula]="novaAula"
-          [turmaName]="turmaControl.value?.nome"
+          [turma]="turmaControl.value"
           (onAulaIndexChange)="onAulaIndexChanged($event)"
           (onNovaAulaCreated)="onNovaAulaCreated($event)"
           (onAulaDeleted)="onAulaDeleted($event)"

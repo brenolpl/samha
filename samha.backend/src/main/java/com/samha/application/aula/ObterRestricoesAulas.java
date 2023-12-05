@@ -10,11 +10,12 @@ import com.samha.domain.Professor;
 import com.samha.domain.Professor_;
 import com.samha.domain.RestricaoProfessor;
 import com.samha.domain.RestricaoProfessor_;
+import com.samha.domain.Turma_;
 import com.samha.domain.dto.Conflito;
 import com.samha.domain.dto.Mensagem;
 import com.samha.domain.dto.RestricaoRequest;
 import com.samha.persistence.generics.IGenericRepository;
-import com.samha.util.Horarios;
+import com.samha.service.HorarioService;
 
 import javax.inject.Inject;
 import java.time.LocalTime;
@@ -26,8 +27,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import static com.samha.util.Horarios.obterStringDia;
 
 public class ObterRestricoesAulas extends UseCase<List<Conflito>> {
     private RestricaoRequest restricaoRequest;
@@ -46,6 +45,9 @@ public class ObterRestricoesAulas extends UseCase<List<Conflito>> {
 
     @Inject
     private IGenericRepository genericRepository;
+
+    @Inject
+    private HorarioService horarioService;
 
     @Override
     protected List<Conflito> execute() throws Exception {
@@ -144,10 +146,10 @@ public class ObterRestricoesAulas extends UseCase<List<Conflito>> {
         mensagem.setTitulo("Restrição de Turno");
         List<String> restricoes = new ArrayList<>();
         restricoes.add("Este professor foi alocado no turno MATUTINO e NOTURNO no mesmo dia");
-        String dia = Horarios.obterStringDia(primeira.getDia());
+        String dia = horarioService.obterStringDia(primeira.getDia());
         restricoes.add(dia);
-        restricoes.add(primeira.getOferta().getTurma().getNome() + ": " + Horarios.horarioInicial(primeira.getNumero()));
-        restricoes.add(ultima.getOferta().getTurma().getNome() + ": " + Horarios.horarioInicial(ultima.getNumero()));
+        restricoes.add(primeira.getOferta().getTurma().getNome() + ": " + horarioService.getHorarioInicial(primeira.getNumero()));
+        restricoes.add(ultima.getOferta().getTurma().getNome() + ": " + horarioService.getHorarioInicial(ultima.getNumero()));
         mensagem.setRestricoes(restricoes);
         mensagem.getAulas().add(primeira);
         mensagem.getAulas().add(ultima);
@@ -175,7 +177,7 @@ public class ObterRestricoesAulas extends UseCase<List<Conflito>> {
     private void montarMensagemConflitoIntervaloTurno(Aula ultima, Aula primeira, Professor professor) {
         String turnoUltimaAula = this.getTurnoPorAula(ultima.getTurno());
         String turnoPrimeiraAula = this.getTurnoPorAula(primeira.getTurno());
-        String dia = Horarios.obterStringDia(ultima.getDia());
+        String dia = horarioService.obterStringDia(ultima.getDia());
         Mensagem mensagem = new Mensagem();
         mensagem.setTitulo("Restrição de turno");
         mensagem.setTipo(2);
@@ -183,8 +185,8 @@ public class ObterRestricoesAulas extends UseCase<List<Conflito>> {
         List<String> restricoes = new ArrayList<>();
         restricoes.add("Este professor não possui um intervalo entre o turno " + turnoUltimaAula + " e " + turnoPrimeiraAula);
         restricoes.add(dia);
-        restricoes.add(ultima.getOferta().getTurma().getNome() + ": " + Horarios.horarioInicial(ultima.getNumero()));
-        restricoes.add(primeira.getOferta().getTurma().getNome() + ": " + Horarios.horarioInicial(primeira.getNumero()));
+        restricoes.add(ultima.getOferta().getTurma().getNome() + ": " + horarioService.getHorarioInicial(ultima.getNumero()));
+        restricoes.add(primeira.getOferta().getTurma().getNome() + ": " + horarioService.getHorarioInicial(primeira.getNumero()));
         mensagem.getAulas().add(ultima);
         mensagem.getAulas().add(primeira);
         mensagem.setRestricoes(restricoes);
@@ -210,9 +212,9 @@ public class ObterRestricoesAulas extends UseCase<List<Conflito>> {
             resposta = identificarNumeroAulaConflitante(restricao, aula.getNumero());
 
             if (resposta) {
-                String dia = Horarios.obterStringDia(aula.getDia());
+                String dia = horarioService.obterStringDia(aula.getDia());
                 restricoesMensagens.add(dia);
-                restricoesMensagens.add(aula.getOferta().getTurma().getNome() + ": " + Horarios.horarioInicial(aula.getNumero()));
+                restricoesMensagens.add(aula.getOferta().getTurma().getNome() + ": " + horarioService.getHorarioInicial(aula.getNumero()));
                 restricoesMensagens.add("Descrição: " + restricao.getNome());
                 if (restricao.getDescricao() != null) restricoesMensagens.add(restricao.getDescricao());
                 mensagem.setRestricoes(restricoesMensagens);
@@ -332,7 +334,7 @@ public class ObterRestricoesAulas extends UseCase<List<Conflito>> {
             if(aula.getDia() != 0){
                 primeiraAula = aula;
             }
-            double tempo = Horarios.obterQuantidadeHoras(primeiraAula, ultimaAula, Horarios.INTERVALO_MINIMO);
+            double tempo = horarioService.obterQuantidadeHoras(primeiraAula, ultimaAula, HorarioService.INTERVALO_MINIMO);
             if(tempo< aula.getOferta().getIntervaloMinimo()){
                 montarMensagemIntervaloMinimo(ultimaAula, primeiraAula, tempo, professor);
             }
@@ -349,15 +351,15 @@ public class ObterRestricoesAulas extends UseCase<List<Conflito>> {
             novoConflito.setProfessor(professor);
             conflitos.add(novoConflito);
         }
-        String diaAnterior = obterStringDia(ultima.getDia());
-        String diaAtual = obterStringDia(primeira.getDia());
+        String diaAnterior = horarioService.obterStringDia(ultima.getDia());
+        String diaAtual = horarioService.obterStringDia(primeira.getDia());
 
-        String horarioFinal = Horarios.horarioFinal(ultima.getNumero());
-        String horarioInicial = Horarios.horarioInicial(primeira.getNumero());
+        String horarioFinal = horarioService.getHorarioFinal(ultima.getNumero());
+        String horarioInicial = horarioService.getHorarioInicial(primeira.getNumero());
 
         Mensagem mensagem = new Mensagem();
 
-        mensagem.setTitulo("Intervalo mínimo de descanso inferior ao permitido: " + Horarios.getTimeFromDouble(tempo).toString() + " horas.");
+        mensagem.setTitulo("Intervalo mínimo de descanso inferior ao permitido: " + horarioService.getTimeFromDouble(tempo).toString() + " horas.");
         mensagem.setCor(CorEnum.VERMELHO.getId());
         mensagem.getAulas().add(ultima);
         mensagem.getAulas().add(primeira);
@@ -387,7 +389,7 @@ public class ObterRestricoesAulas extends UseCase<List<Conflito>> {
                 for (int j = 0; j < proximas.size(); j++) {
                     Aula ultima = proximas.get(j);
 
-                    double tempo = Horarios.obterQuantidadeHoras(aula, ultima, Horarios.TEMPO_MAXIMO);
+                    double tempo = horarioService.obterQuantidadeHoras(aula, ultima, HorarioService.TEMPO_MAXIMO);
 
                     if (tempo > aula.getOferta().getTempoMaximoTrabalho())
                         montarMensagemTempoMaximo(ultima, aula, tempo, professor);
@@ -397,7 +399,7 @@ public class ObterRestricoesAulas extends UseCase<List<Conflito>> {
                 for (int i = 0; i < anteriores.size(); i++) {
                     Aula primeira = anteriores.get(i);
 
-                    double tempo = Horarios.obterQuantidadeHoras(primeira, aula, Horarios.TEMPO_MAXIMO);
+                    double tempo = horarioService.obterQuantidadeHoras(primeira, aula, HorarioService.TEMPO_MAXIMO);
 
                     if (tempo> aula.getOferta().getTempoMaximoTrabalho())
                         montarMensagemTempoMaximo(aula, primeira, tempo, professor);
@@ -417,12 +419,12 @@ public class ObterRestricoesAulas extends UseCase<List<Conflito>> {
             conflitos.add(novoConflito);
         }
 
-        LocalTime hour = Horarios.getTimeFromDouble(tempo);
+        LocalTime hour = horarioService.getTimeFromDouble(tempo);
 
         novoConflito.setProfessor(professor);
 
         Mensagem mensagem = new Mensagem();
-        String dia = Horarios.obterStringDia(ultima.getDia());
+        String dia = horarioService.obterStringDia(ultima.getDia());
         mensagem.setTitulo("Tempo máximo de trabalho superior ao permitido: " + hour.toString() + " horas.");
         mensagem.setCor(CorEnum.VERMELHO.getId());
         mensagem.getAulas().add(ultima);
@@ -430,8 +432,8 @@ public class ObterRestricoesAulas extends UseCase<List<Conflito>> {
         mensagem.setTipo(1);
         List<String> restricoes = new ArrayList<>();
         restricoes.add(dia);
-        restricoes.add(primeira.getOferta().getTurma().getNome() + ": " + Horarios.horarioInicial(primeira.getNumero()));
-        restricoes.add(ultima.getOferta().getTurma().getNome() + ": " + Horarios.horarioFinal(ultima.getNumero()));
+        restricoes.add(primeira.getOferta().getTurma().getNome() + ": " + horarioService.getHorarioInicial(primeira.getNumero()));
+        restricoes.add(ultima.getOferta().getTurma().getNome() + ": " + horarioService.getHorarioFinal(ultima.getNumero()));
 
         mensagem.setRestricoes(restricoes);
         if(verificarMensagemExistente(mensagem, novoConflito)) novoConflito.getMensagens().add(mensagem);
@@ -457,6 +459,7 @@ public class ObterRestricoesAulas extends UseCase<List<Conflito>> {
                         q.equal(q.get(Aula_.alocacao).get(Alocacao_.professor2).get(Professor_.id), professor.getId())
                 ),
                 q.notEqual(q.get(Aula_.oferta).get(Oferta_.id), aula.getOferta().getId()),
+                q.equal(q.get(Aula_.oferta).get(Oferta_.turma).get(Turma_.ativa), true),
                 q.equal(q.get(Aula_.oferta).get(Oferta_.ano), aula.getOferta().getAno()),
                 q.equal(q.get(Aula_.oferta).get(Oferta_.semestre), aula.getOferta().getSemestre())
         ));
@@ -469,7 +472,7 @@ public class ObterRestricoesAulas extends UseCase<List<Conflito>> {
             List<String> restricoes = new ArrayList<>();
             for (Aula restricao : aulasProfessor) {
                 restricoes.add(restricao.getOferta().getTurma().getNome() + " - " + restricao.getAlocacao().getDisciplina().getNome() + ". ");
-                restricoes.add(Horarios.horarioInicial(aula.getNumero()) + " a " + Horarios.horarioFinal(aula.getNumero()));
+                restricoes.add(horarioService.getHorarioInicial(aula.getNumero()) + " a " + horarioService.getHorarioFinal(aula.getNumero()));
                 mensagem.getAulas().add(aula);
             }
             mensagem.setRestricoes(restricoes);

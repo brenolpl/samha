@@ -135,7 +135,6 @@ export class RelatorioTurmaComponent implements OnInit, OnDestroy {
         .subscribe((event: HttpEvent<any>) => {
           if (event.type === HttpEventType.DownloadProgress) {
           } else if (event.type === HttpEventType.Response) {
-            console.log(event.body);
             FunctionHelper.downloadFile(event.body.nomeArquivo, event.body.bytes);
             this.notification.success('Relatório gerado com sucesso!');
             this.isGenerating = false;
@@ -149,7 +148,6 @@ export class RelatorioTurmaComponent implements OnInit, OnDestroy {
         .subscribe((event: HttpEvent<any>) => {
           if (event.type === HttpEventType.DownloadProgress) {
           } else if (event.type === HttpEventType.Response) {
-            console.log(event.body);
             FunctionHelper.downloadFile(event.body.nomeArquivo, event.body.bytes);
             this.notification.success('Relatório gerado com sucesso!');
             this.isGenerating = false;

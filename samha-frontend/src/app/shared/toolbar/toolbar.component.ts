@@ -25,7 +25,7 @@ export class ToolbarComponent implements OnInit {
   onExitClick() {
     this.authService.isLogado = false;
     this.authService.loggedIn.emit(false);
-    this.localStorage.clear();
+    this.localStorage.clearTokens();
     window.location.reload();
   }
 

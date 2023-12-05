@@ -1,21 +1,44 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {ILabel} from "../../label/label.component";
+import {DataService} from "../../shared/service/data.service";
+import {NotificationService} from "../../shared/service/notification.service";
+import {first} from "rxjs/operators";
 
 @Component({
   selector: 'samha-oferta-grid',
   templateUrl: './oferta-grid.component.html',
   styleUrls: ['./oferta-grid.component.css']
 })
-export class OfertaGridComponent {
+export class OfertaGridComponent implements OnInit {
   @Input() matriz: any[][] = [[]];
   @Input() novaAula: any;
   @Input() turno: string;
-  @Input() turmaName: string = '';
+  @Input() turma: any;
   @Input() aulasConflitantes: any[] = [];
   @Output() public onNovaAulaCreated = new EventEmitter<any>();
   @Output() public onAulaIndexChange = new EventEmitter<any>();
   @Output() public onAulaDeleted = new EventEmitter<any>();
+  public labelsMatutino: ILabel[] = [];
+  public labelsVespertino: ILabel[] = [];
+  public labelsNoturno: ILabel[] = [];
   highlightedRowIndex: number = -1;
   highlightedColIndex: number = -1;
+
+  constructor(private dataService: DataService,
+              private notification: NotificationService) {
+  }
+
+  ngOnInit() {
+    this.dataService.getAll('label').pipe(first()).subscribe(
+      (result: ILabel[]) => {
+        result = result.sort((a, b) => a.numero > b.numero ? 1 : -1);
+        this.labelsMatutino = result.filter(r => r.turno === 0);
+        this.labelsVespertino = result.filter(r => r.turno === 1);
+        this.labelsNoturno = result.filter(r => r.turno === 2);
+      },
+      error => this.notification.handleError(error)
+    );
+  }
 
   onDragOver(event: DragEvent, rowIndex: number, colIndex: number) {
     event.preventDefault();
@@ -182,5 +205,9 @@ export class OfertaGridComponent {
     this.onAulaDeleted.emit(item);
     this.highlightedRowIndex = -1;
     this.highlightedColIndex = -1;
+  }
+
+  getLabel(label: ILabel) {
+    return label?.inicio.toString().substring(0, 5) + ' a ' + label?.fim.toString().substring(0, 5);
   }
 }

@@ -21,6 +21,7 @@ import {alocacaoLogColumns} from "../../meta-model/alocacao";
 import {NotificationService} from "../service/notification.service";
 import {not} from "rxjs/internal-compatibility";
 import {ofertaLogColumns} from "../../meta-model/oferta";
+import {labelLogColumns} from "../../meta-model/label";
 
 @Component({
   selector: 'samha-log',
@@ -135,6 +136,9 @@ export class LogComponent extends TableComponent implements OnInit {
         this.toolbarHeader = 'Alocações';
         this.columns = alocacaoLogColumns;
         break;
+      case 'label':
+        this.toolbarHeader = 'Label';
+        this.columns = labelLogColumns;
     }
   }
 

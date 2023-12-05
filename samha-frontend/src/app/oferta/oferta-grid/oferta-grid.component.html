@@ -3,33 +3,38 @@
     <tr style="line-height: 20px;">
       <td class="turma-cell-header">Turma</td>
       <td style="width: 7px"></td>
-      <td [colSpan]="getColspan()" class="turma-cell-content">{{turmaName}}</td>
+      <td [colSpan]="getColspan()" class="turma-cell-content">{{turma?.nome}}</td>
     </tr>
     <tr style="height: 7px"></tr>
     <tr style="line-height: 20px;">
       <td class="invisible-cell"></td>
       <td style="width: 7px;"></td>
       <ng-container *ngIf="turno.toUpperCase() === 'MATUTINO'">
-        <td class="cell-title"><span>07:00 a 07:50</span></td>
-        <td class="cell-title"><span>07:55 a 08:45</span></td>
-        <td class="cell-title"><span>08:50 a 09:40</span></td>
-        <td class="cell-title"><span>10:00 a 10:50</span></td>
-        <td class="cell-title"><span>10:55 a 11:45</span></td>
-        <td class="cell-title"><span>11:50 a 12:40</span></td>
+        <td class="cell-title"><span>{{getLabel(labelsMatutino[0])}}</span></td>
+        <td class="cell-title"><span>{{getLabel(labelsMatutino[1])}}</span></td>
+        <td class="cell-title"><span>{{getLabel(labelsMatutino[2])}}</span></td>
+        <td class="cell-title"><span>{{getLabel(labelsMatutino[3])}}</span></td>
+        <td class="cell-title"><span>{{getLabel(labelsMatutino[4])}}</span></td>
+        <td class="cell-title"><span>{{getLabel(labelsMatutino[5])}}</span></td>
       </ng-container>
       <ng-container *ngIf="turno.toUpperCase() === 'VESPERTINO'">
-        <td class="cell-title"><span>12:50 a 13:40</span></td>
-        <td class="cell-title"><span>13:45 a 14:35</span></td>
-        <td class="cell-title"><span>14:40 a 15:30</span></td>
-        <td class="cell-title"><span>15:50 a 16:40</span></td>
-        <td class="cell-title"><span>16:45 a 17:35</span></td>
-        <td class="cell-title"><span>17:40 a 18:30</span></td>
+        <td class="cell-title"><span>{{getLabel(labelsVespertino[0])}}</span></td>
+        <td class="cell-title"><span>{{getLabel(labelsVespertino[1])}}</span></td>
+        <td class="cell-title"><span>{{getLabel(labelsVespertino[2])}}</span></td>
+        <td class="cell-title"><span>{{getLabel(labelsVespertino[3])}}</span></td>
+        <td class="cell-title"><span>{{getLabel(labelsVespertino[4])}}</span></td>
+        <ng-container *ngIf="turma.turno === 'VESPERTINO' || turma.turno === 'MATUTINO'">
+          <td class="cell-title"><span>{{getLabel(labelsVespertino[5])}}</span></td>
+        </ng-container>
+        <ng-container *ngIf="turma.turno === 'NOTURNO'">
+          <td class="cell-title"><span>{{getLabel(labelsNoturno[0])}}</span></td>
+        </ng-container>
       </ng-container>
       <ng-container *ngIf="turno.toUpperCase() === 'NOTURNO'">
-        <td class="cell-title"><span>18:50 a 19:35</span></td>
-        <td class="cell-title"><span>19:35 a 20:20</span></td>
-        <td class="cell-title"><span>20:30 a 21:15</span></td>
-        <td class="cell-title"><span>21:15 a 22:00</span></td>
+        <td class="cell-title"><span>{{getLabel(labelsNoturno[1])}}</span></td>
+        <td class="cell-title"><span>{{getLabel(labelsNoturno[2])}}</span></td>
+        <td class="cell-title"><span>{{getLabel(labelsNoturno[3])}}</span></td>
+        <td class="cell-title"><span>{{getLabel(labelsNoturno[4])}}</span></td>
       </ng-container>
     </tr>
   </thead>

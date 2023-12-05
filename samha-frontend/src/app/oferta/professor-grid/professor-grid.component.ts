@@ -7,13 +7,14 @@ import {first, map, tap, toArray} from "rxjs/operators";
 import {FormControl} from "@angular/forms";
 import {error} from "protractor";
 import {NotificationService} from "../../shared/service/notification.service";
+import {ILabel} from "../../label/label.component";
 
 @Component({
   selector: 'samha-professor-grid',
   templateUrl: './professor-grid.component.html',
   styleUrls: ['../oferta-grid/oferta-grid.component.css']
 })
-export class ProfessorGridComponent implements OnChanges, OnDestroy {
+export class ProfessorGridComponent implements OnInit, OnChanges, OnDestroy {
   @Input() public alocacao: any;
   @Input() public ano: string;
   @Input() public semestre: string;
@@ -21,6 +22,7 @@ export class ProfessorGridComponent implements OnChanges, OnDestroy {
   public aulasConflitantes: any[] = [];
   public aulas$: Observable<PagedList>;
   public selectionControl: FormControl = new FormControl(1);
+  public labels: ILabel[] = [];
   private aulasProfessor: PagedList;
   private selectionSub: Subscription;
 
@@ -32,6 +34,19 @@ export class ProfessorGridComponent implements OnChanges, OnDestroy {
 
       }
     })
+  }
+
+  ngOnInit() {
+    this.dataService.getAll('label').pipe(first()).subscribe(
+      (next: ILabel[]) => {
+          this.labels = next.sort((a, b) => a.numero > b.numero ? 1 : -1);
+      }, error => this.notificationService.handleError(error)
+
+    )
+  }
+
+  getLabel(label: ILabel) {
+    return label?.inicio.toString().substring(0, 5);
   }
 
   ngOnChanges(changes: SimpleChanges) {

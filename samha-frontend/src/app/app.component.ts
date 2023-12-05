@@ -101,6 +101,9 @@ export class AppComponent implements OnInit, OnDestroy{
       case MenuEnum.MATRIZ:
         this.router.navigate(['matrizCurricular']);
         break;
+      case MenuEnum.LABEL:
+        this.router.navigate(['label']);
+        break;
     }
   }
 
@@ -130,6 +133,8 @@ export class AppComponent implements OnInit, OnDestroy{
         return '360';
       case MenuEnum.MATRIZ:
         return 'grain';
+      case MenuEnum.LABEL:
+        return 'label';
     }
   }
 
@@ -157,15 +162,6 @@ export class AppComponent implements OnInit, OnDestroy{
       menus.push(...menusRestantes);
     }
     return menus;
-  }
-
-  @HostListener('document:mousemove', ['$event'])
-  onDocumentMouseMove(event: MouseEvent) {
-    this.securityService.isUserActive = true;
-    if (this.userActiveTimer) clearTimeout(this.userActiveTimer);
-    this.userActiveTimer = setTimeout(() => {
-      this.securityService.isUserActive = false;
-    }, 30 * 60 * 1000)
   }
 }
 
