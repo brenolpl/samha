@@ -13,6 +13,7 @@ import {PagedList} from "../../shared/paged-list";
 import {animate, state, style, transition, trigger} from "@angular/animations";
 import {HttpEvent, HttpEventType} from "@angular/common/http";
 import {error} from "protractor";
+import {LocalStorageService} from "../../shared/service/local-storage.service";
 
 
 @Component({
@@ -85,15 +86,23 @@ export class OfertaComponent implements OnInit, OnDestroy {
   ) {
     this.formGroup = formBuilder.group({
       turno: ['MATUTINO'],
-      ano: [new Date().getUTCFullYear()],
-      semestre: [new Date().getMonth() < 6 ? 1 : 2],
+      ano: [],
+      semestre: [],
       periodo: [1]
     });
-    this.anoCurrentValue = this.formGroup.get('ano').value;
-    this.semestreCurrentValue = 1;
+
   }
 
   ngOnInit(): void {
+    const anoSelecionado = localStorage.getItem('ano');
+    const semestreSelecionado = localStorage.getItem('semestre');
+    if (anoSelecionado) this.formGroup.get('ano').setValue(anoSelecionado);
+    else this.formGroup.get('ano').setValue(new Date().getUTCFullYear());
+    if (semestreSelecionado) this.formGroup.get('semestre').setValue(semestreSelecionado);
+    else this.formGroup.get('semestre').setValue(new Date().getMonth() < 6 ? 1 : 2);
+
+    this.anoCurrentValue = this.formGroup.get('ano').value;
+    this.semestreCurrentValue = this.formGroup.get('semestre').value;
   }
 
   goToLogOferta() {
@@ -201,6 +210,7 @@ export class OfertaComponent implements OnInit, OnDestroy {
   }
 
   onAnoChange(value: any) {
+    localStorage.setItem('ano', value);
     if (this.ofertaChanged) {
       const dialogRef = this.openDialog();
       dialogRef.afterClosed().pipe(first()).subscribe(
@@ -435,6 +445,7 @@ export class OfertaComponent implements OnInit, OnDestroy {
   }
 
   onSemestreChange(value: any) {
+    localStorage.setItem('semestre', value);
     if (this.ofertaChanged) {
       const dialogRef = this.openDialog();
       dialogRef.afterClosed().pipe(first()).subscribe(
