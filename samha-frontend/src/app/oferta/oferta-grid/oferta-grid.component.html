@@ -54,7 +54,7 @@
         <div
           *ngIf="item"
           (click)="deleteAula(item)"
-          class="clear-item">X</div>
+          [ngClass]="verificarAula(item) === 'background-red' ? 'clear-item-inverted' : 'clear-item'">X</div>
         <span style="text-overflow: ellipsis; white-space: nowrap; width: 90%"
               *ngIf="item?.alocacao">
           {{(item?.alocacao?.disciplina?.sigla || '') + ' - ' + getNomeEncurtadoProfessor(item?.alocacao?.professor1?.nome) + ' ' + getNomeEncurtadoProfessor(item?.alocacao?.professor2?.nome)}}

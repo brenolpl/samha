@@ -143,6 +143,23 @@
   align-content: center;
 }
 
+.clear-item-inverted {
+  display: flex;
+  width: 10%;
+  border-radius: 2px;
+  font-size: 10px;
+  cursor: pointer;
+  z-index: 15;
+  color: #FFF;
+  justify-content: center;
+  align-content: center;
+}
+
+.clear-item-inverted:hover {
+  background-color: #C7312C;
+  color: #FFF;
+}
+
 .clear-item:hover {
   background-color: #C7312C;
   color: #FFF;
