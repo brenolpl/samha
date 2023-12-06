@@ -11,7 +11,7 @@ export enum MenuEnum{
   EIXO,
   COORDENADORIA,
   MATRIZ,
-  LABEL
+  HORARIOS_AULA
 }
 
 /*

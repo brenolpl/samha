@@ -101,7 +101,7 @@ export class AppComponent implements OnInit, OnDestroy{
       case MenuEnum.MATRIZ:
         this.router.navigate(['matrizCurricular']);
         break;
-      case MenuEnum.LABEL:
+      case MenuEnum.HORARIOS_AULA:
         this.router.navigate(['label']);
         break;
     }
@@ -133,7 +133,7 @@ export class AppComponent implements OnInit, OnDestroy{
         return '360';
       case MenuEnum.MATRIZ:
         return 'grain';
-      case MenuEnum.LABEL:
+      case MenuEnum.HORARIOS_AULA:
         return 'label';
     }
   }
