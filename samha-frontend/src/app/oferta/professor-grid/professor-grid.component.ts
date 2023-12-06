@@ -77,7 +77,8 @@ export class ProfessorGridComponent implements OnInit, OnChanges, OnDestroy {
           },
           and: {
             'oferta.semestre': {equals: this.semestre},
-            'oferta.ano': {equals: this.ano}
+            'oferta.ano': {equals: this.ano},
+            'oferta.turma.ativa': {equals: true}
           }
         }))
         .pipe(
