@@ -307,6 +307,7 @@ public class ObterRestricoesAulas extends UseCase<List<Conflito>> {
     private Collection<? extends Aula> getAulasOutrasTurmasProfessor(Professor professor) {
         return genericRepository.find(Aula.class, q -> q.where(
                         q.equal(q.get(Aula_.oferta).get(Oferta_.ano), restricaoRequest.getOferta().getAno()),
+                        q.equal(q.get(Aula_.oferta).get(Oferta_.turma).get(Turma_.ativa), true),
                         q.equal(q.get(Aula_.oferta).get(Oferta_.semestre), restricaoRequest.getOferta().getSemestre()),
                         q.notEqual(q.get(Aula_.oferta).get(Oferta_.id), restricaoRequest.getOferta().getId()),
                         q.or(
