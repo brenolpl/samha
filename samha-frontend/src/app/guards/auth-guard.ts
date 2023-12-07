@@ -32,7 +32,7 @@ export class AuthGuard implements CanActivate, CanDeactivate<any> {
           }
         ),
         catchError(_ => {
-          return of(false);
+          return this.router.navigate(['login']);
         })
       )
     }

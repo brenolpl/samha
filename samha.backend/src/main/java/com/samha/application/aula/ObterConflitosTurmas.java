@@ -11,6 +11,7 @@ import com.samha.domain.dto.Conflito;
 import com.samha.domain.dto.ConflitoTurma;
 import com.samha.domain.dto.RestricaoRequest;
 import com.samha.persistence.generics.IGenericRepository;
+import com.samha.service.HorarioService;
 import org.springframework.scheduling.annotation.Async;
 
 import javax.inject.Inject;
@@ -36,6 +37,9 @@ public class ObterConflitosTurmas extends UseCase<List<ConflitoTurma>> {
     @Inject
     private IGenericRepository genericRepository;
 
+    @Inject
+    private HorarioService horarioService;
+
     @Override
     protected List<ConflitoTurma> execute() throws Exception {
         List<Turma> turmas = genericRepository.find(Turma.class, q -> q.where(
@@ -58,7 +62,7 @@ public class ObterConflitosTurmas extends UseCase<List<ConflitoTurma>> {
                     RestricaoRequest restricaoRequest = new RestricaoRequest();
                     restricaoRequest.setAulas(aulasTurma);
                     restricaoRequest.setOferta(oferta);
-                    ObterRestricoesAulas restricoesUseCase = new ObterRestricoesAulas(restricaoRequest, genericRepository);
+                    ObterRestricoesAulas restricoesUseCase = new ObterRestricoesAulas(restricaoRequest, genericRepository, horarioService);
                     List<Conflito> conflitos = restricoesUseCase.execute();
                     if (!conflitos.isEmpty()) {
                         ConflitoTurma novoConflito = new ConflitoTurma();

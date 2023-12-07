@@ -38,9 +38,10 @@ public class ObterRestricoesAulas extends UseCase<List<Conflito>> {
     }
 
     @Inject
-    public ObterRestricoesAulas(RestricaoRequest restricaoRequest, IGenericRepository genericRepository) {
+    public ObterRestricoesAulas(RestricaoRequest restricaoRequest, IGenericRepository genericRepository, HorarioService horarioService) {
         this.restricaoRequest = restricaoRequest;
         this.genericRepository = genericRepository;
+        this.horarioService = horarioService;
     }
 
     @Inject

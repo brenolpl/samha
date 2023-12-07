@@ -622,6 +622,10 @@ export class OfertaComponent implements OnInit, OnDestroy {
           clearInterval(timer);
           this.notificacoes = event.body;
         }
+      }, error => {
+        this.progresso = 0;
+        clearInterval(timer);
+        this.notification.handleError(error);
       });
   }
 
