@@ -70,13 +70,12 @@ public class ObterCargaHoraria extends UseCase<List<Professor>> {
             for (var disc : disciplinas) {
                 tempoAula += horarioService.getTotalHorasDisciplina(disc.getCargaHoraria());
             }
-            professor.setCargaHoraria(tempoAula);
             Double minutos = tempoAula - Math.floor(tempoAula);
             Long minutosArredondados = Math.round(minutos * 60);
             String cargaHoraria = (tempoAula.intValue() < 10 ? "0" + tempoAula.intValue() : tempoAula.intValue() )+ ":" + (minutosArredondados < 10 ? "0" + minutosArredondados : minutosArredondados);
             professor.setCargaHorariaCalculada(cargaHoraria);
         }
-        professorRepository.saveAll(professores);
+
         return professores;
     }
 }
