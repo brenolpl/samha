@@ -263,6 +263,7 @@ export class OfertaComponent implements OnInit, OnDestroy {
           'ano': {equals: this.formGroup.get('ano').value},
           'semestre': {equals: this.formGroup.get('semestre').value},
           'turma.id': {equals: this.turmaControl.value.id},
+          'turma.ativa': {equals: true},
           'tempoMaximoTrabalho': {equals: this.tempoMaximo},
           'intervaloMinimo': {equals: this.intervaloMinimo}
         }

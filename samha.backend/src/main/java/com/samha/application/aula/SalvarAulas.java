@@ -67,6 +67,7 @@ public class SalvarAulas extends UseCase<List<Aula>> {
                 //Se a turma for de ensino médio e o professor estiver alocando as aulas no primeiro período, (ano/1) replicamos as aulas para o período seguinte.
                 if (aulaMudou && isCursoAnual && oferta.getSemestre() != 2) replicarMudancasAula(a, aulaEncontrada);
                 if (aulaMudou) aulaRepository.save(aulaEncontrada);
+                if (!aulaMudou && oferta.getSemestre() == 1 && isCursoAnual) this.verificarExisteAulaProxSemestre(aulaEncontrada);
             } else {
                 if (isCursoAnual && oferta.getSemestre() != 2) this.deleteAulaReplicada(a);
                 genericRepository.delete(a);
@@ -82,13 +83,56 @@ public class SalvarAulas extends UseCase<List<Aula>> {
         return aulaRepository.getAulasByOferta_Id(oferta.getId());
     }
 
+    private void verificarExisteAulaProxSemestre(Aula aulaEncontrada) {
+        Aula aulaProxSemestre = findAulaIgualSegundoSemestre(aulaEncontrada);
+        if (aulaProxSemestre == null) {
+            Aula mesmoHorario = genericRepository.findSingle(Aula.class, q -> q.where(
+                    q.equal(q.get(Aula_.numero), aulaEncontrada.getNumero()),
+                    q.equal(q.get(Aula_.dia), aulaEncontrada.getDia()),
+                    q.equal(q.get(Aula_.turno), aulaEncontrada.getTurno()),
+                    q.equal(q.get(Aula_.oferta).get(Oferta_.ano), aulaEncontrada.getOferta().getAno()),
+                    q.equal(q.get(Aula_.oferta).get(Oferta_.semestre), 2),
+                    q.equal(q.get(Aula_.oferta).get(Oferta_.turma), aulaEncontrada.getOferta().getTurma())
+            ));
+            if (mesmoHorario != null) genericRepository.delete(mesmoHorario);
+
+            this.criarCopiaAula(getOfertaProxSemestre(aulaEncontrada), getAlocacaoProxSemestre(aulaEncontrada), aulaEncontrada.getNumero(), aulaEncontrada.getDia(), aulaEncontrada.getTurno());
+        }
+    }
+
     private void replicarMudancasAula(Aula a, Aula aulaEncontrada) {
         Aula aulaIgual = findAulaIgualSegundoSemestre(a);
         if (aulaIgual != null) {
             aulaIgual.setDia(aulaEncontrada.getDia());
             aulaIgual.setNumero(aulaEncontrada.getNumero());
             aulaRepository.save(aulaIgual);
+        } else {
+            Aula mesmoHorario = genericRepository.findSingle(Aula.class, q -> q.where(
+                    q.equal(q.get(Aula_.numero), aulaEncontrada.getNumero()),
+                    q.equal(q.get(Aula_.dia), aulaEncontrada.getDia()),
+                    q.equal(q.get(Aula_.turno), aulaEncontrada.getTurno()),
+                    q.equal(q.get(Aula_.oferta).get(Oferta_.ano), a.getOferta().getAno()),
+                    q.equal(q.get(Aula_.oferta).get(Oferta_.semestre), 2),
+                    q.equal(q.get(Aula_.oferta).get(Oferta_.turma), a.getOferta().getTurma())
+            ));
+            if (mesmoHorario != null) genericRepository.delete(mesmoHorario);
+
+            Oferta oferta = getOfertaProxSemestre(a);
+            Alocacao alocacaoReplicada = getAlocacaoProxSemestre(a);
+
+            this.criarCopiaAula(oferta, alocacaoReplicada, aulaEncontrada.getNumero(), aulaEncontrada.getDia(), aulaEncontrada.getTurno());
         }
+    }
+
+    private void criarCopiaAula(Oferta oferta, Alocacao alocacao, Integer numero, Integer dia, Integer turno) {
+        Aula aula = new Aula();
+        aula.setOferta(oferta);
+        aula.setAlocacao(alocacao);
+        aula.setTurno(turno);
+        aula.setNumero(numero);
+        aula.setDia(dia);
+
+        genericRepository.save(aula);
     }
 
     private void deleteAulaReplicada(Aula a) {
