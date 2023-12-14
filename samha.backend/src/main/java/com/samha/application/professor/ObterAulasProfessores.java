@@ -9,6 +9,7 @@ import com.samha.domain.Eixo_;
 import com.samha.domain.Oferta_;
 import com.samha.domain.Professor;
 import com.samha.domain.Professor_;
+import com.samha.domain.Turma_;
 import com.samha.domain.dto.AulaDto;
 import com.samha.domain.dto.RelatorioDto;
 import com.samha.persistence.generics.IGenericRepository;
@@ -79,6 +80,7 @@ public class ObterAulasProfessores extends UseCase<List<Professor>> {
                             q.equal(q.get(Aula_.alocacao).get(Alocacao_.professor2), prof)
                     ),
                     q.equal(q.get(Aula_.oferta).get(Oferta_.ano), relatorioDto.getAno()),
+                    q.equal(q.get(Aula_.oferta).get(Oferta_.turma).get(Turma_.ativa), true),
                     q.equal(q.get(Aula_.oferta).get(Oferta_.semestre), relatorioDto.getSemestre()),
                     getFiltroOfertaPublicaPredicate(q)
             ));
