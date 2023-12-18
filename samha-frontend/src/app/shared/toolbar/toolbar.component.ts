@@ -10,6 +10,8 @@ import {AuthService} from "../service/auth.service";
 export class ToolbarComponent implements OnInit {
   @Output() sideBarClicked: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Input() opened: boolean;
+  public showInfo: boolean = false;
+  public showEmail: boolean = false;
 
   constructor(private router: Router,
               private localStorage: LocalStorageService,
@@ -35,5 +37,17 @@ export class ToolbarComponent implements OnInit {
 
   onSignInClick() {
     this.router.navigate(['login']);
+  }
+
+  onInfoClick() {
+    this.showInfo = true;
+  }
+
+  onShowEmail() {
+    this.showEmail = true;
+    setTimeout(() => {
+      this.showEmail = false;
+    }, 10000)
+
   }
 }

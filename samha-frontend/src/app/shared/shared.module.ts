@@ -15,7 +15,7 @@ import {LogComponent} from './log/log.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {NotificationService} from "./service/notification.service";
 import { AlteracaoDialogComponent } from './alteracao-dialog/alteracao-dialog.component';
-import {DxButtonModule, DxTextAreaModule, DxTextBoxModule} from "devextreme-angular";
+import {DxButtonModule, DxPopupModule, DxTextAreaModule, DxTextBoxModule} from "devextreme-angular";
 
 
 @NgModule({
@@ -28,17 +28,18 @@ import {DxButtonModule, DxTextAreaModule, DxTextBoxModule} from "devextreme-angu
     LogComponent,
     AlteracaoDialogComponent
   ],
-  imports: [
-    CommonModule,
-    MaterialModule,
-    ReactiveFormsModule,
-    HttpClientModule,
-    RouterModule,
-    FormsModule,
-    DxButtonModule,
-    DxTextAreaModule,
-    DxTextBoxModule
-  ],
+    imports: [
+        CommonModule,
+        MaterialModule,
+        ReactiveFormsModule,
+        HttpClientModule,
+        RouterModule,
+        FormsModule,
+        DxButtonModule,
+        DxTextAreaModule,
+        DxTextBoxModule,
+        DxPopupModule
+    ],
   exports: [
     ToolbarComponent,
     TableComponent,
