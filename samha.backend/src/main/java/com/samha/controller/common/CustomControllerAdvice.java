@@ -21,12 +21,19 @@ class CustomControllerAdvice {
 
     @ExceptionHandler(UnexpectedException.class)
     public ResponseEntity<ErrorResponse> handleUnexpected(Exception e) {
-        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR; // 404
+        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
         LOGGER.error(e.getMessage(), e);
+
+        StringWriter stringWriter = new StringWriter();
+        PrintWriter printWriter = new PrintWriter(stringWriter);
+        e.printStackTrace(printWriter);
+        String stackTrace = stringWriter.toString();
+
         return new ResponseEntity<>(
                 new ErrorResponse(
                         status,
-                        e.getMessage()
+                        e.getMessage(),
+                        stackTrace
                 ),
                 status
         );
