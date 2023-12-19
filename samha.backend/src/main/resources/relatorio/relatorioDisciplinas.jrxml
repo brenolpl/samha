@@ -28,7 +28,7 @@
 					<rightPen lineWidth="0.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" size="16" isBold="true"/>
+					<font fontName="DejaVu Sans" size="16" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Relatório de Disciplinas por Turma]]></text>
 			</staticText>
@@ -45,7 +45,7 @@
 			<textField>
 				<reportElement x="0" y="0" width="555" height="578" uuid="a5659ca2-705e-4a79-a350-ccc8262acdbc"/>
 				<textElement>
-					<font fontName="Arial" size="12"/>
+					<font fontName="DejaVu Sans" size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{mensagem}]]></textFieldExpression>
 			</textField>
