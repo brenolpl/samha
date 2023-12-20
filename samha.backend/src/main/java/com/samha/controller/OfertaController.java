@@ -1,5 +1,6 @@
 package com.samha.controller;
 
+import com.samha.application.oferta.InserirOferta;
 import com.samha.application.oferta.MudarVisibilidadeOferta;
 import com.samha.commons.UseCaseFacade;
 import com.samha.controller.common.BaseController;
@@ -21,4 +22,11 @@ public class OfertaController extends BaseController<Oferta, OfertaAud, Long> {
     public Oferta tornarOfertaPublica(@RequestBody Long ofertaId) {
      return facade.execute(new MudarVisibilidadeOferta(ofertaId));
     }
+
+    @Override
+    public Oferta insert(@RequestBody Oferta body) {
+        return facade.execute(new InserirOferta(body));
+    }
+
+
 }

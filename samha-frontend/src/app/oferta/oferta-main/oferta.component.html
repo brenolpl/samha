@@ -443,3 +443,34 @@
     </div>
   </div>
 </dx-popup>
+
+<dx-popup title="Alerta: As ofertas já são públicas!" [(visible)]="showPopupOfertaPublica" height="250" width="700">
+  <div class="container-fluid container">
+    <div class="row">
+      <div class="col-12 text-center">
+        As ofertas do ano/semestre selecionado já foram definidas como públicas, você está prestes a criar uma nova oferta após a liberação dos horários.
+        Caso deseje continuar, as alterações realizadas nesta oferta estarão disponíveis para os alunos e professores sem acesso ao sistema.
+        <br><br>
+        <span style="color: #ff9966; font-weight: bolder"> É recomendado tornar o horário privado antes de prosseguir com esta ação. </span>
+      </div>
+    </div>
+    <div class="row position-fixed w-100" style="bottom: 25px;">
+      <div class="col-12 d-flex justify-content-center">
+        <dx-button
+          text="Confirmar"
+          type="success"
+          icon="save"
+          (onClick)="saveOferta()">
+        </dx-button>
+        <span class="m-1"></span>
+        <dx-button
+          text="Cancelar"
+          type="normal"
+          stylingMode="outlined"
+          icon="clear"
+          (onClick)="showPopupOfertaPublica = false">
+        </dx-button>
+      </div>
+    </div>
+  </div>
+</dx-popup>

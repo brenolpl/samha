@@ -61,8 +61,9 @@ export class OfertaComponent implements OnInit, OnDestroy {
   public filterOpened: boolean = true;
   public notificacoesOpened: boolean = false;
   public notificacaoTurma: boolean = false;
-  private list: any[];
+  public showPopupOfertaPublica: boolean = false;
   public novaAula: any;
+  private list: any[];
   private aulasMatutinas: any[] = [];
   private aulasVespertinas: any[] = [];
   private aulasNoturnas: any[] = [];
@@ -502,6 +503,7 @@ export class OfertaComponent implements OnInit, OnDestroy {
       aulas: aulas,
       oferta: this.oferta
     }
+    this.aulasConflitantes = [];
     this.dataService.post('aula/obter-restricoes', request).pipe(first()).subscribe(
       next => {
         this.notificacoes = next;
@@ -511,9 +513,7 @@ export class OfertaComponent implements OnInit, OnDestroy {
             this.aulasConflitantes.push(...aulas);
           })
         });
-      }, error => {
-        this.notification.handleError(error);
-      }
+      }, error => this.notification.handleError(error)
     )
   }
 
@@ -582,7 +582,26 @@ export class OfertaComponent implements OnInit, OnDestroy {
     )
   }
 
-  private createOferta () {
+  public createOferta () {
+    this.dataService.query(new QueryMirror('oferta').select('id').where({
+     and: {
+       publica: {equals: true},
+       ano: {equals: this.anoCurrentValue},
+       semestre: {equals: this.semestreCurrentValue}
+     }
+    })).pipe(first()).subscribe(
+      (result: PagedList) => {
+        if (result.listMap.length > 0) {
+          this.showPopupOfertaPublica = true;
+        } else {
+          this.saveOferta();
+        }
+      }, error => this.notification.handleError(error)
+    )
+  }
+
+  public saveOferta(): void {
+    this.showPopupOfertaPublica = false;
     this.dataService.save('oferta', this.oferta).pipe(first()).subscribe(
       next => {
         this.oferta = next;
@@ -590,8 +609,6 @@ export class OfertaComponent implements OnInit, OnDestroy {
       }, error => this.notification.handleError(error)
     );
   }
-
-
 
   onDesfazerAlteracoesClicked() {
     this.ofertaChanged = false;

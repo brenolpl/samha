@@ -126,12 +126,6 @@ export class OfertaGridComponent implements OnInit {
     }
   }
 
-  onKeyDown(event: KeyboardEvent, item: any) {
-    if (event.key === 'Delete' || event.key === 'Backspace') {
-      this.onAulaDeleted.emit(item);
-    }
-  }
-
   getNomeEncurtadoProfessor(nome: string) {
     if(nome != null) {
       let nomes = nome.split(' ');

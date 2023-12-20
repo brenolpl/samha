@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface IOfertaRepository extends JpaRepository<Oferta, Long> {
     List<Oferta> findOfertasByAnoAndSemestre(Integer ano, Integer semestre);
+    Oferta findFirstByAnoAndSemestreAndPublica(Integer ano, Integer Semestre, Boolean publica);
 }
