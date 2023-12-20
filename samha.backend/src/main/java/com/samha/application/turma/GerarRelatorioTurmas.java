@@ -4,7 +4,6 @@ package com.samha.application.turma;
 import com.samha.commons.BusinessException;
 import com.samha.commons.UseCase;
 import com.samha.domain.Aula;
-import com.samha.domain.Disciplina;
 import com.samha.domain.Servidor;
 import com.samha.domain.Servidor_;
 import com.samha.domain.Turma;
@@ -24,11 +23,9 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Async
@@ -102,7 +99,7 @@ public class GerarRelatorioTurmas extends UseCase<Map<String, Object>> {
 
 
     private Map<String, String> preencherAulas(Turma turma) {
-        Set<Disciplina> disciplinasAulas = new HashSet<>();
+        Map<String, String> disciplinas = new HashMap<>();
         Map<String, String> hashMapAulas = new HashMap<>();
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 16; j++) {
@@ -114,7 +111,7 @@ public class GerarRelatorioTurmas extends UseCase<Map<String, Object>> {
                     String professor = aula.getAlocacao().getProfessor1().obterNomeAbreviado() + this.getProfessor2String(aula);
                     String key = aula.getDia() + String.valueOf(aula.getNumero());
                     String sigla = aula.getAlocacao().getDisciplina().getSigla();
-                    disciplinasAulas.add(aula.getAlocacao().getDisciplina());
+                    disciplinas.put(sigla, aula.getAlocacao().getDisciplina().getNome());
                     hashMapAulas.put(key, professor + "\n" + sigla);
                 } else {
                     String key = line + String.valueOf(column);
@@ -124,11 +121,19 @@ public class GerarRelatorioTurmas extends UseCase<Map<String, Object>> {
                 }
             }
         }
-        String rodape = "";
-        for (var disciplina : disciplinasAulas) {
-            rodape += "\t" + disciplina.getSigla() + ": " + disciplina.getNome() + " | ";
+
+        int rodapesFaltantes = 20 - disciplinas.size();
+
+        int k = 1;
+        for (var key : disciplinas.keySet()) {
+            hashMapAulas.put("rodape" + k, key + ": " + disciplinas.get(key));
+            k++;
         }
-        hashMapAulas.put("rodape", rodape);
+
+        for (int i = k; i < rodapesFaltantes + k; i++) {
+            hashMapAulas.put("rodape" + i, "");
+        }
+
         return hashMapAulas;
     }
 

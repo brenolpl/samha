@@ -62,7 +62,7 @@ export class RelatorioProfessorComponent implements OnInit, OnDestroy {
       and: {
         'eixo.id': {equals: $event.value.id}
       }
-    }));
+    }).orderBy('nome'));
   }
 
   onCoordSelected($event: MatSelectChange) {
@@ -71,7 +71,7 @@ export class RelatorioProfessorComponent implements OnInit, OnDestroy {
         'ativo': {equals: true},
         'coordenadoria.id': {equals: $event.value.id}
       }
-    }));
+    }).orderBy('nome'));
     this.isLoading = true;
     this.getProfessores();
   }
