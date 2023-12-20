@@ -256,6 +256,7 @@ export class OfertaComponent implements OnInit, OnDestroy {
 
   private executeOfertaQuery() {
     this.notificacoes = [];
+    this.disciplinasWarns = [];
     this.notificacaoTurma = false;
     this.dataService.query(new QueryMirror('oferta')
       .selectList(['id', 'ano', 'semestre', 'tempoMaximoTrabalho', 'intervaloMinimo', 'turma.id', 'turma.nome', 'publica'])
@@ -555,11 +556,9 @@ export class OfertaComponent implements OnInit, OnDestroy {
     }
     this.dataService.post('aula/controle-qtd-disciplina', request).pipe(first())
       .subscribe(next => {
-        if (next.length > 0) {
-          this.notificacoes = next;
-          next.forEach(c => {
-            c.mensagens.forEach(m => this.disciplinasWarns.push(m.disciplina));
-          });
+        if (next.mensagens.length > 0) {
+          this.notificacoes = [next];
+          next.mensagens.forEach(m => this.disciplinasWarns.push(m.disciplina));
         }
       }, error => this.notification.handleError(error))
   }

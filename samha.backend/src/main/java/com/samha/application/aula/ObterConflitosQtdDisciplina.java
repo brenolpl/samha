@@ -22,10 +22,10 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class ObterConflitosQtdDisciplina extends UseCase<List<Conflito>> {
+public class ObterConflitosQtdDisciplina extends UseCase<Conflito> {
 
 
-    private List<Conflito> conflitos = new ArrayList<>();
+    private Conflito conflito = new Conflito();
 
     private ConflitoDisciplinaRequestDto request;
 
@@ -38,7 +38,7 @@ public class ObterConflitosQtdDisciplina extends UseCase<List<Conflito>> {
     private IGenericRepository genericRepository;
 
     @Override
-    protected List<Conflito> execute() throws Exception {
+    protected Conflito execute() throws Exception {
         List<Alocacao> alocacoes = genericRepository.find(Alocacao.class, q -> q.where(
                 q.equal(q.get(Alocacao_.ano), request.getAno()),
                 q.equal(q.get(Alocacao_.semestre), request.getSemestre()),
@@ -47,6 +47,7 @@ public class ObterConflitosQtdDisciplina extends UseCase<List<Conflito>> {
         ));
 
         Set<Disciplina> disciplinas = alocacoes.stream().map(a -> a.getDisciplina()).collect(Collectors.toSet());
+
 
         for (var disciplina : disciplinas) {
             List<Alocacao> alocacoesDisciplina = alocacoes.stream().filter(a -> a.getDisciplina().equals(disciplina)).collect(Collectors.toList());
@@ -64,14 +65,12 @@ public class ObterConflitosQtdDisciplina extends UseCase<List<Conflito>> {
             //adiciona aulas criadas
             aulasDisciplina.addAll(aulasRequest.stream().filter(a -> a.getId() == null).collect(Collectors.toList()));
             if (disciplina.getQtAulas() != aulasDisciplina.size()) {
-                Conflito conflito = new Conflito();
                 Mensagem mensagem = new Mensagem();
                 mensagem.setTipo(2);
                 mensagem.setCor(CorEnum.LARANJA.getId());
-                mensagem.setTitulo("Quantidade de aulas diferente da especificada");
+                mensagem.setTitulo("Disciplina: " + disciplina.getSigla());
                 mensagem.setDisciplina(disciplina);
                 List<String> restrições = new ArrayList<>();
-                restrições.add("Disciplina: " + disciplina.getSigla());
                 restrições.add("Aulas alocadas: " + aulasDisciplina.size());
                 restrições.add("Quantidade especificada: " + disciplina.getQtAulas());
                 mensagem.setRestricoes(restrições);
@@ -81,10 +80,12 @@ public class ObterConflitosQtdDisciplina extends UseCase<List<Conflito>> {
                 Professor fake = new Professor();
                 fake.setNome("Quantidade de aulas diferente da especificada");
                 conflito.setProfessor(fake);
-                conflitos.add(conflito);
             }
         }
 
-        return conflitos;
+
+
+
+        return conflito;
     }
 }

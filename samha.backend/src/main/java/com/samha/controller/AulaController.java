@@ -34,7 +34,7 @@ public class AulaController extends BaseController<Aula, AulaAud, Long> {
     }
 
     @PostMapping("controle-qtd-disciplina")
-    public List<Conflito> obterConflitosQtdDisciplina(@RequestBody ConflitoDisciplinaRequestDto request) {
+    public Conflito obterConflitosQtdDisciplina(@RequestBody ConflitoDisciplinaRequestDto request) {
         return facade.execute(new ObterConflitosQtdDisciplina(request));
     }
 
