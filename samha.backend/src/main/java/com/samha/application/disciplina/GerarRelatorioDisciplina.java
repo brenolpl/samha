@@ -138,7 +138,7 @@ public class GerarRelatorioDisciplina extends UseCase<Map<String, Object>> {
                 mensagem = mensagem + "\t" + aula.getAlocacao().getDisciplina().getSigla() + " - " + aula.getAlocacao().getDisciplina().getNome() + ".\n";
                 mensagem = mensagem + "\tProfessor da Disciplina: " + aula.getAlocacao().getProfessor1().getNome() + " (" + aula.getAlocacao().getProfessor1().obterNomeAbreviado() + ").\n";
 
-                if(aula.getAlocacao().getDisciplina().getTipo().equalsIgnoreCase("ESPECIAL")){
+                if(aula.getAlocacao().getDisciplina().getTipo().equalsIgnoreCase("ESPECIAL") && aula.getAlocacao().getProfessor2() != null){
                     mensagem = mensagem + "\tProfessor da Disciplina: " + aula.getAlocacao().getProfessor2().getNome() + " (" + aula.getAlocacao().getProfessor2().obterNomeAbreviado() + ").\n";
                 }
 
