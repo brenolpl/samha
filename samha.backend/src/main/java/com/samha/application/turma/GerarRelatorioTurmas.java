@@ -36,7 +36,6 @@ public class GerarRelatorioTurmas extends UseCase<Map<String, Object>> {
     @Inject
     public GerarRelatorioTurmas(RelatorioDto relatorioDto) {
         this.relatorioDto = relatorioDto;
-        this.addBefore(new AtualizarTurmasAtivas());
     }
 
     @Inject

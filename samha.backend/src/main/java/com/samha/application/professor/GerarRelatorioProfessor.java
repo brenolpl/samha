@@ -1,6 +1,5 @@
 package com.samha.application.professor;
 
-import com.samha.application.turma.AtualizarTurmasAtivas;
 import com.samha.commons.BusinessException;
 import com.samha.commons.UseCase;
 import com.samha.domain.Professor;
@@ -34,7 +33,6 @@ public class GerarRelatorioProfessor extends UseCase<Map<String, Object>> {
     @Inject
     public GerarRelatorioProfessor(RelatorioDto relatorioDto) {
         this.relatorioDto = relatorioDto;
-        this.addBefore(new AtualizarTurmasAtivas());
     }
 
     @Inject
