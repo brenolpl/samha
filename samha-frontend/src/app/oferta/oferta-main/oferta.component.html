@@ -4,7 +4,7 @@
       (onClick)="showPopupMudarVisiblidade = true"
       stylingMode="outlined"
       class="d-flex"
-      [visible]="oferta?.id != undefined"
+      [visible]="oferta?.id != undefined && permissaoMudarVisibilidade"
       type="normal">
       <div style="height: 18px" class="d-flex">
         <mat-icon style="font-size: 20px; margin-left: .3em" *ngIf="oferta?.publica">visibility</mat-icon>

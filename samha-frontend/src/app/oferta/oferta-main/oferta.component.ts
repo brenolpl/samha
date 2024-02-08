@@ -62,6 +62,7 @@ export class OfertaComponent implements OnInit, OnDestroy {
   public notificacoesOpened: boolean = false;
   public notificacaoTurma: boolean = false;
   public showPopupOfertaPublica: boolean = false;
+  public permissaoMudarVisibilidade: boolean = false;
   public novaAula: any;
   private list: any[];
   private aulasMatutinas: any[] = [];
@@ -83,7 +84,8 @@ export class OfertaComponent implements OnInit, OnDestroy {
     private dataService: DataService,
     private notification: NotificationService,
     private formBuilder: FormBuilder,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private localStorageService: LocalStorageService
   ) {
     this.formGroup = formBuilder.group({
       turno: ['MATUTINO'],
@@ -95,6 +97,11 @@ export class OfertaComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.dataService.post('oferta/permissaoMudarVisibilidade', null).pipe(first()).subscribe(
+      (resultado: boolean) => {
+        this.permissaoMudarVisibilidade = resultado;
+      }, error => this.notification.handleError(error)
+    )
     const anoSelecionado = localStorage.getItem('ano');
     const semestreSelecionado = localStorage.getItem('semestre');
     if (anoSelecionado) this.formGroup.get('ano').setValue(anoSelecionado);
