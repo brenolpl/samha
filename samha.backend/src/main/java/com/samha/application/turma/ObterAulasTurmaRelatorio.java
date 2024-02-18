@@ -20,6 +20,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import javax.inject.Inject;
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 public class ObterAulasTurmaRelatorio extends UseCase<List<Turma>> {
@@ -79,7 +80,12 @@ public class ObterAulasTurmaRelatorio extends UseCase<List<Turma>> {
         ));
 
         List<AulaDto> aulasDto = new ArrayList<>();
-        aulas.forEach(a -> aulasDto.add(new AulaDto(a.getId(), a.getDia(), a.getNumero(), getProfessores(a), a.getAlocacao().getDisciplina().getSigla(), a.getAlocacao().getDisciplina().getNome())));
+        turma.setProfessoresEmails(new HashSet<>());
+        aulas.forEach(a -> {
+            aulasDto.add(new AulaDto(a.getId(), a.getDia(), a.getNumero(), getProfessores(a), a.getAlocacao().getDisciplina().getSigla(), a.getAlocacao().getDisciplina().getNome()));
+            turma.getProfessoresEmails().add(a.getAlocacao().getProfessor1().getEmail());
+            if (a.getAlocacao().getProfessor2() != null) turma.getProfessoresEmails().add(a.getAlocacao().getProfessor2().getEmail());
+        });
         turma.setAulas(aulasDto);
     }
 

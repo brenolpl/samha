@@ -16,12 +16,15 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 
 @Service
 public class EmailService {
 
-    public void enviarEmail(String remetente, String senha, String mensagem, String assunto, byte[] anexo, String filename) {
+    public void enviarEmail(String remetente, Set<String> destinatarios, String senha, String mensagem, String assunto, byte[] anexo, String filename) {
         try {
 
             Properties props = getProperties(remetente, senha);
@@ -30,7 +33,13 @@ public class EmailService {
             MimeMessage message = new MimeMessage(session);
 
             message.setFrom(new InternetAddress(remetente));
-            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(remetente));
+            List<String> destinatariosList = new ArrayList<>(destinatarios);
+            InternetAddress[] addresses = new InternetAddress[destinatariosList.size()];
+
+            for (int i = 0; i < destinatariosList.size(); i++) {
+                addresses[i] = new InternetAddress(destinatariosList.get(i));
+            }
+            message.setRecipients(Message.RecipientType.TO, addresses);
 
             Multipart mp = new MimeMultipart();
 
@@ -60,7 +69,7 @@ public class EmailService {
 
     private Properties getProperties(String remetente, String senha) {
         Properties p = new Properties();
-
+        p.put("mail.smtp.ssl.trust", "smtp.ifes.edu.br");
         p.put("mail.transport.protocol", "smtp");
         p.put("mail.smtp.starttls.enable","true");
         p.put("mail.smtp.auth", "true");

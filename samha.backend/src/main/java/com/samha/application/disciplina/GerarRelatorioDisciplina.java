@@ -26,8 +26,10 @@ import javax.persistence.criteria.Predicate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Async
@@ -69,6 +71,17 @@ public class GerarRelatorioDisciplina extends UseCase<Map<String, Object>> {
             ));
             mensagem = mensagem + obterSiglaDisciplina(aulasTurma) + "\n";
 
+            turma.setProfessoresEmails(
+                    aulasTurma.stream()
+                            .map(Aula::getAlocacao)
+                            .flatMap(alocacao -> {
+                                Set<String> professoresEmails = new HashSet<>();
+                                professoresEmails.add(alocacao.getProfessor1().getEmail());
+                                if (alocacao.getProfessor2() != null) professoresEmails.add(alocacao.getProfessor2().getEmail());
+                                return professoresEmails.stream();
+                            })
+                            .collect(Collectors.toSet())
+            );
 
             String nomeExport = nomeTurma + "-Relatório de Disciplinas-" + relatorioDto.getAno() + "-" + relatorioDto.getSemestre() + ".pdf";
 
@@ -101,6 +114,7 @@ public class GerarRelatorioDisciplina extends UseCase<Map<String, Object>> {
             if(servidor != null && servidor.getEmail() != null) {
                 emailService.enviarEmail(
                         servidor.getEmail(),
+                        turmas.stream().flatMap(t -> t.getProfessoresEmails().stream()).collect(Collectors.toSet()),
                         relatorioDto.getSenha(),
                         emailService.montarMensagem(servidor, relatorioDto.getAno(), relatorioDto.getSemestre()),
                         "Horários de aula " + relatorioDto.getAno() + "/" + relatorioDto.getSemestre(),

@@ -15,6 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Audited
@@ -45,6 +46,17 @@ public class Turma extends BaseLogEntity {
 
     @Transient
     private List<AulaDto> aulas;
+
+    @Transient
+    private Set<String> professoresEmails;
+
+    public Set<String> getProfessoresEmails() {
+        return professoresEmails;
+    }
+
+    public void setProfessoresEmails(Set<String> professoresEmails) {
+        this.professoresEmails = professoresEmails;
+    }
 
     public Boolean getAtiva() {
         return ativa;
