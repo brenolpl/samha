@@ -74,7 +74,7 @@ public class GerarRelatorioProfessor extends UseCase<Map<String, Object>> {
             ));
             if(servidor != null && servidor.getEmail() != null) {
                 emailService.enviarEmail(
-                        servidor.getEmail(),
+                        servidor.getMatricula(),
                         professors.stream().map(Professor::getEmail).collect(Collectors.toSet()),
                         relatorioDto.getSenha(),
                         emailService.montarMensagem(servidor, relatorioDto.getAno(), relatorioDto.getSemestre()),

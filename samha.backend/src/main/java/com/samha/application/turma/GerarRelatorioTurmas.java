@@ -83,7 +83,7 @@ public class GerarRelatorioTurmas extends UseCase<Map<String, Object>> {
             ));
             if(servidor != null && servidor.getEmail() != null) {
                 emailService.enviarEmail(
-                        servidor.getEmail(),
+                        servidor.getMatricula(),
                         turmas.stream().flatMap(t -> t.getProfessoresEmails().stream()).collect(Collectors.toSet()),
                         relatorioDto.getSenha(),
                         emailService.montarMensagem(servidor, relatorioDto.getAno(), relatorioDto.getSemestre()),
