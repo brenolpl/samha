@@ -54,6 +54,9 @@ public class GerarRelatorioDisciplina extends UseCase<Map<String, Object>> {
                 q.equal(q.get(Turma_.ativa), true)
         ));
         List<Map<String, Object>> reports = new ArrayList<>();
+        Servidor servidor = genericRepository.findSingle(Servidor.class, q -> q.where(
+                q.equal(q.get(Servidor_.usuario).get(Usuario_.login), SecurityContextHolder.getContext().getAuthentication().getName())
+        ));
         for (var turma : turmas) {
             String nomeTurma = turma.getNome();
             //zip entry error com turmas de mesmo nome.
@@ -96,6 +99,21 @@ public class GerarRelatorioDisciplina extends UseCase<Map<String, Object>> {
             result.put("nome", nomeExport);
             result.put("bytes", JasperHelper.generateReport(parametros, relatorioDto));
             reports.add(result);
+            if (relatorioDto.getEnviarEmail()) {
+                if(servidor != null && servidor.getEmail() != null && !turma.getProfessoresEmails().isEmpty()) {
+                    emailService.enviarEmail(
+                            servidor.getEmail(),
+                            servidor.getMatricula(),
+                            turma.getProfessoresEmails(),
+                            relatorioDto.getSenha(),
+                            emailService.montarMensagem(relatorioDto.getAno(), relatorioDto.getSemestre()),
+                            "Relatório de disciplinas " + relatorioDto.getAno() + "/" + relatorioDto.getSemestre(),
+                            (byte[]) result.get("bytes"),
+                            nomeExport );
+                }
+                else if(servidor == null) throw new BusinessException("Falha no envio de Email: Não foi possível encontrar o servidor associado a este usuário");
+                else if (servidor.getEmail() == null) throw new BusinessException("Não é possível enviar e-mail para usuários sem e-mail cadastrado.");
+            }
         }
 
         Map<String, Object> result = new HashMap<>();
@@ -107,23 +125,6 @@ public class GerarRelatorioDisciplina extends UseCase<Map<String, Object>> {
             result.put("nomeArquivo", reports.get(0).get("nome"));
         }
 
-        if (relatorioDto.getEnviarEmail()) {
-            Servidor servidor = genericRepository.findSingle(Servidor.class, q -> q.where(
-                    q.equal(q.get(Servidor_.usuario).get(Usuario_.login), SecurityContextHolder.getContext().getAuthentication().getName())
-            ));
-            if(servidor != null && servidor.getEmail() != null) {
-                emailService.enviarEmail(
-                        servidor.getMatricula(),
-                        turmas.stream().flatMap(t -> t.getProfessoresEmails().stream()).collect(Collectors.toSet()),
-                        relatorioDto.getSenha(),
-                        emailService.montarMensagem(servidor, relatorioDto.getAno(), relatorioDto.getSemestre()),
-                        "Horários de aula " + relatorioDto.getAno() + "/" + relatorioDto.getSemestre(),
-                        (byte[]) result.get("bytes"),
-                        (String) result.get("nomeArquivo"));
-            }
-            else if(servidor == null) throw new BusinessException("Falha no envio de Email: Não foi possível encontrar o servidor associado a este usuário");
-            else if (servidor.getEmail() == null) throw new BusinessException("Não é possível enviar e-mail para usuários sem e-mail cadastrado.");
-        }
         return result;
     }
 

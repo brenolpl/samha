@@ -20,6 +20,7 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -50,14 +51,35 @@ public class GerarRelatorioProfessor extends UseCase<Map<String, Object>> {
         obterAulasProfessores.setGenericRepository(genericRepository);
         List<Professor> professors = obterAulasProfessores.execute().stream().sorted(Comparator.comparing(Professor::getNome)).collect(Collectors.toList());
         List<Map<String, Object>> reports = new ArrayList<>();
+        Servidor servidor = genericRepository.findSingle(Servidor.class, q -> q.where(
+                q.equal(q.get(Servidor_.usuario).get(Usuario_.login), SecurityContextHolder.getContext().getAuthentication().getName())
+        ));
         for (var prof : professors) {
             Map<String, String> parametros = gerarHashProfessor(prof);
             parametros.putAll(this.preencherAulas(prof));
             parametros.putAll(horarioService.getGenericReportLabels("NOTURNO", 1));
             Map<String, Object> arquivo = new HashMap<>();
             arquivo.put("nome", prof.getNome());
-            arquivo.put("bytes", JasperHelper.generateReport(parametros, relatorioDto));
+            byte[] report = JasperHelper.generateReport(parametros, relatorioDto);
+            arquivo.put("bytes", report);
             reports.add(arquivo);
+
+            if (relatorioDto.getEnviarEmail()) {
+                if(servidor != null && servidor.getEmail() != null) {
+                    emailService.enviarEmail(
+                            servidor.getEmail(),
+                            servidor.getMatricula(),
+                            new HashSet<>(List.of(prof.getEmail())),
+                            relatorioDto.getSenha(),
+                            emailService.montarMensagem(relatorioDto.getAno(), relatorioDto.getSemestre()),
+                            "Horários de aula " + relatorioDto.getAno() + "/" + relatorioDto.getSemestre(),
+                            report,
+                            prof.getNome() + ".pdf");
+                }
+                else if(servidor == null) throw new BusinessException("Falha no envio de Email: Não foi possível encontrar o servidor associado a este usuário");
+                else if (servidor.getEmail() == null) throw new BusinessException("Não é possível enviar e-mail para usuários sem e-mail cadastrado.");
+
+            }
         }
 
         Map<String, Object> result = new HashMap<>();
@@ -68,24 +90,7 @@ public class GerarRelatorioProfessor extends UseCase<Map<String, Object>> {
             result.put("bytes", reports.get(0).get("bytes"));
             result.put("nomeArquivo", reports.get(0).get("nome") + ".pdf");
         }
-        if (relatorioDto.getEnviarEmail()) {
-            Servidor servidor = genericRepository.findSingle(Servidor.class, q -> q.where(
-                    q.equal(q.get(Servidor_.usuario).get(Usuario_.login), SecurityContextHolder.getContext().getAuthentication().getName())
-            ));
-            if(servidor != null && servidor.getEmail() != null) {
-                emailService.enviarEmail(
-                        servidor.getMatricula(),
-                        professors.stream().map(Professor::getEmail).collect(Collectors.toSet()),
-                        relatorioDto.getSenha(),
-                        emailService.montarMensagem(servidor, relatorioDto.getAno(), relatorioDto.getSemestre()),
-                        "Horários de aula " + relatorioDto.getAno() + "/" + relatorioDto.getSemestre(),
-                        (byte[]) result.get("bytes"),
-                        (String) result.get("nomeArquivo"));
-            }
-            else if(servidor == null) throw new BusinessException("Falha no envio de Email: Não foi possível encontrar o servidor associado a este usuário");
-            else if (servidor.getEmail() == null) throw new BusinessException("Não é possível enviar e-mail para usuários sem e-mail cadastrado.");
 
-        }
 
         return result;
     }

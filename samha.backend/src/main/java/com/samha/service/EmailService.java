@@ -1,7 +1,6 @@
 package com.samha.service;
 
 import com.samha.commons.BusinessException;
-import com.samha.domain.Servidor;
 import org.springframework.stereotype.Service;
 
 import javax.activation.DataHandler;
@@ -24,15 +23,14 @@ import java.util.Set;
 @Service
 public class EmailService {
 
-    public void enviarEmail(String remetente, Set<String> destinatarios, String senha, String mensagem, String assunto, byte[] anexo, String filename) {
+    public void enviarEmail(String emailRemetente, String matriculaRemetente, Set<String> destinatarios, String senha, String mensagem, String assunto, byte[] anexo, String filename) {
         try {
-
-            Properties props = getProperties(remetente, senha);
+            Properties props = getProperties(matriculaRemetente, senha);
             Session session = Session.getDefaultInstance(props, null);
 
             MimeMessage message = new MimeMessage(session);
 
-            message.setFrom(new InternetAddress(remetente));
+            message.setFrom(new InternetAddress(emailRemetente));
             List<String> destinatariosList = new ArrayList<>(destinatarios);
             InternetAddress[] addresses = new InternetAddress[destinatariosList.size()];
 
@@ -48,6 +46,8 @@ public class EmailService {
 
             mp.addBodyPart(mbp);
 
+            //remover non-ascii caracteres
+            filename = filename.replaceAll("[^\\x00-\\x7F]", "");
             MimeBodyPart mbpAnexo = new MimeBodyPart();
             DataSource dataSource = new ByteArrayDataSource(anexo, "application/octet-stream");
             mbpAnexo.setDataHandler(new DataHandler(dataSource));
@@ -81,8 +81,8 @@ public class EmailService {
         return p;
     }
 
-    public String montarMensagem(Servidor servidor, int ano, int semestre) {
-        String mensagem = "\nOlá " + servidor.getNome() + "!\n"
+    public String montarMensagem(int ano, int semestre) {
+        String mensagem = "\nPrezado(s) servidor(es)\n"
                 + "Segue em anexo o arquivo contendo seus horários de aulas para o semestre de " + ano + "/" + semestre + ".\n\n";
         mensagem = mensagem + "\nQualquer dúvida procure seu coordenador de curso.\n\n"
                 + "Atenciosamente,";
