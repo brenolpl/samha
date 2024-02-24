@@ -71,7 +71,7 @@ public class GerarRelatorioProfessor extends UseCase<Map<String, Object>> {
                             servidor.getMatricula(),
                             new HashSet<>(List.of(prof.getEmail())),
                             relatorioDto.getSenha(),
-                            emailService.montarMensagem(relatorioDto.getAno(), relatorioDto.getSemestre()),
+                            emailService.montarMensagem(servidor, relatorioDto.getAno(), relatorioDto.getSemestre()),
                             "Horários de aula " + relatorioDto.getAno() + "/" + relatorioDto.getSemestre(),
                             report,
                             prof.getNome() + ".pdf");

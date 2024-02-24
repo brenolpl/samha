@@ -1,6 +1,7 @@
 package com.samha.service;
 
 import com.samha.commons.BusinessException;
+import com.samha.domain.Servidor;
 import org.springframework.stereotype.Service;
 
 import javax.activation.DataHandler;
@@ -81,11 +82,12 @@ public class EmailService {
         return p;
     }
 
-    public String montarMensagem(int ano, int semestre) {
+    public String montarMensagem(Servidor servidor, int ano, int semestre) {
         String mensagem = "\nPrezado(s) servidor(es)\n"
                 + "Segue em anexo o arquivo contendo seus horários de aulas para o semestre de " + ano + "/" + semestre + ".\n\n";
         mensagem = mensagem + "\nQualquer dúvida procure seu coordenador de curso.\n\n"
-                + "Atenciosamente,";
+                + "Atenciosamente," + "\n" +
+                servidor.getNome();
 
         return mensagem;
     }

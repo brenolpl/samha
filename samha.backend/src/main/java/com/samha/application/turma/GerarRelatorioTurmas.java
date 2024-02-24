@@ -79,7 +79,7 @@ public class GerarRelatorioTurmas extends UseCase<Map<String, Object>> {
                             servidor.getMatricula(),
                             turma.getProfessoresEmails(),
                             relatorioDto.getSenha(),
-                            emailService.montarMensagem(relatorioDto.getAno(), relatorioDto.getSemestre()),
+                            emailService.montarMensagem(servidor, relatorioDto.getAno(), relatorioDto.getSemestre()),
                             "Horários de turma " + relatorioDto.getAno() + "/" + relatorioDto.getSemestre(),
                             report,
                             nomeExport);

@@ -106,7 +106,7 @@ public class GerarRelatorioDisciplina extends UseCase<Map<String, Object>> {
                             servidor.getMatricula(),
                             turma.getProfessoresEmails(),
                             relatorioDto.getSenha(),
-                            emailService.montarMensagem(relatorioDto.getAno(), relatorioDto.getSemestre()),
+                            emailService.montarMensagem(servidor, relatorioDto.getAno(), relatorioDto.getSemestre()),
                             "Relatório de disciplinas " + relatorioDto.getAno() + "/" + relatorioDto.getSemestre(),
                             (byte[]) result.get("bytes"),
                             nomeExport );
