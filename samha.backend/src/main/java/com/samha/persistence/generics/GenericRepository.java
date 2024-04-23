@@ -34,6 +34,10 @@ public class GenericRepository implements IGenericRepository {
     @PersistenceContext
     private EntityManager entityManager;
 
+    public GenericRepository(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
+
     @Override
     public <ENTITY extends BaseLogEntity> List<ENTITY> findAll(Class<ENTITY> entityClass){
         String queryBase = "from " + entityClass.getName();
