@@ -94,7 +94,7 @@ public class ObterRestricoesAulas extends UseCase<List<Conflito>> {
     private void setConflitoRestricaoProfessor(Aula aula, Professor professor) {
         final String turno = getTurnoPorAula(aula.getTurno());
         List<RestricaoProfessor> restricoes = genericRepository.find(RestricaoProfessor.class, q -> q.where(
-                q.equal(q.get(RestricaoProfessor_.professor).get(Professor_.id), professor.getId()),
+                q.equal(q.join(RestricaoProfessor_.professor).get(Professor_.id), professor.getId()),
                 q.equal(q.get(RestricaoProfessor_.turno), turno),
                 q.equal(q.get(RestricaoProfessor_.dia), aula.getDia())
         ));
@@ -200,13 +200,13 @@ public class ObterRestricoesAulas extends UseCase<List<Conflito>> {
 
     private Collection<? extends Aula> getAulasOutrasTurmasProfessor(Professor professor) {
         return genericRepository.find(Aula.class, q -> q.where(
-                        q.equal(q.get(Aula_.oferta).get(Oferta_.ano), restricaoRequest.getOferta().getAno()),
-                        q.equal(q.get(Aula_.oferta).get(Oferta_.turma).get(Turma_.ativa), true),
-                        q.equal(q.get(Aula_.oferta).get(Oferta_.semestre), restricaoRequest.getOferta().getSemestre()),
-                        q.notEqual(q.get(Aula_.oferta).get(Oferta_.id), restricaoRequest.getOferta().getId()),
+                        q.equal(q.join(Aula_.oferta).get(Oferta_.ano), restricaoRequest.getOferta().getAno()),
+                        q.equal(q.join(Aula_.oferta).join(Oferta_.turma).get(Turma_.ativa), true),
+                        q.equal(q.join(Aula_.oferta).get(Oferta_.semestre), restricaoRequest.getOferta().getSemestre()),
+                        q.notEqual(q.join(Aula_.oferta).get(Oferta_.id), restricaoRequest.getOferta().getId()),
                         q.or(
-                                q.equal(q.get(Aula_.alocacao).get(Alocacao_.professor1).get(Professor_.id), professor.getId()),
-                                q.equal(q.get(Aula_.alocacao).get(Alocacao_.professor2).get(Professor_.id), professor.getId())
+                                q.equal(q.join(Aula_.alocacao).join(Alocacao_.professor1).get(Professor_.id), professor.getId()),
+                                q.equal(q.join(Aula_.alocacao).join(Alocacao_.professor2).get(Professor_.id), professor.getId())
                         )
                 ));
     }
@@ -347,16 +347,16 @@ public class ObterRestricoesAulas extends UseCase<List<Conflito>> {
         List<Aula> aulasProfessor = genericRepository.find(Aula.class, q -> q.where(
                 q.equal(q.get(Aula_.numero), aula.getNumero()),
                 q.equal(q.get(Aula_.dia), aula.getDia()),
-                q.equal(q.get(Aula_.alocacao).get(Alocacao_.ano), aula.getAlocacao().getAno()),
-                q.equal(q.get(Aula_.alocacao).get(Alocacao_.semestre), aula.getAlocacao().getSemestre()),
+                q.equal(q.join(Aula_.alocacao).get(Alocacao_.ano), aula.getAlocacao().getAno()),
+                q.equal(q.join(Aula_.alocacao).get(Alocacao_.semestre), aula.getAlocacao().getSemestre()),
                 q.or(
-                        q.equal(q.get(Aula_.alocacao).get(Alocacao_.professor1).get(Professor_.id), professor.getId()),
-                        q.equal(q.get(Aula_.alocacao).get(Alocacao_.professor2).get(Professor_.id), professor.getId())
+                        q.equal(q.join(Aula_.alocacao).join(Alocacao_.professor1).get(Professor_.id), professor.getId()),
+                        q.equal(q.join(Aula_.alocacao).join(Alocacao_.professor2).get(Professor_.id), professor.getId())
                 ),
-                q.notEqual(q.get(Aula_.oferta).get(Oferta_.id), aula.getOferta().getId()),
-                q.equal(q.get(Aula_.oferta).get(Oferta_.turma).get(Turma_.ativa), true),
-                q.equal(q.get(Aula_.oferta).get(Oferta_.ano), aula.getOferta().getAno()),
-                q.equal(q.get(Aula_.oferta).get(Oferta_.semestre), aula.getOferta().getSemestre())
+                q.notEqual(q.join(Aula_.oferta).get(Oferta_.id), aula.getOferta().getId()),
+                q.equal(q.join(Aula_.oferta).get(Oferta_.turma).get(Turma_.ativa), true),
+                q.equal(q.join(Aula_.oferta).get(Oferta_.ano), aula.getOferta().getAno()),
+                q.equal(q.join(Aula_.oferta).get(Oferta_.semestre), aula.getOferta().getSemestre())
         ));
 
         if (!aulasProfessor.isEmpty()) {

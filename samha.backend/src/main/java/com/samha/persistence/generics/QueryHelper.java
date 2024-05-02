@@ -93,6 +93,11 @@ public class QueryHelper<ENTITY, TARGET> implements IQueryHelper<ENTITY, TARGET>
     }
 
     @Override
+    public <Y> Join<ENTITY, Y> join(SingularAttribute<? super ENTITY, Y> attribute) {
+        return root.join(attribute);
+    }
+
+    @Override
     public IQueryHelper<ENTITY, TARGET> entityQuery(Query entityQuery) {
 
         if (!isEmpty(entityQuery.getProjections()))

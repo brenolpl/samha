@@ -4,7 +4,7 @@ import {DataService} from "../../shared/service/data.service";
 import {NotificationService} from "../../shared/service/notification.service";
 import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {Observable, of, range, Subscription} from "rxjs";
-import {catchError, first, map, startWith, tap, toArray} from "rxjs/operators";
+import {catchError, delay, first, map, startWith, tap, toArray} from "rxjs/operators";
 import {QueryMirror} from "../../shared/query-mirror";
 import {alocacaoColumns} from "../../meta-model/alocacao";
 import {MatDialog} from "@angular/material/dialog";
@@ -76,6 +76,7 @@ export class OfertaComponent implements OnInit, OnDestroy {
   private progresso: number = 0;
   private length: number;
   private disciplinasWarns: any[] = [];
+  private restricoesSubscription: Subscription;
 
 
   constructor(
@@ -512,7 +513,7 @@ export class OfertaComponent implements OnInit, OnDestroy {
       oferta: this.oferta
     }
     this.aulasConflitantes = [];
-    this.dataService.post('aula/obter-restricoes', request).pipe(first()).subscribe(
+    this.restricoesSubscription = this.dataService.post('aula/obter-restricoes', request).pipe(first()).subscribe(
       next => {
         this.notificacoes = next;
         next.forEach(conflito => {
@@ -657,6 +658,7 @@ export class OfertaComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.validarTurmasSub?.unsubscribe();
+    this.restricoesSubscription?.unsubscribe();
   }
 
   onNovaAulaCreated(item: any) {

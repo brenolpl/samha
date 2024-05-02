@@ -28,6 +28,7 @@ public interface IQueryHelper<ENTITY, TARGET> {
     <T> Predicate in(Expression<? extends T> expression);
 
     <Y> Path<Y> get(SingularAttribute<? super ENTITY, Y> attribute);
+    <Y> Join<ENTITY, Y> join(SingularAttribute<? super ENTITY, Y> attribute);
 
     IQueryHelper<ENTITY, TARGET> entityQuery(Query entityQuery);
 
